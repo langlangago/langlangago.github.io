@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Redis伪集群 | Langlangago</title>
-  <meta name="keywords" content=" redis ">
-  <meta name="description" content="Redis伪集群 | Langlangago">
+  <title>Zookeeper集群搭建-Cluster模式 | Langlangago</title>
+  <meta name="keywords" content=" [object Object] ">
+  <meta name="description" content="Zookeeper集群搭建-Cluster模式 | Langlangago">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="一、预备环境说明 JDK 1.8.0_261 下载最新版本压缩包，apache-zookeeper-3.5.8-bin.tar.gz（3.5版本后要用bin包） 三台主机 A（192.168.1.1）、B（192.168.1.1）、C（192.168.1.1）  二、部署步骤1、解压tar -zxvf apache-zookeeper-3.5.8-bin.tar.gz -C &#x2F;data 2、建立d">
 <meta property="og:type" content="article">
@@ -326,9 +326,9 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="post-Redis伪集群" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-Zookeeper集群搭建-Cluster模式" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">Redis伪集群</h1>
+        <h1 class="article-title">Zookeeper集群搭建-Cluster模式</h1>
     
     <div class="article-meta">
         
@@ -346,19 +346,19 @@
         <span class="tag">
             <i class="iconfont icon-tag"></i>
             
-            <a class="color1">redis</a>
+            <a class="color1">[object Object]</a>
             
         </span>
         
     </div>
     <div class="article-meta">
         
-            发布时间 : <time class="date" title='最后更新: 2021-01-31 16:29:33'>2021-01-31 16:16</time>
+            发布时间 : <time class="date" title='最后更新: 2021-01-31 19:23:28'>2021-01-31 19:19</time>
         
     </div>
     <div class="article-meta">
         
-        <span>字数:556</span>
+        <span>字数:793</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -377,7 +377,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85"><span class="toc-text">一、源码编译安装</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E4%B8%8B%E8%BD%BD"><span class="toc-text">1、下载</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85"><span class="toc-text">2、编译安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81Make-Test%E6%8A%A5%E9%94%99"><span class="toc-text">3、Make Test报错</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E9%85%8D%E7%BD%AE%E6%95%B0%E6%8D%AE%E7%9B%AE%E5%BD%95"><span class="toc-text">二、配置数据目录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E4%BF%AE%E6%94%B9%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-text">三、修改配置文件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E5%B0%86redis-conf%E6%8B%B7%E8%B4%9D%E5%88%B0%E6%95%B0%E6%8D%AE%E7%9B%AE%E5%BD%95%E4%B8%AD"><span class="toc-text">1、将redis.conf拷贝到数据目录中</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E4%BF%AE%E6%94%B9redis-8001-conf%E6%96%87%E4%BB%B6"><span class="toc-text">2、修改redis_8001.conf文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81%E4%BF%AE%E6%94%B9%E5%85%B6%E4%BB%96%E5%AE%9E%E4%BE%8B%E7%9A%84%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-text">3、修改其他实例的配置文件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E5%90%AF%E5%8A%A8%E9%9B%86%E7%BE%A4"><span class="toc-text">四、启动集群</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E5%90%AF%E5%8A%A8%E5%AE%9E%E4%BE%8B"><span class="toc-text">1、启动实例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E5%88%9B%E5%BB%BA%E9%9B%86%E7%BE%A4"><span class="toc-text">2、创建集群</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E9%AA%8C%E8%AF%81"><span class="toc-text">五、验证</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E9%A2%84%E5%A4%87%E7%8E%AF%E5%A2%83%E8%AF%B4%E6%98%8E"><span class="toc-text">一、预备环境说明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E9%83%A8%E7%BD%B2%E6%AD%A5%E9%AA%A4"><span class="toc-text">二、部署步骤</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E8%A7%A3%E5%8E%8B"><span class="toc-text">1、解压</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E5%BB%BA%E7%AB%8Bdata%E6%96%87%E4%BB%B6%E5%A4%B9%E5%92%8Cmyid%E6%96%87%E4%BB%B6"><span class="toc-text">2、建立data文件夹和myid文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81%E4%BF%AE%E6%94%B9%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-text">3、修改配置文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5%E3%80%81%E5%90%AF%E5%8A%A8"><span class="toc-text">5、启动</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6%E3%80%81%E9%AA%8C%E8%AF%81"><span class="toc-text">6、验证</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7%E3%80%81%E8%B0%83%E7%94%A8ZK%E9%9B%86%E7%BE%A4%E7%9A%84%E9%85%8D%E7%BD%AE"><span class="toc-text">7、调用ZK集群的配置</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E5%85%B6%E4%BB%96"><span class="toc-text">三、其他</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81zoo-cfg%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E8%AF%B4%E6%98%8E"><span class="toc-text">1、zoo.cfg配置文件说明</span></a></li></ol></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -393,66 +393,48 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="一、源码编译安装"><a href="#一、源码编译安装" class="headerlink" title="一、源码编译安装"></a>一、源码编译安装</h2><h3 id="1、下载"><a href="#1、下载" class="headerlink" title="1、下载"></a>1、下载</h3><p><strong>采用Redis最新稳定版本Redis6.0.8</strong></p>
-<pre><code class="shell">cd /opt/ &amp;&amp; wget https://download.redis.io/releases/redis-6.0.8.tar.gz
-tar -zxvf redis-6.0.8.tar.gz
+        <h2 id="一、预备环境说明"><a href="#一、预备环境说明" class="headerlink" title="一、预备环境说明"></a>一、预备环境说明</h2><ol>
+<li>JDK 1.8.0_261</li>
+<li>下载最新版本压缩包，apache-zookeeper-3.5.8-bin.tar.gz（3.5版本后要用bin包）</li>
+<li>三台主机 A（192.168.1.1）、B（192.168.1.1）、C（192.168.1.1）</li>
+</ol>
+<h2 id="二、部署步骤"><a href="#二、部署步骤" class="headerlink" title="二、部署步骤"></a>二、部署步骤</h2><h3 id="1、解压"><a href="#1、解压" class="headerlink" title="1、解压"></a>1、解压</h3><p><code>tar -zxvf apache-zookeeper-3.5.8-bin.tar.gz -C /data</code></p>
+<h3 id="2、建立data文件夹和myid文件"><a href="#2、建立data文件夹和myid文件" class="headerlink" title="2、建立data文件夹和myid文件"></a>2、建立data文件夹和myid文件</h3><p>data文件夹为数据存储目录，myid文件为服务器编号。</p>
+<pre><code class="bash">mkdir /data/apache-zookeeper-3.5.8-bin/data
+echo &#39;1&#39; &gt; /data/apache-zookeeper-3.5.8-bin/data/myid
 </code></pre>
-<h3 id="2、编译安装"><a href="#2、编译安装" class="headerlink" title="2、编译安装"></a>2、编译安装</h3><pre><code class="bash">cd /opt/redis-6.0.8
-yum -y install gcc pkg-config
-yum install devtoolset-9-gcc devtoolset-9-gcc-c++ devtoolset-9-binutils
-(如果找不到，先安装yum源 yum install centos-release-scl-rh)
-scl enable devtoolset-9 bash    # 切换GCC
-make -j4
-make install
-make test
+<p><strong>注意：另外两台分别echo ‘2’ 和 echo ‘3’；三台中只有myid文件不同，其他配置都相同。</strong></p>
+<h3 id="3、修改配置文件"><a href="#3、修改配置文件" class="headerlink" title="3、修改配置文件"></a>3、修改配置文件</h3><p><code>cp zoo_sample.cfg  zoo.cfg</code> 并修改配置文件zoo.cfg。</p>
+<pre><code class="bash"># 数据存储目录
+dataDir=/data/apache-zookeeper-3.5.8-bin/data
+# 集群配置信息
+server.1=192.168.1.1:2888:3888
+server.2=192.168.1.2:2888:3888
+server.3=192.168.1.3:2888:3888
+# 修改管理端口，防止默认8080被占用，导致无法启动
+admin.serverPort=8888
 </code></pre>
-<p><strong>注意：</strong>因为Redis 6.0.8编译需要高版本gcc，所以需要安装devtoolset来满足gcc不同版本的要求</p>
-<h3 id="3、Make-Test报错"><a href="#3、Make-Test报错" class="headerlink" title="3、Make Test报错"></a>3、Make Test报错</h3><pre><code>cd /opt
-wget http://mirror.centos.org/centos/7/os/x86_64/Packages/tcl-8.5.13-8.el7.x86_64.rpm
-rpm -ivh tcl-8.5.13-8.el7.x86_64.rpm
-cd /opt/redis-6.0.8 &amp;&amp; make test
+<p><strong>注：其他两台机器配置文件相同，拷贝过去即可。</strong></p>
+<pre><code class="bash">#集群配置信息
+#server.A=B:C:D
+# A:是一个数字,表示这个是服务器编号
+# B:是这个服务器的ip地址
+# C:zk服务器之间的通信端口
+# D:Leader选举的端口
 </code></pre>
-<h2 id="二、配置数据目录"><a href="#二、配置数据目录" class="headerlink" title="二、配置数据目录"></a>二、配置数据目录</h2><pre><code>mkdir -p /data/redis_cluster/&#123;8001,8002,8003,8004,8005,8006&#125;
-</code></pre>
-<h2 id="三、修改配置文件"><a href="#三、修改配置文件" class="headerlink" title="三、修改配置文件"></a>三、修改配置文件</h2><h3 id="1、将redis-conf拷贝到数据目录中"><a href="#1、将redis-conf拷贝到数据目录中" class="headerlink" title="1、将redis.conf拷贝到数据目录中"></a>1、将redis.conf拷贝到数据目录中</h3><pre><code>cp /usr/local/redis-6.0.8/redis.conf /data/redis_cluster/8001/redis_8001.conf
-</code></pre>
-<h3 id="2、修改redis-8001-conf文件"><a href="#2、修改redis-8001-conf文件" class="headerlink" title="2、修改redis_8001.conf文件"></a>2、修改redis_8001.conf文件</h3><pre><code>protected-mode no    # 关闭保护模式
-port 8001            # 分别设置每个实例的端口
-daemonize yes        # 后台运行
-cluster-enabled yes
-cluster-config-file nodes-8001.conf # 集群节点信息,端口对应上
-cluster-node-timeout 15000
-pidfile /var/run/redis_8001.pid
-dir /data/redis_cluster/8001/    # 数据存放目录
-appendonly yes        # 数据持久化，开启OAF模式
-masterauth Eu3BjE    # 集群节点间访问密码
-requirepass Eu3BjE    # Redis访问密码
-</code></pre>
-<h3 id="3、修改其他实例的配置文件"><a href="#3、修改其他实例的配置文件" class="headerlink" title="3、修改其他实例的配置文件"></a>3、修改其他实例的配置文件</h3><pre><code>cd /data/redis_cluster
-cp 8001/redis_8001.conf 8002/redis_8002.conf
-cp 8001/redis_8001.conf 8003/redis_8003.conf
-cp 8001/redis_8001.conf 8004/redis_8004.conf
-cp 8001/redis_8001.conf 8005/redis_8005.conf
-cp 8001/redis_8001.conf 8006/redis_8006.conf
-sed -i &quot;s/8001/8002/g&quot; 8002/redis_8002.conf
-sed -i &quot;s/8001/8003/g&quot; 8003/redis_8003.conf
-sed -i &quot;s/8001/8004/g&quot; 8004/redis_8004.conf
-sed -i &quot;s/8001/8005/g&quot; 8005/redis_8005.conf
-sed -i &quot;s/8001/8006/g&quot; 8006/redis_8006.conf
-</code></pre>
-<h2 id="四、启动集群"><a href="#四、启动集群" class="headerlink" title="四、启动集群"></a>四、启动集群</h2><h3 id="1、启动实例"><a href="#1、启动实例" class="headerlink" title="1、启动实例"></a>1、启动实例</h3><pre><code class="shell">redis-server /data/redis_cluster/8001/redis_8001.conf 
-redis-server /data/redis_cluster/8002/redis_8002.conf 
-redis-server /data/redis_cluster/8003/redis_8003.conf 
-redis-server /data/redis_cluster/8004/redis_8004.conf 
-redis-server /data/redis_cluster/8005/redis_8005.conf 
-redis-server /data/redis_cluster/8006/redis_8006.conf 
-</code></pre>
-<h3 id="2、创建集群"><a href="#2、创建集群" class="headerlink" title="2、创建集群"></a>2、创建集群</h3><pre><code>redis-cli -a Eu3BjE --cluster create --cluster-replicas 1  172.16.20.28:8001 172.16.20.28:8002 172.16.20.28:8003 172.16.20.28:8004  172.16.20.28:8005 172.16.20.28:8006
-</code></pre>
-<h2 id="五、验证"><a href="#五、验证" class="headerlink" title="五、验证"></a>五、验证</h2><pre><code class="shell">redis-cli -a Eu3BjE -c -h 172.16.20.28 -p 8001
-&gt; cluster info
-&gt; cluster nodes
-</code></pre>
+<h3 id="5、启动"><a href="#5、启动" class="headerlink" title="5、启动"></a>5、启动</h3><p>三台机器依次启动，启动后可以观察日志。</p>
+<p><code>cd /data/apache-zookeeper-3.5.8-bin/bin/ &amp;&amp; ./zkServer.sh start</code>  </p>
+<h3 id="6、验证"><a href="#6、验证" class="headerlink" title="6、验证"></a>6、验证</h3><p>执行<code> ./skServer.sh status</code>命令即可验证集群状态。</p>
+<h3 id="7、调用ZK集群的配置"><a href="#7、调用ZK集群的配置" class="headerlink" title="7、调用ZK集群的配置"></a>7、调用ZK集群的配置</h3><p><code>zookeeper://192.168.1.1:2181?backup=192.168.1.2:2181,192.168.1.3:2181</code></p>
+<h2 id="三、其他"><a href="#三、其他" class="headerlink" title="三、其他"></a>三、其他</h2><h3 id="1、zoo-cfg配置文件说明"><a href="#1、zoo-cfg配置文件说明" class="headerlink" title="1、zoo.cfg配置文件说明"></a>1、zoo.cfg配置文件说明</h3><ol>
+<li>tickTime: zookeeper中使用的基本时间单位，毫秒值，比如可以设为1000，那么基本时间单位就是1000ms，也就是1s。</li>
+<li>initLimit: zookeeper集群中的包含多台server，其中一台为leader，集群中其余的server为follower，initLimit参数配置初始化连接时，follower和leader之间的最长心跳时间。如果该参数设置为5，就说明时间限制为5倍tickTime，即5*1000=5000ms=5s。</li>
+<li>syncLimit: 该参数配置leader和follower之间发送消息，请求和应答的最大时间长度。如果该参数设置为2，说明时间限制为2倍tickTime，即2000ms。</li>
+<li>dataDir: 数据目录. 可以是任意目录，一般是节点安装目录下data目录。</li>
+<li>dataLogDir: log目录, 同样可以是任意目录，一般是节点安装目录下的logs目录。如果没有设置该参数，将使用和dataDir相同的设置。</li>
+<li>clientPort: 监听client连接的端口号。</li>
+<li>server.X=A:B:C 其中X是一个数字, 表示这是第几号server，它的值和myid文件中的值对应。A是该server所在的IP地址。B是配置该server和集群中的leader交换消息所使用的端口。C配置选举leader时所使用的端口。由于配置的是伪集群模式，所以各个server的B, C参数必须不同，如果是真正分布式集群，那么B和C在各个节点上可以相同，因为即使相同由于节点处于不同的服务器也不会导致端口冲突。</li>
+</ol>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 lxwno.1@163.com </span>
