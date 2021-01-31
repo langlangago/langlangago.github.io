@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Redis伪集群 | Langlangago</title>
-  <meta name="keywords" content=" redis ">
-  <meta name="description" content="Redis伪集群 | Langlangago">
+  <title>安装RocketMQ-Console | Langlangago</title>
+  <meta name="keywords" content=" RocketMQ ">
+  <meta name="description" content="安装RocketMQ-Console | Langlangago">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="一、下载wget https:&#x2F;&#x2F;github.com&#x2F;apache&#x2F;rocketmq-externals&#x2F;archive&#x2F;master.zip unzip master.zip  二、编译打包打包依赖maven，可以通过各种方式安装： yum install maven  编译打包： cd &#x2F;opt&#x2F;master mvn clean package -Dmaven.test.skip&#x3D;true">
 <meta property="og:type" content="article">
@@ -359,9 +359,9 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="post-Redis伪集群" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-安装RocketMQ-Console" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">Redis伪集群</h1>
+        <h1 class="article-title">安装RocketMQ-Console</h1>
     
     <div class="article-meta">
         
@@ -371,7 +371,9 @@
             <i class="iconfont icon-category"></i>
             
             
-            <a  data-rel="中间件">中间件</a>
+            <a  data-rel="中间件">中间件</a> > 
+            
+            <a  data-rel="中间件&lt;---&gt;RocketMQ">RocketMQ</a>
             
         </span>
         
@@ -379,19 +381,19 @@
         <span class="tag">
             <i class="iconfont icon-tag"></i>
             
-            <a class="color1">redis</a>
+            <a class="color4">RocketMQ</a>
             
         </span>
         
     </div>
     <div class="article-meta">
         
-            发布时间 : <time class="date" title='最后更新: 2021-01-31 16:29:33'>2021-01-31 16:16</time>
+            发布时间 : <time class="date" title='最后更新: 2021-01-31 20:19:26'>2021-01-31 20:11</time>
         
     </div>
     <div class="article-meta">
         
-        <span>字数:556</span>
+        <span>字数:126</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -410,7 +412,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85"><span class="toc-text">一、源码编译安装</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E4%B8%8B%E8%BD%BD"><span class="toc-text">1、下载</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85"><span class="toc-text">2、编译安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81Make-Test%E6%8A%A5%E9%94%99"><span class="toc-text">3、Make Test报错</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E9%85%8D%E7%BD%AE%E6%95%B0%E6%8D%AE%E7%9B%AE%E5%BD%95"><span class="toc-text">二、配置数据目录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E4%BF%AE%E6%94%B9%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-text">三、修改配置文件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E5%B0%86redis-conf%E6%8B%B7%E8%B4%9D%E5%88%B0%E6%95%B0%E6%8D%AE%E7%9B%AE%E5%BD%95%E4%B8%AD"><span class="toc-text">1、将redis.conf拷贝到数据目录中</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E4%BF%AE%E6%94%B9redis-8001-conf%E6%96%87%E4%BB%B6"><span class="toc-text">2、修改redis_8001.conf文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81%E4%BF%AE%E6%94%B9%E5%85%B6%E4%BB%96%E5%AE%9E%E4%BE%8B%E7%9A%84%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-text">3、修改其他实例的配置文件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E5%90%AF%E5%8A%A8%E9%9B%86%E7%BE%A4"><span class="toc-text">四、启动集群</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E5%90%AF%E5%8A%A8%E5%AE%9E%E4%BE%8B"><span class="toc-text">1、启动实例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E5%88%9B%E5%BB%BA%E9%9B%86%E7%BE%A4"><span class="toc-text">2、创建集群</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E9%AA%8C%E8%AF%81"><span class="toc-text">五、验证</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E4%B8%8B%E8%BD%BD"><span class="toc-text">一、下载</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E7%BC%96%E8%AF%91%E6%89%93%E5%8C%85"><span class="toc-text">二、编译打包</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E5%90%AF%E5%8A%A8"><span class="toc-text">三、启动</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E9%AA%8C%E8%AF%81"><span class="toc-text">四、验证</span></a></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -426,66 +428,23 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="一、源码编译安装"><a href="#一、源码编译安装" class="headerlink" title="一、源码编译安装"></a>一、源码编译安装</h2><h3 id="1、下载"><a href="#1、下载" class="headerlink" title="1、下载"></a>1、下载</h3><p><strong>采用Redis最新稳定版本Redis6.0.8</strong></p>
-<pre><code class="shell">cd /opt/ &amp;&amp; wget https://download.redis.io/releases/redis-6.0.8.tar.gz
-tar -zxvf redis-6.0.8.tar.gz
+        <h2 id="一、下载"><a href="#一、下载" class="headerlink" title="一、下载"></a>一、下载</h2><pre><code class="bash">wget https://github.com/apache/rocketmq-externals/archive/master.zip
+unzip master.zip
 </code></pre>
-<h3 id="2、编译安装"><a href="#2、编译安装" class="headerlink" title="2、编译安装"></a>2、编译安装</h3><pre><code class="bash">cd /opt/redis-6.0.8
-yum -y install gcc pkg-config
-yum install devtoolset-9-gcc devtoolset-9-gcc-c++ devtoolset-9-binutils
-(如果找不到，先安装yum源 yum install centos-release-scl-rh)
-scl enable devtoolset-9 bash    # 切换GCC
-make -j4
-make install
-make test
+<h2 id="二、编译打包"><a href="#二、编译打包" class="headerlink" title="二、编译打包"></a>二、编译打包</h2><p>打包依赖maven，可以通过各种方式安装：</p>
+<pre><code class="bash">yum install maven
 </code></pre>
-<p><strong>注意：</strong>因为Redis 6.0.8编译需要高版本gcc，所以需要安装devtoolset来满足gcc不同版本的要求</p>
-<h3 id="3、Make-Test报错"><a href="#3、Make-Test报错" class="headerlink" title="3、Make Test报错"></a>3、Make Test报错</h3><pre><code>cd /opt
-wget http://mirror.centos.org/centos/7/os/x86_64/Packages/tcl-8.5.13-8.el7.x86_64.rpm
-rpm -ivh tcl-8.5.13-8.el7.x86_64.rpm
-cd /opt/redis-6.0.8 &amp;&amp; make test
+<p>编译打包：</p>
+<pre><code class="bash">cd /opt/master
+mvn clean package -Dmaven.test.skip=true
 </code></pre>
-<h2 id="二、配置数据目录"><a href="#二、配置数据目录" class="headerlink" title="二、配置数据目录"></a>二、配置数据目录</h2><pre><code>mkdir -p /data/redis_cluster/&#123;8001,8002,8003,8004,8005,8006&#125;
+<h2 id="三、启动"><a href="#三、启动" class="headerlink" title="三、启动"></a>三、启动</h2><pre><code class="bash">mkdir /usr/local/rocketmq-console/
+cp target/rocketmq-console-ng-2.0.0.jar /usr/local/rocketmq-console/
+cd /usr/local/rocketmq-console/
+nohup java -jar rocketmq-console-ng-2.0.0.jar --rocketmq.config.namesrvAddr=127.0.0.1:9876 &amp;
 </code></pre>
-<h2 id="三、修改配置文件"><a href="#三、修改配置文件" class="headerlink" title="三、修改配置文件"></a>三、修改配置文件</h2><h3 id="1、将redis-conf拷贝到数据目录中"><a href="#1、将redis-conf拷贝到数据目录中" class="headerlink" title="1、将redis.conf拷贝到数据目录中"></a>1、将redis.conf拷贝到数据目录中</h3><pre><code>cp /usr/local/redis-6.0.8/redis.conf /data/redis_cluster/8001/redis_8001.conf
-</code></pre>
-<h3 id="2、修改redis-8001-conf文件"><a href="#2、修改redis-8001-conf文件" class="headerlink" title="2、修改redis_8001.conf文件"></a>2、修改redis_8001.conf文件</h3><pre><code>protected-mode no    # 关闭保护模式
-port 8001            # 分别设置每个实例的端口
-daemonize yes        # 后台运行
-cluster-enabled yes
-cluster-config-file nodes-8001.conf # 集群节点信息,端口对应上
-cluster-node-timeout 15000
-pidfile /var/run/redis_8001.pid
-dir /data/redis_cluster/8001/    # 数据存放目录
-appendonly yes        # 数据持久化，开启OAF模式
-masterauth Eu3BjE    # 集群节点间访问密码
-requirepass Eu3BjE    # Redis访问密码
-</code></pre>
-<h3 id="3、修改其他实例的配置文件"><a href="#3、修改其他实例的配置文件" class="headerlink" title="3、修改其他实例的配置文件"></a>3、修改其他实例的配置文件</h3><pre><code>cd /data/redis_cluster
-cp 8001/redis_8001.conf 8002/redis_8002.conf
-cp 8001/redis_8001.conf 8003/redis_8003.conf
-cp 8001/redis_8001.conf 8004/redis_8004.conf
-cp 8001/redis_8001.conf 8005/redis_8005.conf
-cp 8001/redis_8001.conf 8006/redis_8006.conf
-sed -i &quot;s/8001/8002/g&quot; 8002/redis_8002.conf
-sed -i &quot;s/8001/8003/g&quot; 8003/redis_8003.conf
-sed -i &quot;s/8001/8004/g&quot; 8004/redis_8004.conf
-sed -i &quot;s/8001/8005/g&quot; 8005/redis_8005.conf
-sed -i &quot;s/8001/8006/g&quot; 8006/redis_8006.conf
-</code></pre>
-<h2 id="四、启动集群"><a href="#四、启动集群" class="headerlink" title="四、启动集群"></a>四、启动集群</h2><h3 id="1、启动实例"><a href="#1、启动实例" class="headerlink" title="1、启动实例"></a>1、启动实例</h3><pre><code class="shell">redis-server /data/redis_cluster/8001/redis_8001.conf 
-redis-server /data/redis_cluster/8002/redis_8002.conf 
-redis-server /data/redis_cluster/8003/redis_8003.conf 
-redis-server /data/redis_cluster/8004/redis_8004.conf 
-redis-server /data/redis_cluster/8005/redis_8005.conf 
-redis-server /data/redis_cluster/8006/redis_8006.conf 
-</code></pre>
-<h3 id="2、创建集群"><a href="#2、创建集群" class="headerlink" title="2、创建集群"></a>2、创建集群</h3><pre><code>redis-cli -a Eu3BjE --cluster create --cluster-replicas 1  172.16.20.28:8001 172.16.20.28:8002 172.16.20.28:8003 172.16.20.28:8004  172.16.20.28:8005 172.16.20.28:8006
-</code></pre>
-<h2 id="五、验证"><a href="#五、验证" class="headerlink" title="五、验证"></a>五、验证</h2><pre><code class="shell">redis-cli -a Eu3BjE -c -h 172.16.20.28 -p 8001
-&gt; cluster info
-&gt; cluster nodes
-</code></pre>
+<p>启动的时候要指定Namesvr地址。</p>
+<h2 id="四、验证"><a href="#四、验证" class="headerlink" title="四、验证"></a>四、验证</h2><p><a target="_blank" rel="noopener" href="http://xx.xx.xx.xx:8080/">http://xx.xx.xx.xx:8080</a> 能访问，有数据即可。</p>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 lxwno.1@163.com </span>
