@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Nacos集群搭建 | 运维人</title>
-  <meta name="keywords" content=" nacos ">
-  <meta name="description" content="Nacos集群搭建 | 运维人">
+  <title>RocketMQ部署-单机模式 | 运维人</title>
+  <meta name="keywords" content=" RocketMQ ">
+  <meta name="description" content="RocketMQ部署-单机模式 | 运维人">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="一、下载解压wget https:&#x2F;&#x2F;mirror.bit.edu.cn&#x2F;apache&#x2F;rocketmq&#x2F;4.7.1&#x2F;rocketmq-all-4.7.1-bin-release.zip  unzip rocketmq-all-4.7.1-bin-release.zip -d &#x2F;usr&#x2F;local&#x2F;  mv rocketmq-all-4.7.1-bin-release&#x2F; rocketmq-all-">
 <meta property="og:type" content="article">
@@ -379,9 +379,9 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="post-Nacos集群搭建" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-RocketMQ部署-单机模式" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">Nacos集群搭建</h1>
+        <h1 class="article-title">RocketMQ部署-单机模式</h1>
     
     <div class="article-meta">
         
@@ -391,7 +391,9 @@
             <i class="iconfont icon-category"></i>
             
             
-            <a  data-rel="中间件">中间件</a>
+            <a  data-rel="中间件">中间件</a> > 
+            
+            <a  data-rel="中间件&lt;---&gt;RocketMQ">RocketMQ</a>
             
         </span>
         
@@ -399,19 +401,19 @@
         <span class="tag">
             <i class="iconfont icon-tag"></i>
             
-            <a class="color1">nacos</a>
+            <a class="color4">RocketMQ</a>
             
         </span>
         
     </div>
     <div class="article-meta">
         
-            发布时间 : <time class="date" title='最后更新: 2021-01-31 16:00:05'>2021-01-29 14:14</time>
+            发布时间 : <time class="date" title='最后更新: 2021-02-01 14:37:53'>2021-02-01 14:34</time>
         
     </div>
     <div class="article-meta">
         
-        <span>字数:779</span>
+        <span>字数:271</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -430,7 +432,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E9%A2%84%E5%A4%87%E7%8E%AF%E5%A2%83%E8%AF%B4%E6%98%8E%EF%BC%9A"><span class="toc-text">一、预备环境说明：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E9%9B%86%E7%BE%A4%E6%9E%B6%E6%9E%84%EF%BC%9A"><span class="toc-text">二、集群架构：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E9%83%A8%E7%BD%B2%E6%AD%A5%E9%AA%A4%EF%BC%9A"><span class="toc-text">三、部署步骤：</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E8%A7%A3%E5%8E%8B%EF%BC%9A"><span class="toc-text">1、解压：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E5%AF%BC%E5%85%A5%E6%95%B0%E6%8D%AE%E6%96%87%E4%BB%B6%EF%BC%9A"><span class="toc-text">2、导入数据文件：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81%E4%BF%AE%E6%94%B9%E6%95%B0%E6%8D%AE%E6%BA%90%EF%BC%9A"><span class="toc-text">3、修改数据源：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4%E3%80%81%E4%BF%AE%E6%94%B9%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE%EF%BC%9A"><span class="toc-text">4、修改集群配置：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5%E3%80%81%E4%BF%AE%E6%94%B9%E5%86%85%E5%AD%98%E5%8D%A0%E7%94%A8%EF%BC%9A"><span class="toc-text">5、修改内存占用：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6%E3%80%81%E5%90%AF%E5%8A%A8%EF%BC%9A"><span class="toc-text">6、启动：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7%E3%80%81%E9%85%8D%E7%BD%AENginx%E4%BB%A3%E7%90%86Upstream"><span class="toc-text">7、配置Nginx代理Upstream</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8%E3%80%81%E9%AA%8C%E8%AF%81%EF%BC%9A"><span class="toc-text">8、验证：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E5%85%B6%E4%BB%96"><span class="toc-text">四、其他</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E4%B8%8B%E8%BD%BD%E8%A7%A3%E5%8E%8B"><span class="toc-text">一、下载解压</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E4%BF%AE%E6%94%B9%E9%85%8D%E7%BD%AE"><span class="toc-text">二、修改配置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E4%BF%AE%E6%94%B9%E5%90%AF%E5%8A%A8%E5%8F%82%E6%95%B0"><span class="toc-text">1、修改启动参数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E4%BF%AE%E6%94%B9broker%E7%9A%84%E9%85%8D%E7%BD%AE"><span class="toc-text">2、修改broker的配置</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E5%90%AF%E5%8A%A8"><span class="toc-text">三、启动</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E9%AA%8C%E8%AF%81"><span class="toc-text">四、验证</span></a></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -446,100 +448,34 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="一、预备环境说明："><a href="#一、预备环境说明：" class="headerlink" title="一、预备环境说明："></a>一、预备环境说明：</h2><ol>
-<li>64位JDK ，这里使用 JDK 1.8.0_261</li>
-<li>下载编译好的压缩包，nacos-server-1.4.0.tar.gz</li>
-<li>准备三台主机A(192.168.1.1)、B(192.168.1.2)、C(192.168.1.3)</li>
-<li>准备高可用Nginx集群、MySQL集群</li>
-</ol>
-<h2 id="二、集群架构："><a href="#二、集群架构：" class="headerlink" title="二、集群架构："></a>二、集群架构：</h2><pre class="mermaid">graph LR
-A[微服务] --> B(Nginx集群)
-    B --> D[Nacos1]
-    B --> E[Nacos2]
-    B --> F[Nacos3]
-    D --> G(MySQL集群)
-    E --> G
-    F --> G</pre>
+        <h2 id="一、下载解压"><a href="#一、下载解压" class="headerlink" title="一、下载解压"></a>一、下载解压</h2><pre><code class="bash">wget https://mirror.bit.edu.cn/apache/rocketmq/4.7.1/rocketmq-all-4.7.1-bin-release.zip
 
+unzip rocketmq-all-4.7.1-bin-release.zip -d /usr/local/
 
-<ul>
-<li><p><strong>高可用Nginx集群</strong></p>
-</li>
-<li><p><strong>高可用Nacos集群（至少三个实例）</strong></p>
-</li>
-<li><p><strong>高可用MySQL集群</strong></p>
-</li>
-</ul>
-<h2 id="三、部署步骤："><a href="#三、部署步骤：" class="headerlink" title="三、部署步骤："></a>三、部署步骤：</h2><h3 id="1、解压："><a href="#1、解压：" class="headerlink" title="1、解压："></a>1、解压：</h3><p><code>tar -zxvf nacos-server-1.4.0.tar.gz -C /data</code></p>
-<h3 id="2、导入数据文件："><a href="#2、导入数据文件：" class="headerlink" title="2、导入数据文件："></a>2、导入数据文件：</h3><p>创建数据库nacos_test，将<code>/data/nacos/conf/nacos-mysql.sql</code>导入数据库，并创建应用程序访问账号。</p>
-<h3 id="3、修改数据源："><a href="#3、修改数据源：" class="headerlink" title="3、修改数据源："></a>3、修改数据源：</h3><p>这里我们使用外置MySQL集群作为数据存储。</p>
-<p>修改<code>conf/application.properties</code>中关于MySQL数据源的配置。</p>
-<pre><code class="yaml">#*************** Config Module Related Configurations ***************#
-### If use MySQL as datasource:
-spring.datasource.platform=mysql
-
-### Count of DB:
-db.num=1
-
-### Connect URL of DB:
-db.url.0=jdbc:mysql://192.168.1.1:3306/nacos_test?characterEncoding=utf8&amp;connectTim
-eout=1000&amp;socketTimeout=3000&amp;auto
-Reconnect=true&amp;useUnicode=true&amp;useSSL=false&amp;serverTimezone=UTC
-db.user=nacos_test_rw
-db.password=POUZV#Of
+mv rocketmq-all-4.7.1-bin-release/ rocketmq-all-4.7.1
 </code></pre>
-<h3 id="4、修改集群配置："><a href="#4、修改集群配置：" class="headerlink" title="4、修改集群配置："></a>4、修改集群配置：</h3><p>修改<code>conf/cluster.conf</code>文件的末尾关于IP和端口配置（若没有cluster.conf就用cluster.conf.example复制）</p>
-<pre><code>192.168.1.1:8848
-192.168.1.2:8848
-192.168.1.3:8848
+<h2 id="二、修改配置"><a href="#二、修改配置" class="headerlink" title="二、修改配置"></a>二、修改配置</h2><h3 id="1、修改启动参数"><a href="#1、修改启动参数" class="headerlink" title="1、修改启动参数"></a>1、修改启动参数</h3><pre><code class="bash">JAVA_OPT=&quot;$&#123;JAVA_OPT&#125; -server -Xms256m -Xmx256m -Xmn125m -XX:MetaspaceSize=128m -XX:MaxMetaspaceSize=320m&quot;
 </code></pre>
-<p>这里写上集群内三台主机的IP和nacos监听端口</p>
-<h3 id="5、修改内存占用："><a href="#5、修改内存占用：" class="headerlink" title="5、修改内存占用："></a>5、修改内存占用：</h3><p>如果机器内存本身不大，那么不建议使用默认配置，根据具体情况修改<code>nacos/bin/startup.sh</code>中关于java内存占用的配置，</p>
-<p>比如将集群的内存占用从2G修改为512M（standalone配置可以保持不变），集群模式是else中内容：</p>
-<pre><code class="shell">#===========================================================================================
-# JVM Configuration
-#===========================================================================================
-if [[ &quot;$&#123;MODE&#125;&quot; == &quot;standalone&quot; ]]; then
-    JAVA_OPT=&quot;$&#123;JAVA_OPT&#125; -Xms512m -Xmx512m -Xmn256m&quot;
-    JAVA_OPT=&quot;$&#123;JAVA_OPT&#125; -Dnacos.standalone=true&quot;
-else
-    if [[ &quot;$&#123;EMBEDDED_STORAGE&#125;&quot; == &quot;embedded&quot; ]]; then
-        JAVA_OPT=&quot;$&#123;JAVA_OPT&#125; -DembeddedStorage=true&quot;
-    fi
-    JAVA_OPT=&quot;$&#123;JAVA_OPT&#125; -server -Xms512m -Xmx512m -Xmn256m -XX:MetaspaceSize=128m -XX:MaxMetaspaceSize=320m&quot;
-    JAVA_OPT=&quot;$&#123;JAVA_OPT&#125; -XX:-OmitStackTraceInFastThrow -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=$&#123;BASE_D
-IR&#125;/logs/java_heapdump.hprof&quot;
+<p>修改tools.sh、runserver.sh、runbroker.sh 中JAVA启动内存参数，默认的数值比较大，可能会启动不起来。</p>
+<h3 id="2、修改broker的配置"><a href="#2、修改broker的配置" class="headerlink" title="2、修改broker的配置"></a>2、修改broker的配置</h3><pre><code class="bash">cat &gt;&gt; /usr/local/rocketmq-all-4.7.1/conf/broker.conf &lt;&lt; EOF
+# 配置当前broker监听的地址（一般是公网IP），防止阿里云ECS无法公网访问MQ
+brokerIP1=xx.xx.xx.xx
+# 配置namesrv地址
+namesrvAddr=127.0.0.1:9876
+EOF
 </code></pre>
-<h3 id="6、启动："><a href="#6、启动：" class="headerlink" title="6、启动："></a>6、启动：</h3><p>依次启动，先启动的是主节点。</p>
-<p>执行<code>bin/startup.sh</code>即可，默认是集群模式。</p>
-<p>启动后可以查看日志文件和端口监听来确定集群是否启动成功 <code>tail -f nacos/logs/start.out</code>。</p>
-<p>注意：<code>./startup.sh -m standalone</code> 是启动单实例模式。</p>
-<h3 id="7、配置Nginx代理Upstream"><a href="#7、配置Nginx代理Upstream" class="headerlink" title="7、配置Nginx代理Upstream"></a>7、配置Nginx代理Upstream</h3><p>修改Nginx配置文件default.conf，加入负载均衡和反向代理的配置。</p>
-<pre><code class="shell"># 在server外部
-upstream nacos-cluster &#123;
-  server 192.168.1.1:8848;
-  server 192.168.1.2:8848;
-  server 192.168.1.3:8848;
-&#125;
-# 在server内部.location / 之前
-server &#123;
-    # 省略。。。。。
-    location /nacos &#123;
-        proxy_redirect off;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_pass http://nacos-cluster;
-    &#125;
-&#125;
+<p>broker启动默认会取第一个网卡的IP作为监听IP，一般为内网IP。</p>
+<h2 id="三、启动"><a href="#三、启动" class="headerlink" title="三、启动"></a>三、启动</h2><pre><code class="bash"># 启动namesvr，监听9876端口
+nohup sh bin/mqnamesrv &amp;
+# 启动mqbroker，监听10911、10912端口
+nohup sh bin/mqbroker -n localhost:9876 -c ./conf/broker.conf autoCreateTopicEnable=true &amp;
 </code></pre>
-<p><strong>注意：nginx upstream 的name中不要带下划线，不然springboot会报400错误。</strong></p>
-<h3 id="8、验证："><a href="#8、验证：" class="headerlink" title="8、验证："></a>8、验证：</h3><p>通过Nginx代理来访问整个集群（建议Nginx集群使用一个域名来访问）。</p>
-<p>可通过<a target="_blank" rel="noopener" href="http://192.168.1.1/nacos%E8%AE%BF%E9%97%AEnacos%E9%9B%86%E7%BE%A4%EF%BC%8C%E9%BB%98%E8%AE%A4%E5%B8%90%E5%8F%B7nacos%E3%80%81%E5%AF%86%E7%A0%81nacos%E3%80%82">http://192.168.1.1/nacos访问nacos集群，默认帐号nacos、密码nacos。</a></p>
-<p>或者使用域名访问<a target="_blank" rel="noopener" href="http://nacos.xxx.com/nacos%E3%80%82">http://nacos.xxx.com/nacos。</a></p>
-<h2 id="四、其他"><a href="#四、其他" class="headerlink" title="四、其他"></a>四、其他</h2><ol>
-<li><a target="_blank" rel="noopener" href="https://nacos.io/zh-cn/docs/what-is-nacos.html">Nacos官方文档 https://nacos.io/zh-cn/docs/what-is-nacos.html</a></li>
-</ol>
+<h2 id="四、验证"><a href="#四、验证" class="headerlink" title="四、验证"></a>四、验证</h2><pre><code class="bash">export NAMESRV_ADDR=localhost:9876
+# 生产者
+sh bin/tools.sh org.apache.rocketmq.example.quickstart.Producer
+# 消费者
+sh bin/tools.sh org.apache.rocketmq.example.quickstart.Consumer
+</code></pre>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 lxwno.1@163.com </span>
