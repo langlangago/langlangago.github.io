@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Nacos单机部署 | 运维人</title>
-  <meta name="keywords" content=" nacos ">
-  <meta name="description" content="Nacos单机部署 | 运维人">
+  <title>Mongodb单实例部署的两种方式 | 运维人</title>
+  <meta name="keywords" content=" mongodb , 数据库 ">
+  <meta name="description" content="Mongodb单实例部署的两种方式 | 运维人">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="一、现象：如图：  二、原因： 内核线程 nfs挂载没有指定端口  NFS挂载的问题已验证，内核原因待验证。">
 <meta property="og:type" content="article">
@@ -535,9 +535,9 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="post-Nacos单机部署" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-Mongodb单实例部署的两种方式" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">Nacos单机部署</h1>
+        <h1 class="article-title">Mongodb单实例部署的两种方式</h1>
     
     <div class="article-meta">
         
@@ -549,7 +549,7 @@
             
             <a  data-rel="中间件">中间件</a> > 
             
-            <a  data-rel="中间件&lt;---&gt;Nacos">Nacos</a>
+            <a  data-rel="中间件&lt;---&gt;MongoDB">MongoDB</a>
             
         </span>
         
@@ -557,19 +557,21 @@
         <span class="tag">
             <i class="iconfont icon-tag"></i>
             
-            <a class="color1">nacos</a>
+            <a class="color3">mongodb</a>
+            
+            <a class="color4">数据库</a>
             
         </span>
         
     </div>
     <div class="article-meta">
         
-            发布时间 : <time class="date" title='最后更新: 2021-02-01 14:56:05'>2021-02-01 14:54</time>
+            发布时间 : <time class="date" title='最后更新: 2021-02-01 15:33:19'>2021-02-01 15:22</time>
         
     </div>
     <div class="article-meta">
         
-        <span>字数:180</span>
+        <span>字数:647</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -588,7 +590,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E4%B8%8B%E8%BD%BD"><span class="toc-text">一、下载</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E9%85%8D%E7%BD%AE%E5%A4%96%E7%BD%AE%E6%95%B0%E6%8D%AE%E6%BA%90MySQL"><span class="toc-text">二、配置外置数据源MySQL</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E5%90%AF%E5%8A%A8"><span class="toc-text">三、启动</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E8%AE%BF%E9%97%AE%E9%AA%8C%E8%AF%81"><span class="toc-text">四、访问验证</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E5%88%A9%E7%94%A8Docker%E9%83%A8%E7%BD%B2"><span class="toc-text">一、利用Docker部署</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81Docker%E7%89%88%E9%83%A8%E7%BD%B2"><span class="toc-text">1、Docker版部署</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81-%E5%90%AF%E5%8A%A8%E5%91%BD%E4%BB%A4%E5%A6%82%E4%B8%8B"><span class="toc-text">2、  启动命令如下</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81-%E6%96%B0%E5%A2%9E%E7%94%A8%E6%88%B7"><span class="toc-text">3、 新增用户</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4%E3%80%81-%E9%AA%8C%E8%AF%81"><span class="toc-text">4、 验证</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E5%88%A9%E7%94%A8YUM%E5%AE%89%E8%A3%85"><span class="toc-text">二、利用YUM安装</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E5%A2%9E%E5%8A%A0yum%E6%BA%90"><span class="toc-text">1、增加yum源</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E5%AE%89%E8%A3%85%E6%8C%87%E5%AE%9A%E7%89%88%E6%9C%ACMongdb"><span class="toc-text">2、安装指定版本Mongdb</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81%E5%90%AF%E5%8A%A8"><span class="toc-text">3、启动</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4%E3%80%81%E5%A2%9E%E5%8A%A0%E7%94%A8%E6%88%B7"><span class="toc-text">4、增加用户</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5%E3%80%81%E4%BF%AE%E6%94%B9%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E6%89%93%E5%BC%80%E8%AE%A4%E8%AF%81"><span class="toc-text">5、修改配置文件打开认证</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6%E3%80%81%E9%87%8D%E5%90%AFMongdb"><span class="toc-text">6、重启Mongdb</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7%E3%80%81%E8%BF%9B%E8%A1%8C%E9%AA%8C%E8%AF%81"><span class="toc-text">7、进行验证</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8%E3%80%81%E6%8A%A5%E9%94%99%E8%A7%A3%E5%86%B3"><span class="toc-text">8、报错解决</span></a></li></ol></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -604,27 +606,79 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="一、下载"><a href="#一、下载" class="headerlink" title="一、下载"></a>一、下载</h2><pre><code class="bash">cd /opt/
-wget https://github.com/alibaba/nacos/releases/download/1.4.0/nacos-server-1.4.0.tar.gz
-tar -zxvf nacos-server-1.4.0.tar.gz -C /usr/local
+        <h2 id="一、利用Docker部署"><a href="#一、利用Docker部署" class="headerlink" title="一、利用Docker部署"></a>一、利用Docker部署</h2><p><strong>Redis、Mongdb、MySQL等数据库必须开认证策略，以防被人攻击破坏。</strong></p>
+<h3 id="1、Docker版部署"><a href="#1、Docker版部署" class="headerlink" title="1、Docker版部署"></a>1、Docker版部署</h3><p>因早期Mongodb默认不开启认证策略，很多Mongdb数据库被攻击，后期官方对认证策略进行了增强。</p>
+<p>经实际验证<code>MONGO_INITDB_ROOT_USERNAME和MONGO_INITDB_ROOT_PASSWORD</code>这两个参数，只有在Mongodb版本为3.6.20以上才生效，故使用Docker版Mongdb必须要用新版本才行（3.6.20以上）。</p>
+<h3 id="2、-启动命令如下"><a href="#2、-启动命令如下" class="headerlink" title="2、  启动命令如下"></a>2、  启动命令如下</h3><pre><code class="bash"> docker run -d  -p 27017:27017 --name mongo_huadong     -e MONGO_INITDB_ROOT_USERNAME=mongoadmin     -e MONGO_INITDB_ROOT_PASSWORD=Yimi@2018 -v 
+/data/mongo_huadong/db:/data/db     mongo:3.6.20
 </code></pre>
-<h2 id="二、配置外置数据源MySQL"><a href="#二、配置外置数据源MySQL" class="headerlink" title="二、配置外置数据源MySQL"></a>二、配置外置数据源MySQL</h2><p>新建MySQL数据库（5.5+）后，将源码<code>conf</code>文件夹下的<code>nacos-mysql.sql</code>导入数据库，并配置用户名密码。</p>
-<p>修改<code>/usr/local/nacos/conf/application.properties</code>文件配置MySQL数据源：</p>
-<pre><code class="bash">spring.datasource.platform=mysql
-
-### Count of DB:
-db.num=1
-
-### Connect URL of DB:
-db.url.0=jdbc:mysql://192.168.1.11:3306/nacos_dev?characterEncoding=utf8&amp;connectTimeout=1000&amp;socketTimeout=3000&amp;autoReconnect=true&amp;useUnicode=true&amp;useSSL=false&amp;serverTimezone=UTC
-db.user=nacos_dev_rw
-db.password=dzVCu#ND
+<h3 id="3、-新增用户"><a href="#3、-新增用户" class="headerlink" title="3、 新增用户"></a>3、 新增用户</h3><pre><code class="bash">use admin;
+db.createUser( &#123;
+ user: &quot;admin&quot;,
+ pwd: &quot;123456&quot;,
+ roles: [ &#123;
+            &quot;role&quot; : &quot;userAdminAnyDatabase&quot;,
+            &quot;db&quot; : &quot;admin&quot;
+        &#125;, 
+        &#123;
+            &quot;role&quot; : &quot;readWriteAnyDatabase&quot;,
+            &quot;db&quot; : &quot;admin&quot;
+        &#125;, 
+        &#123;
+            &quot;role&quot; : &quot;dbAdminAnyDatabase&quot;,
+            &quot;db&quot; : &quot;admin&quot;
+        &#125; ]
+&#125;);
 </code></pre>
-<h2 id="三、启动"><a href="#三、启动" class="headerlink" title="三、启动"></a>三、启动</h2><p>以单实例模式启动：</p>
-<pre><code class="bash">cd bin/
-bash startup.sh -m standalone
+<h3 id="4、-验证"><a href="#4、-验证" class="headerlink" title="4、 验证"></a>4、 验证</h3><pre><code class="bash">use admin;
+db.auth(&#39;admin&#39;, &#39;123456&#39;)
 </code></pre>
-<h2 id="四、访问验证"><a href="#四、访问验证" class="headerlink" title="四、访问验证"></a>四、访问验证</h2><p>访问localhost:8848/nacos   用户名和密码都是nacos。</p>
+<p>返回1 即为验证成功</p>
+<h2 id="二、利用YUM安装"><a href="#二、利用YUM安装" class="headerlink" title="二、利用YUM安装"></a>二、利用YUM安装</h2><p><strong>早期的Mongdb开启认证策略比较麻烦：先添加用户，再修改配置文件开启用户认证，再重启mongo服务（或者 添加用户后，用mongod  –auth命令启动）。</strong></p>
+<p>鉴于Docker中的进程不能关闭，也就是mongodb没发再容器里重启，所以低版本mongodb不建议用Docker安装</p>
+<h3 id="1、增加yum源"><a href="#1、增加yum源" class="headerlink" title="1、增加yum源"></a>1、增加yum源</h3><pre><code class="bash">cat &gt;&gt; /etc/yum.repos.d/mongodb-org-3.2.repo &lt;&lt; EOF
+[mongodb-org-3.2]
+name=MongoDB Repository
+baseurl=https://repo.mongodb.org/yum/redhat/$releasever/mongodb-org/3.2/x86_64/
+gpgcheck=1
+enabled=1
+gpgkey=https://www.mongodb.org/static/pgp/server-3.2.asc
+EOF
+</code></pre>
+<h3 id="2、安装指定版本Mongdb"><a href="#2、安装指定版本Mongdb" class="headerlink" title="2、安装指定版本Mongdb"></a>2、安装指定版本Mongdb</h3><pre><code class="bash">sudo yum install -y mongodb-org-3.2.22 mongodb-org-server-3.2.22 mongodb-org-shell-3.2.22 mongodb-org-mongos-3.2.22 mongodb-org-tools-3.2.22
+</code></pre>
+<h3 id="3、启动"><a href="#3、启动" class="headerlink" title="3、启动"></a>3、启动</h3><p><code>sudo service mongod start</code></p>
+<h3 id="4、增加用户"><a href="#4、增加用户" class="headerlink" title="4、增加用户"></a>4、增加用户</h3><pre><code class="bash">use admin
+db.createUser(
+  &#123;
+    user: &quot;admin&quot;,
+    pwd: &quot;123456&quot;,
+    roles: [ &#123; role: &quot;userAdminAnyDatabase&quot;, db: &quot;admin&quot; &#125; ]
+  &#125;
+)
+</code></pre>
+<h3 id="5、修改配置文件打开认证"><a href="#5、修改配置文件打开认证" class="headerlink" title="5、修改配置文件打开认证"></a>5、修改配置文件打开认证</h3><pre><code class="shell">vim /etc/mongod.conf 
+security:
+  authorization: enabled
+</code></pre>
+<h3 id="6、重启Mongdb"><a href="#6、重启Mongdb" class="headerlink" title="6、重启Mongdb"></a>6、重启Mongdb</h3><p><code>sudo service mongod restart</code></p>
+<h3 id="7、进行验证"><a href="#7、进行验证" class="headerlink" title="7、进行验证"></a>7、进行验证</h3><pre><code>use admin;
+db.auth(&#39;admin&#39;, &#39;123456&#39;)
+</code></pre>
+<p>返回1 即为验证成功</p>
+<h3 id="8、报错解决"><a href="#8、报错解决" class="headerlink" title="8、报错解决"></a>8、报错解决</h3><p>如果账号密码正确还是认证失败，客户端连接不上，建议观察日志，比如：</p>
+<pre><code>SCRAM-SHA-1 authentication failed ``for` `user1 on finddemo
+</code></pre>
+<p>这是因为 mongodb加入了SCRAM-SHA-1校验方式，需要第三方工具配合进行验证。</p>
+<p>首先关闭认证，修改system.version文档里面的authSchema版本为3，初始安装时候应该是5。</p>
+<pre><code>&gt; use admin 
+switched to db admin 
+&gt;  var schema = db.system.version.findOne(&#123;&quot;_id&quot; : &quot;authSchema&quot;&#125;) 
+&gt; schema.currentVersion = 3 
+3 
+&gt; db.system.version.save(schema) 
+WriteResult(&#123; &quot;nMatched&quot; : 1, &quot;nUpserted&quot; : 0, &quot;nModified&quot; : 1 &#125;)  
+</code></pre>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 lxwno.1@163.com </span>

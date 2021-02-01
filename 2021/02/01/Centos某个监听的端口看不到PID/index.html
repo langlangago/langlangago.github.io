@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Nacos单机部署 | 运维人</title>
-  <meta name="keywords" content=" nacos ">
-  <meta name="description" content="Nacos单机部署 | 运维人">
+  <title>Centos某个监听的端口看不到PID | 运维人</title>
+  <meta name="keywords" content=" centos ">
+  <meta name="description" content="Centos某个监听的端口看不到PID | 运维人">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="一、现象：如图：  二、原因： 内核线程 nfs挂载没有指定端口  NFS挂载的问题已验证，内核原因待验证。">
 <meta property="og:type" content="article">
@@ -535,9 +535,9 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="post-Nacos单机部署" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-Centos某个监听的端口看不到PID" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">Nacos单机部署</h1>
+        <h1 class="article-title">Centos某个监听的端口看不到PID</h1>
     
     <div class="article-meta">
         
@@ -547,9 +547,9 @@
             <i class="iconfont icon-category"></i>
             
             
-            <a  data-rel="中间件">中间件</a> > 
+            <a  data-rel="操作系统">操作系统</a> > 
             
-            <a  data-rel="中间件&lt;---&gt;Nacos">Nacos</a>
+            <a  data-rel="操作系统&lt;---&gt;Linux">Linux</a>
             
         </span>
         
@@ -557,19 +557,19 @@
         <span class="tag">
             <i class="iconfont icon-tag"></i>
             
-            <a class="color1">nacos</a>
+            <a class="color2">centos</a>
             
         </span>
         
     </div>
     <div class="article-meta">
         
-            发布时间 : <time class="date" title='最后更新: 2021-02-01 14:56:05'>2021-02-01 14:54</time>
+            发布时间 : <time class="date" title='最后更新: 2021-02-01 15:44:21'>2021-02-01 15:35</time>
         
     </div>
     <div class="article-meta">
         
-        <span>字数:180</span>
+        <span>字数:37</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -588,7 +588,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E4%B8%8B%E8%BD%BD"><span class="toc-text">一、下载</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E9%85%8D%E7%BD%AE%E5%A4%96%E7%BD%AE%E6%95%B0%E6%8D%AE%E6%BA%90MySQL"><span class="toc-text">二、配置外置数据源MySQL</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E5%90%AF%E5%8A%A8"><span class="toc-text">三、启动</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E8%AE%BF%E9%97%AE%E9%AA%8C%E8%AF%81"><span class="toc-text">四、访问验证</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E7%8E%B0%E8%B1%A1%EF%BC%9A"><span class="toc-text">一、现象：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E5%8E%9F%E5%9B%A0%EF%BC%9A"><span class="toc-text">二、原因：</span></a></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -604,27 +604,13 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="一、下载"><a href="#一、下载" class="headerlink" title="一、下载"></a>一、下载</h2><pre><code class="bash">cd /opt/
-wget https://github.com/alibaba/nacos/releases/download/1.4.0/nacos-server-1.4.0.tar.gz
-tar -zxvf nacos-server-1.4.0.tar.gz -C /usr/local
-</code></pre>
-<h2 id="二、配置外置数据源MySQL"><a href="#二、配置外置数据源MySQL" class="headerlink" title="二、配置外置数据源MySQL"></a>二、配置外置数据源MySQL</h2><p>新建MySQL数据库（5.5+）后，将源码<code>conf</code>文件夹下的<code>nacos-mysql.sql</code>导入数据库，并配置用户名密码。</p>
-<p>修改<code>/usr/local/nacos/conf/application.properties</code>文件配置MySQL数据源：</p>
-<pre><code class="bash">spring.datasource.platform=mysql
-
-### Count of DB:
-db.num=1
-
-### Connect URL of DB:
-db.url.0=jdbc:mysql://192.168.1.11:3306/nacos_dev?characterEncoding=utf8&amp;connectTimeout=1000&amp;socketTimeout=3000&amp;autoReconnect=true&amp;useUnicode=true&amp;useSSL=false&amp;serverTimezone=UTC
-db.user=nacos_dev_rw
-db.password=dzVCu#ND
-</code></pre>
-<h2 id="三、启动"><a href="#三、启动" class="headerlink" title="三、启动"></a>三、启动</h2><p>以单实例模式启动：</p>
-<pre><code class="bash">cd bin/
-bash startup.sh -m standalone
-</code></pre>
-<h2 id="四、访问验证"><a href="#四、访问验证" class="headerlink" title="四、访问验证"></a>四、访问验证</h2><p>访问localhost:8848/nacos   用户名和密码都是nacos。</p>
+        <h2 id="一、现象："><a href="#一、现象：" class="headerlink" title="一、现象："></a>一、现象：</h2><p>如图：</p>
+<p><img src="Centos%E6%9F%90%E4%B8%AA%E7%9B%91%E5%90%AC%E7%9A%84%E7%AB%AF%E5%8F%A3%E7%9C%8B%E4%B8%8D%E5%88%B0PID/ports.png" alt="ports"></p>
+<h2 id="二、原因："><a href="#二、原因：" class="headerlink" title="二、原因："></a>二、原因：</h2><ol>
+<li>内核线程</li>
+<li>nfs挂载没有指定端口</li>
+</ol>
+<p><strong>NFS挂载的问题已验证，内核原因待验证。</strong></p>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 lxwno.1@163.com </span>
