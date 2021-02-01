@@ -6,17 +6,17 @@
   <meta name="keywords" content=" RocketMQ ">
   <meta name="description" content="安装RocketMQ-Console | 运维人">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<meta name="description" content="一、下载解压wget https:&#x2F;&#x2F;mirror.bit.edu.cn&#x2F;apache&#x2F;rocketmq&#x2F;4.7.1&#x2F;rocketmq-all-4.7.1-bin-release.zip  unzip rocketmq-all-4.7.1-bin-release.zip -d &#x2F;usr&#x2F;local&#x2F;  mv rocketmq-all-4.7.1-bin-release&#x2F; rocketmq-all-">
+<meta name="description" content="一、下载cd &#x2F;opt&#x2F; wget https:&#x2F;&#x2F;github.com&#x2F;alibaba&#x2F;nacos&#x2F;releases&#x2F;download&#x2F;1.4.0&#x2F;nacos-server-1.4.0.tar.gz tar -zxvf nacos-server-1.4.0.tar.gz -C &#x2F;usr&#x2F;local  二、配置外置数据源MySQL新建MySQL数据库（5.5+）后，将源码conf文件夹下的naco">
 <meta property="og:type" content="article">
-<meta property="og:title" content="RocketMQ部署-单机模式">
-<meta property="og:url" content="http://example.com/2021/02/01/RocketMQ%E9%83%A8%E7%BD%B2-%E5%8D%95%E6%9C%BA%E6%A8%A1%E5%BC%8F/index.html">
+<meta property="og:title" content="Nacos单机部署">
+<meta property="og:url" content="http://example.com/2021/02/01/Nacos%E5%8D%95%E6%9C%BA%E9%83%A8%E7%BD%B2/index.html">
 <meta property="og:site_name" content="运维人">
-<meta property="og:description" content="一、下载解压wget https:&#x2F;&#x2F;mirror.bit.edu.cn&#x2F;apache&#x2F;rocketmq&#x2F;4.7.1&#x2F;rocketmq-all-4.7.1-bin-release.zip  unzip rocketmq-all-4.7.1-bin-release.zip -d &#x2F;usr&#x2F;local&#x2F;  mv rocketmq-all-4.7.1-bin-release&#x2F; rocketmq-all-">
+<meta property="og:description" content="一、下载cd &#x2F;opt&#x2F; wget https:&#x2F;&#x2F;github.com&#x2F;alibaba&#x2F;nacos&#x2F;releases&#x2F;download&#x2F;1.4.0&#x2F;nacos-server-1.4.0.tar.gz tar -zxvf nacos-server-1.4.0.tar.gz -C &#x2F;usr&#x2F;local  二、配置外置数据源MySQL新建MySQL数据库（5.5+）后，将源码conf文件夹下的naco">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2021-02-01T06:34:32.000Z">
-<meta property="article:modified_time" content="2021-02-01T06:37:53.538Z">
+<meta property="article:published_time" content="2021-02-01T06:54:52.000Z">
+<meta property="article:modified_time" content="2021-02-01T06:56:05.966Z">
 <meta property="article:author" content="运维人">
-<meta property="article:tag" content="RocketMQ">
+<meta property="article:tag" content="nacos">
 <meta name="twitter:card" content="summary">
 
 
@@ -183,10 +183,41 @@
     <li>
         <div class="all active" data-rel="全部文章">全部文章
             
-                <small>(6)</small>
+                <small>(8)</small>
             
         </div>
     </li>
+    
+        
+            
+                <li>
+                    <div data-rel="脚本">
+                        <i class="fold iconfont icon-right"></i>
+                        
+                        脚本
+                        <small>(1)</small>
+                        
+                    </div>
+                    
+                        <ul class="sub hide">
+                            
+                                <li>
+                                    <div data-rel="脚本<--->Python脚本">
+                                        
+                                        Python脚本
+                                        
+                                            <small>(1
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                        </ul>
+                    
+                </li>
+            
+        
     
         
             
@@ -195,11 +226,23 @@
                         <i class="fold iconfont icon-right"></i>
                         
                         中间件
-                        <small>(5)</small>
+                        <small>(6)</small>
                         
                     </div>
                     
                         <ul class="sub hide">
+                            
+                                <li>
+                                    <div data-rel="中间件<--->Nacos">
+                                        
+                                        Nacos
+                                        
+                                            <small>(2
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
                             
                                 <li>
                                     <div data-rel="中间件<--->RocketMQ">
@@ -216,6 +259,14 @@
                         </ul>
                     
                 </li>
+            
+        
+    
+        
+            
+        
+    
+        
             
         
     
@@ -243,8 +294,8 @@
         
     </div>
 </div>
-<input type="hidden" id="yelog_site_posts_number" value="6">
-<input type="hidden" id="yelog_site_word_count" value="2.6k">
+<input type="hidden" id="yelog_site_posts_number" value="8">
+<input type="hidden" id="yelog_site_word_count" value="3.2k">
 <div style="display: none">
     <span id="busuanzi_value_site_uv"></span>
     <span id="busuanzi_value_site_pv"></span>
@@ -296,6 +347,14 @@
             </li>
         
             <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>oracle</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>python</a>
+            </li>
+        
+            <li class="article-tag-list-item">
                 <i class="iconfont icon-tag"></i><a>redis</a>
             </li>
         
@@ -313,6 +372,22 @@
 
     
     <nav id="title-list-nav">
+        
+        <a  class="全部文章 中间件 Nacos "
+           href="/2021/02/01/Nacos%E5%8D%95%E6%9C%BA%E9%83%A8%E7%BD%B2/"
+           data-tag="nacos"
+           data-author="" >
+            <span class="post-title" title="Nacos单机部署">Nacos单机部署</span>
+            <span class="post-date" title="2021-02-01 14:54:52">2021/02/01</span>
+        </a>
+        
+        <a  class="全部文章 脚本 Python脚本 "
+           href="/2021/02/01/Python%E8%AF%BB%E5%8F%96Oracle%E6%95%B0%E6%8D%AE%E5%BA%93/"
+           data-tag="python,oracle"
+           data-author="" >
+            <span class="post-title" title="Python读取Oracle数据库">Python读取Oracle数据库</span>
+            <span class="post-date" title="2021-02-01 14:48:16">2021/02/01</span>
+        </a>
         
         <a  class="全部文章 中间件 RocketMQ "
            href="/2021/02/01/RocketMQ%E9%83%A8%E7%BD%B2-%E5%8D%95%E6%9C%BA%E6%A8%A1%E5%BC%8F/"
@@ -346,7 +421,7 @@
             <span class="post-date" title="2021-01-31 19:19:16">2021/01/31</span>
         </a>
         
-        <a  class="全部文章 中间件 "
+        <a  class="全部文章 中间件 Nacos "
            href="/2021/01/29/Nacos%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA/"
            data-tag="nacos"
            data-author="" >
