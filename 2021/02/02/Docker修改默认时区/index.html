@@ -951,12 +951,12 @@
     </div>
     <div class="article-meta">
         
-            发布时间 : <time class="date" title='最后更新: 2021-02-02 10:34:07'>2021-02-02 10:32</time>
+            发布时间 : <time class="date" title='最后更新: 2021-02-02 10:43:52'>2021-02-02 10:32</time>
         
     </div>
     <div class="article-meta">
         
-        <span>字数:161</span>
+        <span>字数:160</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -991,16 +991,13 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="一、缘由："><a href="#一、缘由：" class="headerlink" title="一、缘由："></a>一、缘由：</h2><pre><code>Docker Hub中的镜像默认都是0时区，而我们在东八区，差8小时，会导致我们看日志不能准确定位时间，这是很要命的。
-</code></pre>
+        <h2 id="一、缘由："><a href="#一、缘由：" class="headerlink" title="一、缘由："></a>一、缘由：</h2><p><strong>Docker Hub中的镜像默认都是0时区，而我们在东八区，差8小时，会导致我们看日志不能准确定位时间，这是很要命的。</strong></p>
 <h2 id="二、解决办法："><a href="#二、解决办法：" class="headerlink" title="二、解决办法："></a>二、解决办法：</h2><h3 id="1、环境变量方式："><a href="#1、环境变量方式：" class="headerlink" title="1、环境变量方式："></a>1、环境变量方式：</h3><ol>
 <li><p>docker run 启动时加入环境变量：<code>docker run -e &quot;TZ=Asia/Shanghai&quot;</code></p>
 </li>
 <li><p>docker-compose 方式启动时，加入 </p>
-<pre><code>```bash
-environment:
-   - TZ=Asia/Shanghai
-```
+<pre><code class="bash">environment:
+ - TZ=Asia/Shanghai
 </code></pre>
 <h3 id="2、重新制作镜像方式："><a href="#2、重新制作镜像方式：" class="headerlink" title="2、重新制作镜像方式："></a>2、重新制作镜像方式：</h3></li>
 </ol>
