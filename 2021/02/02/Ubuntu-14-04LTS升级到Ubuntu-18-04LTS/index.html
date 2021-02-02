@@ -1,0 +1,1264 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Ubuntu-14.04LTS升级到Ubuntu-18.04LTS | 运维人</title>
+  <meta name="keywords" content=" ubuntu , 系统升级 ">
+  <meta name="description" content="Ubuntu-14.04LTS升级到Ubuntu-18.04LTS | 运维人">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="description" content="一、缘由：　　今天学习Flask，书上建议用Docker，那我就安装了DockerToolBox（WIN10系统只能用toolbox）。其中从docker hub拉取ubuntu镜像时 docker pull xxxx，网速简直是龟速。想到中国的长城防火墙，再想到毕竟是国外的网站，瞬间心灰意冷，想诅骂作者搞了个那么大个镜像在Docker Hub。 　　按以往的经验，对于国外网站或者源，我们都喜欢更">
+<meta property="og:type" content="article">
+<meta property="og:title" content="DockerHub加速">
+<meta property="og:url" content="http://example.com/2021/02/02/DockerHub%E5%8A%A0%E9%80%9F/index.html">
+<meta property="og:site_name" content="运维人">
+<meta property="og:description" content="一、缘由：　　今天学习Flask，书上建议用Docker，那我就安装了DockerToolBox（WIN10系统只能用toolbox）。其中从docker hub拉取ubuntu镜像时 docker pull xxxx，网速简直是龟速。想到中国的长城防火墙，再想到毕竟是国外的网站，瞬间心灰意冷，想诅骂作者搞了个那么大个镜像在Docker Hub。 　　按以往的经验，对于国外网站或者源，我们都喜欢更">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-02-02T02:34:29.000Z">
+<meta property="article:modified_time" content="2021-02-02T02:35:58.143Z">
+<meta property="article:author" content="运维人">
+<meta property="article:tag" content="docker">
+<meta property="article:tag" content="加速器">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="icon" href="/img/avatar.jpg">
+
+<link href="/css/style.css?v=1.1.0" rel="stylesheet">
+
+<link href="/css/hl_theme/atom-light.css?v=1.1.0" rel="stylesheet">
+
+<link href="//cdn.jsdelivr.net/npm/animate.css@4.1.0/animate.min.css" rel="stylesheet">
+
+<script src="//cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+<script src="/js/titleTip.js?v=1.1.0" ></script>
+
+<script src="//cdn.jsdelivr.net/npm/highlightjs@9.16.2/highlight.pack.min.js"></script>
+<script>
+    hljs.initHighlightingOnLoad();
+</script>
+
+<script src="//cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js"></script>
+
+
+
+<script src="//cdn.jsdelivr.net/npm/jquery.cookie@1.4.1/jquery.cookie.min.js" ></script>
+
+<script src="/js/iconfont.js?v=1.1.0" ></script>
+
+<meta name="generator" content="Hexo 5.3.0"></head>
+<div style="display: none">
+  <input class="theme_disqus_on" value="false">
+  <input class="theme_preload_comment" value="">
+  <input class="theme_blog_path" value="">
+  <input id="theme_shortcut" value="true" />
+  <input id="theme_highlight_on" value="true" />
+  <input id="theme_code_copy" value="true" />
+</div>
+
+
+
+<body>
+<aside class="nav">
+    <div class="nav-left">
+        <a href="/"
+   class="avatar_target">
+    <img class="avatar"
+         src="/img/avatar.jpg"/>
+</a>
+<div class="author">
+    <span>运维人</span>
+</div>
+
+<div class="icon">
+    
+        
+            <a title="rss"
+               href="/atom.xml"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-rss"></use>
+                    </svg>
+                
+            </a>
+        
+    
+        
+            <a title="github"
+               href="https://github.com/langlangago"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-github"></use>
+                    </svg>
+                
+            </a>
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+            <a title="weibo"
+               href="https://weibo.com/u/1661089304"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-weibo"></use>
+                    </svg>
+                
+            </a>
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+            <a title="email"
+               href="mailto:lxwno.1@163.com"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-email"></use>
+                    </svg>
+                
+            </a>
+        
+    
+        
+            <a title="qq"
+               href="http://wpa.qq.com/msgrd?v=3&uin=458590981&site=qq&menu=yes"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-qq"></use>
+                    </svg>
+                
+            </a>
+        
+    
+        
+            <a title="kugou"
+               href="https://www.kugou.com/"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-kugou"></use>
+                    </svg>
+                
+            </a>
+        
+    
+        
+            <a title="neteasemusic"
+               href="https://music.163.com/"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-neteasemusic"></use>
+                    </svg>
+                
+            </a>
+        
+    
+</div>
+
+
+
+
+<ul>
+    <li>
+        <div class="all active" data-rel="全部文章">全部文章
+            
+                <small>(28)</small>
+            
+        </div>
+    </li>
+    
+        
+            
+                <li>
+                    <div data-rel="工具">
+                        <i class="fold iconfont icon-right"></i>
+                        
+                        工具
+                        <small>(7)</small>
+                        
+                    </div>
+                    
+                        <ul class="sub hide">
+                            
+                                <li>
+                                    <div data-rel="工具<--->ELK">
+                                        
+                                        ELK
+                                        
+                                            <small>(3
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                                <li>
+                                    <div data-rel="工具<--->Git">
+                                        
+                                        Git
+                                        
+                                            <small>(1
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                        </ul>
+                    
+                </li>
+            
+        
+    
+        
+            
+                <li>
+                    <div data-rel="脚本">
+                        <i class="fold iconfont icon-right"></i>
+                        
+                        脚本
+                        <small>(1)</small>
+                        
+                    </div>
+                    
+                        <ul class="sub hide">
+                            
+                                <li>
+                                    <div data-rel="脚本<--->Python脚本">
+                                        
+                                        Python脚本
+                                        
+                                            <small>(1
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                        </ul>
+                    
+                </li>
+            
+        
+    
+        
+            
+                <li>
+                    <div data-rel="系统">
+                        <i class="fold iconfont icon-right"></i>
+                        
+                        系统
+                        <small>(4)</small>
+                        
+                    </div>
+                    
+                        <ul class="sub hide">
+                            
+                                <li>
+                                    <div data-rel="系统<--->Linux">
+                                        
+                                        Linux
+                                        
+                                            <small>(1
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                                <li>
+                                    <div data-rel="系统<--->Ubuntu">
+                                        
+                                        Ubuntu
+                                        
+                                            <small>(2
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                                <li>
+                                    <div data-rel="系统<--->Windows">
+                                        
+                                        Windows
+                                        
+                                            <small>(1
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                        </ul>
+                    
+                </li>
+            
+        
+    
+        
+            
+                <li>
+                    <div data-rel="虚拟化">
+                        <i class="fold iconfont icon-right"></i>
+                        
+                        虚拟化
+                        <small>(7)</small>
+                        
+                    </div>
+                    
+                        <ul class="sub hide">
+                            
+                                <li>
+                                    <div data-rel="虚拟化<--->Docker">
+                                        
+                                        Docker
+                                        
+                                            <small>(5
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                                <li>
+                                    <div data-rel="虚拟化<--->VMware">
+                                        
+                                        VMware
+                                        
+                                            <small>(2
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                        </ul>
+                    
+                </li>
+            
+        
+    
+        
+            
+                <li>
+                    <div data-rel="中间件">
+                        <i class="fold iconfont icon-right"></i>
+                        
+                        中间件
+                        <small>(8)</small>
+                        
+                    </div>
+                    
+                        <ul class="sub hide">
+                            
+                                <li>
+                                    <div data-rel="中间件<--->MongoDB">
+                                        
+                                        MongoDB
+                                        
+                                            <small>(1
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                                <li>
+                                    <div data-rel="中间件<--->Nacos">
+                                        
+                                        Nacos
+                                        
+                                            <small>(2
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                                <li>
+                                    <div data-rel="中间件<--->Nginx">
+                                        
+                                        Nginx
+                                        
+                                            <small>(1
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                                <li>
+                                    <div data-rel="中间件<--->RocketMQ">
+                                        
+                                        RocketMQ
+                                        
+                                            <small>(2
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                        </ul>
+                    
+                </li>
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+</ul>
+<div class="left-bottom">
+    <div class="menus">
+        
+            
+            
+            
+    </div>
+    <div>
+        
+            <a class="about  hasFriend  site_url"
+               
+               href="/about">关于</a>
+        
+        <a style="width: 50%"
+                
+                                           class="friends">友链</a>
+        
+    </div>
+</div>
+<input type="hidden" id="yelog_site_posts_number" value="28">
+<input type="hidden" id="yelog_site_word_count" value="16.5k">
+<div style="display: none">
+    <span id="busuanzi_value_site_uv"></span>
+    <span id="busuanzi_value_site_pv"></span>
+</div>
+
+    </div>
+    <div class="nav-right">
+        <div class="friends-area">
+    <div class="friends-title">
+        友情链接
+        <i class="iconfont icon-left"></i>
+    </div>
+    <div class="friends-content">
+        <ul>
+            
+            <li><a target="_blank" href="https://www.cnblogs.com/langdashu/">我的CSDN</a></li>
+            
+            <li><a target="_blank" href="https://www.langxw.com/">运维人</a></li>
+            
+        </ul>
+    </div>
+</div>
+        <div class="title-list">
+    <div class="right-top">
+        <div id="default-panel">
+            <i class="iconfont icon-search" data-title="搜索 快捷键 i"></i>
+            <div class="right-title">全部文章</div>
+            <i class="iconfont icon-file-tree" data-title="切换到大纲视图 快捷键 w"></i>
+        </div>
+        <div id="search-panel">
+            <i class="iconfont icon-left" data-title="返回"></i>
+            <input id="local-search-input" />
+            <label class="border-line" for="input"></label>
+            <i class="iconfont icon-case-sensitive" data-title="大小写敏感"></i>
+            <i class="iconfont icon-tag" data-title="标签"></i>
+        </div>
+        <div id="outline-panel" style="display: none">
+            <div class="right-title">大纲</div>
+            <i class="iconfont icon-list" data-title="切换到文章列表"></i>
+        </div>
+    </div>
+
+    <div class="tags-list">
+    <input id="tag-search" />
+    <div class="tag-wrapper">
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>加速器</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>数据库</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>系统升级</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>aircrack-ng</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>arimon-ng</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>bbr</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>centos</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>docker</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>ELK</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>filebeat</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>git</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>index</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>lets-encrypt</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>log</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>mongodb</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>nacos</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>nginx</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>oracle</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>python</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>redis</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>RocketMQ</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>shadowsockets</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>ssl证书</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>swap</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>timezone</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>ubuntu</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>vmware</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>vsca</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>vsphere</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>vultr</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>win10</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>zookeeper</a>
+            </li>
+        
+    </div>
+
+</div>
+
+    
+    <nav id="title-list-nav">
+        
+        <a  class="全部文章 虚拟化 Docker "
+           href="/2021/02/02/DockerHub%E5%8A%A0%E9%80%9F/"
+           data-tag="docker,加速器"
+           data-author="" >
+            <span class="post-title" title="DockerHub加速">DockerHub加速</span>
+            <span class="post-date" title="2021-02-02 10:34:29">2021/02/02</span>
+        </a>
+        
+        <a  class="全部文章 虚拟化 Docker "
+           href="/2021/02/02/Docker%E4%BF%AE%E6%94%B9%E9%BB%98%E8%AE%A4%E6%97%B6%E5%8C%BA/"
+           data-tag="docker,timezone"
+           data-author="" >
+            <span class="post-title" title="Docker修改默认时区">Docker修改默认时区</span>
+            <span class="post-date" title="2021-02-02 10:32:07">2021/02/02</span>
+        </a>
+        
+        <a  class="全部文章 工具 ELK "
+           href="/2021/02/02/ELK-Docker%E5%8C%96%E5%AE%89%E8%A3%85/"
+           data-tag="docker,ELK"
+           data-author="" >
+            <span class="post-title" title="ELK-Docker化安装">ELK-Docker化安装</span>
+            <span class="post-date" title="2021-02-02 10:28:20">2021/02/02</span>
+        </a>
+        
+        <a  class="全部文章 工具 ELK "
+           href="/2021/02/02/ELK%E8%87%AA%E5%AE%9A%E4%B9%89%E7%B4%A2%E5%BC%95%E9%85%8D%E7%BD%AE/"
+           data-tag="ELK,index,log"
+           data-author="" >
+            <span class="post-title" title="ELK自定义索引配置">ELK自定义索引配置</span>
+            <span class="post-date" title="2021-02-02 10:26:17">2021/02/02</span>
+        </a>
+        
+        <a  class="全部文章 工具 ELK "
+           href="/2021/02/02/Filebeat%E5%90%88%E5%B9%B6%E5%A4%9A%E8%A1%8C%E6%97%A5%E5%BF%97/"
+           data-tag="ELK,filebeat"
+           data-author="" >
+            <span class="post-title" title="Filebeat合并多行日志">Filebeat合并多行日志</span>
+            <span class="post-date" title="2021-02-02 10:23:55">2021/02/02</span>
+        </a>
+        
+        <a  class="全部文章 工具 Git "
+           href="/2021/02/02/Git%E4%B8%8A%E4%BC%A0%E6%9C%AC%E5%9C%B0%E9%A1%B9%E7%9B%AE/"
+           data-tag="git"
+           data-author="" >
+            <span class="post-title" title="Git上传本地项目">Git上传本地项目</span>
+            <span class="post-date" title="2021-02-02 10:21:35">2021/02/02</span>
+        </a>
+        
+        <a  class="全部文章 工具 "
+           href="/2021/02/02/Lets-encrypt%E5%85%8D%E8%B4%B9SSL%E8%AF%81%E4%B9%A6%E7%94%B3%E8%AF%B7/"
+           data-tag="lets-encrypt,ssl证书"
+           data-author="" >
+            <span class="post-title" title="Lets-encrypt免费SSL证书申请">Lets-encrypt免费SSL证书申请</span>
+            <span class="post-date" title="2021-02-02 10:18:38">2021/02/02</span>
+        </a>
+        
+        <a  class="全部文章 中间件 Nginx "
+           href="/2021/02/02/Nginx%E5%88%A9%E7%94%A8%E6%BA%90%E5%8D%87%E7%BA%A7/"
+           data-tag="nginx"
+           data-author="" >
+            <span class="post-title" title="Nginx利用源升级">Nginx利用源升级</span>
+            <span class="post-date" title="2021-02-02 10:16:55">2021/02/02</span>
+        </a>
+        
+        <a  class="全部文章 系统 Ubuntu "
+           href="/2021/02/02/Ubuntu-14-04LTS%E5%8D%87%E7%BA%A7%E5%88%B0Ubuntu-18-04LTS/"
+           data-tag="ubuntu,系统升级"
+           data-author="" >
+            <span class="post-title" title="Ubuntu-14.04LTS升级到Ubuntu-18.04LTS">Ubuntu-14.04LTS升级到Ubuntu-18.04LTS</span>
+            <span class="post-date" title="2021-02-02 10:14:53">2021/02/02</span>
+        </a>
+        
+        <a  class="全部文章 系统 Ubuntu "
+           href="/2021/02/02/Ubuntu%E6%96%B0%E5%A2%9ESWAP%E5%92%8C%E8%B0%83%E6%95%B4SWAP%E5%A4%A7%E5%B0%8F/"
+           data-tag="ubuntu,swap"
+           data-author="" >
+            <span class="post-title" title="Ubuntu新增SWAP和调整SWAP大小">Ubuntu新增SWAP和调整SWAP大小</span>
+            <span class="post-date" title="2021-02-02 10:13:23">2021/02/02</span>
+        </a>
+        
+        <a  class="全部文章 工具 "
+           href="/2021/02/02/VPS%E6%90%AD%E5%BB%BASS%E5%BD%B1%E6%A2%AD%E6%9C%8D%E5%8A%A1%E7%AB%AF%E5%B9%B6%E4%BC%98%E5%8C%96%E5%8A%A0%E9%80%9FShadowsocks-BBR/"
+           data-tag="shadowsockets,bbr,vultr"
+           data-author="" >
+            <span class="post-title" title="VPS搭建SS影梭服务端并优化加速Shadowsocks+BBR">VPS搭建SS影梭服务端并优化加速Shadowsocks+BBR</span>
+            <span class="post-date" title="2021-02-02 10:10:31">2021/02/02</span>
+        </a>
+        
+        <a  class="全部文章 虚拟化 VMware "
+           href="/2021/02/02/VSCA%E5%8F%91%E9%82%AE%E4%BB%B6%E9%85%8D%E7%BD%AE/"
+           data-tag="vsca"
+           data-author="" >
+            <span class="post-title" title="VSCA发邮件配置">VSCA发邮件配置</span>
+            <span class="post-date" title="2021-02-02 10:08:20">2021/02/02</span>
+        </a>
+        
+        <a  class="全部文章 系统 Windows "
+           href="/2021/02/02/Win10%E7%9A%84%E4%BE%BF%E6%8D%B7%E4%BD%BF%E7%94%A8/"
+           data-tag="win10"
+           data-author="" >
+            <span class="post-title" title="Win10的便捷使用">Win10的便捷使用</span>
+            <span class="post-date" title="2021-02-02 10:06:16">2021/02/02</span>
+        </a>
+        
+        <a  class="全部文章 工具 "
+           href="/2021/02/02/Wifi%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3/"
+           data-tag="aircrack-ng,arimon-ng"
+           data-author="" >
+            <span class="post-title" title="Wifi密码破解">Wifi密码破解</span>
+            <span class="post-date" title="2021-02-02 10:02:18">2021/02/02</span>
+        </a>
+        
+        <a  class="全部文章 虚拟化 Docker "
+           href="/2021/02/02/Docker%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/"
+           data-tag="docker"
+           data-author="" >
+            <span class="post-title" title="Docker基本操作">Docker基本操作</span>
+            <span class="post-date" title="2021-02-02 09:53:03">2021/02/02</span>
+        </a>
+        
+        <a  class="全部文章 虚拟化 Docker "
+           href="/2021/02/02/Docker%E6%8C%82%E8%BD%BD%E6%96%87%E4%BB%B6%E7%9A%84%E6%9B%B4%E6%96%B0%E9%97%AE%E9%A2%98/"
+           data-tag="docker"
+           data-author="" >
+            <span class="post-title" title="Docker挂载文件的更新问题">Docker挂载文件的更新问题</span>
+            <span class="post-date" title="2021-02-02 09:50:42">2021/02/02</span>
+        </a>
+        
+        <a  class="全部文章 虚拟化 VMware "
+           href="/2021/02/02/vSphere%E6%95%B0%E6%8D%AE%E4%B8%AD%E5%BF%83%E6%9E%B6%E6%9E%84%E9%80%89%E5%9E%8B/"
+           data-tag="vmware,vsphere"
+           data-author="" >
+            <span class="post-title" title="vSphere数据中心架构选型">vSphere数据中心架构选型</span>
+            <span class="post-date" title="2021-02-02 09:47:12">2021/02/02</span>
+        </a>
+        
+        <a  class="全部文章 虚拟化 Docker "
+           href="/2021/02/02/%E5%88%B6%E4%BD%9CDockerImage%E5%AD%98%E5%9C%A8%E7%9A%84%E9%97%AE%E9%A2%98/"
+           data-tag="docker"
+           data-author="" >
+            <span class="post-title" title="制作DockerImage存在的问题">制作DockerImage存在的问题</span>
+            <span class="post-date" title="2021-02-02 09:44:03">2021/02/02</span>
+        </a>
+        
+        <a  class="全部文章 系统 Linux "
+           href="/2021/02/01/Centos%E6%9F%90%E4%B8%AA%E7%9B%91%E5%90%AC%E7%9A%84%E7%AB%AF%E5%8F%A3%E7%9C%8B%E4%B8%8D%E5%88%B0PID/"
+           data-tag="centos"
+           data-author="" >
+            <span class="post-title" title="Centos某个监听的端口看不到PID">Centos某个监听的端口看不到PID</span>
+            <span class="post-date" title="2021-02-01 15:35:10">2021/02/01</span>
+        </a>
+        
+        <a  class="全部文章 中间件 MongoDB "
+           href="/2021/02/01/Mongodb%E5%8D%95%E5%AE%9E%E4%BE%8B%E9%83%A8%E7%BD%B2%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%96%B9%E5%BC%8F/"
+           data-tag="mongodb,数据库"
+           data-author="" >
+            <span class="post-title" title="Mongodb单实例部署的两种方式">Mongodb单实例部署的两种方式</span>
+            <span class="post-date" title="2021-02-01 15:22:54">2021/02/01</span>
+        </a>
+        
+        <a  class="全部文章 中间件 Nacos "
+           href="/2021/02/01/Nacos%E5%8D%95%E6%9C%BA%E9%83%A8%E7%BD%B2/"
+           data-tag="nacos"
+           data-author="" >
+            <span class="post-title" title="Nacos单机部署">Nacos单机部署</span>
+            <span class="post-date" title="2021-02-01 14:54:52">2021/02/01</span>
+        </a>
+        
+        <a  class="全部文章 脚本 Python脚本 "
+           href="/2021/02/01/Python%E8%AF%BB%E5%8F%96Oracle%E6%95%B0%E6%8D%AE%E5%BA%93/"
+           data-tag="python,oracle"
+           data-author="" >
+            <span class="post-title" title="Python读取Oracle数据库">Python读取Oracle数据库</span>
+            <span class="post-date" title="2021-02-01 14:48:16">2021/02/01</span>
+        </a>
+        
+        <a  class="全部文章 中间件 RocketMQ "
+           href="/2021/02/01/RocketMQ%E9%83%A8%E7%BD%B2-%E5%8D%95%E6%9C%BA%E6%A8%A1%E5%BC%8F/"
+           data-tag="RocketMQ"
+           data-author="" >
+            <span class="post-title" title="RocketMQ部署-单机模式">RocketMQ部署-单机模式</span>
+            <span class="post-date" title="2021-02-01 14:34:32">2021/02/01</span>
+        </a>
+        
+        <a  class="全部文章 中间件 "
+           href="/2021/02/01/Redis%E4%BC%AA%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA/"
+           data-tag="redis"
+           data-author="" >
+            <span class="post-title" title="Redis伪集群搭建">Redis伪集群搭建</span>
+            <span class="post-date" title="2021-02-01 10:25:25">2021/02/01</span>
+        </a>
+        
+        <a  class="全部文章 中间件 RocketMQ "
+           href="/2021/01/31/%E5%AE%89%E8%A3%85RocketMQ-Console/"
+           data-tag="RocketMQ"
+           data-author="" >
+            <span class="post-title" title="安装RocketMQ-Console">安装RocketMQ-Console</span>
+            <span class="post-date" title="2021-01-31 20:11:23">2021/01/31</span>
+        </a>
+        
+        <a  class="全部文章 中间件 "
+           href="/2021/01/31/Zookeeper%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-Cluster%E6%A8%A1%E5%BC%8F/"
+           data-tag="zookeeper"
+           data-author="" >
+            <span class="post-title" title="Zookeeper集群搭建-Cluster模式">Zookeeper集群搭建-Cluster模式</span>
+            <span class="post-date" title="2021-01-31 19:19:16">2021/01/31</span>
+        </a>
+        
+        <a  class="全部文章 中间件 Nacos "
+           href="/2021/01/29/Nacos%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA/"
+           data-tag="nacos"
+           data-author="" >
+            <span class="post-title" title="Nacos集群搭建">Nacos集群搭建</span>
+            <span class="post-date" title="2021-01-29 14:14:34">2021/01/29</span>
+        </a>
+        
+        <a  class="全部文章 "
+           href="/2021/01/29/hello-world/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="Hello World">Hello World</span>
+            <span class="post-date" title="2021-01-29 10:34:11">2021/01/29</span>
+        </a>
+        
+        <div id="no-item-tips">
+
+        </div>
+    </nav>
+    <div id="outline-list">
+    </div>
+</div>
+    </div>
+    <div class="hide-list">
+        <div class="semicircle" data-title="切换全屏 快捷键 s">
+            <div class="brackets first"><</div>
+            <div class="brackets">&gt;</div>
+        </div>
+    </div>
+</aside>
+<div id="post">
+    <div class="pjax">
+        <article id="post-Ubuntu-14-04LTS升级到Ubuntu-18-04LTS" class="article article-type-post" itemscope itemprop="blogPost">
+    
+        <h1 class="article-title">Ubuntu-14.04LTS升级到Ubuntu-18.04LTS</h1>
+    
+    <div class="article-meta">
+        
+        
+        
+        <span class="book">
+            <i class="iconfont icon-category"></i>
+            
+            
+            <a  data-rel="系统">系统</a> > 
+            
+            <a  data-rel="系统&lt;---&gt;Ubuntu">Ubuntu</a>
+            
+        </span>
+        
+        
+        <span class="tag">
+            <i class="iconfont icon-tag"></i>
+            
+            <a class="color2">ubuntu</a>
+            
+            <a class="color5">系统升级</a>
+            
+        </span>
+        
+    </div>
+    <div class="article-meta">
+        
+            发布时间 : <time class="date" title='最后更新: 2021-02-02 10:16:28'>2021-02-02 10:14</time>
+        
+    </div>
+    <div class="article-meta">
+        
+        <span>字数:765</span>
+        
+        
+        <span id="busuanzi_container_page_pv">
+            阅读 :<span id="busuanzi_value_page_pv">
+                <span class="count-comment">
+                    <span class="spinner">
+                      <div class="cube1"></div>
+                      <div class="cube2"></div>
+                    </span>
+                </span>
+            </span>
+        </span>
+        
+        
+    </div>
+    
+    <div class="toc-ref">
+    
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E7%BC%98%E7%94%B1%EF%BC%9A"><span class="toc-text">一、缘由：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E6%AD%A5%E9%AA%A4%EF%BC%9A"><span class="toc-text">二、步骤：</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E5%8D%87%E7%BA%A7%E5%88%B0Ubuntu14-04-LTS%E7%9A%84%E6%9C%80%E6%96%B0%E7%89%88%E6%9C%AC"><span class="toc-text">1、升级到Ubuntu14.04 LTS的最新版本</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E5%8D%87%E7%BA%A7%E5%88%B0Ubuntu-16-04-LTS"><span class="toc-text">2、升级到Ubuntu 16.04 LTS</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81%E5%8D%87%E7%BA%A7%E5%88%B0Ubuntu-18-04-LTS"><span class="toc-text">3、升级到Ubuntu 18.04 LTS</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4%E3%80%81%E4%BF%AE%E6%94%B9DNS%E9%85%8D%E7%BD%AE"><span class="toc-text">4、修改DNS配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5%E3%80%81%E4%BF%AE%E6%94%B9APT%E6%BA%90"><span class="toc-text">5、修改APT源</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6%E3%80%81-%E8%AE%BE%E7%BD%AE%E5%BC%80%E6%9C%BA%E5%90%AF%E5%8A%A8"><span class="toc-text">6、 设置开机启动</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7%E3%80%81-%E8%A7%82%E5%AF%9F"><span class="toc-text">7、 观察</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E6%BC%8F%E6%B4%9E%EF%BC%9A"><span class="toc-text">三、漏洞：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9%EF%BC%9A"><span class="toc-text">四、注意事项：</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81MySQL"><span class="toc-text">1、MySQL</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E5%85%B6%E4%BB%96%E4%B8%8D%E7%9B%91%E5%90%AC%E7%AB%AF%E5%8F%A3%E7%9A%84%E8%BD%AF%E4%BB%B6%EF%BC%9A"><span class="toc-text">2、其他不监听端口的软件：</span></a></li></ol></li></ol>
+    
+<style>
+    .left-col .switch-btn,
+    .left-col .switch-area {
+        display: none;
+    }
+    .toc-level-3 i,
+    .toc-level-3 ol {
+        display: none !important;
+    }
+</style>
+</div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="一、缘由："><a href="#一、缘由：" class="headerlink" title="一、缘由："></a>一、缘由：</h2><p>最近爆出了Linux内核的高危漏洞，Linux 内核TCP SACK漏洞，需要升级内核或者打补丁做修补。</p>
+<p>但是，我司使用的是Ubuntu 14.04 TLS Server，已经过了官方支持周期，无Ubuntu14.04 LTS的内核升级方案和补丁。无奈，只能升级操作系统。</p>
+<p>环境：<strong>Ubuntu 14.04 LTS Server</strong></p>
+<h2 id="二、步骤："><a href="#二、步骤：" class="headerlink" title="二、步骤："></a>二、步骤：</h2><h3 id="1、升级到Ubuntu14-04-LTS的最新版本"><a href="#1、升级到Ubuntu14-04-LTS的最新版本" class="headerlink" title="1、升级到Ubuntu14.04 LTS的最新版本"></a>1、升级到Ubuntu14.04 LTS的最新版本</h3><p><strong>建议先修改APT源到国内源，节省下载时间。</strong></p>
+<pre><code class="bash">sudo apt-get update
+sudo apt-get dist-upgrade
+sudo apt-get autoremove
+</code></pre>
+<p>这些命令可以使你的Ubuntu14.04 LTS升级为最新版本，比如从Ubuntu14.04.1LTS升级到Ubutnu 14.04.6LTS</p>
+<p>命令说明：<strong>update 更新本地软件包的索引，upgrade 根据update拿到的索引安装最近软件包；dist-upgrade 功能和upgrade一样，但是他会自动处理最新依赖关系。</strong></p>
+<h3 id="2、升级到Ubuntu-16-04-LTS"><a href="#2、升级到Ubuntu-16-04-LTS" class="headerlink" title="2、升级到Ubuntu 16.04 LTS"></a>2、升级到Ubuntu 16.04 LTS</h3><p><code>sudo do-release-upgrade -d</code> </p>
+<p>如果提示没有可用的升级，则加上-d参数 <code>sudo do-release-upgrade -p</code></p>
+<h3 id="3、升级到Ubuntu-18-04-LTS"><a href="#3、升级到Ubuntu-18-04-LTS" class="headerlink" title="3、升级到Ubuntu 18.04 LTS"></a>3、升级到Ubuntu 18.04 LTS</h3><p><code>sudo do-release-upgrade -d</code> </p>
+<p>如果提示没有可用的升级，则加上-d参数 <code>sudo do-release-upgrade -p</code></p>
+<h3 id="4、修改DNS配置"><a href="#4、修改DNS配置" class="headerlink" title="4、修改DNS配置"></a>4、修改DNS配置</h3><p>Ubuntu 18.04 改用systemd-resolve来管理DNS，之前resolveconf -u形式的貌似失效了。</p>
+<p><code>sudo vim /etc/systemd/resolved.conf </code></p>
+<pre><code class="bash">[Resolve]
+DNS= 192.168.1.99 223.5.5.5 114.114.114.114
+</code></pre>
+<p>然后重启DNS服务<code>sudo systemctl restart systemd-resolved.service </code></p>
+<h3 id="5、修改APT源"><a href="#5、修改APT源" class="headerlink" title="5、修改APT源"></a>5、修改APT源</h3><p>鉴于ubuntu官方源比较慢，建议修改sources.list 为阿里云源。</p>
+<p><code>cp /etc/apt/sources.list /etc/apt/sources.list.bak</code></p>
+<p><code>vim /etc/apt/sources.list</code></p>
+<pre><code class="bash">deb http://mirrors.aliyun.com/ubuntu/ bionic main restricted universe multiverse
+deb-src http://mirrors.aliyun.com/ubuntu/ bionic main restricted universe multiverse
+
+deb http://mirrors.aliyun.com/ubuntu/ bionic-security main restricted universe multiverse
+deb-src http://mirrors.aliyun.com/ubuntu/ bionic-security main restricted universe multiverse
+
+deb http://mirrors.aliyun.com/ubuntu/ bionic-updates main restricted universe multiverse
+deb-src http://mirrors.aliyun.com/ubuntu/ bionic-updates main restricted universe multiverse
+
+deb http://mirrors.aliyun.com/ubuntu/ bionic-proposed main restricted universe multiverse
+deb-src http://mirrors.aliyun.com/ubuntu/ bionic-proposed main restricted universe multiverse
+
+deb http://mirrors.aliyun.com/ubuntu/ bionic-backports main restricted universe multiverse
+deb-src http://mirrors.aliyun.com/ubuntu/ bionic-backports main restricted universe multiverse
+</code></pre>
+<p>然后更新下索引 ：<code>sudo apt update &amp;&amp; sudo apt upgrade</code>  </p>
+<h3 id="6、-设置开机启动"><a href="#6、-设置开机启动" class="headerlink" title="6、 设置开机启动"></a>6、 设置开机启动</h3><p>设置systemd管理的开机启动项目，建议使用systemclt 更清晰明了，不建议使用rc.local(毕竟已是昨日黄花)</p>
+<h3 id="7、-观察"><a href="#7、-观察" class="headerlink" title="7、 观察"></a>7、 观察</h3><p>先在测试环境升级，待观察2周，环境稳定后，再升级正式环境。</p>
+<h2 id="三、漏洞："><a href="#三、漏洞：" class="headerlink" title="三、漏洞："></a>三、漏洞：</h2><ol>
+<li>漏洞的发布者发布的信息：<br><a target="_blank" rel="noopener" href="https://github.com/Netflix/security-bulletins/blob/master/advisories/third-party/2019-001.md">https://github.com/Netflix/security-bulletins/blob/master/advisories/third-party/2019-001.md</a></li>
+<li>Ubuntu官方的 更新通知：<br><a target="_blank" rel="noopener" href="https://wiki.ubuntu.com/SecurityTeam/KnowledgeBase/SACKPanic">https://wiki.ubuntu.com/SecurityTeam/KnowledgeBase/SACKPanic</a></li>
+<li>阿里云镜像网站：<a target="_blank" rel="noopener" href="http://mirrors.aliyun.com/">http://mirrors.aliyun.com/</a></li>
+</ol>
+<h2 id="四、注意事项："><a href="#四、注意事项：" class="headerlink" title="四、注意事项："></a>四、注意事项：</h2><h3 id="1、MySQL"><a href="#1、MySQL" class="headerlink" title="1、MySQL"></a>1、MySQL</h3><p>如果是APT在线安装的MySQL，再升级完系统后会起不起来，发现没有mysql这个命令。</p>
+<p>是因为，旧版本的MySQL已经不再被Ubuntu18.04支持，已经被抛弃，但是数据还在。</p>
+<p>解决办法：</p>
+<ol>
+<li><p>安装新版本MySQL5.7 <code>apt install mysql-server</code></p>
+</li>
+<li><p>根据需要修改配置文件中 <code>bind-address:127.0.0.1</code>，默认绑定本地。</p>
+</li>
+</ol>
+<h3 id="2、其他不监听端口的软件："><a href="#2、其他不监听端口的软件：" class="headerlink" title="2、其他不监听端口的软件："></a>2、其他不监听端口的软件：</h3><ol>
+<li>Filebeat</li>
+<li>Smokeping</li>
+<li>Falcon-agent</li>
+</ol>
+
+      
+       <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 lxwno.1@163.com </span>
+    </div>
+</article>
+
+
+<p>
+    <a  class="dashang" onclick="dashangToggle()">赏</a>
+</p>
+
+
+
+
+
+
+    
+
+
+
+
+    </div>
+    <div class="copyright">
+        <p class="footer-entry">
+    ©2016-2020 LangXiaowei
+</p>
+<p class="footer-entry">Built with <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/yelog/hexo-theme-3-hexo" target="_blank">3-hexo</a> theme</p>
+
+    </div>
+    <div class="full-toc">
+        <button class="full" data-title="切换全屏 快捷键 s"><span class="min "></span></button>
+<a class="" id="rocket" ></a>
+
+    </div>
+</div>
+
+<div class="hide_box" onclick="dashangToggle()"></div>
+<div class="shang_box">
+    <a class="shang_close"  onclick="dashangToggle()">×</a>
+    <div class="shang_tit">
+        <p>喜欢就点赞,疼爱就打赏</p>
+    </div>
+    <div class="shang_payimg">
+        <div class="pay_img">
+            <img src="/img/alipay.jpg" class="alipay" title="扫码支持">
+            <img src="/img/weixin.jpg" class="weixin" title="扫码支持">
+        </div>
+    </div>
+    <div class="shang_payselect">
+        <span><label><input type="radio" name="pay" checked value="alipay">支付宝</label></span><span><label><input type="radio" name="pay" value="weixin">微信</label></span>
+    </div>
+</div>
+
+
+</body>
+<script src="/js/jquery.pjax.js?v=1.1.0" ></script>
+
+<script src="/js/script.js?v=1.1.0" ></script>
+<script>
+    var img_resize = 'default';
+    function initArticle() {
+        /*渲染对应的表格样式*/
+        
+            $("#post .pjax table").addClass("green_title");
+        
+
+        /*渲染打赏样式*/
+        
+        $("input[name=pay]").on("click", function () {
+            if($("input[name=pay]:checked").val()=="weixin"){
+                $(".shang_box .shang_payimg .pay_img").addClass("weixin_img");
+            } else {
+                $(".shang_box .shang_payimg .pay_img").removeClass("weixin_img");
+            }
+        })
+        
+
+        /*高亮代码块行号*/
+        
+
+        /*访问数量*/
+        
+        $.getScript("//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js");
+        
+
+        /*代码高亮，行号对齐*/
+        $('.pre-numbering').css('line-height',$('.has-numbering').css('line-height'));
+
+        
+        
+        /* 渲染*/
+        function HTMLDecode(text) {
+            var temp = document.createElement("div");
+            temp.innerHTML = text;
+            var output = temp.innerText || temp.textContent;
+            temp = null;
+            return output;
+        }
+        if (window.mermaid){
+            window.mermaid = null
+        }
+        $.getScript("//cdn.jsdelivr.net/npm/mermaid@8.4.2/dist/mermaid.min.js", function () {
+            var mermaidOptions = JSON.parse(HTMLDecode("{&#34;theme&#34;:&#34;default&#34;,&#34;startOnLoad&#34;:true,&#34;flowchart&#34;:{&#34;useMaxWidth&#34;:false,&#34;htmlLabels&#34;:true}}"))
+            if (window.mermaid) {
+                mermaid.initialize(mermaidOptions)
+                mermaid.contentLoaded()
+            }
+        })
+        
+    }
+
+    /*打赏页面隐藏与展示*/
+    
+    function dashangToggle() {
+        $(".shang_box").fadeToggle();
+        $(".hide_box").fadeToggle();
+    }
+    
+
+</script>
+
+<!--加入行号的高亮代码块样式-->
+
+<!--自定义样式设置-->
+<style>
+    
+    
+    .nav {
+        width: 542px;
+    }
+    .nav.fullscreen {
+        margin-left: -542px;
+    }
+    .nav-left {
+        width: 120px;
+    }
+    
+    
+    @media screen and (max-width: 1468px) {
+        .nav {
+            width: 492px;
+        }
+        .nav.fullscreen {
+            margin-left: -492px;
+        }
+        .nav-left {
+            width: 100px;
+        }
+    }
+    
+    
+    @media screen and (max-width: 1024px) {
+        .nav {
+            width: 492px;
+            margin-left: -492px
+        }
+        .nav.fullscreen {
+            margin-left: 0;
+        }
+    }
+    
+    @media screen and (max-width: 426px) {
+        .nav {
+            width: 100%;
+        }
+        .nav-left {
+            width: 100%;
+        }
+    }
+    
+    
+    .nav-right .title-list nav a .post-title, .nav-right .title-list #local-search-result a .post-title {
+        color: #383636;
+    }
+    
+    
+    .nav-right .title-list nav a .post-date, .nav-right .title-list #local-search-result a .post-date {
+        color: #5e5e5f;
+    }
+    
+    
+    .nav-right nav a.hover, #local-search-result a.hover{
+        background-color: #e2e0e0;
+    }
+    
+    
+
+    /*列表样式*/
+    
+
+    /* 背景图样式 */
+    
+    
+
+
+    /*引用块样式*/
+    
+
+    /*文章列表背景图*/
+    
+
+    
+</style>
+
+
+
+
+
+
+
+</html>

@@ -1,0 +1,1396 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Docker基本操作 | 运维人</title>
+  <meta name="keywords" content=" docker ">
+  <meta name="description" content="Docker基本操作 | 运维人">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="description" content="一、缘由：　　今天学习Flask，书上建议用Docker，那我就安装了DockerToolBox（WIN10系统只能用toolbox）。其中从docker hub拉取ubuntu镜像时 docker pull xxxx，网速简直是龟速。想到中国的长城防火墙，再想到毕竟是国外的网站，瞬间心灰意冷，想诅骂作者搞了个那么大个镜像在Docker Hub。 　　按以往的经验，对于国外网站或者源，我们都喜欢更">
+<meta property="og:type" content="article">
+<meta property="og:title" content="DockerHub加速">
+<meta property="og:url" content="http://example.com/2021/02/02/DockerHub%E5%8A%A0%E9%80%9F/index.html">
+<meta property="og:site_name" content="运维人">
+<meta property="og:description" content="一、缘由：　　今天学习Flask，书上建议用Docker，那我就安装了DockerToolBox（WIN10系统只能用toolbox）。其中从docker hub拉取ubuntu镜像时 docker pull xxxx，网速简直是龟速。想到中国的长城防火墙，再想到毕竟是国外的网站，瞬间心灰意冷，想诅骂作者搞了个那么大个镜像在Docker Hub。 　　按以往的经验，对于国外网站或者源，我们都喜欢更">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-02-02T02:34:29.000Z">
+<meta property="article:modified_time" content="2021-02-02T02:35:58.143Z">
+<meta property="article:author" content="运维人">
+<meta property="article:tag" content="docker">
+<meta property="article:tag" content="加速器">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="icon" href="/img/avatar.jpg">
+
+<link href="/css/style.css?v=1.1.0" rel="stylesheet">
+
+<link href="/css/hl_theme/atom-light.css?v=1.1.0" rel="stylesheet">
+
+<link href="//cdn.jsdelivr.net/npm/animate.css@4.1.0/animate.min.css" rel="stylesheet">
+
+<script src="//cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+<script src="/js/titleTip.js?v=1.1.0" ></script>
+
+<script src="//cdn.jsdelivr.net/npm/highlightjs@9.16.2/highlight.pack.min.js"></script>
+<script>
+    hljs.initHighlightingOnLoad();
+</script>
+
+<script src="//cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js"></script>
+
+
+
+<script src="//cdn.jsdelivr.net/npm/jquery.cookie@1.4.1/jquery.cookie.min.js" ></script>
+
+<script src="/js/iconfont.js?v=1.1.0" ></script>
+
+<meta name="generator" content="Hexo 5.3.0"></head>
+<div style="display: none">
+  <input class="theme_disqus_on" value="false">
+  <input class="theme_preload_comment" value="">
+  <input class="theme_blog_path" value="">
+  <input id="theme_shortcut" value="true" />
+  <input id="theme_highlight_on" value="true" />
+  <input id="theme_code_copy" value="true" />
+</div>
+
+
+
+<body>
+<aside class="nav">
+    <div class="nav-left">
+        <a href="/"
+   class="avatar_target">
+    <img class="avatar"
+         src="/img/avatar.jpg"/>
+</a>
+<div class="author">
+    <span>运维人</span>
+</div>
+
+<div class="icon">
+    
+        
+            <a title="rss"
+               href="/atom.xml"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-rss"></use>
+                    </svg>
+                
+            </a>
+        
+    
+        
+            <a title="github"
+               href="https://github.com/langlangago"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-github"></use>
+                    </svg>
+                
+            </a>
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+            <a title="weibo"
+               href="https://weibo.com/u/1661089304"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-weibo"></use>
+                    </svg>
+                
+            </a>
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+            <a title="email"
+               href="mailto:lxwno.1@163.com"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-email"></use>
+                    </svg>
+                
+            </a>
+        
+    
+        
+            <a title="qq"
+               href="http://wpa.qq.com/msgrd?v=3&uin=458590981&site=qq&menu=yes"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-qq"></use>
+                    </svg>
+                
+            </a>
+        
+    
+        
+            <a title="kugou"
+               href="https://www.kugou.com/"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-kugou"></use>
+                    </svg>
+                
+            </a>
+        
+    
+        
+            <a title="neteasemusic"
+               href="https://music.163.com/"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-neteasemusic"></use>
+                    </svg>
+                
+            </a>
+        
+    
+</div>
+
+
+
+
+<ul>
+    <li>
+        <div class="all active" data-rel="全部文章">全部文章
+            
+                <small>(28)</small>
+            
+        </div>
+    </li>
+    
+        
+            
+                <li>
+                    <div data-rel="工具">
+                        <i class="fold iconfont icon-right"></i>
+                        
+                        工具
+                        <small>(7)</small>
+                        
+                    </div>
+                    
+                        <ul class="sub hide">
+                            
+                                <li>
+                                    <div data-rel="工具<--->ELK">
+                                        
+                                        ELK
+                                        
+                                            <small>(3
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                                <li>
+                                    <div data-rel="工具<--->Git">
+                                        
+                                        Git
+                                        
+                                            <small>(1
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                        </ul>
+                    
+                </li>
+            
+        
+    
+        
+            
+                <li>
+                    <div data-rel="脚本">
+                        <i class="fold iconfont icon-right"></i>
+                        
+                        脚本
+                        <small>(1)</small>
+                        
+                    </div>
+                    
+                        <ul class="sub hide">
+                            
+                                <li>
+                                    <div data-rel="脚本<--->Python脚本">
+                                        
+                                        Python脚本
+                                        
+                                            <small>(1
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                        </ul>
+                    
+                </li>
+            
+        
+    
+        
+            
+                <li>
+                    <div data-rel="系统">
+                        <i class="fold iconfont icon-right"></i>
+                        
+                        系统
+                        <small>(4)</small>
+                        
+                    </div>
+                    
+                        <ul class="sub hide">
+                            
+                                <li>
+                                    <div data-rel="系统<--->Linux">
+                                        
+                                        Linux
+                                        
+                                            <small>(1
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                                <li>
+                                    <div data-rel="系统<--->Ubuntu">
+                                        
+                                        Ubuntu
+                                        
+                                            <small>(2
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                                <li>
+                                    <div data-rel="系统<--->Windows">
+                                        
+                                        Windows
+                                        
+                                            <small>(1
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                        </ul>
+                    
+                </li>
+            
+        
+    
+        
+            
+                <li>
+                    <div data-rel="虚拟化">
+                        <i class="fold iconfont icon-right"></i>
+                        
+                        虚拟化
+                        <small>(7)</small>
+                        
+                    </div>
+                    
+                        <ul class="sub hide">
+                            
+                                <li>
+                                    <div data-rel="虚拟化<--->Docker">
+                                        
+                                        Docker
+                                        
+                                            <small>(5
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                                <li>
+                                    <div data-rel="虚拟化<--->VMware">
+                                        
+                                        VMware
+                                        
+                                            <small>(2
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                        </ul>
+                    
+                </li>
+            
+        
+    
+        
+            
+                <li>
+                    <div data-rel="中间件">
+                        <i class="fold iconfont icon-right"></i>
+                        
+                        中间件
+                        <small>(8)</small>
+                        
+                    </div>
+                    
+                        <ul class="sub hide">
+                            
+                                <li>
+                                    <div data-rel="中间件<--->MongoDB">
+                                        
+                                        MongoDB
+                                        
+                                            <small>(1
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                                <li>
+                                    <div data-rel="中间件<--->Nacos">
+                                        
+                                        Nacos
+                                        
+                                            <small>(2
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                                <li>
+                                    <div data-rel="中间件<--->Nginx">
+                                        
+                                        Nginx
+                                        
+                                            <small>(1
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                                <li>
+                                    <div data-rel="中间件<--->RocketMQ">
+                                        
+                                        RocketMQ
+                                        
+                                            <small>(2
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                        </ul>
+                    
+                </li>
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+</ul>
+<div class="left-bottom">
+    <div class="menus">
+        
+            
+            
+            
+    </div>
+    <div>
+        
+            <a class="about  hasFriend  site_url"
+               
+               href="/about">关于</a>
+        
+        <a style="width: 50%"
+                
+                                           class="friends">友链</a>
+        
+    </div>
+</div>
+<input type="hidden" id="yelog_site_posts_number" value="28">
+<input type="hidden" id="yelog_site_word_count" value="16.5k">
+<div style="display: none">
+    <span id="busuanzi_value_site_uv"></span>
+    <span id="busuanzi_value_site_pv"></span>
+</div>
+
+    </div>
+    <div class="nav-right">
+        <div class="friends-area">
+    <div class="friends-title">
+        友情链接
+        <i class="iconfont icon-left"></i>
+    </div>
+    <div class="friends-content">
+        <ul>
+            
+            <li><a target="_blank" href="https://www.cnblogs.com/langdashu/">我的CSDN</a></li>
+            
+            <li><a target="_blank" href="https://www.langxw.com/">运维人</a></li>
+            
+        </ul>
+    </div>
+</div>
+        <div class="title-list">
+    <div class="right-top">
+        <div id="default-panel">
+            <i class="iconfont icon-search" data-title="搜索 快捷键 i"></i>
+            <div class="right-title">全部文章</div>
+            <i class="iconfont icon-file-tree" data-title="切换到大纲视图 快捷键 w"></i>
+        </div>
+        <div id="search-panel">
+            <i class="iconfont icon-left" data-title="返回"></i>
+            <input id="local-search-input" />
+            <label class="border-line" for="input"></label>
+            <i class="iconfont icon-case-sensitive" data-title="大小写敏感"></i>
+            <i class="iconfont icon-tag" data-title="标签"></i>
+        </div>
+        <div id="outline-panel" style="display: none">
+            <div class="right-title">大纲</div>
+            <i class="iconfont icon-list" data-title="切换到文章列表"></i>
+        </div>
+    </div>
+
+    <div class="tags-list">
+    <input id="tag-search" />
+    <div class="tag-wrapper">
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>加速器</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>数据库</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>系统升级</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>aircrack-ng</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>arimon-ng</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>bbr</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>centos</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>docker</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>ELK</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>filebeat</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>git</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>index</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>lets-encrypt</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>log</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>mongodb</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>nacos</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>nginx</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>oracle</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>python</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>redis</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>RocketMQ</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>shadowsockets</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>ssl证书</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>swap</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>timezone</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>ubuntu</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>vmware</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>vsca</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>vsphere</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>vultr</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>win10</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>zookeeper</a>
+            </li>
+        
+    </div>
+
+</div>
+
+    
+    <nav id="title-list-nav">
+        
+        <a  class="全部文章 虚拟化 Docker "
+           href="/2021/02/02/DockerHub%E5%8A%A0%E9%80%9F/"
+           data-tag="docker,加速器"
+           data-author="" >
+            <span class="post-title" title="DockerHub加速">DockerHub加速</span>
+            <span class="post-date" title="2021-02-02 10:34:29">2021/02/02</span>
+        </a>
+        
+        <a  class="全部文章 虚拟化 Docker "
+           href="/2021/02/02/Docker%E4%BF%AE%E6%94%B9%E9%BB%98%E8%AE%A4%E6%97%B6%E5%8C%BA/"
+           data-tag="docker,timezone"
+           data-author="" >
+            <span class="post-title" title="Docker修改默认时区">Docker修改默认时区</span>
+            <span class="post-date" title="2021-02-02 10:32:07">2021/02/02</span>
+        </a>
+        
+        <a  class="全部文章 工具 ELK "
+           href="/2021/02/02/ELK-Docker%E5%8C%96%E5%AE%89%E8%A3%85/"
+           data-tag="docker,ELK"
+           data-author="" >
+            <span class="post-title" title="ELK-Docker化安装">ELK-Docker化安装</span>
+            <span class="post-date" title="2021-02-02 10:28:20">2021/02/02</span>
+        </a>
+        
+        <a  class="全部文章 工具 ELK "
+           href="/2021/02/02/ELK%E8%87%AA%E5%AE%9A%E4%B9%89%E7%B4%A2%E5%BC%95%E9%85%8D%E7%BD%AE/"
+           data-tag="ELK,index,log"
+           data-author="" >
+            <span class="post-title" title="ELK自定义索引配置">ELK自定义索引配置</span>
+            <span class="post-date" title="2021-02-02 10:26:17">2021/02/02</span>
+        </a>
+        
+        <a  class="全部文章 工具 ELK "
+           href="/2021/02/02/Filebeat%E5%90%88%E5%B9%B6%E5%A4%9A%E8%A1%8C%E6%97%A5%E5%BF%97/"
+           data-tag="ELK,filebeat"
+           data-author="" >
+            <span class="post-title" title="Filebeat合并多行日志">Filebeat合并多行日志</span>
+            <span class="post-date" title="2021-02-02 10:23:55">2021/02/02</span>
+        </a>
+        
+        <a  class="全部文章 工具 Git "
+           href="/2021/02/02/Git%E4%B8%8A%E4%BC%A0%E6%9C%AC%E5%9C%B0%E9%A1%B9%E7%9B%AE/"
+           data-tag="git"
+           data-author="" >
+            <span class="post-title" title="Git上传本地项目">Git上传本地项目</span>
+            <span class="post-date" title="2021-02-02 10:21:35">2021/02/02</span>
+        </a>
+        
+        <a  class="全部文章 工具 "
+           href="/2021/02/02/Lets-encrypt%E5%85%8D%E8%B4%B9SSL%E8%AF%81%E4%B9%A6%E7%94%B3%E8%AF%B7/"
+           data-tag="lets-encrypt,ssl证书"
+           data-author="" >
+            <span class="post-title" title="Lets-encrypt免费SSL证书申请">Lets-encrypt免费SSL证书申请</span>
+            <span class="post-date" title="2021-02-02 10:18:38">2021/02/02</span>
+        </a>
+        
+        <a  class="全部文章 中间件 Nginx "
+           href="/2021/02/02/Nginx%E5%88%A9%E7%94%A8%E6%BA%90%E5%8D%87%E7%BA%A7/"
+           data-tag="nginx"
+           data-author="" >
+            <span class="post-title" title="Nginx利用源升级">Nginx利用源升级</span>
+            <span class="post-date" title="2021-02-02 10:16:55">2021/02/02</span>
+        </a>
+        
+        <a  class="全部文章 系统 Ubuntu "
+           href="/2021/02/02/Ubuntu-14-04LTS%E5%8D%87%E7%BA%A7%E5%88%B0Ubuntu-18-04LTS/"
+           data-tag="ubuntu,系统升级"
+           data-author="" >
+            <span class="post-title" title="Ubuntu-14.04LTS升级到Ubuntu-18.04LTS">Ubuntu-14.04LTS升级到Ubuntu-18.04LTS</span>
+            <span class="post-date" title="2021-02-02 10:14:53">2021/02/02</span>
+        </a>
+        
+        <a  class="全部文章 系统 Ubuntu "
+           href="/2021/02/02/Ubuntu%E6%96%B0%E5%A2%9ESWAP%E5%92%8C%E8%B0%83%E6%95%B4SWAP%E5%A4%A7%E5%B0%8F/"
+           data-tag="ubuntu,swap"
+           data-author="" >
+            <span class="post-title" title="Ubuntu新增SWAP和调整SWAP大小">Ubuntu新增SWAP和调整SWAP大小</span>
+            <span class="post-date" title="2021-02-02 10:13:23">2021/02/02</span>
+        </a>
+        
+        <a  class="全部文章 工具 "
+           href="/2021/02/02/VPS%E6%90%AD%E5%BB%BASS%E5%BD%B1%E6%A2%AD%E6%9C%8D%E5%8A%A1%E7%AB%AF%E5%B9%B6%E4%BC%98%E5%8C%96%E5%8A%A0%E9%80%9FShadowsocks-BBR/"
+           data-tag="shadowsockets,bbr,vultr"
+           data-author="" >
+            <span class="post-title" title="VPS搭建SS影梭服务端并优化加速Shadowsocks+BBR">VPS搭建SS影梭服务端并优化加速Shadowsocks+BBR</span>
+            <span class="post-date" title="2021-02-02 10:10:31">2021/02/02</span>
+        </a>
+        
+        <a  class="全部文章 虚拟化 VMware "
+           href="/2021/02/02/VSCA%E5%8F%91%E9%82%AE%E4%BB%B6%E9%85%8D%E7%BD%AE/"
+           data-tag="vsca"
+           data-author="" >
+            <span class="post-title" title="VSCA发邮件配置">VSCA发邮件配置</span>
+            <span class="post-date" title="2021-02-02 10:08:20">2021/02/02</span>
+        </a>
+        
+        <a  class="全部文章 系统 Windows "
+           href="/2021/02/02/Win10%E7%9A%84%E4%BE%BF%E6%8D%B7%E4%BD%BF%E7%94%A8/"
+           data-tag="win10"
+           data-author="" >
+            <span class="post-title" title="Win10的便捷使用">Win10的便捷使用</span>
+            <span class="post-date" title="2021-02-02 10:06:16">2021/02/02</span>
+        </a>
+        
+        <a  class="全部文章 工具 "
+           href="/2021/02/02/Wifi%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3/"
+           data-tag="aircrack-ng,arimon-ng"
+           data-author="" >
+            <span class="post-title" title="Wifi密码破解">Wifi密码破解</span>
+            <span class="post-date" title="2021-02-02 10:02:18">2021/02/02</span>
+        </a>
+        
+        <a  class="全部文章 虚拟化 Docker "
+           href="/2021/02/02/Docker%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/"
+           data-tag="docker"
+           data-author="" >
+            <span class="post-title" title="Docker基本操作">Docker基本操作</span>
+            <span class="post-date" title="2021-02-02 09:53:03">2021/02/02</span>
+        </a>
+        
+        <a  class="全部文章 虚拟化 Docker "
+           href="/2021/02/02/Docker%E6%8C%82%E8%BD%BD%E6%96%87%E4%BB%B6%E7%9A%84%E6%9B%B4%E6%96%B0%E9%97%AE%E9%A2%98/"
+           data-tag="docker"
+           data-author="" >
+            <span class="post-title" title="Docker挂载文件的更新问题">Docker挂载文件的更新问题</span>
+            <span class="post-date" title="2021-02-02 09:50:42">2021/02/02</span>
+        </a>
+        
+        <a  class="全部文章 虚拟化 VMware "
+           href="/2021/02/02/vSphere%E6%95%B0%E6%8D%AE%E4%B8%AD%E5%BF%83%E6%9E%B6%E6%9E%84%E9%80%89%E5%9E%8B/"
+           data-tag="vmware,vsphere"
+           data-author="" >
+            <span class="post-title" title="vSphere数据中心架构选型">vSphere数据中心架构选型</span>
+            <span class="post-date" title="2021-02-02 09:47:12">2021/02/02</span>
+        </a>
+        
+        <a  class="全部文章 虚拟化 Docker "
+           href="/2021/02/02/%E5%88%B6%E4%BD%9CDockerImage%E5%AD%98%E5%9C%A8%E7%9A%84%E9%97%AE%E9%A2%98/"
+           data-tag="docker"
+           data-author="" >
+            <span class="post-title" title="制作DockerImage存在的问题">制作DockerImage存在的问题</span>
+            <span class="post-date" title="2021-02-02 09:44:03">2021/02/02</span>
+        </a>
+        
+        <a  class="全部文章 系统 Linux "
+           href="/2021/02/01/Centos%E6%9F%90%E4%B8%AA%E7%9B%91%E5%90%AC%E7%9A%84%E7%AB%AF%E5%8F%A3%E7%9C%8B%E4%B8%8D%E5%88%B0PID/"
+           data-tag="centos"
+           data-author="" >
+            <span class="post-title" title="Centos某个监听的端口看不到PID">Centos某个监听的端口看不到PID</span>
+            <span class="post-date" title="2021-02-01 15:35:10">2021/02/01</span>
+        </a>
+        
+        <a  class="全部文章 中间件 MongoDB "
+           href="/2021/02/01/Mongodb%E5%8D%95%E5%AE%9E%E4%BE%8B%E9%83%A8%E7%BD%B2%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%96%B9%E5%BC%8F/"
+           data-tag="mongodb,数据库"
+           data-author="" >
+            <span class="post-title" title="Mongodb单实例部署的两种方式">Mongodb单实例部署的两种方式</span>
+            <span class="post-date" title="2021-02-01 15:22:54">2021/02/01</span>
+        </a>
+        
+        <a  class="全部文章 中间件 Nacos "
+           href="/2021/02/01/Nacos%E5%8D%95%E6%9C%BA%E9%83%A8%E7%BD%B2/"
+           data-tag="nacos"
+           data-author="" >
+            <span class="post-title" title="Nacos单机部署">Nacos单机部署</span>
+            <span class="post-date" title="2021-02-01 14:54:52">2021/02/01</span>
+        </a>
+        
+        <a  class="全部文章 脚本 Python脚本 "
+           href="/2021/02/01/Python%E8%AF%BB%E5%8F%96Oracle%E6%95%B0%E6%8D%AE%E5%BA%93/"
+           data-tag="python,oracle"
+           data-author="" >
+            <span class="post-title" title="Python读取Oracle数据库">Python读取Oracle数据库</span>
+            <span class="post-date" title="2021-02-01 14:48:16">2021/02/01</span>
+        </a>
+        
+        <a  class="全部文章 中间件 RocketMQ "
+           href="/2021/02/01/RocketMQ%E9%83%A8%E7%BD%B2-%E5%8D%95%E6%9C%BA%E6%A8%A1%E5%BC%8F/"
+           data-tag="RocketMQ"
+           data-author="" >
+            <span class="post-title" title="RocketMQ部署-单机模式">RocketMQ部署-单机模式</span>
+            <span class="post-date" title="2021-02-01 14:34:32">2021/02/01</span>
+        </a>
+        
+        <a  class="全部文章 中间件 "
+           href="/2021/02/01/Redis%E4%BC%AA%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA/"
+           data-tag="redis"
+           data-author="" >
+            <span class="post-title" title="Redis伪集群搭建">Redis伪集群搭建</span>
+            <span class="post-date" title="2021-02-01 10:25:25">2021/02/01</span>
+        </a>
+        
+        <a  class="全部文章 中间件 RocketMQ "
+           href="/2021/01/31/%E5%AE%89%E8%A3%85RocketMQ-Console/"
+           data-tag="RocketMQ"
+           data-author="" >
+            <span class="post-title" title="安装RocketMQ-Console">安装RocketMQ-Console</span>
+            <span class="post-date" title="2021-01-31 20:11:23">2021/01/31</span>
+        </a>
+        
+        <a  class="全部文章 中间件 "
+           href="/2021/01/31/Zookeeper%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-Cluster%E6%A8%A1%E5%BC%8F/"
+           data-tag="zookeeper"
+           data-author="" >
+            <span class="post-title" title="Zookeeper集群搭建-Cluster模式">Zookeeper集群搭建-Cluster模式</span>
+            <span class="post-date" title="2021-01-31 19:19:16">2021/01/31</span>
+        </a>
+        
+        <a  class="全部文章 中间件 Nacos "
+           href="/2021/01/29/Nacos%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA/"
+           data-tag="nacos"
+           data-author="" >
+            <span class="post-title" title="Nacos集群搭建">Nacos集群搭建</span>
+            <span class="post-date" title="2021-01-29 14:14:34">2021/01/29</span>
+        </a>
+        
+        <a  class="全部文章 "
+           href="/2021/01/29/hello-world/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="Hello World">Hello World</span>
+            <span class="post-date" title="2021-01-29 10:34:11">2021/01/29</span>
+        </a>
+        
+        <div id="no-item-tips">
+
+        </div>
+    </nav>
+    <div id="outline-list">
+    </div>
+</div>
+    </div>
+    <div class="hide-list">
+        <div class="semicircle" data-title="切换全屏 快捷键 s">
+            <div class="brackets first"><</div>
+            <div class="brackets">&gt;</div>
+        </div>
+    </div>
+</aside>
+<div id="post">
+    <div class="pjax">
+        <article id="post-Docker基本操作" class="article article-type-post" itemscope itemprop="blogPost">
+    
+        <h1 class="article-title">Docker基本操作</h1>
+    
+    <div class="article-meta">
+        
+        
+        
+        <span class="book">
+            <i class="iconfont icon-category"></i>
+            
+            
+            <a  data-rel="虚拟化">虚拟化</a> > 
+            
+            <a  data-rel="虚拟化&lt;---&gt;Docker">Docker</a>
+            
+        </span>
+        
+        
+        <span class="tag">
+            <i class="iconfont icon-tag"></i>
+            
+            <a class="color2">docker</a>
+            
+        </span>
+        
+    </div>
+    <div class="article-meta">
+        
+            发布时间 : <time class="date" title='最后更新: 2021-02-02 09:56:46'>2021-02-02 09:53</time>
+        
+    </div>
+    <div class="article-meta">
+        
+        <span>字数:2.8k</span>
+        
+        
+        <span id="busuanzi_container_page_pv">
+            阅读 :<span id="busuanzi_value_page_pv">
+                <span class="count-comment">
+                    <span class="spinner">
+                      <div class="cube1"></div>
+                      <div class="cube2"></div>
+                    </span>
+                </span>
+            </span>
+        </span>
+        
+        
+    </div>
+    
+    <div class="toc-ref">
+    
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E5%9F%BA%E6%9C%AC%E5%91%BD%E4%BB%A4"><span class="toc-text">一、基本命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E7%BD%91%E7%BB%9C%E5%91%BD%E4%BB%A4%EF%BC%9A"><span class="toc-text">二、网络命令：</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E7%AB%AF%E5%8F%A3%E6%98%A0%E5%B0%84%EF%BC%9A"><span class="toc-text">1、端口映射：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81docker%E7%BD%91%E7%BB%9C%E7%B1%BB%E5%9E%8B%EF%BC%9A"><span class="toc-text">2、docker网络类型：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81%E7%BD%91%E7%BB%9C%E4%BA%92%E8%81%94%EF%BC%9A"><span class="toc-text">3、网络互联：</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%B7%A8%E5%AE%B9%E5%99%A8%E7%BD%91%E7%BB%9C%E4%BA%92%E8%81%94%EF%BC%9A"><span class="toc-text">跨容器网络互联：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%97%A7%E7%89%88%EF%BC%9A"><span class="toc-text">旧版：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%96%B0%E7%89%88%EF%BC%9A"><span class="toc-text">新版：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A4%9A%E5%AE%B9%E5%99%A8%E4%BA%92%E8%81%94%EF%BC%9A"><span class="toc-text">多容器互联：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%B7%A8%E4%B8%BB%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%BA%92%E8%81%94%EF%BC%9A"><span class="toc-text">跨主机网络互联：</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4%E3%80%81%E6%95%B0%E6%8D%AE%E7%AE%A1%E7%90%86%EF%BC%9A"><span class="toc-text">4、数据管理：</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%8D%B7"><span class="toc-text">数据卷</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%97%A7%E7%89%88%EF%BC%88-v%EF%BC%89%EF%BC%9A"><span class="toc-text">旧版（-v）：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%96%B0%E7%89%88%EF%BC%88%E2%80%93mount%EF%BC%89%EF%BC%9A"><span class="toc-text">新版（–mount）：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%8D%B7%E5%AE%B9%E5%99%A8"><span class="toc-text">数据卷容器</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81Dokcerfile%E7%BC%96%E5%86%99"><span class="toc-text">三、Dokcerfile编写</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E6%96%87%E4%BB%B6%E4%BE%8B%E5%AD%90%EF%BC%9A"><span class="toc-text">1、文件例子：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81-%E5%88%B6%E4%BD%9C%E9%95%9C%E5%83%8F%EF%BC%9A"><span class="toc-text">2、 制作镜像：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81%E9%AA%8C%E8%AF%81%E5%B9%B6%E5%90%AF%E5%8A%A8%EF%BC%9A"><span class="toc-text">3、验证并启动：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4%E3%80%81%E6%8C%87%E4%BB%A4%E8%AF%A6%E8%A7%A3%EF%BC%9A"><span class="toc-text">4、指令详解：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E7%A7%81%E5%BA%93%E6%90%AD%E5%BB%BA"><span class="toc-text">四、私库搭建</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C%EF%BC%9A"><span class="toc-text">1、准备工作：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E5%90%AF%E5%8A%A8Registry%EF%BC%9A"><span class="toc-text">2、启动Registry：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81%E7%99%BB%E9%99%86%E5%B9%B6%E4%BD%BF%E7%94%A8%EF%BC%9A"><span class="toc-text">3、登陆并使用：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4%E3%80%81%E6%8A%A5%E9%94%99%E8%A7%A3%E5%86%B3%EF%BC%9A"><span class="toc-text">4、报错解决：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E5%AE%B9%E5%99%A8%E7%BC%96%E6%8E%92%EF%BC%88%E5%8D%95%E6%9C%BA%EF%BC%89"><span class="toc-text">五、容器编排（单机）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E5%AE%89%E8%A3%85%EF%BC%9A"><span class="toc-text">1、安装：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E4%BD%BF%E7%94%A8%EF%BC%9A"><span class="toc-text">2、使用：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AD%E3%80%81%E9%85%8D%E7%BD%AE%E5%AE%B9%E5%99%A8DNS"><span class="toc-text">六、配置容器DNS</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B9%E6%B3%95%E4%B8%80%EF%BC%9A"><span class="toc-text">方法一：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B9%E6%B3%95%E4%BA%8C%EF%BC%9A"><span class="toc-text">方法二：</span></a></li></ol></li></ol>
+    
+<style>
+    .left-col .switch-btn,
+    .left-col .switch-area {
+        display: none;
+    }
+    .toc-level-3 i,
+    .toc-level-3 ol {
+        display: none !important;
+    }
+</style>
+</div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="一、基本命令"><a href="#一、基本命令" class="headerlink" title="一、基本命令"></a>一、基本命令</h2><p><code>docker pull nginx</code>  下载docker镜像</p>
+<p><code>docker images</code>  查看目前下载的所有镜像</p>
+<p><code>docker rmi nginx</code> 删除nginx镜像</p>
+<p><code>docker save  nginx &gt; /tmp/nginx.tar</code> 保存nginx镜像</p>
+<p><code>docker  load &lt; /tmp/nginx.tar</code>  手动载入nginx镜像</p>
+<p><code>docker run -it nginx sh</code>  启动nginx镜像，并进入交互命令(sh)模式 ,run=create + start , -it是你需要交互的时候才用，平时用-d</p>
+<p><code>docker ps </code> 查看正在运行的docker镜像</p>
+<p><code>docker ps -a</code> 查看所有已创建docker镜像（已停止+在正运行）</p>
+<p><code>docker rm -f container_id</code> 删除docker容器</p>
+<p><code>docker container prune</code> 清除所有终止状态的容器</p>
+<p><code>docker inspect names</code> 查看容器的所有信息</p>
+<p><code>docker attach names/container_id</code>  进入容器方式1，大家共用一个tty，会互相影响，不推荐 </p>
+<p><code>docker exec -it names/container_id sh</code>  进入容器方式2，拿到不同的tty，推荐，exit退出</p>
+<p><code>nsenter -t $pid -m -i -u -n -p </code> 利用namespace进入容器，方式3，比较复杂，不推荐。</p>
+<pre><code class="bash">pid = `docker inspect --format &quot;&#123;&#123;.State.Pid&#125;&#125;&quot; $1`
+nsenter -t $pid -m -u -i -n -p
+</code></pre>
+<p><code>docker run -d --name my_nginx nginx</code> 后台方式运行nginx docker, -d</p>
+<p><code>docker logs my_nginx </code> 查看my_nginx的日志</p>
+<p><code>docker logs -f my_nginx</code> 不断刷新的查看my_nginx 日志</p>
+<p><code>docker commit container_name image_name</code> 从改变的容器创建一个新镜像</p>
+<p><code>docker tag image_id docker.io/username/iamge_name</code>  在本地对镜像打一个tag</p>
+<p><code>docker push docker.io/username/image_name</code> 上传本地的镜像到docker hub</p>
+<pre><code class="bash">docker login
+docker images
+docker tag image_id docker.io/username/image_name
+docker push docker.io/username/image_name
+</code></pre>
+<h2 id="二、网络命令："><a href="#二、网络命令：" class="headerlink" title="二、网络命令："></a>二、网络命令：</h2><h3 id="1、端口映射："><a href="#1、端口映射：" class="headerlink" title="1、端口映射："></a>1、端口映射：</h3><p><code>docker  run -d -P --name my_nginx nginx </code> 将容器暴露的端口随机映射到宿主机的端口</p>
+<p><code>docker run -d -p 80:80 --name my_nginx nginx</code>  将docker容器的80端口映射到宿主机的80端口，-p</p>
+<p>不做IP绑定，即0.0.0.0</p>
+<p><code>dcoker run -d -p 127.0.0.1:80:80 --name my_nginx  nginx</code> 将docker容器的80端口映射到宿主机的80端口，并绑定127.0.0.1</p>
+<h3 id="2、docker网络类型："><a href="#2、docker网络类型：" class="headerlink" title="2、docker网络类型："></a>2、docker网络类型：</h3><p><code>docker network ls</code> 查看docker可以设置的网络类型</p>
+<pre><code class="bash">root@langxiaowei-pc:~# docker network ls
+NETWORK ID          NAME                DRIVER              SCOPE
+1fabfe0002bb        bridge              bridge              local
+f4400c8b1fe7        host                host                local
+cb0a51a6c279        none                null                local
+</code></pre>
+<p><code>docker run -it --network=bridge alpine sh</code> 指定网络方式为桥接，启动容器，拿到172网段地址</p>
+<p><code>docker run -it --network=host alpine sh</code> 指定网络方式为主机，启动容器，使用主机的所有网卡，没有自己的IP</p>
+<p><code>docker run -it --network=none alpine sh</code> 指定网络方式为none，启动主机，只有本地回环网卡。</p>
+<h3 id="3、网络互联："><a href="#3、网络互联：" class="headerlink" title="3、网络互联："></a>3、网络互联：</h3><h4 id="跨容器网络互联："><a href="#跨容器网络互联：" class="headerlink" title="跨容器网络互联："></a>跨容器网络互联：</h4><h4 id="旧版："><a href="#旧版：" class="headerlink" title="旧版："></a>旧版：</h4><p><code>docker run -d --name web1 -p 80:80 lxwno1/lang_nginx nginx </code></p>
+<p><code>docker run -d --name web2 --link web1 -p 81:80 lxwno1/lang_nginx nginx</code></p>
+<p>– link 将容器web2 连接到容器web1，即在web2中可以使用ping web1 找到web1，本质是修改了web2的hosts文件，标识web1 在哪里：<code>172.17.0.2    web1 ae63849bb54f</code>。 单方向的连接。</p>
+<h4 id="新版："><a href="#新版：" class="headerlink" title="新版："></a>新版：</h4><pre><code class="bash">docker network create -d bridge my-net
+
+docker run -it --rm --name busybox1 --network my-net busybox  sh
+
+docker run -it --rm --name busybox2 --network my-net busybox  sh
+
+ping busybox2
+ping busybox1
+</code></pre>
+<p>创建自定义网络连接 my-net(-d 指定网络类型)。</p>
+<p>创建容器busybox1和busybox2并加入自定义网络。</p>
+<p>再每个容器中，互ping对方，通了。</p>
+<h4 id="多容器互联："><a href="#多容器互联：" class="headerlink" title="多容器互联："></a>多容器互联：</h4><p>推荐使用Docker Compose。</p>
+<h4 id="跨主机网络互联："><a href="#跨主机网络互联：" class="headerlink" title="跨主机网络互联："></a>跨主机网络互联：</h4><p><code>route add -net 192.168.1.0/24 -gw 10.0.0.157</code> 实现两台不同宿主机的docker直接网络沟通，添加一个路由表就好，网关指向宿主机的网卡IP。</p>
+<h3 id="4、数据管理："><a href="#4、数据管理：" class="headerlink" title="4、数据管理："></a>4、数据管理：</h3><h4 id="数据卷"><a href="#数据卷" class="headerlink" title="数据卷"></a>数据卷</h4><h4 id="旧版（-v）："><a href="#旧版（-v）：" class="headerlink" title="旧版（-v）："></a>旧版（-v）：</h4><p><code>docker run -it -d -v /opt:/opt --name centos2 centos  bash</code></p>
+<p><code>docker run -it -d -v /etc/hosts:/opt/hosts --name centos3 centos bash</code></p>
+<p><code>docker run -it -d -v /etc/hosts:/opt/hosts:ro --name centos4 centos</code> bash</p>
+<p>用 -v 参数，挂在宿主机的目录到容器，完成共享，可以作代码动态加载，-v 宿主机目录：容器目录，</p>
+<p>要写绝对路径，而且俩个目录都要写。</p>
+<h4 id="新版（–mount）："><a href="#新版（–mount）：" class="headerlink" title="新版（–mount）："></a>新版（–mount）：</h4><p>创建并查看数据卷信息：</p>
+<pre><code class="bash">docker volume create my-vol
+
+docker volume ls
+
+docker volume inspect my-vol
+
+docker volume rm my-vol
+</code></pre>
+<p>启动一个挂载数据卷的容器：</p>
+<pre><code class="bash">docker run -it -d --mount source=my-vol,target=/opt --name centos2 centos  bash
+</code></pre>
+<p>挂载一个主机目录作为数据卷（只读）：</p>
+<pre><code class="bash">docker run -it -d --mount type=bind,source=/etc/,target=/opt/,readonly --name centos3 centos bash
+</code></pre>
+<p>挂载一个本地主机文件作为数据卷：</p>
+<p><code>docker run -it -d --mount type=bind,source=$HOME/.bash_history,target=$HOME/.bash_history --name centos4 centos bash</code></p>
+<p>这样就可以将容器中的命令记录在本地。  </p>
+<h4 id="数据卷容器"><a href="#数据卷容器" class="headerlink" title="数据卷容器"></a>数据卷容器</h4><p><code>docker run -it -d --volumes-from centos3 --name centos6 centos bash</code></p>
+<p>用 –volumes 参数，从另一个容器加载数据卷。</p>
+<h2 id="三、Dokcerfile编写"><a href="#三、Dokcerfile编写" class="headerlink" title="三、Dokcerfile编写"></a>三、Dokcerfile编写</h2><h3 id="1、文件例子："><a href="#1、文件例子：" class="headerlink" title="1、文件例子："></a>1、文件例子：</h3><p>Dockerfile文件编写，以自制nginx镜像为例，如下：</p>
+<pre><code class="bash">#This is a dockerfile for nginx
+
+#base mirror
+FROM centos
+#maintainer information
+MAINTAINER lxw lxwno.1@163.com
+# relate command
+RUN rpm -ivh https://mirrors.aliyun.com/epel/7/x86_64/Packages/e/epel-release-7-11.noarch.rpm
+RUN yum install nginx -y
+#add files
+ADD index.html /usr/share/nginx/html/index.html
+#arguments
+RUN echo &quot;daemon off;&quot; &gt;&gt; /etc/nginx/nginx.conf
+# expose port
+EXPOSE 80
+#exec command
+CMD [&quot;nginx&quot;]
+</code></pre>
+<h3 id="2、-制作镜像："><a href="#2、-制作镜像：" class="headerlink" title="2、 制作镜像："></a>2、 制作镜像：</h3><p><code>dcoekr build -t df_nginx:v1 .</code>  从当前目录的Dockerfile制作镜像，并指定名字和tag。</p>
+<h3 id="3、验证并启动："><a href="#3、验证并启动：" class="headerlink" title="3、验证并启动："></a>3、验证并启动：</h3><p><code>dcoker images</code> 可以查看刚构建好的docker镜像。</p>
+<p><code>docker -d --name my_nginx df_nginx</code>  启动镜像，注意命令后面不要加command 比如bash，不然bash会取代Dockerfile中写好的CMD命令 nginx，切忌。</p>
+<p><code>dcoker ps -a</code> 查看docker镜像状态</p>
+<p><code>docker exec -it my_nginx bash</code> 进入my_nginx容器</p>
+<p><code>docker inspect my_nginx</code> 查看my_nginx  的IP</p>
+<p><code>curl  ip</code> 验证Nginx 启动成功</p>
+<h3 id="4、指令详解："><a href="#4、指令详解：" class="headerlink" title="4、指令详解："></a>4、指令详解：</h3><ol>
+<li>Dockerfile是一行命令创建一层，所以所有命令尽量写入一行 ，通过 &amp;&amp;。要有清除动作。</li>
+<li>每一个 RUN 都是启动一个容器、执行命令、然后提交存储层文件变更。</li>
+<li>docker build 可以从Dockerfile、指定压缩包.tar、从标准输入中读取Dockerfile和压缩包，进行构建。</li>
+<li>COPY指令用于文件复制，ADD指令在需要自动解压的场合才使用。可配合 –chown=<user>:<group></li>
+<li>容器内的主进程要以前台方式运行，容器是进程不是虚拟机，没有后台服务的概念。容器的启动程序就是容器内的应用进程（CMD），容器就是为了主进程存在的，主进程退出，容器就没存在的意义了，从而退出。</li>
+<li>CMD指令是容器启动命令，推荐格式是列表，例如 <code>CMD [&quot;nginx&quot;, &quot;-g&quot;, &quot;daemon off;&quot;]</code>，可以被docker run中的命令替换。</li>
+<li>ENTYRPOINT 入口点指令，其内容可以是脚本可以是命令，用于接收来自CMD的指令当做参数，CMD内容可以来自Dockerfile，也可以来自docker run 中的 cmd。也可以被覆盖，需docker run 的参数 –entrypoint。</li>
+<li> ENV设置环境变量，方便其他指令引用。也类似设置全局变量。容器运行的时候，就会有这些环境变量。</li>
+<li>ARG构建参数，也是设置环境变量的，但是不会带到容器中去。会被–build-arg 覆盖。类似springboot启动命令对配置文件的选择。</li>
+<li>VOLUME 定义匿名卷，容器运行时向此卷写入的数据都不会记录到容器的存储层，从而保证了这个容器的无状态化（就是容器的读写层，原则上也不要写入数据，如果要写，请将宿主机的目录挂载为卷）。<strong>VOLUME指令定义的是target目录，是容器内部的目录，source呢，是匿名的，自动生成的，在宿主机的Docker安装目录下，/var/lib/docker/volumes。</strong></li>
+<li>EXPOSE 声明端口，仅仅是告诉你我这个进程的守护端口是什么，说明而已，方便你做端口映射有个参考。另外 docker run -P 随机端口映射，会将这个声明的端口映射出去，不然鬼知道他要映射哪个端口。</li>
+<li>WORKDIR指定工作目录，改变以后各层的工作目录，类似shell中的cd效果（命令都写在一行才一样）。</li>
+<li>USER指定当前用户，改变环境状态并影响以后的层。如果你是用root执行的脚本，但是需要使用某个用户来启动特定进程，用gosu，不要用su、sudo。比如 <code>CMD [ &quot;exec&quot;, &quot;gosu&quot;, &quot;redis&quot;, &quot;redis-server]</code></li>
+<li>HEALTHCHECK 健康检查 ，HEALTHCHECK CMD <commod>  设置检查容器健康状况的命令。docker ps 里可以看到，或者 docker inspect 的Health状态。</li>
+<li>ONSUILD 为他人做嫁衣 ，后面跟其他指令：RUN COPY等，这些指令不会立即执行，只有在以当前镜像为基础镜像制作新的镜像的时候，才会执行。类似模版吧，方便修改后统一跟新。</li>
+<li>多阶段构建。推荐使用多阶段构建，而不是都写在一个Dokcerfile文件里，或者分散到多个Dockerfile。</li>
+<li>镜像迁移，应该使用Docker Registry ，而不推荐 docker save 和 docker load。SSH传输例子，带进度条：    <code>docker save &lt;镜像名&gt; | bzip2 | pv | ssh &lt;用户名&gt;@&lt;主机名&gt; &#39;cat | docker load&#39;</code></li>
+</ol>
+<h2 id="四、私库搭建"><a href="#四、私库搭建" class="headerlink" title="四、私库搭建"></a>四、私库搭建</h2><h3 id="1、准备工作："><a href="#1、准备工作：" class="headerlink" title="1、准备工作："></a>1、准备工作：</h3><p><code>docker pull registry</code>  使用docker官方的仓库镜像来做私有仓库</p>
+<p><code>mkdir auth</code> 建立密码文件目录</p>
+<p><code>docker run --entrypoint htpasswd registry:2 -Bbn langxiaowei 123456 &gt; auth/htpasswd</code> 使用registry自带的apache命令htpasswd 命令生成密码文件，以供认证使用。</p>
+<h3 id="2、启动Registry："><a href="#2、启动Registry：" class="headerlink" title="2、启动Registry："></a>2、启动Registry：</h3><pre><code class="bash">docker run -d -p 5000:5000 --restart=always --name my_registry \
+-v `pwd`/auth:/auth \ 
+-e &quot;REGISTRY_AUTH=htpasswd&quot; \ 
+-e &quot;REGISTRY_AUTH_HTPASSWD_REALM=Registry Realm&quot; \ 
+-e &quot;REGISTRY_AUTH_HTPASSWD_PATH=/auth/htpasswd&quot; \
+registry
+</code></pre>
+<p>registry 默认使用5000端口，挂在密码文件后，设置环境变量-e来启动。</p>
+<h3 id="3、登陆并使用："><a href="#3、登陆并使用：" class="headerlink" title="3、登陆并使用："></a>3、登陆并使用：</h3><p><code>docker login 10.0.0.157:5000</code>  输入用户名密码登陆私库</p>
+<p><code>dcoker tag container_id 10.0.0.157:5000/user/image</code> 将本地镜像打tag(name:latest)</p>
+<p><code>dcoker push container_id 10.0.0.157:5000/user/image</code> 上传本地镜像到私库</p>
+<p><code>docker pull 10.0.0.157:5000/user/image</code> 从 私库拉取镜像到本地</p>
+<p>注意：以上如果不写IP和port，默认拉取官方镜像docker.io</p>
+<h3 id="4、报错解决："><a href="#4、报错解决：" class="headerlink" title="4、报错解决："></a>4、报错解决：</h3><p>登陆的时候，有以下提示：</p>
+<ol>
+<li><p><code>Error response from daemon: login attempt to http://10.0.0.157:5000/v2/ failed with status: 400 Bad Request</code> 密码文件路径错误，找不到。</p>
+</li>
+<li><p><code>Error response from daemon: Get https://10.0.0.157:5000/v2/: http: server gave HTTP response to HTTPS client</code></p>
+<p>Docker自从1.3.X之后docker registry交互默认使用的是HTTPS，但是搭建私有镜像默认使用的是HTTP服务，所以与私有镜像交时出现以上错误。</p>
+<p>解决办法：</p>
+<p>/lib/systemd/system/docker.service中，ExecStar 后面加入 –insecure-registry  ip:5000</p>
+<p>然后重启docker 服务：</p>
+<pre><code class="bash">systemctl daemon-reload 
+
+systemctl restart docker
+</code></pre>
+</li>
+</ol>
+<h2 id="五、容器编排（单机）"><a href="#五、容器编排（单机）" class="headerlink" title="五、容器编排（单机）"></a>五、容器编排（单机）</h2><p>容器的编排，即容器的依赖启动，这里使用docker-compose 来完成容器的依赖启动，单机情况下。</p>
+<h3 id="1、安装："><a href="#1、安装：" class="headerlink" title="1、安装："></a>1、安装：</h3><p>其是用python编写的，故用pip安装：</p>
+<pre><code class="bash">apt-get install python-pip
+pip install docker-compose
+</code></pre>
+<h3 id="2、使用："><a href="#2、使用：" class="headerlink" title="2、使用："></a>2、使用：</h3><p>依赖docker-compose.yml文件，故要先编写yml文件。</p>
+<pre><code class="bash">web1:
+        image: nginx
+        expose:
+                - 80
+
+web2:
+        image: nginx
+        expose:
+                - 80
+
+haproxy:
+        image: haproxy
+        volumes:
+                - /opt/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
+        links:
+                - web1
+                - web2
+        ports:
+                - &quot;7777:1080&quot;
+                - &quot;80:80&quot;
+</code></pre>
+<p><code>dcoker-compose up</code>  启动编排好的容器</p>
+<h2 id="六、配置容器DNS"><a href="#六、配置容器DNS" class="headerlink" title="六、配置容器DNS"></a>六、配置容器DNS</h2><h3 id="方法一："><a href="#方法一：" class="headerlink" title="方法一："></a>方法一：</h3><p>容器默认挂载了宿主机的三个文件<code>/etc/hosts, /etc/hostname, /etc/resolv.conf</code> 使用宿主机的DNS解析。</p>
+<h3 id="方法二："><a href="#方法二：" class="headerlink" title="方法二："></a>方法二：</h3><p>修改docker守护进程的配置文件<code>/etc/docker/daemon.json</code>，加入</p>
+<pre><code>&quot;dns&quot;: [&quot;114.114.114.114&quot;,&quot;223.5.5.5&quot;]
+</code></pre>
+<p>###方法三：</p>
+<p>docker run 命令行加入参数 -h –dns</p>
+
+      
+       <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 lxwno.1@163.com </span>
+    </div>
+</article>
+
+
+<p>
+    <a  class="dashang" onclick="dashangToggle()">赏</a>
+</p>
+
+
+
+
+
+
+    
+
+
+
+
+    </div>
+    <div class="copyright">
+        <p class="footer-entry">
+    ©2016-2020 LangXiaowei
+</p>
+<p class="footer-entry">Built with <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/yelog/hexo-theme-3-hexo" target="_blank">3-hexo</a> theme</p>
+
+    </div>
+    <div class="full-toc">
+        <button class="full" data-title="切换全屏 快捷键 s"><span class="min "></span></button>
+<a class="" id="rocket" ></a>
+
+    </div>
+</div>
+
+<div class="hide_box" onclick="dashangToggle()"></div>
+<div class="shang_box">
+    <a class="shang_close"  onclick="dashangToggle()">×</a>
+    <div class="shang_tit">
+        <p>喜欢就点赞,疼爱就打赏</p>
+    </div>
+    <div class="shang_payimg">
+        <div class="pay_img">
+            <img src="/img/alipay.jpg" class="alipay" title="扫码支持">
+            <img src="/img/weixin.jpg" class="weixin" title="扫码支持">
+        </div>
+    </div>
+    <div class="shang_payselect">
+        <span><label><input type="radio" name="pay" checked value="alipay">支付宝</label></span><span><label><input type="radio" name="pay" value="weixin">微信</label></span>
+    </div>
+</div>
+
+
+</body>
+<script src="/js/jquery.pjax.js?v=1.1.0" ></script>
+
+<script src="/js/script.js?v=1.1.0" ></script>
+<script>
+    var img_resize = 'default';
+    function initArticle() {
+        /*渲染对应的表格样式*/
+        
+            $("#post .pjax table").addClass("green_title");
+        
+
+        /*渲染打赏样式*/
+        
+        $("input[name=pay]").on("click", function () {
+            if($("input[name=pay]:checked").val()=="weixin"){
+                $(".shang_box .shang_payimg .pay_img").addClass("weixin_img");
+            } else {
+                $(".shang_box .shang_payimg .pay_img").removeClass("weixin_img");
+            }
+        })
+        
+
+        /*高亮代码块行号*/
+        
+
+        /*访问数量*/
+        
+        $.getScript("//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js");
+        
+
+        /*代码高亮，行号对齐*/
+        $('.pre-numbering').css('line-height',$('.has-numbering').css('line-height'));
+
+        
+        
+        /* 渲染*/
+        function HTMLDecode(text) {
+            var temp = document.createElement("div");
+            temp.innerHTML = text;
+            var output = temp.innerText || temp.textContent;
+            temp = null;
+            return output;
+        }
+        if (window.mermaid){
+            window.mermaid = null
+        }
+        $.getScript("//cdn.jsdelivr.net/npm/mermaid@8.4.2/dist/mermaid.min.js", function () {
+            var mermaidOptions = JSON.parse(HTMLDecode("{&#34;theme&#34;:&#34;default&#34;,&#34;startOnLoad&#34;:true,&#34;flowchart&#34;:{&#34;useMaxWidth&#34;:false,&#34;htmlLabels&#34;:true}}"))
+            if (window.mermaid) {
+                mermaid.initialize(mermaidOptions)
+                mermaid.contentLoaded()
+            }
+        })
+        
+    }
+
+    /*打赏页面隐藏与展示*/
+    
+    function dashangToggle() {
+        $(".shang_box").fadeToggle();
+        $(".hide_box").fadeToggle();
+    }
+    
+
+</script>
+
+<!--加入行号的高亮代码块样式-->
+
+<!--自定义样式设置-->
+<style>
+    
+    
+    .nav {
+        width: 542px;
+    }
+    .nav.fullscreen {
+        margin-left: -542px;
+    }
+    .nav-left {
+        width: 120px;
+    }
+    
+    
+    @media screen and (max-width: 1468px) {
+        .nav {
+            width: 492px;
+        }
+        .nav.fullscreen {
+            margin-left: -492px;
+        }
+        .nav-left {
+            width: 100px;
+        }
+    }
+    
+    
+    @media screen and (max-width: 1024px) {
+        .nav {
+            width: 492px;
+            margin-left: -492px
+        }
+        .nav.fullscreen {
+            margin-left: 0;
+        }
+    }
+    
+    @media screen and (max-width: 426px) {
+        .nav {
+            width: 100%;
+        }
+        .nav-left {
+            width: 100%;
+        }
+    }
+    
+    
+    .nav-right .title-list nav a .post-title, .nav-right .title-list #local-search-result a .post-title {
+        color: #383636;
+    }
+    
+    
+    .nav-right .title-list nav a .post-date, .nav-right .title-list #local-search-result a .post-date {
+        color: #5e5e5f;
+    }
+    
+    
+    .nav-right nav a.hover, #local-search-result a.hover{
+        background-color: #e2e0e0;
+    }
+    
+    
+
+    /*列表样式*/
+    
+
+    /* 背景图样式 */
+    
+    
+
+
+    /*引用块样式*/
+    
+
+    /*文章列表背景图*/
+    
+
+    
+</style>
+
+
+
+
+
+
+
+</html>

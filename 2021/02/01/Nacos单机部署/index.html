@@ -6,20 +6,19 @@
   <meta name="keywords" content=" nacos ">
   <meta name="description" content="Nacos单机部署 | 运维人">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<meta name="description" content="一、现象：如图：  二、原因： 内核线程 nfs挂载没有指定端口  NFS挂载的问题已验证，内核原因待验证。">
+<meta name="description" content="一、缘由：　　今天学习Flask，书上建议用Docker，那我就安装了DockerToolBox（WIN10系统只能用toolbox）。其中从docker hub拉取ubuntu镜像时 docker pull xxxx，网速简直是龟速。想到中国的长城防火墙，再想到毕竟是国外的网站，瞬间心灰意冷，想诅骂作者搞了个那么大个镜像在Docker Hub。 　　按以往的经验，对于国外网站或者源，我们都喜欢更">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Centos某个监听的端口看不到PID">
-<meta property="og:url" content="http://example.com/2021/02/01/Centos%E6%9F%90%E4%B8%AA%E7%9B%91%E5%90%AC%E7%9A%84%E7%AB%AF%E5%8F%A3%E7%9C%8B%E4%B8%8D%E5%88%B0PID/index.html">
+<meta property="og:title" content="DockerHub加速">
+<meta property="og:url" content="http://example.com/2021/02/02/DockerHub%E5%8A%A0%E9%80%9F/index.html">
 <meta property="og:site_name" content="运维人">
-<meta property="og:description" content="一、现象：如图：  二、原因： 内核线程 nfs挂载没有指定端口  NFS挂载的问题已验证，内核原因待验证。">
+<meta property="og:description" content="一、缘由：　　今天学习Flask，书上建议用Docker，那我就安装了DockerToolBox（WIN10系统只能用toolbox）。其中从docker hub拉取ubuntu镜像时 docker pull xxxx，网速简直是龟速。想到中国的长城防火墙，再想到毕竟是国外的网站，瞬间心灰意冷，想诅骂作者搞了个那么大个镜像在Docker Hub。 　　按以往的经验，对于国外网站或者源，我们都喜欢更">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://s3.ax1x.com/2021/02/01/yZbJd1.png">
-<meta property="article:published_time" content="2021-02-01T07:35:10.000Z">
-<meta property="article:modified_time" content="2021-02-01T08:43:25.447Z">
+<meta property="article:published_time" content="2021-02-02T02:34:29.000Z">
+<meta property="article:modified_time" content="2021-02-02T02:35:58.143Z">
 <meta property="article:author" content="运维人">
-<meta property="article:tag" content="centos">
+<meta property="article:tag" content="docker">
+<meta property="article:tag" content="加速器">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://s3.ax1x.com/2021/02/01/yZbJd1.png">
 
 
 <link rel="icon" href="/img/avatar.jpg">
@@ -185,10 +184,53 @@
     <li>
         <div class="all active" data-rel="全部文章">全部文章
             
-                <small>(10)</small>
+                <small>(28)</small>
             
         </div>
     </li>
+    
+        
+            
+                <li>
+                    <div data-rel="工具">
+                        <i class="fold iconfont icon-right"></i>
+                        
+                        工具
+                        <small>(7)</small>
+                        
+                    </div>
+                    
+                        <ul class="sub hide">
+                            
+                                <li>
+                                    <div data-rel="工具<--->ELK">
+                                        
+                                        ELK
+                                        
+                                            <small>(3
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                                <li>
+                                    <div data-rel="工具<--->Git">
+                                        
+                                        Git
+                                        
+                                            <small>(1
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                        </ul>
+                    
+                </li>
+            
+        
     
         
             
@@ -228,18 +270,85 @@
                         <i class="fold iconfont icon-right"></i>
                         
                         系统
-                        <small>(1)</small>
+                        <small>(4)</small>
                         
                     </div>
                     
                         <ul class="sub hide">
                             
                                 <li>
-                                    <div data-rel="系统<--->Centos">
+                                    <div data-rel="系统<--->Linux">
                                         
-                                        Centos
+                                        Linux
                                         
                                             <small>(1
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                                <li>
+                                    <div data-rel="系统<--->Ubuntu">
+                                        
+                                        Ubuntu
+                                        
+                                            <small>(2
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                                <li>
+                                    <div data-rel="系统<--->Windows">
+                                        
+                                        Windows
+                                        
+                                            <small>(1
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                        </ul>
+                    
+                </li>
+            
+        
+    
+        
+            
+                <li>
+                    <div data-rel="虚拟化">
+                        <i class="fold iconfont icon-right"></i>
+                        
+                        虚拟化
+                        <small>(7)</small>
+                        
+                    </div>
+                    
+                        <ul class="sub hide">
+                            
+                                <li>
+                                    <div data-rel="虚拟化<--->Docker">
+                                        
+                                        Docker
+                                        
+                                            <small>(5
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                                <li>
+                                    <div data-rel="虚拟化<--->VMware">
+                                        
+                                        VMware
+                                        
+                                            <small>(2
                                                 )</small>
                                         
                                     </div>
@@ -259,7 +368,7 @@
                         <i class="fold iconfont icon-right"></i>
                         
                         中间件
-                        <small>(7)</small>
+                        <small>(8)</small>
                         
                     </div>
                     
@@ -283,6 +392,18 @@
                                         Nacos
                                         
                                             <small>(2
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                                <li>
+                                    <div data-rel="中间件<--->Nginx">
+                                        
+                                        Nginx
+                                        
+                                            <small>(1
                                                 )</small>
                                         
                                     </div>
@@ -327,6 +448,34 @@
             
         
     
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
 </ul>
 <div class="left-bottom">
     <div class="menus">
@@ -347,8 +496,8 @@
         
     </div>
 </div>
-<input type="hidden" id="yelog_site_posts_number" value="10">
-<input type="hidden" id="yelog_site_word_count" value="3.9k">
+<input type="hidden" id="yelog_site_posts_number" value="28">
+<input type="hidden" id="yelog_site_word_count" value="16.5k">
 <div style="display: none">
     <span id="busuanzi_value_site_uv"></span>
     <span id="busuanzi_value_site_pv"></span>
@@ -396,11 +545,59 @@
     <div class="tag-wrapper">
         
             <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>加速器</a>
+            </li>
+        
+            <li class="article-tag-list-item">
                 <i class="iconfont icon-tag"></i><a>数据库</a>
             </li>
         
             <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>系统升级</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>aircrack-ng</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>arimon-ng</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>bbr</a>
+            </li>
+        
+            <li class="article-tag-list-item">
                 <i class="iconfont icon-tag"></i><a>centos</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>docker</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>ELK</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>filebeat</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>git</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>index</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>lets-encrypt</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>log</a>
             </li>
         
             <li class="article-tag-list-item">
@@ -409,6 +606,10 @@
         
             <li class="article-tag-list-item">
                 <i class="iconfont icon-tag"></i><a>nacos</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>nginx</a>
             </li>
         
             <li class="article-tag-list-item">
@@ -428,6 +629,46 @@
             </li>
         
             <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>shadowsockets</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>ssl证书</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>swap</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>timezone</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>ubuntu</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>vmware</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>vsca</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>vsphere</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>vultr</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>win10</a>
+            </li>
+        
+            <li class="article-tag-list-item">
                 <i class="iconfont icon-tag"></i><a>zookeeper</a>
             </li>
         
@@ -438,7 +679,151 @@
     
     <nav id="title-list-nav">
         
-        <a  class="全部文章 系统 Centos "
+        <a  class="全部文章 虚拟化 Docker "
+           href="/2021/02/02/DockerHub%E5%8A%A0%E9%80%9F/"
+           data-tag="docker,加速器"
+           data-author="" >
+            <span class="post-title" title="DockerHub加速">DockerHub加速</span>
+            <span class="post-date" title="2021-02-02 10:34:29">2021/02/02</span>
+        </a>
+        
+        <a  class="全部文章 虚拟化 Docker "
+           href="/2021/02/02/Docker%E4%BF%AE%E6%94%B9%E9%BB%98%E8%AE%A4%E6%97%B6%E5%8C%BA/"
+           data-tag="docker,timezone"
+           data-author="" >
+            <span class="post-title" title="Docker修改默认时区">Docker修改默认时区</span>
+            <span class="post-date" title="2021-02-02 10:32:07">2021/02/02</span>
+        </a>
+        
+        <a  class="全部文章 工具 ELK "
+           href="/2021/02/02/ELK-Docker%E5%8C%96%E5%AE%89%E8%A3%85/"
+           data-tag="docker,ELK"
+           data-author="" >
+            <span class="post-title" title="ELK-Docker化安装">ELK-Docker化安装</span>
+            <span class="post-date" title="2021-02-02 10:28:20">2021/02/02</span>
+        </a>
+        
+        <a  class="全部文章 工具 ELK "
+           href="/2021/02/02/ELK%E8%87%AA%E5%AE%9A%E4%B9%89%E7%B4%A2%E5%BC%95%E9%85%8D%E7%BD%AE/"
+           data-tag="ELK,index,log"
+           data-author="" >
+            <span class="post-title" title="ELK自定义索引配置">ELK自定义索引配置</span>
+            <span class="post-date" title="2021-02-02 10:26:17">2021/02/02</span>
+        </a>
+        
+        <a  class="全部文章 工具 ELK "
+           href="/2021/02/02/Filebeat%E5%90%88%E5%B9%B6%E5%A4%9A%E8%A1%8C%E6%97%A5%E5%BF%97/"
+           data-tag="ELK,filebeat"
+           data-author="" >
+            <span class="post-title" title="Filebeat合并多行日志">Filebeat合并多行日志</span>
+            <span class="post-date" title="2021-02-02 10:23:55">2021/02/02</span>
+        </a>
+        
+        <a  class="全部文章 工具 Git "
+           href="/2021/02/02/Git%E4%B8%8A%E4%BC%A0%E6%9C%AC%E5%9C%B0%E9%A1%B9%E7%9B%AE/"
+           data-tag="git"
+           data-author="" >
+            <span class="post-title" title="Git上传本地项目">Git上传本地项目</span>
+            <span class="post-date" title="2021-02-02 10:21:35">2021/02/02</span>
+        </a>
+        
+        <a  class="全部文章 工具 "
+           href="/2021/02/02/Lets-encrypt%E5%85%8D%E8%B4%B9SSL%E8%AF%81%E4%B9%A6%E7%94%B3%E8%AF%B7/"
+           data-tag="lets-encrypt,ssl证书"
+           data-author="" >
+            <span class="post-title" title="Lets-encrypt免费SSL证书申请">Lets-encrypt免费SSL证书申请</span>
+            <span class="post-date" title="2021-02-02 10:18:38">2021/02/02</span>
+        </a>
+        
+        <a  class="全部文章 中间件 Nginx "
+           href="/2021/02/02/Nginx%E5%88%A9%E7%94%A8%E6%BA%90%E5%8D%87%E7%BA%A7/"
+           data-tag="nginx"
+           data-author="" >
+            <span class="post-title" title="Nginx利用源升级">Nginx利用源升级</span>
+            <span class="post-date" title="2021-02-02 10:16:55">2021/02/02</span>
+        </a>
+        
+        <a  class="全部文章 系统 Ubuntu "
+           href="/2021/02/02/Ubuntu-14-04LTS%E5%8D%87%E7%BA%A7%E5%88%B0Ubuntu-18-04LTS/"
+           data-tag="ubuntu,系统升级"
+           data-author="" >
+            <span class="post-title" title="Ubuntu-14.04LTS升级到Ubuntu-18.04LTS">Ubuntu-14.04LTS升级到Ubuntu-18.04LTS</span>
+            <span class="post-date" title="2021-02-02 10:14:53">2021/02/02</span>
+        </a>
+        
+        <a  class="全部文章 系统 Ubuntu "
+           href="/2021/02/02/Ubuntu%E6%96%B0%E5%A2%9ESWAP%E5%92%8C%E8%B0%83%E6%95%B4SWAP%E5%A4%A7%E5%B0%8F/"
+           data-tag="ubuntu,swap"
+           data-author="" >
+            <span class="post-title" title="Ubuntu新增SWAP和调整SWAP大小">Ubuntu新增SWAP和调整SWAP大小</span>
+            <span class="post-date" title="2021-02-02 10:13:23">2021/02/02</span>
+        </a>
+        
+        <a  class="全部文章 工具 "
+           href="/2021/02/02/VPS%E6%90%AD%E5%BB%BASS%E5%BD%B1%E6%A2%AD%E6%9C%8D%E5%8A%A1%E7%AB%AF%E5%B9%B6%E4%BC%98%E5%8C%96%E5%8A%A0%E9%80%9FShadowsocks-BBR/"
+           data-tag="shadowsockets,bbr,vultr"
+           data-author="" >
+            <span class="post-title" title="VPS搭建SS影梭服务端并优化加速Shadowsocks+BBR">VPS搭建SS影梭服务端并优化加速Shadowsocks+BBR</span>
+            <span class="post-date" title="2021-02-02 10:10:31">2021/02/02</span>
+        </a>
+        
+        <a  class="全部文章 虚拟化 VMware "
+           href="/2021/02/02/VSCA%E5%8F%91%E9%82%AE%E4%BB%B6%E9%85%8D%E7%BD%AE/"
+           data-tag="vsca"
+           data-author="" >
+            <span class="post-title" title="VSCA发邮件配置">VSCA发邮件配置</span>
+            <span class="post-date" title="2021-02-02 10:08:20">2021/02/02</span>
+        </a>
+        
+        <a  class="全部文章 系统 Windows "
+           href="/2021/02/02/Win10%E7%9A%84%E4%BE%BF%E6%8D%B7%E4%BD%BF%E7%94%A8/"
+           data-tag="win10"
+           data-author="" >
+            <span class="post-title" title="Win10的便捷使用">Win10的便捷使用</span>
+            <span class="post-date" title="2021-02-02 10:06:16">2021/02/02</span>
+        </a>
+        
+        <a  class="全部文章 工具 "
+           href="/2021/02/02/Wifi%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3/"
+           data-tag="aircrack-ng,arimon-ng"
+           data-author="" >
+            <span class="post-title" title="Wifi密码破解">Wifi密码破解</span>
+            <span class="post-date" title="2021-02-02 10:02:18">2021/02/02</span>
+        </a>
+        
+        <a  class="全部文章 虚拟化 Docker "
+           href="/2021/02/02/Docker%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/"
+           data-tag="docker"
+           data-author="" >
+            <span class="post-title" title="Docker基本操作">Docker基本操作</span>
+            <span class="post-date" title="2021-02-02 09:53:03">2021/02/02</span>
+        </a>
+        
+        <a  class="全部文章 虚拟化 Docker "
+           href="/2021/02/02/Docker%E6%8C%82%E8%BD%BD%E6%96%87%E4%BB%B6%E7%9A%84%E6%9B%B4%E6%96%B0%E9%97%AE%E9%A2%98/"
+           data-tag="docker"
+           data-author="" >
+            <span class="post-title" title="Docker挂载文件的更新问题">Docker挂载文件的更新问题</span>
+            <span class="post-date" title="2021-02-02 09:50:42">2021/02/02</span>
+        </a>
+        
+        <a  class="全部文章 虚拟化 VMware "
+           href="/2021/02/02/vSphere%E6%95%B0%E6%8D%AE%E4%B8%AD%E5%BF%83%E6%9E%B6%E6%9E%84%E9%80%89%E5%9E%8B/"
+           data-tag="vmware,vsphere"
+           data-author="" >
+            <span class="post-title" title="vSphere数据中心架构选型">vSphere数据中心架构选型</span>
+            <span class="post-date" title="2021-02-02 09:47:12">2021/02/02</span>
+        </a>
+        
+        <a  class="全部文章 虚拟化 Docker "
+           href="/2021/02/02/%E5%88%B6%E4%BD%9CDockerImage%E5%AD%98%E5%9C%A8%E7%9A%84%E9%97%AE%E9%A2%98/"
+           data-tag="docker"
+           data-author="" >
+            <span class="post-title" title="制作DockerImage存在的问题">制作DockerImage存在的问题</span>
+            <span class="post-date" title="2021-02-02 09:44:03">2021/02/02</span>
+        </a>
+        
+        <a  class="全部文章 系统 Linux "
            href="/2021/02/01/Centos%E6%9F%90%E4%B8%AA%E7%9B%91%E5%90%AC%E7%9A%84%E7%AB%AF%E5%8F%A3%E7%9C%8B%E4%B8%8D%E5%88%B0PID/"
            data-tag="centos"
            data-author="" >
