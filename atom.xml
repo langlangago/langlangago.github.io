@@ -6,7 +6,7 @@
   <link href="https://www.langxw.com/atom.xml" rel="self"/>
   
   <link href="https://www.langxw.com/"/>
-  <updated>2021-02-02T02:35:58.143Z</updated>
+  <updated>2021-02-22T08:11:17.791Z</updated>
   <id>https://www.langxw.com/</id>
   
   <author>
@@ -15,6 +15,30 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>ss免费账号</title>
+    <link href="https://www.langxw.com/2021/02/22/ss%E5%85%8D%E8%B4%B9%E8%B4%A6%E5%8F%B7/"/>
+    <id>https://www.langxw.com/2021/02/22/ss%E5%85%8D%E8%B4%B9%E8%B4%A6%E5%8F%B7/</id>
+    <published>2021-02-22T07:38:35.000Z</published>
+    <updated>2021-02-22T08:11:17.791Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="一、免费账号"><a href="#一、免费账号" class="headerlink" title="一、免费账号"></a>一、免费账号</h2><p><a href="https://github.com/Alvin9999/new-pac/wiki/ss%E5%85%8D%E8%B4%B9%E8%B4%A6%E5%8F%B7">免费账号连接：https://github.com/Alvin9999/new-pac/wiki/ss%E5%85%8D%E8%B4%B9%E8%B4%A6%E5%8F%B7</a></p><p><strong>账号可能会失效，失效后请到以上页面获取新的账号。</strong></p><h2 id="二、自由上网"><a href="#二、自由上网" class="headerlink" title="二、自由上网"></a>二、自由上网</h2><p><a href="https://github.com/Alvin9999/new-pac/wiki">自由上网：https://github.com/Alvin9999/new-pac/wiki</a></p><h2 id="三、注意事项"><a href="#三、注意事项" class="headerlink" title="三、注意事项"></a>三、注意事项</h2><ol><li>本资源仅供用于学习和交流,请遵循相关法律法规,本资源不代表本站立场,并禁止以下行为</li><li>不得使用 BT，eMule，迅雷，FlashGet，Tor 等 P2P 工具下载非法和国家禁止的互联网信息内容</li><li>不得用于“注册机/发贴机/垃圾邮件/群发外链/黑帽SEO/网络攻击/网络诈骗”等用途</li><li>不得下载或传播侵犯知识产权相关内容</li><li>不得发布任何非法、威胁、诽谤、反动、淫秽、色情信息或其它违法信息</li><li>不得利用本系统可能存在漏洞以各种形式为自己及他人牟利</li><li>不散布电子邮件广告、垃圾邮件（SPAM）：不利用本平台提供的服务散发大量不受欢迎的或者未经请求的电子邮件、电子广告或包含反动、色情等有害信息的电子邮件</li><li>不利用本平台提供的服务上传、下载、发布如下信息或者内容，不为他人发布该等信息提供任何便利</li><li>违反国家规定的政治宣传或新闻信息</li><li>涉及国家秘密或安全的信息</li><li>封建迷信或淫秽、色情、下流的信息或教唆犯罪的信息</li><li>违反国家民族和宗教政策的信息</li><li>妨碍互联网运行安全的信息</li><li>侵害他人合法权益的信息或其他有损于社会秩序、社会治安、公共道德的信息或内容</li><li>其他违反法律法规、部门规章或国家政策的内容</li><li>不进行任何破坏或试图破坏网络安全的行为（包括钓鱼，黑客，网络诈骗等）</li></ol>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h2 id=&quot;一、免费账号&quot;&gt;&lt;a href=&quot;#一、免费账号&quot; class=&quot;headerlink&quot; title=&quot;一、免费账号&quot;&gt;&lt;/a&gt;一、免费账号&lt;/h2&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/Alvin9999/new-pac/wiki/ss%</summary>
+      
+    
+    
+    
+    <category term="工具" scheme="https://www.langxw.com/categories/%E5%B7%A5%E5%85%B7/"/>
+    
+    
+    <category term="shadowsocks" scheme="https://www.langxw.com/tags/shadowsocks/"/>
+    
+  </entry>
   
   <entry>
     <title>DockerHub加速</title>
@@ -539,34 +563,6 @@
     
     
     <category term="centos" scheme="https://www.langxw.com/tags/centos/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Mongodb单实例部署的两种方式</title>
-    <link href="https://www.langxw.com/2021/02/01/Mongodb%E5%8D%95%E5%AE%9E%E4%BE%8B%E9%83%A8%E7%BD%B2%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%96%B9%E5%BC%8F/"/>
-    <id>https://www.langxw.com/2021/02/01/Mongodb%E5%8D%95%E5%AE%9E%E4%BE%8B%E9%83%A8%E7%BD%B2%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%96%B9%E5%BC%8F/</id>
-    <published>2021-02-01T07:22:54.000Z</published>
-    <updated>2021-02-01T07:33:19.292Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="一、利用Docker部署"><a href="#一、利用Docker部署" class="headerlink" title="一、利用Docker部署"></a>一、利用Docker部署</h2><p><strong>Redis、Mongdb、MySQL等数据库必须开认证策略，以防被人攻击破坏。</strong></p><h3 id="1、Docker版部署"><a href="#1、Docker版部署" class="headerlink" title="1、Docker版部署"></a>1、Docker版部署</h3><p>因早期Mongodb默认不开启认证策略，很多Mongdb数据库被攻击，后期官方对认证策略进行了增强。</p><p>经实际验证<code>MONGO_INITDB_ROOT_USERNAME和MONGO_INITDB_ROOT_PASSWORD</code>这两个参数，只有在Mongodb版本为3.6.20以上才生效，故使用Docker版Mongdb必须要用新版本才行（3.6.20以上）。</p><h3 id="2、-启动命令如下"><a href="#2、-启动命令如下" class="headerlink" title="2、  启动命令如下"></a>2、  启动命令如下</h3><pre><code class="bash"> docker run -d  -p 27017:27017 --name mongo_huadong     -e MONGO_INITDB_ROOT_USERNAME=mongoadmin     -e MONGO_INITDB_ROOT_PASSWORD=Yimi@2018 -v /data/mongo_huadong/db:/data/db     mongo:3.6.20</code></pre><h3 id="3、-新增用户"><a href="#3、-新增用户" class="headerlink" title="3、 新增用户"></a>3、 新增用户</h3><pre><code class="bash">use admin;db.createUser( &#123; user: &quot;admin&quot;, pwd: &quot;123456&quot;, roles: [ &#123;            &quot;role&quot; : &quot;userAdminAnyDatabase&quot;,            &quot;db&quot; : &quot;admin&quot;        &#125;,         &#123;            &quot;role&quot; : &quot;readWriteAnyDatabase&quot;,            &quot;db&quot; : &quot;admin&quot;        &#125;,         &#123;            &quot;role&quot; : &quot;dbAdminAnyDatabase&quot;,            &quot;db&quot; : &quot;admin&quot;        &#125; ]&#125;);</code></pre><h3 id="4、-验证"><a href="#4、-验证" class="headerlink" title="4、 验证"></a>4、 验证</h3><pre><code class="bash">use admin;db.auth(&#39;admin&#39;, &#39;123456&#39;)</code></pre><p>返回1 即为验证成功</p><h2 id="二、利用YUM安装"><a href="#二、利用YUM安装" class="headerlink" title="二、利用YUM安装"></a>二、利用YUM安装</h2><p><strong>早期的Mongdb开启认证策略比较麻烦：先添加用户，再修改配置文件开启用户认证，再重启mongo服务（或者 添加用户后，用mongod  –auth命令启动）。</strong></p><p>鉴于Docker中的进程不能关闭，也就是mongodb没发再容器里重启，所以低版本mongodb不建议用Docker安装</p><h3 id="1、增加yum源"><a href="#1、增加yum源" class="headerlink" title="1、增加yum源"></a>1、增加yum源</h3><pre><code class="bash">cat &gt;&gt; /etc/yum.repos.d/mongodb-org-3.2.repo &lt;&lt; EOF[mongodb-org-3.2]name=MongoDB Repositorybaseurl=https://repo.mongodb.org/yum/redhat/$releasever/mongodb-org/3.2/x86_64/gpgcheck=1enabled=1gpgkey=https://www.mongodb.org/static/pgp/server-3.2.ascEOF</code></pre><h3 id="2、安装指定版本Mongdb"><a href="#2、安装指定版本Mongdb" class="headerlink" title="2、安装指定版本Mongdb"></a>2、安装指定版本Mongdb</h3><pre><code class="bash">sudo yum install -y mongodb-org-3.2.22 mongodb-org-server-3.2.22 mongodb-org-shell-3.2.22 mongodb-org-mongos-3.2.22 mongodb-org-tools-3.2.22</code></pre><h3 id="3、启动"><a href="#3、启动" class="headerlink" title="3、启动"></a>3、启动</h3><p><code>sudo service mongod start</code></p><h3 id="4、增加用户"><a href="#4、增加用户" class="headerlink" title="4、增加用户"></a>4、增加用户</h3><pre><code class="bash">use admindb.createUser(  &#123;    user: &quot;admin&quot;,    pwd: &quot;123456&quot;,    roles: [ &#123; role: &quot;userAdminAnyDatabase&quot;, db: &quot;admin&quot; &#125; ]  &#125;)</code></pre><h3 id="5、修改配置文件打开认证"><a href="#5、修改配置文件打开认证" class="headerlink" title="5、修改配置文件打开认证"></a>5、修改配置文件打开认证</h3><pre><code class="shell">vim /etc/mongod.conf security:  authorization: enabled</code></pre><h3 id="6、重启Mongdb"><a href="#6、重启Mongdb" class="headerlink" title="6、重启Mongdb"></a>6、重启Mongdb</h3><p><code>sudo service mongod restart</code></p><h3 id="7、进行验证"><a href="#7、进行验证" class="headerlink" title="7、进行验证"></a>7、进行验证</h3><pre><code>use admin;db.auth(&#39;admin&#39;, &#39;123456&#39;)</code></pre><p>返回1 即为验证成功</p><h3 id="8、报错解决"><a href="#8、报错解决" class="headerlink" title="8、报错解决"></a>8、报错解决</h3><p>如果账号密码正确还是认证失败，客户端连接不上，建议观察日志，比如：</p><pre><code>SCRAM-SHA-1 authentication failed ``for` `user1 on finddemo</code></pre><p>这是因为 mongodb加入了SCRAM-SHA-1校验方式，需要第三方工具配合进行验证。</p><p>首先关闭认证，修改system.version文档里面的authSchema版本为3，初始安装时候应该是5。</p><pre><code>&gt; use admin switched to db admin &gt;  var schema = db.system.version.findOne(&#123;&quot;_id&quot; : &quot;authSchema&quot;&#125;) &gt; schema.currentVersion = 3 3 &gt; db.system.version.save(schema) WriteResult(&#123; &quot;nMatched&quot; : 1, &quot;nUpserted&quot; : 0, &quot;nModified&quot; : 1 &#125;)  </code></pre>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h2 id=&quot;一、利用Docker部署&quot;&gt;&lt;a href=&quot;#一、利用Docker部署&quot; class=&quot;headerlink&quot; title=&quot;一、利用Docker部署&quot;&gt;&lt;/a&gt;一、利用Docker部署&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;Redis、Mongdb、MySQL等数据库</summary>
-      
-    
-    
-    
-    <category term="中间件" scheme="https://www.langxw.com/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/"/>
-    
-    <category term="MongoDB" scheme="https://www.langxw.com/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/MongoDB/"/>
-    
-    
-    <category term="mongodb" scheme="https://www.langxw.com/tags/mongodb/"/>
-    
-    <category term="数据库" scheme="https://www.langxw.com/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
     
   </entry>
   
