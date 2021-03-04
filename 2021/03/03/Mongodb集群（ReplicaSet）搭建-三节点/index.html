@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>VPS搭建SS影梭服务端并优化加速Shadowsocks+BBR | 运维人</title>
-  <meta name="keywords" content=" shadowsockets , bbr , vultr ">
-  <meta name="description" content="VPS搭建SS影梭服务端并优化加速Shadowsocks+BBR | 运维人">
+  <title>Mongodb集群（ReplicaSet）搭建-三节点 | 运维人</title>
+  <meta name="keywords" content=" mongodb , 数据库 ">
+  <meta name="description" content="Mongodb集群（ReplicaSet）搭建-三节点 | 运维人">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="一、环境说明 操作系统：Centos7.6  Mongodb 3.2.1 的rpm包 mongodb-org-server-3.2.1-1.el7.x86_64.rpm mongodb-org-tools-3.2.1-1.el7.x86_64.rpm mongodb-org-mongos-3.2.1-1.el7.x86_64.rpm mongodb-org-shell-3.2.1-1.el7.x8">
 <meta property="og:type" content="article">
@@ -941,9 +941,9 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="post-VPS搭建SS影梭服务端并优化加速Shadowsocks-BBR" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-Mongodb集群（ReplicaSet）搭建-三节点" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">VPS搭建SS影梭服务端并优化加速Shadowsocks+BBR</h1>
+        <h1 class="article-title">Mongodb集群（ReplicaSet）搭建-三节点</h1>
     
     <div class="article-meta">
         
@@ -953,7 +953,9 @@
             <i class="iconfont icon-category"></i>
             
             
-            <a  data-rel="工具">工具</a>
+            <a  data-rel="中间件">中间件</a> > 
+            
+            <a  data-rel="中间件&lt;---&gt;MongoDB">MongoDB</a>
             
         </span>
         
@@ -961,23 +963,21 @@
         <span class="tag">
             <i class="iconfont icon-tag"></i>
             
-            <a class="color4">shadowsockets</a>
+            <a class="color3">mongodb</a>
             
-            <a class="color4">bbr</a>
-            
-            <a class="color1">vultr</a>
+            <a class="color4">数据库</a>
             
         </span>
         
     </div>
     <div class="article-meta">
         
-            发布时间 : <time class="date" title='最后更新: 2021-02-02 10:12:33'>2021-02-02 10:10</time>
+            发布时间 : <time class="date" title='最后更新: 2021-03-04 09:54:48'>2021-03-03 19:37</time>
         
     </div>
     <div class="article-meta">
         
-        <span>字数:912</span>
+        <span>字数:788</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -1007,7 +1007,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E7%BC%98%E7%94%B1%EF%BC%9A"><span class="toc-text">一、缘由：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95%EF%BC%9A"><span class="toc-text">二、解决办法：</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E8%B4%AD%E4%B9%B0VPS-%E7%BA%A6%E7%AD%89%E4%BA%8E%E4%BA%91%E4%B8%BB%E6%9C%BA"><span class="toc-text">1、购买VPS (约等于云主机)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E5%AE%89%E8%A3%85%E5%B9%B6%E9%85%8D%E7%BD%AEShadowsocks"><span class="toc-text">2、安装并配置Shadowsocks</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81%E5%AE%89%E8%A3%85%E5%8A%A0%E9%80%9F%E5%99%A8Google-TCP-BBR"><span class="toc-text">3、安装加速器Google TCP BBR</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81VPN%E5%92%8CSS%E5%AF%B9%E6%AF%94"><span class="toc-text">三、VPN和SS对比:</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E9%99%84%E5%BD%95%EF%BC%9A"><span class="toc-text">四、附录：</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E7%8E%AF%E5%A2%83%E8%AF%B4%E6%98%8E"><span class="toc-text">一、环境说明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E7%A6%BB%E7%BA%BF%E5%AE%89%E8%A3%85"><span class="toc-text">二、离线安装</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E5%85%B3%E9%97%AD%E9%98%B2%E7%81%AB%E5%A2%99"><span class="toc-text">1、关闭防火墙</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E7%A6%BB%E7%BA%BF%E5%AE%89%E8%A3%85mongodb"><span class="toc-text">2、离线安装mongodb</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE"><span class="toc-text">三、集群配置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E7%94%9F%E6%88%90%E5%AF%86%E9%92%A5%E6%96%87%E4%BB%B6"><span class="toc-text">1、生成密钥文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E4%BF%AE%E6%94%B9%E7%9B%91%E5%90%AC%EF%BC%8C%E9%85%8D%E7%BD%AE%E9%9B%86%E7%BE%A4%E5%90%8D%E7%A7%B0"><span class="toc-text">2、修改监听，配置集群名称</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1%EF%BC%89%E4%BF%AE%E6%94%B9%E7%9B%91%E5%90%AC%EF%BC%9A"><span class="toc-text">1）修改监听：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2%EF%BC%89%E9%85%8D%E7%BD%AE%E9%9B%86%E7%BE%A4%E5%90%8D%E7%A7%B0%EF%BC%9A"><span class="toc-text">2）配置集群名称：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3%EF%BC%89%E9%87%8D%E5%90%AF"><span class="toc-text">3）重启</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81%E5%88%9D%E5%A7%8B%E5%8C%96%E9%9B%86%E7%BE%A4"><span class="toc-text">3、初始化集群</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E8%AE%A4%E8%AF%81%E9%85%8D%E7%BD%AE"><span class="toc-text">二、认证配置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E5%88%9B%E5%BB%BA%E7%94%A8%E6%88%B7"><span class="toc-text">1、创建用户</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E5%BC%80%E5%90%AF%E8%AE%A4%E8%AF%81"><span class="toc-text">2、开启认证</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81%E9%87%8D%E5%90%AF"><span class="toc-text">3、重启</span></a></li></ol></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -1023,82 +1023,111 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="一、缘由："><a href="#一、缘由：" class="headerlink" title="一、缘由："></a>一、缘由：</h2><p>　　之前自己花钱买了一年的SS影梭用来FQ，小200大洋，网速还不好，不稳定，瞬间感觉花了冤枉钱。这次借着公司</p>
-<p>打算搞自己的VPN机会，买了个VPS，搭了个Shadowsocks服务端，并安装了加速器BBR。经过youtube带宽图测试，高清HD无压力。</p>
-<p><strong>环境：Centos6.9 + Shadowsocks 2.8.2 (Python) +  Google TCP BBR 拥塞控制算法。</strong> <strong>VPS服务商 Vultr</strong></p>
-<h2 id="二、解决办法："><a href="#二、解决办法：" class="headerlink" title="二、解决办法："></a>二、解决办法：</h2><h3 id="1、购买VPS-约等于云主机"><a href="#1、购买VPS-约等于云主机" class="headerlink" title="1、购买VPS (约等于云主机)"></a>1、购买VPS (约等于云主机)</h3><p>Vultr注册账号并充值后，新建VPS机器，选择日本地区机房和Centos6系统。（选日本是因为日本近，选Centos6 是因为内核升级和匹配方便和操作顺手） </p>
-<h3 id="2、安装并配置Shadowsocks"><a href="#2、安装并配置Shadowsocks" class="headerlink" title="2、安装并配置Shadowsocks"></a>2、安装并配置Shadowsocks</h3><p>由于SS本身就是一个Python项目，这里就推荐使用最简单的Python版本。拿到服务器的IP和密码后，SSH到服务器上，已root用户执行如下命令。</p>
-<p>1）服务端安装（Centos）：</p>
-<pre><code class="bash">yum install python-setuptools &amp;&amp; easy_install pip
-pip install shadowsocks
+        <h2 id="一、环境说明"><a href="#一、环境说明" class="headerlink" title="一、环境说明"></a>一、环境说明</h2><ol>
+<li><p>操作系统：Centos7.6</p>
+</li>
+<li><p>Mongodb 3.2.1 的rpm包</p>
+<pre><code class="bash">mongodb-org-server-3.2.1-1.el7.x86_64.rpm
+mongodb-org-tools-3.2.1-1.el7.x86_64.rpm
+mongodb-org-mongos-3.2.1-1.el7.x86_64.rpm
+mongodb-org-shell-3.2.1-1.el7.x86_64.rpm
+mongodb-org-3.2.1-1.el7.x86_64.rpm
 </code></pre>
-<p>安装加密包： pip install M2Crypto</p>
-<p>2）配置SS配置文件</p>
-<p>新建文件/etc/shadowsocks.json并写入以下内容：</p>
-<pre><code class="bash">&#123;
-    &quot;server&quot;:&quot;my_server_ip&quot;,
-    &quot;server_port&quot;:12345,
-    &quot;local_address&quot;: &quot;127.0.0.1&quot;,
-    &quot;local_port&quot;:1080,
-    &quot;password&quot;:&quot;my_password&quot;,
-    &quot;timeout&quot;:300,
-    &quot;method&quot;:&quot;aes-256-cfb&quot;,
-&#125;
+</li>
+<li><p>集群模式：Replica Set，一个主节点两个从节点，没有仲裁节点</p>
+<table>
+<thead>
+<tr>
+<th>节点</th>
+<th>IP</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>primary</td>
+<td>172.16.20.29</td>
+</tr>
+<tr>
+<td>secondary</td>
+<td>172.16.20.30</td>
+</tr>
+<tr>
+<td>secondary</td>
+<td>172.16.20.31</td>
+</tr>
+</tbody></table>
+<h2 id="二、离线安装"><a href="#二、离线安装" class="headerlink" title="二、离线安装"></a>二、离线安装</h2><h3 id="1、关闭防火墙"><a href="#1、关闭防火墙" class="headerlink" title="1、关闭防火墙"></a>1、关闭防火墙</h3><p>关闭三台机器的防火墙：</p>
+<pre><code class="bash">systemctl stop firewalld.service
+systemctl disable firewalld.service
 </code></pre>
-<p>my_server_ip 写服务器外网IP或者0.0.0.0，服务器端口号可以随意（大于1024即可），本地端口默认1080（socks5的国际惯例），</p>
-<p>加密方式推荐asc-256-cfb安全性较高，但其他加密方式也可以。SS认证靠的是端口和密码的匹配，故可为不同的用户分配不同的端口和密码。</p>
-<p>多用户模式配置：</p>
-<pre><code class="bash">&#123;
-    &quot;server&quot;: &quot;0.0.0.0&quot;,
-    &quot;port_password&quot;: &#123;
-        &quot;8381&quot;: &quot;foobar1&quot;,
-        &quot;8382&quot;: &quot;foobar2&quot;,
-        &quot;8383&quot;: &quot;foobar3&quot;,
-        &quot;8384&quot;: &quot;foobar4&quot;
-    &#125;,
-    &quot;timeout&quot;: 300,
-    &quot;method&quot;: &quot;aes-256-cfb&quot;
-&#125;
+<p>注意：如果后面端口还是不通，可以考虑是否是Selinux的影响。</p>
+<h3 id="2、离线安装mongodb"><a href="#2、离线安装mongodb" class="headerlink" title="2、离线安装mongodb"></a>2、离线安装mongodb</h3><p>在三台机器上依次执行安装mongodb的脚本：<code>bash mongo_install.sh</code></p>
+<p>具体脚本信息如下：</p>
+<pre><code class="bash">#!/bin/bash
+
+rpm -ivh mongodb-org-server-3.2.1-1.el7.x86_64.rpm
+rpm -ivh mongodb-org-tools-3.2.1-1.el7.x86_64.rpm
+rpm -ivh mongodb-org-mongos-3.2.1-1.el7.x86_64.rpm
+rpm -ivh mongodb-org-shell-3.2.1-1.el7.x86_64.rpm
+rpm -ivh mongodb-org-3.2.1-1.el7.x86_64.rpm
+
+systemctl start mongod
+
+EXCODE=$?
+if [ &quot;$EXCODE&quot; == &quot;0&quot; ]; then
+    echo &#39;-------------------------------------&#39;
+    echo &#39;Mongo install Sucess!&#39;
+    echo &#39;-------------------------------------&#39;
+fi
+systemctl status mongod
 </code></pre>
-<p>3）启动和停止</p>
-<p>为了省事，先关闭防火墙 :</p>
-<p>services iptables stop</p>
-<p>启动SS：</p>
-<p>ssserver -c /etc/shadowsocks.json -d start</p>
-<p>停止SS：</p>
-<p>ssserver -c /etc/shadowsocks.json -d stop</p>
-<p>注意：安全起见，不建议关闭防火墙，写入让SS端口通过的防火墙规则即可。</p>
-<h3 id="3、安装加速器Google-TCP-BBR"><a href="#3、安装加速器Google-TCP-BBR" class="headerlink" title="3、安装加速器Google TCP BBR"></a>3、安装加速器Google TCP BBR</h3><p>Google 开源了其 TCP BBR 拥塞控制算法，并提交到了 Linux 内核，最新的 4.11 版内核已经用上了该算法。根据以往的传统，Google 总是先在自家的</p>
-<p>生产环境上线运用后，才会将代码开源，此次也不例外。根据实地测试，在部署了最新版内核并开启了TCP BBR 的机器上，网速甚至可以提升好几个数量级。</p>
-<p>谷歌出品，必属精品！</p>
-<p><strong>使用方法：</strong></p>
-<p>root用户登录，运行以下命令：</p>
-<pre><code class="bash">wget --no-check-certificate https://github.com/teddysun/across/raw/master/bbr.sh
-chmod +x bbr.sh
-./bbr.sh
+<p><strong>注意：因我司机房环境特殊，无法连通外网，故使用rpm包形式进行安装。同时也解决了tar包启动中要创建用户、注册为服务、设置开机启动的繁琐事项。如果可以访问外网，也可以使用yum在线安装。</strong></p>
+</li>
+</ol>
+<h2 id="三、集群配置"><a href="#三、集群配置" class="headerlink" title="三、集群配置"></a>三、集群配置</h2><h3 id="1、生成密钥文件"><a href="#1、生成密钥文件" class="headerlink" title="1、生成密钥文件"></a>1、生成密钥文件</h3><p>第一台主机上执行：</p>
+<pre><code class="bash">openssl rand -base64 756 &gt; /var/lib/mongo/keyFile
+chmod 600 /var/lib/mongo/keyFile
+chown -R mongod:mongod /var/lib/mongo/keyFile
 </code></pre>
-<p>安装完成后，脚本会提示需要重启 VPS，输入 y 并回车后重启。<br>重启完成后，进入 VPS，验证一下是否成功安装最新内核并开启 TCP BBR，输入以下命令：</p>
-<pre><code class="bash">uname -r
+<p>其他两台主机复制第一台生成的keyFile文件(通过lszrz 或者 scp 或者 ftp)，并执行以下命令：</p>
+<pre><code class="bash">cp keyFile /var/lib/mongo/
+chmod 600 /var/lib/mongo/keyFile
+chown -R mongod:mongod /var/lib/mongo/keyFile
 </code></pre>
-<p>查看内核版本，含有 4.11 就表示 OK 了</p>
-<pre><code class="bash">sysctl net.ipv4.tcp_available_congestion_control
+<h3 id="2、修改监听，配置集群名称"><a href="#2、修改监听，配置集群名称" class="headerlink" title="2、修改监听，配置集群名称"></a>2、修改监听，配置集群名称</h3><p><strong>三台机器依次做如下操作</strong></p>
+<h4 id="1）修改监听："><a href="#1）修改监听：" class="headerlink" title="1）修改监听："></a>1）修改监听：</h4><p><code>sed -i &quot;s/bindIp: 127.0.0.1/bindIp: 0.0.0.0/g&quot; /etc/mongod.conf </code></p>
+<h4 id="2）配置集群名称："><a href="#2）配置集群名称：" class="headerlink" title="2）配置集群名称："></a>2）配置集群名称：</h4><pre><code class="bassh">cat &gt;&gt; /etc/mongod.conf &lt;&lt; EOF
+replication:
+  oplogSizeMB: 1024 
+  replSetName: mars
+EOF
 </code></pre>
-<p>返回值一般为：net.ipv4.tcp_available_congestion_control = bbr cubic reno</p>
-<pre><code class="bash">sysctl net.ipv4.tcp_congestion_control
+<h4 id="3）重启"><a href="#3）重启" class="headerlink" title="3）重启"></a>3）重启</h4><p>三台机器依次重启服务：</p>
+<p><code>systemctl restart mongod</code></p>
+<h3 id="3、初始化集群"><a href="#3、初始化集群" class="headerlink" title="3、初始化集群"></a>3、初始化集群</h3><p>在第一台主机上，执行<code>mongo</code>命令，进入mongo shell：</p>
+<pre><code class="bash">use admin
+# 设置集群配置（根据具体情况修改IP和端口）
+config = &#123;_id:&quot;mars&quot;,members:[&#123;_id:0,host:&#39;172.16.20.29:27017&#39;,priority :100&#125;,&#123;_id:1,host:&#39;172.16.20.30:27017&#39;,priority:100&#125;,&#123;_id:2,host:&#39;172.16.20.31:27017&#39;,priority:100&#125;]&#125;
+# 初始化集群
+rs.initiate(config)
+# 查看集群状态
+rs.status()
 </code></pre>
-<p>返回值一般为：net.ipv4.tcp_congestion_control = bbr</p>
-<pre><code class="bash">sysctl net.core.default_qdisc
+<h2 id="二、认证配置"><a href="#二、认证配置" class="headerlink" title="二、认证配置"></a>二、认证配置</h2><h3 id="1、创建用户"><a href="#1、创建用户" class="headerlink" title="1、创建用户"></a>1、创建用户</h3><p>在mongo shell中输入：</p>
+<p><strong>创建管理员账户：</strong></p>
+<p><code>db.createUser(&#123;user: &quot;admin&quot;,pwd: &quot;xxxxxx&quot;,roles: [ &#123; role: &quot;userAdminAnyDatabase&quot;, db: &quot;admin&quot; &#125;,&#123; role: &quot;clusterAdmin&quot;, db: &quot;admin&quot; &#125;]&#125;)</code></p>
+<p><strong>创建客户端账户:</strong></p>
+<p><code>db.createUser(&#123;user: &quot;用于客户端用户名&quot;,pwd: &quot;用于客户端密码&quot;,roles: [ &quot;readWriteAnyDatabase&quot;]&#125;)</code></p>
+<p><strong>退出mongo shell：</strong><code>exit</code></p>
+<h3 id="2、开启认证"><a href="#2、开启认证" class="headerlink" title="2、开启认证"></a>2、开启认证</h3><p>在shell终端中输入：</p>
+<pre><code class="bash">cat &gt;&gt; /etc/mongod.conf &lt;&lt; EOF
+
+security:
+  authorization: enabled
+  keyFile: /var/lib/mongo/keyFile
+EOF
 </code></pre>
-<p>返回值一般为：net.core.default_qdisc = fq</p>
-<pre><code class="bash">lsmod | grep bbr
-</code></pre>
-<p>返回值有 tcp_bbr 模块即说明bbr已启动。   </p>
-<p>只要最后一步BBR模块启动成功即可，其他返回值可能有出入。</p>
-<h2 id="三、VPN和SS对比"><a href="#三、VPN和SS对比" class="headerlink" title="三、VPN和SS对比:"></a>三、VPN和SS对比:</h2><p><img src="https://s2.ax1x.com/2019/05/16/EH4ONn.png"></p>
-<h2 id="四、附录："><a href="#四、附录：" class="headerlink" title="四、附录："></a>四、附录：</h2><p>1、<a target="_blank" rel="noopener" href="https://teddysun.com/489.html">BBR安装</a></p>
-<p>2、<a target="_blank" rel="noopener" href="http://www.vultryouhui.com/uncategorized/vultrdajiananzhuangvpnpptpjiaocheng.html">Vultr安装PPTP VPN</a></p>
-<p>3、<a target="_blank" rel="noopener" href="https://wenku.baidu.com/view/1b72f809da38376baf1faed2.html%20">VPN、SSH、SHADOWSCOKS 傻瓜图解</a></p>
-<p>3、<a target="_blank" rel="noopener" href="https://www.vultr.com/?ref=7167847">Vultr官网买送活动地址</a></p>
+<h3 id="3、重启"><a href="#3、重启" class="headerlink" title="3、重启"></a>3、重启</h3><p>全部三个几点，一次重启</p>
+<p><code>systemctl restart mongod</code></p>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 lxwno.1@163.com </span>
