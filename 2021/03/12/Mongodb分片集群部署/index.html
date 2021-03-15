@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Docker修改默认时区 | 运维人</title>
-  <meta name="keywords" content=" docker , timezone ">
-  <meta name="description" content="Docker修改默认时区 | 运维人">
+  <title>Mongodb分片集群部署 | 运维人</title>
+  <meta name="keywords" content=" mongodb , 数据库 ">
+  <meta name="description" content="Mongodb分片集群部署 | 运维人">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="奇数个就不用带仲裁节点了，偶数个要带一个仲裁节点 1、防止网络阻隔，防止脑列，导致选举失败。两个IDC机房网络中断，或者两个机柜网络中断。2、存活数（参与选举数）大与50%，集群才能正常工作的原则，说明了偶数个节点基本就是浪费资源（除了多个一个可读的副本） 二、三节点复制集带仲裁节点与不带的优劣带仲裁节点，仲裁节点占用资源小，可节省资源。不带，多一个可读副本集，分散读的压力。多一个数据备份。">
 <meta property="og:type" content="article">
@@ -957,9 +957,9 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="post-Docker修改默认时区" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-Mongodb分片集群部署" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">Docker修改默认时区</h1>
+        <h1 class="article-title">Mongodb分片集群部署</h1>
     
     <div class="article-meta">
         
@@ -969,9 +969,9 @@
             <i class="iconfont icon-category"></i>
             
             
-            <a  data-rel="虚拟化">虚拟化</a> > 
+            <a  data-rel="中间件">中间件</a> > 
             
-            <a  data-rel="虚拟化&lt;---&gt;Docker">Docker</a>
+            <a  data-rel="中间件&lt;---&gt;MongoDB">MongoDB</a>
             
         </span>
         
@@ -979,21 +979,21 @@
         <span class="tag">
             <i class="iconfont icon-tag"></i>
             
-            <a class="color2">docker</a>
+            <a class="color3">mongodb</a>
             
-            <a class="color4">timezone</a>
+            <a class="color4">数据库</a>
             
         </span>
         
     </div>
     <div class="article-meta">
         
-            发布时间 : <time class="date" title='最后更新: 2021-02-02 10:43:52'>2021-02-02 10:32</time>
+            发布时间 : <time class="date" title='最后更新: 2021-03-15 09:38:45'>2021-03-12 20:52</time>
         
     </div>
     <div class="article-meta">
         
-        <span>字数:160</span>
+        <span>字数:2.8k</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -1023,7 +1023,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E7%BC%98%E7%94%B1%EF%BC%9A"><span class="toc-text">一、缘由：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95%EF%BC%9A"><span class="toc-text">二、解决办法：</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E6%96%B9%E5%BC%8F%EF%BC%9A"><span class="toc-text">1、环境变量方式：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E9%87%8D%E6%96%B0%E5%88%B6%E4%BD%9C%E9%95%9C%E5%83%8F%E6%96%B9%E5%BC%8F%EF%BC%9A"><span class="toc-text">2、重新制作镜像方式：</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E6%9E%B6%E6%9E%84"><span class="toc-text">一、架构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81Mongodb%E5%88%86%E7%89%87%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE"><span class="toc-text">1、Mongodb分片集群配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E8%AF%B4%E6%98%8E"><span class="toc-text">2、说明</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E7%8E%AF%E5%A2%83%E5%87%86%E5%A4%87"><span class="toc-text">二、环境准备</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E5%88%86%E7%89%87%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA"><span class="toc-text">三、分片集群搭建</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E6%90%AD%E5%BB%BA%E6%AD%A5%E9%AA%A4"><span class="toc-text">1、搭建步骤</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E6%89%80%E6%9C%89%E4%B8%BB%E6%9C%BA%E9%A2%84%E5%A4%87%E6%93%8D%E4%BD%9C"><span class="toc-text">2、所有主机预备操作</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1%E3%80%81%E4%BF%AE%E6%94%B9Linux%E4%B8%BB%E6%9C%BA%E8%83%BD%E5%88%9B%E5%BB%BA%E7%9A%84%E6%96%87%E4%BB%B6%E6%95%B0%E9%87%8F%E9%99%90%E5%88%B6"><span class="toc-text">2.1、修改Linux主机能创建的文件数量限制</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2%E3%80%81%E4%BD%BF%E7%94%A8RPM%E5%8C%85%E5%AE%89%E8%A3%85mongodb"><span class="toc-text">2.2、使用RPM包安装mongodb</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-3%E3%80%81%E4%BF%AE%E6%94%B9%E7%9B%91%E5%90%ACIP"><span class="toc-text">2.3、修改监听IP</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-4%E3%80%81%E6%B8%85%E7%A9%BA%E9%98%B2%E7%81%AB%E5%A2%99"><span class="toc-text">2.4、清空防火墙</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81%E6%90%AD%E5%BB%BAConfig-Server%E9%9B%86%E7%BE%A4"><span class="toc-text">3、搭建Config-Server集群</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-1%E3%80%81%E4%BF%AE%E6%94%B9Congfig-Server%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-text">3.1、修改Congfig-Server配置文件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2%E3%80%81%E5%90%AF%E5%8A%A8Mongod"><span class="toc-text">3.2、启动Mongod</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-3%E3%80%81%E5%88%9D%E5%A7%8B%E5%8C%96config-server%E5%89%AF%E6%9C%AC%E9%9B%86"><span class="toc-text">3.3、初始化config-server副本集</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-4-%E9%AA%8C%E8%AF%81"><span class="toc-text">3.4 验证</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81%E6%90%AD%E5%BB%BAShard%E5%88%86%E7%89%87%E5%A4%8D%E5%88%B6%E9%9B%86%E9%9B%86%E7%BE%A4"><span class="toc-text">3、搭建Shard分片复制集集群</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-1%E3%80%81%E5%88%86%E7%89%871"><span class="toc-text">3.1、分片1</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#3-1-1%E3%80%81%E4%BF%AE%E6%94%B9%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-text">3.1.1、修改配置文件</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3-1-2%E3%80%81%E5%90%AF%E5%8A%A8mongod"><span class="toc-text">3.1.2、启动mongod</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3-1-3%E3%80%81%E5%88%9D%E5%A7%8B%E5%8C%96Shard1%E5%89%AF%E6%9C%AC%E9%9B%86"><span class="toc-text">3.1.3、初始化Shard1副本集</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3-1-4%E3%80%81%E9%AA%8C%E8%AF%81"><span class="toc-text">3.1.4、验证</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2%E3%80%81%E5%88%86%E7%89%872"><span class="toc-text">3.2、分片2</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#3-2-1%E3%80%81%E4%BF%AE%E6%94%B9%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-text">3.2.1、修改配置文件</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3-2-2%E3%80%81%E5%90%AF%E5%8A%A8mongod"><span class="toc-text">3.2.2、启动mongod</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3-2-3%E3%80%81%E5%88%9D%E5%A7%8B%E5%8C%96Shard1%E5%89%AF%E6%9C%AC%E9%9B%86"><span class="toc-text">3.2.3、初始化Shard1副本集</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3-2-4%E3%80%81%E9%AA%8C%E8%AF%81"><span class="toc-text">3.2.4、验证</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4%E3%80%81%E6%90%AD%E5%BB%BAmongos%E8%B7%AF%E7%94%B1"><span class="toc-text">4、搭建mongos路由</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#4-1%E3%80%81%E4%BF%AE%E6%94%B9%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-text">4.1、修改配置文件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-2%E3%80%81%E5%90%AF%E5%8A%A8mongos"><span class="toc-text">4.2、启动mongos</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-3%E3%80%81%E6%B7%BB%E5%8A%A0%E5%88%86%E7%89%87"><span class="toc-text">4.3、添加分片</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-4%E3%80%81%E9%AA%8C%E8%AF%81"><span class="toc-text">4.4、验证</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5%E3%80%81%E4%BD%BF%E7%94%A8%E5%88%86%E7%89%87"><span class="toc-text">5、使用分片</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#5-1%E3%80%81%E5%BC%80%E5%90%AF%E6%95%B0%E6%8D%AE%E5%BA%93%E5%88%86%E7%89%87"><span class="toc-text">5.1、开启数据库分片</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-2%E3%80%81%E5%BC%80%E5%A7%8B%E9%9B%86%E5%90%88%E5%88%86%E7%89%87"><span class="toc-text">5.2、开始集合分片</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-3%E3%80%81%E6%8F%92%E5%85%A5%E6%95%B0%E6%8D%AE%E9%AA%8C%E8%AF%81%E5%88%86%E7%89%87"><span class="toc-text">5.3、插入数据验证分片</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6%E3%80%81%E6%B7%BB%E5%8A%A0%E9%9B%86%E7%BE%A4%E8%AE%A4%E8%AF%81"><span class="toc-text">6、添加集群认证</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#6-1%E3%80%81%E7%94%9F%E6%88%90%E5%B9%B6%E5%88%86%E5%8F%91%E5%AF%86%E9%92%A5%E6%96%87%E4%BB%B6Keyfile"><span class="toc-text">6.1、生成并分发密钥文件Keyfile</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-2%E3%80%81%E6%B7%BB%E5%8A%A0%E7%94%A8%E6%88%B7"><span class="toc-text">6.2、添加用户</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-3%E3%80%81%E5%BC%80%E5%90%AF%E8%AE%A4%E8%AF%81"><span class="toc-text">6.3、开启认证</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#6-3-1%E3%80%81%E4%B8%BA%E6%89%80%E6%9C%89mongod%E7%A8%8B%E5%BA%8F%E6%B7%BB%E5%8A%A0%E8%AE%A4%E8%AF%81%E5%8F%82%E6%95%B0"><span class="toc-text">6.3.1、为所有mongod程序添加认证参数</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#6-3-2%E3%80%81%E4%B8%BA%E6%89%80%E6%9C%89mongos%E7%A8%8B%E5%BA%8F%E6%B7%BB%E5%8A%A0%E8%AE%A4%E8%AF%81%E5%8F%82%E6%95%B0"><span class="toc-text">6.3.2、为所有mongos程序添加认证参数</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#6-3-3%E3%80%81%E5%81%9C%E6%AD%A2%E9%9B%86%E7%BE%A4%E5%86%85%E6%89%80%E6%9C%89mongos%E5%92%8Cmongod%E7%A8%8B%E5%BA%8F"><span class="toc-text">6.3.3、停止集群内所有mongos和mongod程序</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#6-3-4%E3%80%81%E6%8C%89%E9%A1%BA%E5%BA%8F%E5%90%AF%E5%8A%A8%E6%89%80%E6%9C%89%E7%A8%8B%E5%BA%8F"><span class="toc-text">6.3.4、按顺序启动所有程序</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#6-3-5%E3%80%81%E9%AA%8C%E8%AF%81%E7%94%A8%E6%88%B7%E8%AE%BF%E9%97%AE"><span class="toc-text">6.3.5、验证用户访问</span></a></li></ol></li></ol></li></ol></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -1039,21 +1039,367 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="一、缘由："><a href="#一、缘由：" class="headerlink" title="一、缘由："></a>一、缘由：</h2><p><strong>Docker Hub中的镜像默认都是0时区，而我们在东八区，差8小时，会导致我们看日志不能准确定位时间，这是很要命的。</strong></p>
-<h2 id="二、解决办法："><a href="#二、解决办法：" class="headerlink" title="二、解决办法："></a>二、解决办法：</h2><h3 id="1、环境变量方式："><a href="#1、环境变量方式：" class="headerlink" title="1、环境变量方式："></a>1、环境变量方式：</h3><ol>
-<li><p>docker run 启动时加入环境变量：<code>docker run -e &quot;TZ=Asia/Shanghai&quot;</code></p>
+        <h2 id="一、架构"><a href="#一、架构" class="headerlink" title="一、架构"></a>一、架构</h2><h3 id="1、Mongodb分片集群配置"><a href="#1、Mongodb分片集群配置" class="headerlink" title="1、Mongodb分片集群配置"></a>1、Mongodb分片集群配置</h3><p>按照尽量节省资源的原则，不交叉部署的原则：</p>
+<table>
+<thead>
+<tr>
+<th>作用</th>
+<th>配置</th>
+<th>数量</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>分片1-主、分片1-副</td>
+<td>8C16G300GSSD</td>
+<td>2</td>
+</tr>
+<tr>
+<td>分片1-仲裁节点</td>
+<td>4C8G100GSSD</td>
+<td>1</td>
+</tr>
+<tr>
+<td>分片2-主、分片2-副</td>
+<td>8C16G300GSSD</td>
+<td>2</td>
+</tr>
+<tr>
+<td>分片2-仲裁节点</td>
+<td>4C8G100GSSD</td>
+<td>1</td>
+</tr>
+<tr>
+<td>config服务复制集（1主2副）</td>
+<td>4C8G100GSSD</td>
+<td>3</td>
+</tr>
+<tr>
+<td>mongos路由</td>
+<td>2C4G40GSSD</td>
+<td>3</td>
+</tr>
+</tbody></table>
+<h3 id="2、说明"><a href="#2、说明" class="headerlink" title="2、说明"></a>2、说明</h3><p>MongoDB分片集群，英文名称为： Sharded Cluster。旨在通过横向扩展，来提高数据吞吐性能、增大数据存储量。</p>
+<p>分片集群由三个组件：“mongos”, “config server”, “shard” 组成。<br><img src="https://img-blog.csdnimg.cn/20190416151746484.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2R1YW5iZWliZWk=,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<ul>
+<li><p>mongos:数据库请求路由。负责接收所有客户端应用程序的连接查询请求，并将请求路由到集群内部对应的分片上。”mongos”可以有1个或多个。</p>
+<p>本身不保存数据，在启动时从配置服务器加载集群信息，开启mongos进程需要知道配置服务器的地址，指定configdb选项。</p>
 </li>
-<li><p>docker-compose 方式启动时，加入 </p>
-<pre><code class="bash">environment:
- - TZ=Asia/Shanghai
+<li><p>config server: 配置服务器。是一个独立的mongod进程，保存集群和分片的元数据，即各分片包含了哪些数据的信息。最先开始建立，启用日志功能。像启动普通的mongod一样启动配置服务器，指定configsvr选项。不需要太多的空间和资源，配置服务器的1KB空间相当于真是数据的200MB。保存的只是数据的分布表。当服务不可用，则变成只读，无法分块、迁移数据。</p>
+</li>
+<li><p>shard: 分片存储。将数据分片存储在多个服务器上。有点类似关系数据库”分区表”的概念，只不过分区表是将数据分散存储在多个文件中，而sharding将数据分散存储在多个服务器上。一个集群可以有一个或多个分片。</p>
+</li>
+<li><p>每个分片都必须是副本集，“config server” 必须是副本集！</p>
+</li>
+</ul>
+<h2 id="二、环境准备"><a href="#二、环境准备" class="headerlink" title="二、环境准备"></a>二、环境准备</h2><ul>
+<li><p>操作系统：Centos6.5</p>
+</li>
+<li><p>Mongodb版本：3.2.1 RPM包</p>
+<pre><code class="bash">mongodb-org-server-3.2.1-1.el7.x86_64.rpm
+mongodb-org-tools-3.2.1-1.el7.x86_64.rpm
+mongodb-org-mongos-3.2.1-1.el7.x86_64.rpm
+mongodb-org-shell-3.2.1-1.el7.x86_64.rpm
+mongodb-org-3.2.1-1.el7.x86_64.rpm
 </code></pre>
-<h3 id="2、重新制作镜像方式："><a href="#2、重新制作镜像方式：" class="headerlink" title="2、重新制作镜像方式："></a>2、重新制作镜像方式：</h3></li>
+</li>
+<li><p>主机规划：mongos（3个）+ config server 副本集（1主2从） + 分片（2个，每个分片由1主1从1仲裁组成），一共12台主机：</p>
+<table>
+<thead>
+<tr>
+<th>主机编号</th>
+<th>IP地址</th>
+<th>角色</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>192.168.1.1</td>
+<td>Mongos-1</td>
+</tr>
+<tr>
+<td>2</td>
+<td>192.168.1.2</td>
+<td>Mongos-2</td>
+</tr>
+<tr>
+<td>3</td>
+<td>192.168.1.3</td>
+<td>Mongos-3</td>
+</tr>
+<tr>
+<td>4</td>
+<td>192.168.1.11</td>
+<td>Config-1</td>
+</tr>
+<tr>
+<td>5</td>
+<td>192.168.1.12</td>
+<td>Config-2</td>
+</tr>
+<tr>
+<td>6</td>
+<td>192.168.1.13</td>
+<td>Config-3</td>
+</tr>
+<tr>
+<td>7</td>
+<td>192.168.1.21</td>
+<td>Shard1-Primary</td>
+</tr>
+<tr>
+<td>8</td>
+<td>192.168.1.22</td>
+<td>Shard1-Secondary</td>
+</tr>
+<tr>
+<td>9</td>
+<td>192.168.1.23</td>
+<td>Shard1-Arbiter</td>
+</tr>
+<tr>
+<td>10</td>
+<td>192.168.1.31</td>
+<td>Shard2-Primary</td>
+</tr>
+<tr>
+<td>11</td>
+<td>192.168.1.32</td>
+<td>Shard2-Secondary</td>
+</tr>
+<tr>
+<td>12</td>
+<td>192.168.1.33</td>
+<td>Shard2-Arbiter</td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+<h2 id="三、分片集群搭建"><a href="#三、分片集群搭建" class="headerlink" title="三、分片集群搭建"></a>三、分片集群搭建</h2><h3 id="1、搭建步骤"><a href="#1、搭建步骤" class="headerlink" title="1、搭建步骤"></a>1、搭建步骤</h3><p>分片集群各组件搭建顺序如下，不能错：</p>
+<ol>
+<li>ConfigServer –&gt; 2.Shard集群 –&gt; 3.Mongos</li>
 </ol>
-<p>如果你是基于某个官方Image来制作自己的镜像，比如Alpine。那么你可以在Dockerfile中，加入:</p>
-<pre><code class="bash">RUN apk --no-cache add tzdata  &amp;&amp; \
-  ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime &amp;&amp; \
-  echo &quot;Asia/Shanghai&quot; &gt; /etc/timezone
+<p><strong>启动顺序也是这样</strong></p>
+<h3 id="2、所有主机预备操作"><a href="#2、所有主机预备操作" class="headerlink" title="2、所有主机预备操作"></a>2、所有主机预备操作</h3><h4 id="2-1、修改Linux主机能创建的文件数量限制"><a href="#2-1、修改Linux主机能创建的文件数量限制" class="headerlink" title="2.1、修改Linux主机能创建的文件数量限制"></a>2.1、修改Linux主机能创建的文件数量限制</h4><pre><code class="bash">echo &quot;ulimit -c unlimited&quot; &gt;&gt; /etc/profile &amp;&amp; source /etc/profile
+
+cat &gt;&gt; /etc/security/limits.conf &lt;&lt; EOF
+* soft nofile 262140
+* hard nofile 262140
+root soft nofile 262140
+root hard nofile 262140
+* soft core unlimited
+* hard core unlimited
+root soft core unlimited
+root hard core unlimited
+EOF
+echo &quot;session  required  pam_limits.so&quot;&gt;&gt; /etc/pam.d/login
 </code></pre>
+<h4 id="2-2、使用RPM包安装mongodb"><a href="#2-2、使用RPM包安装mongodb" class="headerlink" title="2.2、使用RPM包安装mongodb"></a>2.2、使用RPM包安装mongodb</h4><pre><code class="bash">rpm -ivh mongodb-org-server-3.2.1-1.el7.x86_64.rpm
+rpm -ivh mongodb-org-tools-3.2.1-1.el7.x86_64.rpm
+rpm -ivh mongodb-org-mongos-3.2.1-1.el7.x86_64.rpm
+rpm -ivh mongodb-org-shell-3.2.1-1.el7.x86_64.rpm
+rpm -ivh mongodb-org-3.2.1-1.el7.x86_64.rpm
+</code></pre>
+<h4 id="2-3、修改监听IP"><a href="#2-3、修改监听IP" class="headerlink" title="2.3、修改监听IP"></a>2.3、修改监听IP</h4><pre><code class="bash">sed -i &quot;s/bindIp: 127.0.0.1/bindIp: 0.0.0.0/g&quot; /etc/mongod.conf
+</code></pre>
+<h4 id="2-4、清空防火墙"><a href="#2-4、清空防火墙" class="headerlink" title="2.4、清空防火墙"></a>2.4、清空防火墙</h4><pre><code class="bash">iptables -F
+systemctl stop firewalld
+systemctl disable firewalld
+</code></pre>
+<p><strong>或者，在防火墙添加相应的放通策略，也可以</strong></p>
+<h3 id="3、搭建Config-Server集群"><a href="#3、搭建Config-Server集群" class="headerlink" title="3、搭建Config-Server集群"></a>3、搭建Config-Server集群</h3><p>ConfigServer是一个副本集集群，一主两从，按照搭建副本集的方式搭建即可。</p>
+<h4 id="3-1、修改Congfig-Server配置文件"><a href="#3-1、修改Congfig-Server配置文件" class="headerlink" title="3.1、修改Congfig-Server配置文件"></a>3.1、修改Congfig-Server配置文件</h4><p>三台主机配置相同，依次执行如下命令：</p>
+<pre><code class="bash">cat &gt;&gt; /etc/mongod.conf &lt;&lt; EOF
+replication:
+  oplogSizeMB: 2048
+  replSetName: mars-config
+
+sharding:
+  clusterRole: configsvr
+EOF
+</code></pre>
+<p><strong>注意：集群角色必须是configsvr</strong></p>
+<h4 id="3-2、启动Mongod"><a href="#3-2、启动Mongod" class="headerlink" title="3.2、启动Mongod"></a>3.2、启动Mongod</h4><p>三台主机依次启动mongod程序</p>
+<pre><code class="bash">systemctl start mongod   
+</code></pre>
+<h4 id="3-3、初始化config-server副本集"><a href="#3-3、初始化config-server副本集" class="headerlink" title="3.3、初始化config-server副本集"></a>3.3、初始化config-server副本集</h4><p>三台主机随便挑一台，敲<code>mongo</code>进入mongo shell，执行如下命令：</p>
+<pre><code class="bash">rs.initiate( &#123;
+    _id: &quot;mars-config&quot;,
+    configsvr: true,
+    members: [
+        &#123; _id: 0, host: &quot;192.168.0.11:27017&quot;&#125;,
+        &#123; _id: 1, host: &quot;192.168.0.12:27017&quot;&#125;,
+        &#123; _id: 2, host: &quot;192.168.0.13:27017&quot;&#125;
+    ]
+&#125; )
+</code></pre>
+<p><strong>注意：id为集群名称，configsvr为true。</strong></p>
+<h4 id="3-4-验证"><a href="#3-4-验证" class="headerlink" title="3.4 验证"></a>3.4 验证</h4><pre><code class="bash">rs.status()
+</code></pre>
+<h3 id="3、搭建Shard分片复制集集群"><a href="#3、搭建Shard分片复制集集群" class="headerlink" title="3、搭建Shard分片复制集集群"></a>3、搭建Shard分片复制集集群</h3><p>此处我们采用2个Shard分片，每个分片是一个主-从-仲裁的三节点复制集。两个分片配置过程一致。</p>
+<h4 id="3-1、分片1"><a href="#3-1、分片1" class="headerlink" title="3.1、分片1"></a>3.1、分片1</h4><h5 id="3-1-1、修改配置文件"><a href="#3-1-1、修改配置文件" class="headerlink" title="3.1.1、修改配置文件"></a>3.1.1、修改配置文件</h5><p>三台主机配置相同，依次执行如下shell命令：</p>
+<pre><code class="bash">cat &gt;&gt; /etc/mongod.conf &lt;&lt; EOF
+replication:
+  oplogSizeMB: 2048
+  replSetName: mars-shard1
+
+sharding:
+  clusterRole: shardsvr
+EOF
+</code></pre>
+<p><strong>注意：集群名字为shard1，要和分片2区分开。集群角色为shardsvr。</strong></p>
+<h5 id="3-1-2、启动mongod"><a href="#3-1-2、启动mongod" class="headerlink" title="3.1.2、启动mongod"></a>3.1.2、启动mongod</h5><pre><code class="shell">systemctl start mongod
+</code></pre>
+<h5 id="3-1-3、初始化Shard1副本集"><a href="#3-1-3、初始化Shard1副本集" class="headerlink" title="3.1.3、初始化Shard1副本集"></a>3.1.3、初始化Shard1副本集</h5><p>三台主机随便挑一台，敲<code>mongo</code>进入mongo shell，执行如下命令：</p>
+<pre><code class="shell">rs.initiate( &#123;
+    _id: &quot;mars-shard1&quot;,
+    members: [
+        &#123; _id: 0, host: &quot;192.168.0.21:27017&quot;&#125;,
+        &#123; _id: 1, host: &quot;192.168.0.22:27017&quot;&#125;,
+        &#123; _id: 2, host: &quot;192.168.0.23:27017&quot;, arbiterOnly: true&#125;
+    ]
+&#125; )
+</code></pre>
+<p><strong>注意：id为配置文件中的集群名称。</strong></p>
+<h5 id="3-1-4、验证"><a href="#3-1-4、验证" class="headerlink" title="3.1.4、验证"></a>3.1.4、验证</h5><pre><code class="shell">rs.status()
+</code></pre>
+<h4 id="3-2、分片2"><a href="#3-2、分片2" class="headerlink" title="3.2、分片2"></a>3.2、分片2</h4><h5 id="3-2-1、修改配置文件"><a href="#3-2-1、修改配置文件" class="headerlink" title="3.2.1、修改配置文件"></a>3.2.1、修改配置文件</h5><p>三台主机配置相同，依次执行如下shell命令：</p>
+<pre><code class="bash">cat &gt;&gt; /etc/mongod.conf &lt;&lt; EOF
+replication:
+  oplogSizeMB: 2048
+  replSetName: mars-shard2
+
+sharding:
+  clusterRole: shardsvr
+EOF
+</code></pre>
+<p><strong>注意：集群名字为shard2，要和分片1区分开。集群角色为shardsvr。</strong></p>
+<h5 id="3-2-2、启动mongod"><a href="#3-2-2、启动mongod" class="headerlink" title="3.2.2、启动mongod"></a>3.2.2、启动mongod</h5><pre><code class="shell">systemctl start mongod
+</code></pre>
+<h5 id="3-2-3、初始化Shard1副本集"><a href="#3-2-3、初始化Shard1副本集" class="headerlink" title="3.2.3、初始化Shard1副本集"></a>3.2.3、初始化Shard1副本集</h5><p>三台主机随便挑一台，敲<code>mongo</code>进入mongo shell，执行如下命令：</p>
+<pre><code class="shell">rs.initiate( &#123;
+    _id: &quot;mars-shard1&quot;,
+    members: [
+        &#123; _id: 0, host: &quot;192.168.0.31:27017&quot;&#125;,
+        &#123; _id: 1, host: &quot;192.168.0.32:27017&quot;&#125;,
+        &#123; _id: 2, host: &quot;192.168.0.33:27017&quot;, arbiterOnly: true&#125;
+    ]
+&#125; )
+</code></pre>
+<p><strong>注意：id为配置文件中的集群名称。</strong></p>
+<p><strong>我这里把第三台主机设为仲裁主机，是为了节省硬件资源，节约成本。如果不在乎这点成本，可以去掉上面arbiterOnly的配置。</strong></p>
+<h5 id="3-2-4、验证"><a href="#3-2-4、验证" class="headerlink" title="3.2.4、验证"></a>3.2.4、验证</h5><pre><code class="shell">rs.status()
+</code></pre>
+<h3 id="4、搭建mongos路由"><a href="#4、搭建mongos路由" class="headerlink" title="4、搭建mongos路由"></a>4、搭建mongos路由</h3><p>mongos可以为1个，也可以为多个，可以根据需要横向扩展，这里采用3个。</p>
+<h4 id="4-1、修改配置文件"><a href="#4-1、修改配置文件" class="headerlink" title="4.1、修改配置文件"></a>4.1、修改配置文件</h4><p>mongos的配置文件为mongos.conf，如果不存在就采用如下方式新建，三台主机依次执行：</p>
+<pre><code class="bash">cat &gt;&gt; /etc/mongos.conf &lt;&lt; EOF
+systemLog:
+  destination: file
+  logAppend: true
+  path: /var/log/mongodb/mongod.log
+
+# how the process runs
+processManagement:
+  fork: true  # fork and run in background
+  pidFilePath: /var/run/mongodb/mongos.pid  # location of pidfile
+
+# network interfaces
+net:
+  port: 27017
+
+sharding:
+  configDB: mars-config/192.168.0.11:27017, 192.168.0.12:27017, 192.168.0.13:27017
+EOF
+</code></pre>
+<p><strong>注意：configDB为config-server集群的IP和端口，不要填错。</strong></p>
+<h4 id="4-2、启动mongos"><a href="#4-2、启动mongos" class="headerlink" title="4.2、启动mongos"></a>4.2、启动mongos</h4><p>已mongod用户启动mongos，三台主机依次执行：</p>
+<pre><code class="bash">sudo -u mongod mongos -f /etc/mongos.conf
+</code></pre>
+<h4 id="4-3、添加分片"><a href="#4-3、添加分片" class="headerlink" title="4.3、添加分片"></a>4.3、添加分片</h4><p>连接任意一个mongos，在任意一台主机上执行<code>mongo</code>，添加分片信息：</p>
+<pre><code class="bash">use admin
+
+sh.addShard(&quot;mars-shard1/192.168.0.21:27017,192.168.0.22:27017,192.168.0.23:27017&quot;)
+
+sh.addShard(&quot;mars-shard2/192.168.0.31:27017,192.168.0.32:27017,192.168.0.33:27017&quot;)
+</code></pre>
+<h4 id="4-4、验证"><a href="#4-4、验证" class="headerlink" title="4.4、验证"></a>4.4、验证</h4><pre><code class="bash">sh.status()
+</code></pre>
+<p><img src="https://img-blog.csdnimg.cn/201904161718322.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2R1YW5iZWliZWk=,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p><strong>至此，一个基本的Shard分片集群已经搭建完毕。</strong></p>
+<h3 id="5、使用分片"><a href="#5、使用分片" class="headerlink" title="5、使用分片"></a>5、使用分片</h3><p>使用分片的基本步骤是：1.开启数据库分片–&gt; 2.开启集合分片</p>
+<p>对数据库分片是对集合分片的先决条件。</p>
+<h4 id="5-1、开启数据库分片"><a href="#5-1、开启数据库分片" class="headerlink" title="5.1、开启数据库分片"></a>5.1、开启数据库分片</h4><p>以testdb数据库为例，在一台mongos上，进入mongoshell，执行：</p>
+<pre><code class="shell">sh.enableSharding(&quot;testdb&quot;)
+</code></pre>
+<h4 id="5-2、开始集合分片"><a href="#5-2、开始集合分片" class="headerlink" title="5.2、开始集合分片"></a>5.2、开始集合分片</h4><p>已testdb.coll1集合为例：</p>
+<pre><code>sh.shardCollection(&quot;testdb.coll1&quot;, &#123;&quot;name&quot; : &quot;hashed&quot;&#125;)
+</code></pre>
+<p>说明：</p>
+<ul>
+<li>第一个参数为集合的完整namespace名称，此例集合为testdb.coll1。</li>
+<li>第二个参数为片键，指定根据哪个字段进行分片，此例对name字段进行hash分片。</li>
+</ul>
+<h4 id="5-3、插入数据验证分片"><a href="#5-3、插入数据验证分片" class="headerlink" title="5.3、插入数据验证分片"></a>5.3、插入数据验证分片</h4><p>插入测试数据</p>
+<pre><code class="bash">use testdb
+
+for (var i = 1; i &lt;= 100000; i++)&#123;
+  db.coll1.insert(&#123;&quot;id&quot; : i, &quot;name&quot; : &quot;name&quot; + i&#125;);
+&#125;
+</code></pre>
+<p>验证是否分片</p>
+<pre><code class="bash">sh.status()
+</code></pre>
+<p><img src="https://img-blog.csdnimg.cn/20190416174828762.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2R1YW5iZWliZWk=,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h3 id="6、添加集群认证"><a href="#6、添加集群认证" class="headerlink" title="6、添加集群认证"></a>6、添加集群认证</h3><p>上文已经成功创建一个分片集群，并验证数据分片可用。但在部署生产环境时，还需添加认证，用以保障集群安全性。<br>认证分两种：</p>
+<ul>
+<li><p>集群内部认证 (Internal Authentication)<br>用于集群内的各个组件(mongos, config server, shard)之间相互访问认证，也就是所有的mongos进程和mongod进程之间相互访问认证。<br>内部认证通过keyfile密钥文件实现，即所有的monogs/mongod公用同一个keyfile文件来相互认证。如果集群外随便来一个”mongod”进程，如果没有相同的keyfile，想加入集群，是不可能的。</p>
+</li>
+<li><p>外部用户访问集群所需的用户认证 (User Access Controls)<br>用于外部客户端访问mongos时，所需的用户认证。</p>
+</li>
+</ul>
+<h4 id="6-1、生成并分发密钥文件Keyfile"><a href="#6-1、生成并分发密钥文件Keyfile" class="headerlink" title="6.1、生成并分发密钥文件Keyfile"></a>6.1、生成并分发密钥文件Keyfile</h4><p>在第一台主机上执行</p>
+<pre><code class="bash">openssl rand -base64 756 &gt; /var/lib/mongo/keyFile
+chmod 600 /var/lib/mongo/keyFile
+chown -R mongod:mongod /var/lib/mongo/keyFile
+</code></pre>
+<p>其他所有主机复制第一台生成的keyFile文件(通过lszrz 或者 scp 或者 ftp)，并执行以下命令：</p>
+<pre><code>cp keyFile /var/lib/mongo/
+chmod 600 /var/lib/mongo/keyFile
+chown -R mongod:mongod /var/lib/mongo/keyFile
+</code></pre>
+<h4 id="6-2、添加用户"><a href="#6-2、添加用户" class="headerlink" title="6.2、添加用户"></a>6.2、添加用户</h4><p>连接到任意一台mongos上，添加超级管理员用户：</p>
+<pre><code class="bash">use admin
+db.createUser(&#123;user: &quot;admin&quot;,pwd: &quot;xxx@1111&quot;,roles: [ &#123; role: &quot;userAdminAnyDatabase&quot;, db: &quot;admin&quot; &#125;,&#123; role: &quot;clusterAdmin&quot;, db: &quot;admin&quot; &#125;]&#125;)
+</code></pre>
+<p>添加客户端用户：</p>
+<pre><code class="bash">use test_db
+db.createUser(&#123;user: &quot;test_rw&quot;,pwd: &quot;xxx#111&quot;,roles: [&#123; role: &quot;dbOwner&quot;, db: &quot;test_db&quot;&#125;]&#125;)
+</code></pre>
+<p>在”mongos”上添加用户，用户信息实际保存在”config server”上，”mongos”本身不存储任何数据，包括用户信息。</p>
+<p>然而，”mongos”上创建的用户，是不会自动添加到”shard”分片服务器上的。<br>为了以后方便维护shard分片服务器，分别登录到每个分片服务器的”primary”节点，添加管理员用户：</p>
+<pre><code class="bash">use admin
+db.createUser(&#123;user: &quot;admin&quot;,pwd: &quot;xxx@1111&quot;,roles: [ &#123; role: &quot;userAdminAnyDatabase&quot;, db: &quot;admin&quot; &#125;,&#123; role: &quot;clusterAdmin&quot;, db: &quot;admin&quot; &#125;]&#125;)
+</code></pre>
+<h4 id="6-3、开启认证"><a href="#6-3、开启认证" class="headerlink" title="6.3、开启认证"></a>6.3、开启认证</h4><h5 id="6-3-1、为所有mongod程序添加认证参数"><a href="#6-3-1、为所有mongod程序添加认证参数" class="headerlink" title="6.3.1、为所有mongod程序添加认证参数"></a>6.3.1、为所有mongod程序添加认证参数</h5><p>所有mongod程序包括，config-server主机3台，分片集群6台。</p>
+<pre><code class="bash">cat &gt;&gt; /etc/mongod.conf &lt;&lt; EOF
+
+security:
+  authorization: enabled
+  keyFile: /var/lib/mongo/keyFile
+EOF
+</code></pre>
+<h5 id="6-3-2、为所有mongos程序添加认证参数"><a href="#6-3-2、为所有mongos程序添加认证参数" class="headerlink" title="6.3.2、为所有mongos程序添加认证参数"></a>6.3.2、为所有mongos程序添加认证参数</h5><p>在三台mongos主机上执行：</p>
+<pre><code class="bash">cat &gt;&gt; /etc/mongos.conf &lt;&lt; EOF
+
+security:
+  keyFile: /var/lib/mongo/keyFile
+EOF
+</code></pre>
+<h5 id="6-3-3、停止集群内所有mongos和mongod程序"><a href="#6-3-3、停止集群内所有mongos和mongod程序" class="headerlink" title="6.3.3、停止集群内所有mongos和mongod程序"></a>6.3.3、停止集群内所有mongos和mongod程序</h5><p>mongos程序使用<code>kill -9 pid</code>停止，mongod程序使用<code>systemctl stop mongod</code>停止。</p>
+<h5 id="6-3-4、按顺序启动所有程序"><a href="#6-3-4、按顺序启动所有程序" class="headerlink" title="6.3.4、按顺序启动所有程序"></a>6.3.4、按顺序启动所有程序</h5><ol>
+<li>config-server -&gt; 2. shard集群 -&gt; 3. mongos</li>
+</ol>
+<h5 id="6-3-5、验证用户访问"><a href="#6-3-5、验证用户访问" class="headerlink" title="6.3.5、验证用户访问"></a>6.3.5、验证用户访问</h5><p>通过连接任意一个mongos，验证管理员用户和客户端用户的访问。</p>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 lxwno.1@163.com </span>
