@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Wifi密码破解 | 运维人</title>
-  <meta name="keywords" content=" aircrack-ng , arimon-ng ">
-  <meta name="description" content="Wifi密码破解 | 运维人">
+  <title>日志系统的选型 | 运维人</title>
+  <meta name="keywords" content=" FTP , 日志系统 ">
+  <meta name="description" content="日志系统的选型 | 运维人">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="一、需求简单、安全、轻量级、不耗费资源、最好能时时查看日志（需求不大）。 二、选型   方法 工具    日志系统 Rsyslog，Fluented，ELK，Loki、Logio、SLS   定时同步 Scp、Rsync   文件共享 SFTP、VSFTP、NFS共享、NAS   可视化 Jenkins + Ansible + Shell Or Python Web   三、分析1、日志系统 如果">
 <meta property="og:type" content="article">
@@ -1104,9 +1104,9 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="post-Wifi密码破解" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-日志系统的选型" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">Wifi密码破解</h1>
+        <h1 class="article-title">日志系统的选型</h1>
     
     <div class="article-meta">
         
@@ -1118,7 +1118,7 @@
             
             <a  data-rel="工具">工具</a> > 
             
-            <a  data-rel="工具&lt;---&gt;破解">破解</a>
+            <a  data-rel="工具&lt;---&gt;FTP">FTP</a>
             
         </span>
         
@@ -1126,21 +1126,21 @@
         <span class="tag">
             <i class="iconfont icon-tag"></i>
             
-            <a class="color2">aircrack-ng</a>
+            <a class="color4">FTP</a>
             
-            <a class="color5">arimon-ng</a>
+            <a class="color5">日志系统</a>
             
         </span>
         
     </div>
     <div class="article-meta">
         
-            发布时间 : <time class="date" title='最后更新: 2021-03-16 20:01:03'>2021-02-02 10:02</time>
+            发布时间 : <time class="date" title='最后更新: 2021-04-13 19:42:17'>2021-04-13 19:36</time>
         
     </div>
     <div class="article-meta">
         
-        <span>字数:544</span>
+        <span>字数:541</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -1170,7 +1170,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1%E3%80%81%E5%85%B3%E9%97%AD%E7%BD%91%E7%BB%9C%E5%92%8C%E4%BC%9A%E5%BD%B1%E5%93%8D%E5%88%B0%E7%A0%B4%E8%A7%A3%E7%9A%84%E8%BF%9B%E7%A8%8B"><span class="toc-text">1、关闭网络和会影响到破解的进程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2%E3%80%81%E6%89%93%E5%BC%80%E7%BD%91%E7%BB%9C%E7%9B%91%E5%90%AC"><span class="toc-text">2、打开网络监听</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3%E3%80%81%E9%99%84%E5%BD%95%EF%BC%9A"><span class="toc-text">3、附录：</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E4%BD%BF%E7%94%A8%E6%98%BE%E5%8D%A1%E7%9A%84%E8%BF%90%E7%AE%97%E8%83%BD%E5%8A%9B"><span class="toc-text">1、使用显卡的运算能力</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E5%8F%82%E8%80%83%E9%93%BE%E6%8E%A5%EF%BC%9A"><span class="toc-text">2、参考链接：</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E9%9C%80%E6%B1%82"><span class="toc-text">一、需求</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E9%80%89%E5%9E%8B"><span class="toc-text">二、选型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E5%88%86%E6%9E%90"><span class="toc-text">三、分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E6%97%A5%E5%BF%97%E7%B3%BB%E7%BB%9F"><span class="toc-text">1、日志系统</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E5%AE%9A%E6%97%B6%E5%90%8C%E6%AD%A5"><span class="toc-text">2、定时同步</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81%E6%96%87%E4%BB%B6%E5%85%B1%E4%BA%AB"><span class="toc-text">3、文件共享</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4%E3%80%81%E5%8F%AF%E8%A7%86%E5%8C%96"><span class="toc-text">4、可视化</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E7%BB%93%E8%AE%BA"><span class="toc-text">四、结论</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E6%B3%A8%E6%84%8F"><span class="toc-text">五、注意</span></a></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -1186,28 +1186,51 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="1、关闭网络和会影响到破解的进程"><a href="#1、关闭网络和会影响到破解的进程" class="headerlink" title="1、关闭网络和会影响到破解的进程"></a>1、关闭网络和会影响到破解的进程</h2><ol>
-<li><code>service net-manager stop</code> 关闭网络功能</li>
-<li> <code>airmon-ng check kill</code> 关闭相关进程</li>
+        <h2 id="一、需求"><a href="#一、需求" class="headerlink" title="一、需求"></a>一、需求</h2><p>简单、安全、轻量级、不耗费资源、最好能时时查看日志（需求不大）。</p>
+<h2 id="二、选型"><a href="#二、选型" class="headerlink" title="二、选型"></a>二、选型</h2><table>
+<thead>
+<tr>
+<th>方法</th>
+<th>工具</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>日志系统</td>
+<td>Rsyslog，Fluented，ELK，Loki、Logio、SLS</td>
+</tr>
+<tr>
+<td>定时同步</td>
+<td>Scp、Rsync</td>
+</tr>
+<tr>
+<td>文件共享</td>
+<td>SFTP、VSFTP、NFS共享、NAS</td>
+</tr>
+<tr>
+<td>可视化</td>
+<td>Jenkins + Ansible + Shell Or Python Web</td>
+</tr>
+</tbody></table>
+<h2 id="三、分析"><a href="#三、分析" class="headerlink" title="三、分析"></a>三、分析</h2><h3 id="1、日志系统"><a href="#1、日志系统" class="headerlink" title="1、日志系统"></a>1、日志系统</h3><ol>
+<li>如果是中大型系统，不缺资源，不缺经费，那么就可以采用开源的日志系统或者采用阿里云SLS日志系统。</li>
+<li>可以根据日志规模，应用规模来进行选型，简单的就用Rsyslog、Logio，复杂的就用Fluented、ELK、LoKi。</li>
+<li>如果使用的是云主机而且不差钱，可以使用阿里云日志系统SLS，还是很好用的，功能也很强大。</li>
 </ol>
-<h2 id="2、打开网络监听"><a href="#2、打开网络监听" class="headerlink" title="2、打开网络监听"></a>2、打开网络监听</h2><ol>
-<li><code>iwconfig</code> 命令查看本机的网卡，可以看到无线网卡wlan0</li>
-<li><code>airmon-ng</code> 命令列出支持监控模式的无线网卡，如没有输出，则表示本机无线网卡不支持监控模式。</li>
-<li> <code>airmon-ng start wlan0</code> 打开网络监听，wlan0为你的无线网卡名称。如果有报错<code>Operation not possible due to RF-kill</code>，则手动关掉wifid的soft blocked，<code>rfkill list</code> , <code>rfkill unblock 2</code>。</li>
-<li><code>airodump-ng wlan0mon</code> 监听所有wifi， wlan0mon 也可能是mon0，并记录BSSID, CH, ESSID, 考虑data列有数据的WIFI。BSSID是路由器的MAC地址，CH路由器WIFI频道，ESSID为WIFI的名字，<strong>窗口1</strong>。</li>
-<li><code>airodump-ng --bssid xx:xx:xx:xx:xx:xx -c 1 -w ~/Desktop/cap/xxx.cap  wlan0mon</code> 监听特定的频道，不要结束此进程，不要关掉此窗口，<strong>窗口2</strong>。</li>
-<li><code>aireplay-ng -0 2 -a xx:xx:xx:xx:xx:xx -c xx:xx:xx:xx:xx:xx wlan0mon</code> 获取握手包数据，新开一个终端执行，当上一步时间后面出现WAP handshake时说明获取成功。需要多尝试几次  ，<strong>窗口3</strong>。 或者 <code>aireplay-ng -0 0 -a 28:6C:07:53:53:80 wlam0mon</code> 进行洪水攻击，不断攻击，让所有设备下线。</li>
-<li><code>aircrack-ng -w 1.txt tmp-02.cap</code> 硬破解密码，1.txt是密码包，temp-02.cap是握手包。会执行很长时间，直到提示key fund！<strong>窗口4</strong></li>
-<li><code>airmon-ng stop wlan0mon</code> 关闭网络监听。</li>
-<li><code>service network-manager start</code> 打开网络。</li>
+<h3 id="2、定时同步"><a href="#2、定时同步" class="headerlink" title="2、定时同步"></a>2、定时同步</h3><ol>
+<li>如果对实时性要求不高，我们可以Scp或者Rsync脚本定时远程同步，问题就在于间隔时间的确定和来自不同机器的名字相同的文件的区分。</li>
+<li>可以在每台日志服务器上搭建rysncd服务端，进行推送，但是如果日志分散的话，需要安装多个服务端，不建议。</li>
 </ol>
-<h2 id="3、附录："><a href="#3、附录：" class="headerlink" title="3、附录："></a>3、附录：</h2><h3 id="1、使用显卡的运算能力"><a href="#1、使用显卡的运算能力" class="headerlink" title="1、使用显卡的运算能力"></a>1、使用显卡的运算能力</h3><p>如果你有一个强大的GPU，为什么不使用GPU跑字典呢？<br>Hashcat可以借助GPU的运算力破解各种不同算法的hash值。<br>下载时要注意选择正确的显卡类型（AMD、NVidia）。Kali Linux自带这个工具。<br>在破解cap文件之前，要把它转换为hccap文件：</p>
-<p><code>aircrack-ng file.cap -J out.hccap</code></p>
-<p>使用GPU破解hash：</p>
-<p><code>hashcat -m 2500 out.hccap 字典文件</code></p>
-<h3 id="2、参考链接："><a href="#2、参考链接：" class="headerlink" title="2、参考链接："></a>2、参考链接：</h3><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/GrayOnDream/article/details/51859688?locationNum=13">https://blog.csdn.net/GrayOnDream/article/details/51859688?locationNum=13</a></p>
-<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_37367124/article/details/79587713">https://blog.csdn.net/qq_37367124/article/details/79587713</a></p>
-<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/daoyi/p/Kali-Linux-shi-yongAircrack-po-jiewifi-mi-ma-wpawp.html">https://www.cnblogs.com/daoyi/p/Kali-Linux-shi-yongAircrack-po-jiewifi-mi-ma-wpawp.html</a></p>
+<h3 id="3、文件共享"><a href="#3、文件共享" class="headerlink" title="3、文件共享"></a>3、文件共享</h3><ol>
+<li>可以使用NFS或者NAS，将一块磁盘挂载到所有机器上，然后使用软连接来访问不同的日志。</li>
+<li>还可以使用基于SSH服务端的SFTP服务，进行权限控制后，将日志目录挂载到用户目录进行日志的下载。</li>
+</ol>
+<h3 id="4、可视化"><a href="#4、可视化" class="headerlink" title="4、可视化"></a>4、可视化</h3><p>可视化web界面可以使用Jenkins + Ansible + Shell来实现，也可以自己写Python网页来实现，具体实现有待研究。</p>
+<h2 id="四、结论"><a href="#四、结论" class="headerlink" title="四、结论"></a>四、结论</h2><p>作为一个初创公司的小型系统，由于资源缺乏，日志查询需求不是频繁，也不太需要查看实时日志，故采用**SFTP + mount **的形式来满足开发查询日志的需求。不额外安装软件，不占用系统资源，配置简单，就很Nice。</p>
+<h2 id="五、注意"><a href="#五、注意" class="headerlink" title="五、注意"></a>五、注意</h2><ol>
+<li>硬链接不能跨分区，硬连接不能链接目录，只能链接文件。</li>
+<li>FTP不支持软连接。</li>
+<li>Mount可以挂载本机的文件目录。</li>
+</ol>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 lxwno.1@163.com </span>
