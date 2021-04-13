@@ -629,7 +629,7 @@
     </div>
 </div>
 <input type="hidden" id="yelog_site_posts_number" value="34">
-<input type="hidden" id="yelog_site_word_count" value="22.2k">
+<input type="hidden" id="yelog_site_word_count" value="22.3k">
 <div style="display: none">
     <span id="busuanzi_value_site_uv"></span>
     <span id="busuanzi_value_site_pv"></span>
@@ -1145,12 +1145,12 @@
     </div>
     <div class="article-meta">
         
-            发布时间 : <time class="date" title='最后更新: 2021-03-16 19:56:59'>2021-03-12 20:52</time>
+            发布时间 : <time class="date" title='最后更新: 2021-04-13 20:57:21'>2021-03-12 20:52</time>
         
     </div>
     <div class="article-meta">
         
-        <span>字数:2.8k</span>
+        <span>字数:2.9k</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -1332,6 +1332,7 @@ mongodb-org-3.2.1-1.el7.x86_64.rpm
 </tbody></table>
 </li>
 </ul>
+<p><strong>注意：所有主机的hostname最好不要相同，以免影响mongos信息在config服务数据库中的存储。</strong></p>
 <h2 id="三、分片集群搭建"><a href="#三、分片集群搭建" class="headerlink" title="三、分片集群搭建"></a>三、分片集群搭建</h2><h3 id="1、搭建步骤"><a href="#1、搭建步骤" class="headerlink" title="1、搭建步骤"></a>1、搭建步骤</h3><p>分片集群各组件搭建顺序如下，不能错：</p>
 <ol>
 <li>ConfigServer –&gt; 2.Shard集群 –&gt; 3.Mongos</li>
@@ -1448,6 +1449,7 @@ EOF
 <h5 id="3-2-4、验证"><a href="#3-2-4、验证" class="headerlink" title="3.2.4、验证"></a>3.2.4、验证</h5><pre><code class="shell">rs.status()
 </code></pre>
 <h3 id="4、搭建mongos路由"><a href="#4、搭建mongos路由" class="headerlink" title="4、搭建mongos路由"></a>4、搭建mongos路由</h3><p>mongos可以为1个，也可以为多个，可以根据需要横向扩展，这里采用3个。</p>
+<p><strong>mongos的主机名hostname必须要保持不同，如果相同，config的数据库中就只会保存一个mongos信息，从而造成active mongos数量永远是1。</strong></p>
 <h4 id="4-1、修改配置文件"><a href="#4-1、修改配置文件" class="headerlink" title="4.1、修改配置文件"></a>4.1、修改配置文件</h4><p>mongos的配置文件为mongos.conf，如果不存在就采用如下方式新建，三台主机依次执行：</p>
 <pre><code class="bash">cat &gt;&gt; /etc/mongos.conf &lt;&lt; EOF
 systemLog:
