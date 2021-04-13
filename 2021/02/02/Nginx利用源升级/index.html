@@ -6,18 +6,18 @@
   <meta name="keywords" content=" nginx ">
   <meta name="description" content="Nginx利用源升级 | 运维人">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<meta name="description" content="一、需求简单、安全、轻量级、不耗费资源、最好能时时查看日志（需求不大）。 二、选型   方法 工具    日志系统 Rsyslog，Fluented，ELK，Loki、Logio、SLS   定时同步 Scp、Rsync   文件共享 SFTP、VSFTP、NFS共享、NAS   可视化 Jenkins + Ansible + Shell Or Python Web   三、分析1、日志系统 如果">
+<meta name="description" content="一、需求初创公司，资源和资金有限，无法搭建日志系统。 系统上线初期，开发人员需要经常查看生产日志来定位bug，且不能给予开发人员生产服务器的权限。 需要一个简单、安全、轻量级、不耗费资源的方法来满足查看日志的需求。 二、方案经过调研，使用基于SSH服务的SFTP和Mount挂载本机目录的方法，可以满足需求。 此方法，可以进行严格的权限控制：只读、不能访问其他目录、不能登录服务器。 三、实施步骤1、">
 <meta property="og:type" content="article">
-<meta property="og:title" content="日志系统的选型">
-<meta property="og:url" content="https://www.langxw.com/2021/04/13/%E6%97%A5%E5%BF%97%E7%B3%BB%E7%BB%9F%E7%9A%84%E9%80%89%E5%9E%8B/index.html">
+<meta property="og:title" content="基于SSH服务的SFTP应用">
+<meta property="og:url" content="https://www.langxw.com/2021/04/13/%E5%9F%BA%E4%BA%8ESSH%E6%9C%8D%E5%8A%A1%E7%9A%84SFTP%E5%BA%94%E7%94%A8/index.html">
 <meta property="og:site_name" content="运维人">
-<meta property="og:description" content="一、需求简单、安全、轻量级、不耗费资源、最好能时时查看日志（需求不大）。 二、选型   方法 工具    日志系统 Rsyslog，Fluented，ELK，Loki、Logio、SLS   定时同步 Scp、Rsync   文件共享 SFTP、VSFTP、NFS共享、NAS   可视化 Jenkins + Ansible + Shell Or Python Web   三、分析1、日志系统 如果">
+<meta property="og:description" content="一、需求初创公司，资源和资金有限，无法搭建日志系统。 系统上线初期，开发人员需要经常查看生产日志来定位bug，且不能给予开发人员生产服务器的权限。 需要一个简单、安全、轻量级、不耗费资源的方法来满足查看日志的需求。 二、方案经过调研，使用基于SSH服务的SFTP和Mount挂载本机目录的方法，可以满足需求。 此方法，可以进行严格的权限控制：只读、不能访问其他目录、不能登录服务器。 三、实施步骤1、">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2021-04-13T11:36:34.000Z">
-<meta property="article:modified_time" content="2021-04-13T11:47:18.922Z">
+<meta property="article:published_time" content="2021-04-13T12:48:55.000Z">
+<meta property="article:modified_time" content="2021-04-13T12:50:14.357Z">
 <meta property="article:author" content="运维人">
 <meta property="article:tag" content="FTP">
-<meta property="article:tag" content="日志系统">
+<meta property="article:tag" content="SFTP">
 <meta name="twitter:card" content="summary">
 
 
@@ -185,7 +185,7 @@
     <li>
         <div class="all active" data-rel="全部文章">全部文章
             
-                <small>(33)</small>
+                <small>(34)</small>
             
         </div>
     </li>
@@ -197,7 +197,7 @@
                         <i class="fold iconfont icon-right"></i>
                         
                         工具
-                        <small>(9)</small>
+                        <small>(10)</small>
                         
                     </div>
                     
@@ -256,7 +256,7 @@
                                         
                                         FTP
                                         
-                                            <small>(1
+                                            <small>(2
                                                 )</small>
                                         
                                     </div>
@@ -628,8 +628,8 @@
         
     </div>
 </div>
-<input type="hidden" id="yelog_site_posts_number" value="33">
-<input type="hidden" id="yelog_site_word_count" value="21.4k">
+<input type="hidden" id="yelog_site_posts_number" value="34">
+<input type="hidden" id="yelog_site_word_count" value="22.2k">
 <div style="display: none">
     <span id="busuanzi_value_site_uv"></span>
     <span id="busuanzi_value_site_pv"></span>
@@ -769,6 +769,10 @@
             </li>
         
             <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>SFTP</a>
+            </li>
+        
+            <li class="article-tag-list-item">
                 <i class="iconfont icon-tag"></i><a>shadowsockets</a>
             </li>
         
@@ -822,6 +826,14 @@
 
     
     <nav id="title-list-nav">
+        
+        <a  class="全部文章 工具 FTP "
+           href="/2021/04/13/%E5%9F%BA%E4%BA%8ESSH%E6%9C%8D%E5%8A%A1%E7%9A%84SFTP%E5%BA%94%E7%94%A8/"
+           data-tag="FTP,SFTP"
+           data-author="" >
+            <span class="post-title" title="基于SSH服务的SFTP应用">基于SSH服务的SFTP应用</span>
+            <span class="post-date" title="2021-04-13 20:48:55">2021/04/13</span>
+        </a>
         
         <a  class="全部文章 工具 FTP "
            href="/2021/04/13/%E6%97%A5%E5%BF%97%E7%B3%BB%E7%BB%9F%E7%9A%84%E9%80%89%E5%9E%8B/"

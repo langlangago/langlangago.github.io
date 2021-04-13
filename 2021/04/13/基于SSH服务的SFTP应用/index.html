@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>制作DockerImage存在的问题 | 运维人</title>
-  <meta name="keywords" content=" docker ">
-  <meta name="description" content="制作DockerImage存在的问题 | 运维人">
+  <title>基于SSH服务的SFTP应用 | 运维人</title>
+  <meta name="keywords" content=" FTP , SFTP ">
+  <meta name="description" content="基于SSH服务的SFTP应用 | 运维人">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="一、需求初创公司，资源和资金有限，无法搭建日志系统。 系统上线初期，开发人员需要经常查看生产日志来定位bug，且不能给予开发人员生产服务器的权限。 需要一个简单、安全、轻量级、不耗费资源的方法来满足查看日志的需求。 二、方案经过调研，使用基于SSH服务的SFTP和Mount挂载本机目录的方法，可以满足需求。 此方法，可以进行严格的权限控制：只读、不能访问其他目录、不能登录服务器。 三、实施步骤1、">
 <meta property="og:type" content="article">
@@ -1116,9 +1116,9 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="post-制作DockerImage存在的问题" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-基于SSH服务的SFTP应用" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">制作DockerImage存在的问题</h1>
+        <h1 class="article-title">基于SSH服务的SFTP应用</h1>
     
     <div class="article-meta">
         
@@ -1128,9 +1128,9 @@
             <i class="iconfont icon-category"></i>
             
             
-            <a  data-rel="虚拟化">虚拟化</a> > 
+            <a  data-rel="工具">工具</a> > 
             
-            <a  data-rel="虚拟化&lt;---&gt;Docker">Docker</a>
+            <a  data-rel="工具&lt;---&gt;FTP">FTP</a>
             
         </span>
         
@@ -1138,19 +1138,21 @@
         <span class="tag">
             <i class="iconfont icon-tag"></i>
             
-            <a class="color2">docker</a>
+            <a class="color4">FTP</a>
+            
+            <a class="color5">SFTP</a>
             
         </span>
         
     </div>
     <div class="article-meta">
         
-            发布时间 : <time class="date" title='最后更新: 2021-02-02 09:45:27'>2021-02-02 09:44</time>
+            发布时间 : <time class="date" title='最后更新: 2021-04-13 20:50:14'>2021-04-13 20:48</time>
         
     </div>
     <div class="article-meta">
         
-        <span>字数:467</span>
+        <span>字数:823</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -1180,7 +1182,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E6%97%B6%E5%8C%BA%E9%97%AE%E9%A2%98%EF%BC%9A"><span class="toc-text">一、时区问题：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E5%AE%8B%E4%BD%93%E4%B8%AD%E6%96%87%E6%94%AF%E6%8C%81%EF%BC%9A"><span class="toc-text">二、宋体中文支持：</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81Docker%E5%AE%B9%E5%99%A8%E9%87%8C%E9%9D%A2%E4%BF%AE%E6%94%B9%EF%BC%9A"><span class="toc-text">1、Docker容器里面修改：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E5%86%99%E5%85%A5Dockerfile%EF%BC%8C%E7%9B%B4%E6%8E%A5%E7%94%9F%E6%88%90%E9%95%9C%E5%83%8F%EF%BC%9A"><span class="toc-text">2、写入Dockerfile，直接生成镜像：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81APK%E5%AE%89%E8%A3%85%E8%BD%AF%E4%BB%B6%E9%80%9F%E5%BA%A6%E6%85%A2%EF%BC%9A"><span class="toc-text">三、APK安装软件速度慢：</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E7%9B%B4%E6%8E%A5%E4%BF%AE%E6%94%B9%E8%BD%AF%E4%BB%B6%E6%BA%90%E6%96%87%E4%BB%B6"><span class="toc-text">1、直接修改软件源文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E5%AE%89%E8%A3%85%E8%BD%AF%E4%BB%B6%E5%91%BD%E4%BB%A4apk%E5%90%8E%E6%B7%BB%E5%8A%A0%E6%BA%90%E5%9C%B0%E5%9D%80"><span class="toc-text">2、安装软件命令apk后添加源地址</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E9%9C%80%E6%B1%82"><span class="toc-text">一、需求</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E6%96%B9%E6%A1%88"><span class="toc-text">二、方案</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E5%AE%9E%E6%96%BD%E6%AD%A5%E9%AA%A4"><span class="toc-text">三、实施步骤</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E6%96%B0%E5%BB%BA%E7%94%A8%E5%81%9ASFTP%E7%9A%84%E7%94%A8%E6%88%B7"><span class="toc-text">1、新建用做SFTP的用户</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E6%8E%A7%E5%88%B6%E6%9D%83%E9%99%90"><span class="toc-text">2、控制权限</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81%E4%BF%AE%E6%94%B9sshd%E9%85%8D%E7%BD%AE"><span class="toc-text">3、修改sshd配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4%E3%80%81%E9%87%8D%E5%90%AFsshd"><span class="toc-text">4、重启sshd</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5%E3%80%81%E4%BD%BF%E7%94%A8mount%E6%8C%82%E8%BD%BD%E6%97%A5%E5%BF%97%E6%96%87%E4%BB%B6"><span class="toc-text">5、使用mount挂载日志文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6%E3%80%81%E9%AA%8C%E8%AF%81"><span class="toc-text">6、验证</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E5%85%B6%E4%BB%96"><span class="toc-text">四、其他</span></a></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -1196,35 +1198,59 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p><strong>我基本使用基于alpine的镜像，故以此镜像为例。</strong></p>
-<h2 id="一、时区问题："><a href="#一、时区问题：" class="headerlink" title="一、时区问题："></a>一、时区问题：</h2><p>鉴于<strong>Docker Hub官方的Image都是0时区</strong>的，不符合中国东八区。</p>
-<p>建议：</p>
-<ol>
-<li>如果直接使用官方镜像，在启动时，直接加入环境变量 <code>-e &quot;TZ=Asia/Shanghai&quot;</code>;</li>
-<li>如果定制自己的镜像，在Dockerfile里加入修改时区的操作。</li>
-</ol>
-<h2 id="二、宋体中文支持："><a href="#二、宋体中文支持：" class="headerlink" title="二、宋体中文支持："></a>二、宋体中文支持：</h2><h3 id="1、Docker容器里面修改："><a href="#1、Docker容器里面修改：" class="headerlink" title="1、Docker容器里面修改："></a>1、Docker容器里面修改：</h3><ol>
-<li>查看系统是否已经安装中文字体：<code>fc-list :lang=zh</code>，一般都是没有结果</li>
-<li>安装字体软件：<code>apk add ttf-dejavu fontconfig </code></li>
-<li>查看所有字体：<code>fc-list</code>，会显示字体目录为 <code>/usr/share/fonts</code></li>
-<li>将我们需要的字体放入字体目录中，比如宋体Simsun.ttf（可以从网上下载）</li>
-<li>启用字体：<code>fc-cache</code></li>
-<li>再次查看是否已安装中文字体：<code>fc-list :lang=zh</code> ，会显示<code>/usr/share/fonts/SimSun.ttf: SimSun,宋体:style=Regular</code></li>
-</ol>
-<h3 id="2、写入Dockerfile，直接生成镜像："><a href="#2、写入Dockerfile，直接生成镜像：" class="headerlink" title="2、写入Dockerfile，直接生成镜像："></a>2、写入Dockerfile，直接生成镜像：</h3><p>在Dockerfile中，加入以下两句，镜像启动的时候就会已包含中文宋体。 </p>
-<pre><code class="bash">RUN apk add --update --no-cache ttf-dejavu fontconfig &amp;&amp; rm -rf /var/cache/apk/*
-COPY simsun.ttf /usr/share/fonts/simsun.ttf
+        <h2 id="一、需求"><a href="#一、需求" class="headerlink" title="一、需求"></a>一、需求</h2><p>初创公司，资源和资金有限，无法搭建日志系统。</p>
+<p>系统上线初期，开发人员需要经常查看生产日志来定位bug，且不能给予开发人员生产服务器的权限。</p>
+<p>需要一个简单、安全、轻量级、不耗费资源的方法来满足查看日志的需求。</p>
+<h2 id="二、方案"><a href="#二、方案" class="headerlink" title="二、方案"></a>二、方案</h2><p>经过调研，使用<strong>基于SSH服务的SFTP和Mount挂载本机目录</strong>的方法，可以满足需求。</p>
+<p>此方法，可以进行严格的权限控制：只读、不能访问其他目录、不能登录服务器。</p>
+<h2 id="三、实施步骤"><a href="#三、实施步骤" class="headerlink" title="三、实施步骤"></a>三、实施步骤</h2><h3 id="1、新建用做SFTP的用户"><a href="#1、新建用做SFTP的用户" class="headerlink" title="1、新建用做SFTP的用户"></a>1、新建用做SFTP的用户</h3><pre><code class="shell">groupadd log_ro -g 2000
+useradd log_ro -u 2000 -g 2000 -d /home/log_ro -s /sbin/nologin
 </code></pre>
-<h2 id="三、APK安装软件速度慢："><a href="#三、APK安装软件速度慢：" class="headerlink" title="三、APK安装软件速度慢："></a>三、APK安装软件速度慢：</h2><p>Linux服务器默认软件源都是官方源在国外，国内访问慢的很，影响Docker build 的效率。</p>
-<h3 id="1、直接修改软件源文件"><a href="#1、直接修改软件源文件" class="headerlink" title="1、直接修改软件源文件"></a>1、直接修改软件源文件</h3><p>在Dockerfile中加入run sed命令，替换软件源为阿里云：</p>
-<pre><code class="bash">RUN sed -i &quot;s/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g&quot; /etc/apk/repositories
+<ul>
+<li>如果服务器是使用密码的登录的，就需要设置log_ro用户的密码<code>passwd log_ro</code></li>
+<li>如果是使用密钥登录的，就要为log_ro做密钥登录的相关配置，和ssh登录一样</li>
+<li>-s /sbin/nologin 控制其不能登录服务器</li>
+</ul>
+<h3 id="2、控制权限"><a href="#2、控制权限" class="headerlink" title="2、控制权限"></a>2、控制权限</h3><p>对SFTP用户，做不能切换目录和只读的权限控制。</p>
+<p>注意：只读是针对SFTP的home目录的，对于日志的只读权限，由日志本身的权限属性进行控制。</p>
+<pre><code class="shell">chown root:log_ro /home/log_ro
+chmod 755 /home/log_ro
 </code></pre>
-<p>然后你肯定要安装软件，可以使用下面命令 先update 后安装：</p>
-<pre><code class="bash">RUN apk add --update --no-cache ttf-dejavu fontconfig &amp;&amp; rm -rf /var/cache/apk/*
+<h3 id="3、修改sshd配置"><a href="#3、修改sshd配置" class="headerlink" title="3、修改sshd配置"></a>3、修改sshd配置</h3><pre><code class="shell">sed -i &quot;s/Subsystem/#Subsystem/g&quot; /etc/ssh/sshd_config
 </code></pre>
-<h3 id="2、安装软件命令apk后添加源地址"><a href="#2、安装软件命令apk后添加源地址" class="headerlink" title="2、安装软件命令apk后添加源地址"></a>2、安装软件命令apk后添加源地址</h3><p>这个可能不会全部生效，可能某些还会去找官方源地址，所以不太建议使用。</p>
-<pre><code class="bash">apk add php7 --repository http://nl.alpinelinux.org/alpine/edge/testing/
+<pre><code class="shell">cat &gt;&gt; /etc/ssh/sshd_config &lt;&lt; EOF
+
+# sftp for read log    
+Subsystem sftp internal-sftp
+UsePAM yes
+Match User log_ro
+    ChrootDirectory /home/log_ro/
+    ForceCommand internal-sftp
+    AllowTcpForwarding no
+    X11Forwarding no
+EOF    
 </code></pre>
+<p>在配置文件中， User指定了sftp的用户，ChrootDirectory指定了sftp登录后的根目录。</p>
+<p>注意：</p>
+<ul>
+<li>根目录本身所属必须是root，属组为sftp用户的属组，权限最小为755。意味着log_ro本身是不能在/home/log_ro中建立新文件、文件夹或者修改文件的。</li>
+<li>虽然ftp用户对于登录后的根目录没有写权限，但是我们可以用root新建一个文件夹，比如叫upload，然后把这个文件夹所属改为log_ro，这样ftp用户就对/home/log_ro/upload拥有完全的写权限了。上传文件不要放到根目录而是放到upload下面。</li>
+</ul>
+<h3 id="4、重启sshd"><a href="#4、重启sshd" class="headerlink" title="4、重启sshd"></a>4、重启sshd</h3><p>关掉Selinux：<code>setenforce 0</code>，重启sshd服务<code>systemctl restart sshd</code></p>
+<h3 id="5、使用mount挂载日志文件"><a href="#5、使用mount挂载日志文件" class="headerlink" title="5、使用mount挂载日志文件"></a>5、使用mount挂载日志文件</h3><p><strong>因为软连接在ftp中不能生效，又因为硬链接不能链接目录，所以采用mount挂载本机文件系统的方法实现软连接。</strong></p>
+<pre><code class="shell">mkdir fps_logs
+chown log_ro.log_ro fps_logs
+mount --bind /data/app/fps/logs fps_logs
+</code></pre>
+<h3 id="6、验证"><a href="#6、验证" class="headerlink" title="6、验证"></a>6、验证</h3><p>使用ftp客户端来验证对于ftp用户权限的控制。</p>
+<h2 id="四、其他"><a href="#四、其他" class="headerlink" title="四、其他"></a>四、其他</h2><p>最后介绍一下，如果不使用家目录作为sftp的根目录，使用其他目录的方法。</p>
+<p>但是有一个原则还是要遵守，就是sftp所在的根目录，和其所有的上级目录，所属必须是root，不然就会碰到sftp连接马上被关闭的情况。</p>
+<p>比如我们想要登录后的根目录为/data/haha/abc</p>
+<p>/data/haha/abc 应该为root:zhongan 755</p>
+<p>/data/haha/       应该为root:root         755</p>
+<p>/data                 应该为root:root         755</p>
+<p>如果想要上传文件，应该建立/data/haha/abc/upload文件夹，所属zhongan:zhongan , 755，然后上传文件的目标路径为/upload</p>
+<p>然后修改/etc/ssh/sshd_config ,修改ChrootDirectory后面的目录为/data/haha/abc/</p>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 lxwno.1@163.com </span>
