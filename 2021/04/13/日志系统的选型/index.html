@@ -14,7 +14,7 @@
 <meta property="og:description" content="一、需求简单、安全、轻量级、不耗费资源、最好能时时查看日志（需求不大）。 二、选型   方法 工具    日志系统 Rsyslog，Fluented，ELK，Loki、Logio、SLS   定时同步 Scp、Rsync   文件共享 SFTP、VSFTP、NFS共享、NAS   可视化 Jenkins + Ansible + Shell Or Python Web   三、分析1、日志系统 如果">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2021-04-13T11:36:34.000Z">
-<meta property="article:modified_time" content="2021-04-13T11:42:17.930Z">
+<meta property="article:modified_time" content="2021-04-13T11:47:18.922Z">
 <meta property="article:author" content="运维人">
 <meta property="article:tag" content="FTP">
 <meta property="article:tag" content="日志系统">
@@ -1135,12 +1135,12 @@
     </div>
     <div class="article-meta">
         
-            发布时间 : <time class="date" title='最后更新: 2021-04-13 19:42:17'>2021-04-13 19:36</time>
+            发布时间 : <time class="date" title='最后更新: 2021-04-13 19:47:18'>2021-04-13 19:36</time>
         
     </div>
     <div class="article-meta">
         
-        <span>字数:541</span>
+        <span>字数:540</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -1218,14 +1218,14 @@
 </ol>
 <h3 id="2、定时同步"><a href="#2、定时同步" class="headerlink" title="2、定时同步"></a>2、定时同步</h3><ol>
 <li>如果对实时性要求不高，我们可以Scp或者Rsync脚本定时远程同步，问题就在于间隔时间的确定和来自不同机器的名字相同的文件的区分。</li>
-<li>可以在每台日志服务器上搭建rysncd服务端，进行推送，但是如果日志分散的话，需要安装多个服务端，不建议。</li>
+<li>可以在每台日志服务器上搭建rsync服务端，进行推送，但如果日志分散的话，需要安装多个服务端，不建议。</li>
 </ol>
 <h3 id="3、文件共享"><a href="#3、文件共享" class="headerlink" title="3、文件共享"></a>3、文件共享</h3><ol>
 <li>可以使用NFS或者NAS，将一块磁盘挂载到所有机器上，然后使用软连接来访问不同的日志。</li>
 <li>还可以使用基于SSH服务端的SFTP服务，进行权限控制后，将日志目录挂载到用户目录进行日志的下载。</li>
 </ol>
-<h3 id="4、可视化"><a href="#4、可视化" class="headerlink" title="4、可视化"></a>4、可视化</h3><p>可视化web界面可以使用Jenkins + Ansible + Shell来实现，也可以自己写Python网页来实现，具体实现有待研究。</p>
-<h2 id="四、结论"><a href="#四、结论" class="headerlink" title="四、结论"></a>四、结论</h2><p>作为一个初创公司的小型系统，由于资源缺乏，日志查询需求不是频繁，也不太需要查看实时日志，故采用**SFTP + mount **的形式来满足开发查询日志的需求。不额外安装软件，不占用系统资源，配置简单，就很Nice。</p>
+<h3 id="4、可视化"><a href="#4、可视化" class="headerlink" title="4、可视化"></a>4、可视化</h3><p>可视化web界面可以使用Jenkins+Ansible+Shell来实现，也可以自己写Python网页来实现，具体实现有待研究。</p>
+<h2 id="四、结论"><a href="#四、结论" class="headerlink" title="四、结论"></a>四、结论</h2><p>作为一个初创公司的小型系统，由于资源缺乏，日志查询需求不是频繁，也不太需要查看实时日志，故采用<strong>SFTP + mount</strong>的形式来满足开发查询日志的需求。不额外安装软件，不占用系统资源，配置简单，就很Nice。</p>
 <h2 id="五、注意"><a href="#五、注意" class="headerlink" title="五、注意"></a>五、注意</h2><ol>
 <li>硬链接不能跨分区，硬连接不能链接目录，只能链接文件。</li>
 <li>FTP不支持软连接。</li>
