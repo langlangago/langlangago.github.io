@@ -6,7 +6,7 @@
   <link href="https://www.langxw.com/atom.xml" rel="self"/>
   
   <link href="https://www.langxw.com/"/>
-  <updated>2021-04-14T02:11:44.561Z</updated>
+  <updated>2021-04-14T07:28:50.275Z</updated>
   <id>https://www.langxw.com/</id>
   
   <author>
@@ -15,6 +15,37 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Python制作Exce报表并打包</title>
+    <link href="https://www.langxw.com/2021/04/14/Python%E5%88%B6%E4%BD%9CExce%E6%8A%A5%E8%A1%A8%E5%B9%B6%E6%89%93%E5%8C%85/"/>
+    <id>https://www.langxw.com/2021/04/14/Python%E5%88%B6%E4%BD%9CExce%E6%8A%A5%E8%A1%A8%E5%B9%B6%E6%89%93%E5%8C%85/</id>
+    <published>2021-04-14T07:25:45.000Z</published>
+    <updated>2021-04-14T07:28:50.275Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="一、缘由"><a href="#一、缘由" class="headerlink" title="一、缘由"></a>一、缘由</h2><p>在公司报表系统没有出来之前，每日运营数据的需求由运维或者DBA查数据库手动拉取，徒增工作量。</p><p>故考虑做一个exe文件，让产品童鞋点一下就自动生成一个包含昨日的数据的Excel表格，省心省力。</p><h2 id="二、环境"><a href="#二、环境" class="headerlink" title="二、环境"></a>二、环境</h2><p>**Win10 + Pycharm + Python3.7 + pymysql + openpyxl + pyinstaller **</p><p>说明：</p><ol><li>因为办公环境是windows，如果是Linux、Mac则可以设置定时任务来自动跑Python脚本</li><li>openpyxl模块，用来处理excel文档，操作简单，功能强大</li><li>pyinstaller模块，可以将python脚本打包成exe程序，还可以加密除入口函数外的pyhon脚本。</li></ol><h2 id="三、代码实现"><a href="#三、代码实现" class="headerlink" title="三、代码实现"></a>三、代码实现</h2><pre><code class="python">import pymysqlimport timefrom openpyxl import Workbook# MySQL查询函数def query_db(sql):    conn = pymysql.connect(host=&#39;1.1.1.1&#39;,                           port=3306,                           user=&#39;test_ro&#39;,                           password=&#39;$uT%8ono&#39;,                           db=&#39;test&#39;,                           cursorclass=pymysql.cursors.DictCursor                           )    with conn.cursor() as cursor:        # 为了避免SQL注入，生产环境这里不要直接传入SQL，要带参数的拼接形式        cursor.execute(sql)        result = cursor.fetchall()    conn.close()    return result# 处理多个SQL查询语句，并将结果拼接成包含多个字典的列表def handle_result():    # 获得昨天的日期    yesterday_time = time.localtime(time.time()-86400)    yesterday = time.strftime(&#39;%Y-%m-%d&#39;, yesterday_time)    res_list = [&#123;&#39;日期&#39;: &#39;&#123;&#125;&#39;.format(yesterday)&#125;, ]    sql_list = [        &quot;SELECT COUNT(*) AS &#39;累计进件总笔数&#39; FROM ( SELECT COUNT(*) FROM test_apply_account WHERE apply_date &lt; &#39;&#123;&#125; 23:59:59&#39; GROUP BY cert_no) A&quot;.format(yesterday),        &quot;SELECT count(*) AS &#39;当日进件总笔数&#39; FROM (SELECT count(*) FROM test_apply_account WHERE apply_date BETWEEN &#39;&#123;&#125; 00:00:00&#39; AND &#39;&#123;&#125; 23:59:59&#39; GROUP BY cert_no) A&quot;.format(yesterday, yesterday),        &quot;SELECT  count(*) as &#39;当日授信总笔数数&#39; FROM test_credit_apply WHERE credit_date BETWEEN &#39;&#123;&#125; 00:00:00&#39; AND &#39;&#123;&#125; 23:59:59&#39;&quot;.format(yesterday, yesterday),        &quot;SELECT count(*) as &#39;当日授信通过笔数&#39; FROM test_credit_apply WHERE credit_date BETWEEN &#39;&#123;&#125; 00:00:00&#39; AND &#39;&#123;&#125; 23:59:59&#39; AND credit_status=&#39;SUCCESS&#39;&quot;.format(yesterday, yesterday),    ]    for sql in sql_list:        res = query_db(sql)        res_list += res    return res_list# 将拼接好的数据写入excel，以新建excel表格的形式def write_excel(data):    wb = Workbook()    wb.create_sheet(&#39;XX每日数据&#39;, 0)    sheet = wb.active    i = 1    for item in data:        sheet.cell(row=1, column=i, value=list(item.keys())[0])        sheet.cell(row=2, column=i, value=list(item.values())[0])        i += 1    wb.save(&#39;xx_everyday.xlsx&#39;)if __name__ == &#39;__main__&#39;:    res_list = handle_result()    write_excel(res_list)</code></pre><h2 id="四、将python脚本打包成exe文件"><a href="#四、将python脚本打包成exe文件" class="headerlink" title="四、将python脚本打包成exe文件"></a>四、将python脚本打包成exe文件</h2><p>这里使用pyinstaller模块，具体命令为：</p><pre><code class="shell">pyinstaller -F -c --key 123456 main.py</code></pre><p>参数解释：</p><ol><li>-F 打包成单个exe文件，相反的参数为-D</li><li>-c 显示cmd控制台，相反的参数为-w</li><li>–key 密钥，加密打包，但是只对引入的库文件进行加密，所以建议main.py中只写入口函数，其他的函数进行引用</li><li>这样的加密基本安全，要想完全反编译，没点水平很难做到。</li></ol><p><strong>注意：pyinstaller 加密需要tinyaes包，tinyaes又依赖于Microsoft Visual C++，C++也要安装Win10 SDK。</strong></p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h2 id=&quot;一、缘由&quot;&gt;&lt;a href=&quot;#一、缘由&quot; class=&quot;headerlink&quot; title=&quot;一、缘由&quot;&gt;&lt;/a&gt;一、缘由&lt;/h2&gt;&lt;p&gt;在公司报表系统没有出来之前，每日运营数据的需求由运维或者DBA查数据库手动拉取，徒增工作量。&lt;/p&gt;
+&lt;p&gt;故考虑做一个ex</summary>
+      
+    
+    
+    
+    <category term="脚本" scheme="https://www.langxw.com/categories/%E8%84%9A%E6%9C%AC/"/>
+    
+    <category term="Python脚本" scheme="https://www.langxw.com/categories/%E8%84%9A%E6%9C%AC/Python%E8%84%9A%E6%9C%AC/"/>
+    
+    
+    <category term="python" scheme="https://www.langxw.com/tags/python/"/>
+    
+    <category term="mysql" scheme="https://www.langxw.com/tags/mysql/"/>
+    
+    <category term="excel" scheme="https://www.langxw.com/tags/excel/"/>
+    
+  </entry>
   
   <entry>
     <title>Mongodb小版本热升级</title>
@@ -547,33 +578,6 @@
     
     
     <category term="vsca" scheme="https://www.langxw.com/tags/vsca/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Win10的便捷使用</title>
-    <link href="https://www.langxw.com/2021/02/02/Win10%E7%9A%84%E4%BE%BF%E6%8D%B7%E4%BD%BF%E7%94%A8/"/>
-    <id>https://www.langxw.com/2021/02/02/Win10%E7%9A%84%E4%BE%BF%E6%8D%B7%E4%BD%BF%E7%94%A8/</id>
-    <published>2021-02-02T02:06:16.000Z</published>
-    <updated>2021-02-02T02:07:47.490Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="一、Win10快捷键："><a href="#一、Win10快捷键：" class="headerlink" title="一、Win10快捷键："></a>一、Win10快捷键：</h2><ol><li><strong>Win+s</strong>  搜索（要先彻底关闭微软小娜，没用的家伙）</li><li><strong>Win+v</strong>  剪贴板</li><li><strong>Win+d</strong>   桌面</li><li><strong>Win+e</strong> 文件资源管理器</li><li><strong>Win+r</strong> 运行</li><li><strong>Win+x</strong> 快速链接菜单</li><li><strong>Win+w</strong> 工作区（便签，草图，截图）</li><li><strong>Win+p</strong> 投影</li><li><strong>Win+l</strong> 锁屏</li><li><strong>Alt+F4 / Ctrl+w</strong>关闭当前窗口</li><li><strong>F2</strong> 重命名文件</li><li><strong>Win + Pause</strong> 系统属性（我的电脑右键）</li><li><strong>Win + Ctrl + D</strong> 创建新的虚拟桌面</li><li>**Win + Ctrl + ←/→ ** 切换虚拟桌面</li><li><strong>Win + Ctrl + F4</strong> 关闭虚拟桌面</li><li><strong>Shift + 右键</strong> 再次打开Powershell 或者 linux shell</li><li><strong>桌面+Alt+F4</strong> 注销，关机，睡眠，切换用户</li><li>**Win + Alt + d ** 打开日历</li><li>**Win + i **  打开设置</li><li></li></ol>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h2 id=&quot;一、Win10快捷键：&quot;&gt;&lt;a href=&quot;#一、Win10快捷键：&quot; class=&quot;headerlink&quot; title=&quot;一、Win10快捷键：&quot;&gt;&lt;/a&gt;一、Win10快捷键：&lt;/h2&gt;&lt;ol&gt;
-&lt;li&gt;&lt;strong&gt;Win+s&lt;/strong&gt;  搜索（要</summary>
-      
-    
-    
-    
-    <category term="系统" scheme="https://www.langxw.com/categories/%E7%B3%BB%E7%BB%9F/"/>
-    
-    <category term="Windows" scheme="https://www.langxw.com/categories/%E7%B3%BB%E7%BB%9F/Windows/"/>
-    
-    
-    <category term="win10" scheme="https://www.langxw.com/tags/win10/"/>
     
   </entry>
   

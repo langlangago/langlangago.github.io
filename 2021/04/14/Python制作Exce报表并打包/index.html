@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Docker修改默认时区 | 运维人</title>
-  <meta name="keywords" content=" docker , timezone ">
-  <meta name="description" content="Docker修改默认时区 | 运维人">
+  <title>Python制作Exce报表并打包 | 运维人</title>
+  <meta name="keywords" content=" python , mysql , excel ">
+  <meta name="description" content="Python制作Exce报表并打包 | 运维人">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="一、缘由在公司报表系统没有出来之前，每日运营数据的需求由运维或者DBA查数据库手动拉取，徒增工作量。 故考虑做一个exe文件，让产品童鞋点一下就自动生成一个包含昨日的数据的Excel表格，省心省力。 二、环境**Win10 + Pycharm + Python3.7 + pymysql + openpyxl + pyinstaller ** 说明：  因为办公环境是windows，如果是Linux">
 <meta property="og:type" content="article">
@@ -1141,9 +1141,9 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="post-Docker修改默认时区" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-Python制作Exce报表并打包" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">Docker修改默认时区</h1>
+        <h1 class="article-title">Python制作Exce报表并打包</h1>
     
     <div class="article-meta">
         
@@ -1153,9 +1153,9 @@
             <i class="iconfont icon-category"></i>
             
             
-            <a  data-rel="虚拟化">虚拟化</a> > 
+            <a  data-rel="脚本">脚本</a> > 
             
-            <a  data-rel="虚拟化&lt;---&gt;Docker">Docker</a>
+            <a  data-rel="脚本&lt;---&gt;Python脚本">Python脚本</a>
             
         </span>
         
@@ -1163,21 +1163,23 @@
         <span class="tag">
             <i class="iconfont icon-tag"></i>
             
-            <a class="color2">docker</a>
+            <a class="color2">python</a>
             
-            <a class="color4">timezone</a>
+            <a class="color1">mysql</a>
+            
+            <a class="color1">excel</a>
             
         </span>
         
     </div>
     <div class="article-meta">
         
-            发布时间 : <time class="date" title='最后更新: 2021-02-02 10:43:52'>2021-02-02 10:32</time>
+            发布时间 : <time class="date" title='最后更新: 2021-04-14 15:28:50'>2021-04-14 15:25</time>
         
     </div>
     <div class="article-meta">
         
-        <span>字数:160</span>
+        <span>字数:732</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -1207,7 +1209,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E7%BC%98%E7%94%B1%EF%BC%9A"><span class="toc-text">一、缘由：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95%EF%BC%9A"><span class="toc-text">二、解决办法：</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E6%96%B9%E5%BC%8F%EF%BC%9A"><span class="toc-text">1、环境变量方式：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E9%87%8D%E6%96%B0%E5%88%B6%E4%BD%9C%E9%95%9C%E5%83%8F%E6%96%B9%E5%BC%8F%EF%BC%9A"><span class="toc-text">2、重新制作镜像方式：</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E7%BC%98%E7%94%B1"><span class="toc-text">一、缘由</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E7%8E%AF%E5%A2%83"><span class="toc-text">二、环境</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="toc-text">三、代码实现</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E5%B0%86python%E8%84%9A%E6%9C%AC%E6%89%93%E5%8C%85%E6%88%90exe%E6%96%87%E4%BB%B6"><span class="toc-text">四、将python脚本打包成exe文件</span></a></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -1223,21 +1225,85 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="一、缘由："><a href="#一、缘由：" class="headerlink" title="一、缘由："></a>一、缘由：</h2><p><strong>Docker Hub中的镜像默认都是0时区，而我们在东八区，差8小时，会导致我们看日志不能准确定位时间，这是很要命的。</strong></p>
-<h2 id="二、解决办法："><a href="#二、解决办法：" class="headerlink" title="二、解决办法："></a>二、解决办法：</h2><h3 id="1、环境变量方式："><a href="#1、环境变量方式：" class="headerlink" title="1、环境变量方式："></a>1、环境变量方式：</h3><ol>
-<li><p>docker run 启动时加入环境变量：<code>docker run -e &quot;TZ=Asia/Shanghai&quot;</code></p>
-</li>
-<li><p>docker-compose 方式启动时，加入 </p>
-<pre><code class="bash">environment:
- - TZ=Asia/Shanghai
-</code></pre>
-<h3 id="2、重新制作镜像方式："><a href="#2、重新制作镜像方式：" class="headerlink" title="2、重新制作镜像方式："></a>2、重新制作镜像方式：</h3></li>
+        <h2 id="一、缘由"><a href="#一、缘由" class="headerlink" title="一、缘由"></a>一、缘由</h2><p>在公司报表系统没有出来之前，每日运营数据的需求由运维或者DBA查数据库手动拉取，徒增工作量。</p>
+<p>故考虑做一个exe文件，让产品童鞋点一下就自动生成一个包含昨日的数据的Excel表格，省心省力。</p>
+<h2 id="二、环境"><a href="#二、环境" class="headerlink" title="二、环境"></a>二、环境</h2><p>**Win10 + Pycharm + Python3.7 + pymysql + openpyxl + pyinstaller **</p>
+<p>说明：</p>
+<ol>
+<li>因为办公环境是windows，如果是Linux、Mac则可以设置定时任务来自动跑Python脚本</li>
+<li>openpyxl模块，用来处理excel文档，操作简单，功能强大</li>
+<li>pyinstaller模块，可以将python脚本打包成exe程序，还可以加密除入口函数外的pyhon脚本。</li>
 </ol>
-<p>如果你是基于某个官方Image来制作自己的镜像，比如Alpine。那么你可以在Dockerfile中，加入:</p>
-<pre><code class="bash">RUN apk --no-cache add tzdata  &amp;&amp; \
-  ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime &amp;&amp; \
-  echo &quot;Asia/Shanghai&quot; &gt; /etc/timezone
+<h2 id="三、代码实现"><a href="#三、代码实现" class="headerlink" title="三、代码实现"></a>三、代码实现</h2><pre><code class="python">import pymysql
+import time
+from openpyxl import Workbook
+
+# MySQL查询函数
+def query_db(sql):
+    conn = pymysql.connect(host=&#39;1.1.1.1&#39;,
+                           port=3306,
+                           user=&#39;test_ro&#39;,
+                           password=&#39;$uT%8ono&#39;,
+                           db=&#39;test&#39;,
+                           cursorclass=pymysql.cursors.DictCursor
+                           )
+
+    with conn.cursor() as cursor:
+        # 为了避免SQL注入，生产环境这里不要直接传入SQL，要带参数的拼接形式
+        cursor.execute(sql)
+        result = cursor.fetchall()
+
+    conn.close()
+    return result
+
+# 处理多个SQL查询语句，并将结果拼接成包含多个字典的列表
+def handle_result():
+    # 获得昨天的日期
+    yesterday_time = time.localtime(time.time()-86400)
+    yesterday = time.strftime(&#39;%Y-%m-%d&#39;, yesterday_time)
+    res_list = [&#123;&#39;日期&#39;: &#39;&#123;&#125;&#39;.format(yesterday)&#125;, ]
+    sql_list = [
+        &quot;SELECT COUNT(*) AS &#39;累计进件总笔数&#39; FROM ( SELECT COUNT(*) FROM test_apply_account WHERE apply_date &lt; &#39;&#123;&#125; 23:59:59&#39; GROUP BY cert_no) A&quot;.format(yesterday),
+        &quot;SELECT count(*) AS &#39;当日进件总笔数&#39; FROM (SELECT count(*) FROM test_apply_account WHERE apply_date BETWEEN &#39;&#123;&#125; 00:00:00&#39; AND &#39;&#123;&#125; 23:59:59&#39; GROUP BY cert_no) A&quot;.format(yesterday, yesterday),
+        &quot;SELECT  count(*) as &#39;当日授信总笔数数&#39; FROM test_credit_apply WHERE credit_date BETWEEN &#39;&#123;&#125; 00:00:00&#39; AND &#39;&#123;&#125; 23:59:59&#39;&quot;.format(yesterday, yesterday),
+        &quot;SELECT count(*) as &#39;当日授信通过笔数&#39; FROM test_credit_apply WHERE credit_date BETWEEN &#39;&#123;&#125; 00:00:00&#39; AND &#39;&#123;&#125; 23:59:59&#39; AND credit_status=&#39;SUCCESS&#39;&quot;.format(yesterday, yesterday),
+    ]
+
+    for sql in sql_list:
+        res = query_db(sql)
+        res_list += res
+
+    return res_list
+
+# 将拼接好的数据写入excel，以新建excel表格的形式
+def write_excel(data):
+    wb = Workbook()
+    wb.create_sheet(&#39;XX每日数据&#39;, 0)
+    sheet = wb.active
+    i = 1
+    for item in data:
+        sheet.cell(row=1, column=i, value=list(item.keys())[0])
+        sheet.cell(row=2, column=i, value=list(item.values())[0])
+        i += 1
+
+    wb.save(&#39;xx_everyday.xlsx&#39;)
+
+
+if __name__ == &#39;__main__&#39;:
+    res_list = handle_result()
+    write_excel(res_list)
 </code></pre>
+<h2 id="四、将python脚本打包成exe文件"><a href="#四、将python脚本打包成exe文件" class="headerlink" title="四、将python脚本打包成exe文件"></a>四、将python脚本打包成exe文件</h2><p>这里使用pyinstaller模块，具体命令为：</p>
+<pre><code class="shell">pyinstaller -F -c --key 123456 main.py
+</code></pre>
+<p>参数解释：</p>
+<ol>
+<li>-F 打包成单个exe文件，相反的参数为-D</li>
+<li>-c 显示cmd控制台，相反的参数为-w</li>
+<li>–key 密钥，加密打包，但是只对引入的库文件进行加密，所以建议main.py中只写入口函数，其他的函数进行引用</li>
+<li>这样的加密基本安全，要想完全反编译，没点水平很难做到。</li>
+</ol>
+<p><strong>注意：pyinstaller 加密需要tinyaes包，tinyaes又依赖于Microsoft Visual C++，C++也要安装Win10 SDK。</strong></p>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 lxwno.1@163.com </span>
