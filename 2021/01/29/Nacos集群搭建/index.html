@@ -6,17 +6,18 @@
   <meta name="keywords" content=" nacos ">
   <meta name="description" content="Nacos集群搭建 | 运维人">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<meta name="description" content="一、缘由我司一个系统中用到mongodb 3.2.1版本，但是漏扫软件扫出来有重大漏洞，需要打补丁（升级版本）。 部署3.2的最后一个版本3.2.22后，经扫描没有漏洞，同时业务系统也支持3.2.22版本，决定采用mongodb 3.2.22版本。 环境：Centos 7.6 + rpm包方式安装的mongo 3.2.1 二、热升级注意：热升级仅支持小版本的升级，跨大版本的升级，请严格按照停机备份">
+<meta name="description" content="一、需求初创公司，资源和资金有限，无法搭建日志系统。 系统上线初期，开发人员需要经常查看生产日志来定位bug，且不能给予开发人员生产服务器的权限。 需要一个简单、安全、轻量级、不耗费资源的方法来满足查看日志的需求。 二、方案经过调研，使用基于SSH服务的SFTP和Mount挂载本机目录的方法，可以满足需求。 此方法，可以进行严格的权限控制：只读、不能访问其他目录、不能登录服务器。 三、实施步骤1、">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Mongodb小版本热升级">
-<meta property="og:url" content="https://www.langxw.com/2021/04/14/Mongodb%E5%B0%8F%E7%89%88%E6%9C%AC%E7%83%AD%E5%8D%87%E7%BA%A7/index.html">
+<meta property="og:title" content="基于SSH服务的SFTP应用">
+<meta property="og:url" content="https://www.langxw.com/2021/04/13/%E5%9F%BA%E4%BA%8ESSH%E6%9C%8D%E5%8A%A1%E7%9A%84SFTP%E5%BA%94%E7%94%A8/index.html">
 <meta property="og:site_name" content="运维人">
-<meta property="og:description" content="一、缘由我司一个系统中用到mongodb 3.2.1版本，但是漏扫软件扫出来有重大漏洞，需要打补丁（升级版本）。 部署3.2的最后一个版本3.2.22后，经扫描没有漏洞，同时业务系统也支持3.2.22版本，决定采用mongodb 3.2.22版本。 环境：Centos 7.6 + rpm包方式安装的mongo 3.2.1 二、热升级注意：热升级仅支持小版本的升级，跨大版本的升级，请严格按照停机备份">
+<meta property="og:description" content="一、需求初创公司，资源和资金有限，无法搭建日志系统。 系统上线初期，开发人员需要经常查看生产日志来定位bug，且不能给予开发人员生产服务器的权限。 需要一个简单、安全、轻量级、不耗费资源的方法来满足查看日志的需求。 二、方案经过调研，使用基于SSH服务的SFTP和Mount挂载本机目录的方法，可以满足需求。 此方法，可以进行严格的权限控制：只读、不能访问其他目录、不能登录服务器。 三、实施步骤1、">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2021-04-14T02:10:43.000Z">
-<meta property="article:modified_time" content="2021-04-14T02:11:44.561Z">
+<meta property="article:published_time" content="2021-04-13T12:48:55.000Z">
+<meta property="article:modified_time" content="2021-04-13T12:50:14.357Z">
 <meta property="article:author" content="运维人">
-<meta property="article:tag" content="mongodb">
+<meta property="article:tag" content="FTP">
+<meta property="article:tag" content="SFTP">
 <meta name="twitter:card" content="summary">
 
 
