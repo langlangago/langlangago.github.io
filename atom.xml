@@ -6,7 +6,7 @@
   <link href="https://www.langxw.com/atom.xml" rel="self"/>
   
   <link href="https://www.langxw.com/"/>
-  <updated>2021-04-14T07:43:48.322Z</updated>
+  <updated>2021-05-19T06:25:48.390Z</updated>
   <id>https://www.langxw.com/</id>
   
   <author>
@@ -15,6 +15,85 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>命令行查看SSL证书的有效期和组织</title>
+    <link href="https://www.langxw.com/2021/05/19/%E5%91%BD%E4%BB%A4%E8%A1%8C%E6%9F%A5%E7%9C%8BSSL%E8%AF%81%E4%B9%A6%E7%9A%84%E6%9C%89%E6%95%88%E6%9C%9F%E5%92%8C%E7%BB%84%E7%BB%87/"/>
+    <id>https://www.langxw.com/2021/05/19/%E5%91%BD%E4%BB%A4%E8%A1%8C%E6%9F%A5%E7%9C%8BSSL%E8%AF%81%E4%B9%A6%E7%9A%84%E6%9C%89%E6%95%88%E6%9C%9F%E5%92%8C%E7%BB%84%E7%BB%87/</id>
+    <published>2021-05-19T06:24:19.000Z</published>
+    <updated>2021-05-19T06:25:48.390Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="一、缘由"><a href="#一、缘由" class="headerlink" title="一、缘由"></a>一、缘由</h2><p>生产某个SSL证书要到期需要更换，生产环境又特别复杂：多证书+证书名字不明确（ssl.pem），不敢随意更换，只能先核对好组织名字和到期时间后，再进行更换。</p><h2 id="二、解决办法"><a href="#二、解决办法" class="headerlink" title="二、解决办法"></a>二、解决办法</h2><h3 id="1、全盘搜索证书"><a href="#1、全盘搜索证书" class="headerlink" title="1、全盘搜索证书"></a>1、全盘搜索证书</h3><p><code>sudo find / -name &#39;*.key&#39;</code></p><h3 id="2、确认Nginx配置的证书"><a href="#2、确认Nginx配置的证书" class="headerlink" title="2、确认Nginx配置的证书"></a>2、确认Nginx配置的证书</h3><p><code>grep pem /etc/nginx/conf.d/default.conf</code></p><h3 id="3、查看证书的组织"><a href="#3、查看证书的组织" class="headerlink" title="3、查看证书的组织"></a>3、查看证书的组织</h3><p><code>openssl x509 -in ssl.pem -noout -text|grep &#39;CN&#39;</code></p><h3 id="4、查看证书的到期时间"><a href="#4、查看证书的到期时间" class="headerlink" title="4、查看证书的到期时间"></a>4、查看证书的到期时间</h3><p><code>openssl x509 -in ssl.pem -noout -dates</code></p><h3 id="5、批量查看证书到期时间"><a href="#5、批量查看证书到期时间" class="headerlink" title="5、批量查看证书到期时间"></a>5、批量查看证书到期时间</h3><p><code>ls  /ssl/ |grep -e &#39;pem$&#39;| xargs -I &#123;&#125; openssl x509 -in &#123;&#125; -noout -dates</code></p><p>xargs的参数-I 用来指定一个替换字符串{}，表示字符串{}会被前面的输出替换掉</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h2 id=&quot;一、缘由&quot;&gt;&lt;a href=&quot;#一、缘由&quot; class=&quot;headerlink&quot; title=&quot;一、缘由&quot;&gt;&lt;/a&gt;一、缘由&lt;/h2&gt;&lt;p&gt;生产某个SSL证书要到期需要更换，生产环境又特别复杂：多证书+证书名字不明确（ssl.pem），不敢随意更换，只能先核对好组</summary>
+      
+    
+    
+    
+    <category term="脚本" scheme="https://www.langxw.com/categories/%E8%84%9A%E6%9C%AC/"/>
+    
+    <category term="命令行" scheme="https://www.langxw.com/categories/%E8%84%9A%E6%9C%AC/%E5%91%BD%E4%BB%A4%E8%A1%8C/"/>
+    
+    
+    <category term="shell" scheme="https://www.langxw.com/tags/shell/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>命令行获取公网IP地址</title>
+    <link href="https://www.langxw.com/2021/05/19/%E5%91%BD%E4%BB%A4%E8%A1%8C%E8%8E%B7%E5%8F%96%E5%85%AC%E7%BD%91IP%E5%9C%B0%E5%9D%80/"/>
+    <id>https://www.langxw.com/2021/05/19/%E5%91%BD%E4%BB%A4%E8%A1%8C%E8%8E%B7%E5%8F%96%E5%85%AC%E7%BD%91IP%E5%9C%B0%E5%9D%80/</id>
+    <published>2021-05-19T06:22:20.000Z</published>
+    <updated>2021-05-19T06:23:50.291Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="1、直接获取"><a href="#1、直接获取" class="headerlink" title="1、直接获取"></a>1、直接获取</h3><p><code>curl ip.sb</code></p><h3 id="2、获取Json格式"><a href="#2、获取Json格式" class="headerlink" title="2、获取Json格式"></a>2、获取Json格式</h3><p><code>curl https://api.ip.sb/jsonip </code></p><h3 id="3、获取地址位置信息Json"><a href="#3、获取地址位置信息Json" class="headerlink" title="3、获取地址位置信息Json"></a>3、获取地址位置信息Json</h3><p><code>curl https://api.ip.sb/geoip</code></p><h3 id="4、加上回调地址"><a href="#4、加上回调地址" class="headerlink" title="4、加上回调地址"></a>4、加上回调地址</h3><p><code>curl https://api.ip.sb/jsonip?callback=myip</code> </p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h3 id=&quot;1、直接获取&quot;&gt;&lt;a href=&quot;#1、直接获取&quot; class=&quot;headerlink&quot; title=&quot;1、直接获取&quot;&gt;&lt;/a&gt;1、直接获取&lt;/h3&gt;&lt;p&gt;&lt;code&gt;curl ip.sb&lt;/code&gt;&lt;/p&gt;
+&lt;h3 id=&quot;2、获取Json格式&quot;&gt;&lt;a hre</summary>
+      
+    
+    
+    
+    <category term="脚本" scheme="https://www.langxw.com/categories/%E8%84%9A%E6%9C%AC/"/>
+    
+    <category term="命令行" scheme="https://www.langxw.com/categories/%E8%84%9A%E6%9C%AC/%E5%91%BD%E4%BB%A4%E8%A1%8C/"/>
+    
+    
+    <category term="shell" scheme="https://www.langxw.com/tags/shell/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Nginx反向代理时端口丢失的解决</title>
+    <link href="https://www.langxw.com/2021/05/19/Nginx%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E6%97%B6%E7%AB%AF%E5%8F%A3%E4%B8%A2%E5%A4%B1%E7%9A%84%E8%A7%A3%E5%86%B3/"/>
+    <id>https://www.langxw.com/2021/05/19/Nginx%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E6%97%B6%E7%AB%AF%E5%8F%A3%E4%B8%A2%E5%A4%B1%E7%9A%84%E8%A7%A3%E5%86%B3/</id>
+    <published>2021-05-19T06:20:11.000Z</published>
+    <updated>2021-05-19T06:21:53.151Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="一、缘由"><a href="#一、缘由" class="headerlink" title="一、缘由"></a>一、缘由</h2><p>nginx有时候并不像apache那样智能，对于redirect location的处理尤为惨淡，几乎只能用户手工处理非标准端口的问题。</p><p>比如，因为种种原因，nginx并不能监听在80端口，或者外部通过NAT方式将请求丢给nginx，外部地址并不是标准http(s)端口（非80和443端口），此时nginx并不能美好的处理这些重定向。发生重定向的时候会丢失端口。</p><p>例如：Nginx监听非80端口，访问欢迎页面时应该是重定向到登录页面，在这个重定向的过程中端口丢失了。</p><h2 id="二、解决办法"><a href="#二、解决办法" class="headerlink" title="二、解决办法"></a>二、解决办法</h2><p>一般是在将反向代理配置在location中，以匹配不同代理规则的需要。</p><p>经实践，以下办法都可以实现，三选一即可，优先选择1，再者选择2。</p><pre><code class="shell">1、 proxy_set_header Host $host:$server_port; （跟版本有关系，我的失效）2、 proxy_set_header Host $http_host;（跟版本有关系，我的失效）3、 proxy_set_header Host $host:11011;（直接强制注入端口号，亲测有效）</code></pre>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h2 id=&quot;一、缘由&quot;&gt;&lt;a href=&quot;#一、缘由&quot; class=&quot;headerlink&quot; title=&quot;一、缘由&quot;&gt;&lt;/a&gt;一、缘由&lt;/h2&gt;&lt;p&gt;nginx有时候并不像apache那样智能，对于redirect location的处理尤为惨淡，几乎只能用户手工处理非标准</summary>
+      
+    
+    
+    
+    <category term="中间件" scheme="https://www.langxw.com/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/"/>
+    
+    <category term="Nginx" scheme="https://www.langxw.com/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/Nginx/"/>
+    
+    
+    <category term="nginx" scheme="https://www.langxw.com/tags/nginx/"/>
+    
+  </entry>
   
   <entry>
     <title>Python制作Exce报表并打包</title>
@@ -492,92 +571,6 @@
     <category term="ubuntu" scheme="https://www.langxw.com/tags/ubuntu/"/>
     
     <category term="系统升级" scheme="https://www.langxw.com/tags/%E7%B3%BB%E7%BB%9F%E5%8D%87%E7%BA%A7/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Ubuntu新增SWAP和调整SWAP大小</title>
-    <link href="https://www.langxw.com/2021/02/02/Ubuntu%E6%96%B0%E5%A2%9ESWAP%E5%92%8C%E8%B0%83%E6%95%B4SWAP%E5%A4%A7%E5%B0%8F/"/>
-    <id>https://www.langxw.com/2021/02/02/Ubuntu%E6%96%B0%E5%A2%9ESWAP%E5%92%8C%E8%B0%83%E6%95%B4SWAP%E5%A4%A7%E5%B0%8F/</id>
-    <published>2021-02-02T02:13:23.000Z</published>
-    <updated>2021-02-02T02:14:13.391Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="一、新增SWAP分区"><a href="#一、新增SWAP分区" class="headerlink" title="一、新增SWAP分区"></a>一、新增SWAP分区</h2><ol><li><p>查看内存情况：<code>free -m</code></p></li><li><p>创建一个新的swapfile文件<br><code>sudo dd if=/dev/zero of=swapfile bs=1M count=2048</code>,<br>创建2G的swap，大小为bs*count</p></li><li><p>把生成的文件转换成 Swap 文件 :<br><code>sudo mkswap swapfile</code></p></li><li><p>开启新的swap:<br><code>sudo swapon swap</code></p></li><li><p>激活 Swap 文件:<br><code>sudo swapon swapfile</code></p></li><li><p>查看swap内存:<br><code>free -m</code></p></li><li><p>设置开机启动</p><pre><code class="bash">cp /etc/fstab /etc/fstab.bak echo &#39;/swapfile none swap sw 0 0&#39; | sudo tee -a /etc/fstab</code></pre></li></ol>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h2 id=&quot;一、新增SWAP分区&quot;&gt;&lt;a href=&quot;#一、新增SWAP分区&quot; class=&quot;headerlink&quot; title=&quot;一、新增SWAP分区&quot;&gt;&lt;/a&gt;一、新增SWAP分区&lt;/h2&gt;&lt;ol&gt;
-&lt;li&gt;&lt;p&gt;查看内存情况：&lt;code&gt;free -m&lt;/code&gt;&lt;/</summary>
-      
-    
-    
-    
-    <category term="系统" scheme="https://www.langxw.com/categories/%E7%B3%BB%E7%BB%9F/"/>
-    
-    <category term="Ubuntu" scheme="https://www.langxw.com/categories/%E7%B3%BB%E7%BB%9F/Ubuntu/"/>
-    
-    
-    <category term="ubuntu" scheme="https://www.langxw.com/tags/ubuntu/"/>
-    
-    <category term="swap" scheme="https://www.langxw.com/tags/swap/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>VPS搭建SS影梭服务端并优化加速Shadowsocks+BBR</title>
-    <link href="https://www.langxw.com/2021/02/02/VPS%E6%90%AD%E5%BB%BASS%E5%BD%B1%E6%A2%AD%E6%9C%8D%E5%8A%A1%E7%AB%AF%E5%B9%B6%E4%BC%98%E5%8C%96%E5%8A%A0%E9%80%9FShadowsocks-BBR/"/>
-    <id>https://www.langxw.com/2021/02/02/VPS%E6%90%AD%E5%BB%BASS%E5%BD%B1%E6%A2%AD%E6%9C%8D%E5%8A%A1%E7%AB%AF%E5%B9%B6%E4%BC%98%E5%8C%96%E5%8A%A0%E9%80%9FShadowsocks-BBR/</id>
-    <published>2021-02-02T02:10:31.000Z</published>
-    <updated>2021-03-16T12:00:35.018Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="一、缘由："><a href="#一、缘由：" class="headerlink" title="一、缘由："></a>一、缘由：</h2><p>　　之前自己花钱买了一年的SS影梭用来FQ，小200大洋，网速还不好，不稳定，瞬间感觉花了冤枉钱。这次借着公司</p><p>打算搞自己的VPN机会，买了个VPS，搭了个Shadowsocks服务端，并安装了加速器BBR。经过youtube带宽图测试，高清HD无压力。</p><p><strong>环境：Centos6.9 + Shadowsocks 2.8.2 (Python) +  Google TCP BBR 拥塞控制算法。</strong> <strong>VPS服务商 Vultr</strong></p><h2 id="二、解决办法："><a href="#二、解决办法：" class="headerlink" title="二、解决办法："></a>二、解决办法：</h2><h3 id="1、购买VPS-约等于云主机"><a href="#1、购买VPS-约等于云主机" class="headerlink" title="1、购买VPS (约等于云主机)"></a>1、购买VPS (约等于云主机)</h3><p>Vultr注册账号并充值后，新建VPS机器，选择日本地区机房和Centos6系统。（选日本是因为日本近，选Centos6 是因为内核升级和匹配方便和操作顺手） </p><h3 id="2、安装并配置Shadowsocks"><a href="#2、安装并配置Shadowsocks" class="headerlink" title="2、安装并配置Shadowsocks"></a>2、安装并配置Shadowsocks</h3><p>由于SS本身就是一个Python项目，这里就推荐使用最简单的Python版本。拿到服务器的IP和密码后，SSH到服务器上，已root用户执行如下命令。</p><p>1）服务端安装（Centos）：</p><pre><code class="bash">yum install python-setuptools &amp;&amp; easy_install pippip install shadowsocks</code></pre><p>安装加密包： pip install M2Crypto</p><p>2）配置SS配置文件</p><p>新建文件/etc/shadowsocks.json并写入以下内容：</p><pre><code class="bash">&#123;    &quot;server&quot;:&quot;my_server_ip&quot;,    &quot;server_port&quot;:12345,    &quot;local_address&quot;: &quot;127.0.0.1&quot;,    &quot;local_port&quot;:1080,    &quot;password&quot;:&quot;my_password&quot;,    &quot;timeout&quot;:300,    &quot;method&quot;:&quot;aes-256-cfb&quot;,&#125;</code></pre><p>my_server_ip 写服务器外网IP或者0.0.0.0，服务器端口号可以随意（大于1024即可），本地端口默认1080（socks5的国际惯例），</p><p>加密方式推荐asc-256-cfb安全性较高，但其他加密方式也可以。SS认证靠的是端口和密码的匹配，故可为不同的用户分配不同的端口和密码。</p><p>多用户模式配置：</p><pre><code class="bash">&#123;    &quot;server&quot;: &quot;0.0.0.0&quot;,    &quot;port_password&quot;: &#123;        &quot;8381&quot;: &quot;foobar1&quot;,        &quot;8382&quot;: &quot;foobar2&quot;,        &quot;8383&quot;: &quot;foobar3&quot;,        &quot;8384&quot;: &quot;foobar4&quot;    &#125;,    &quot;timeout&quot;: 300,    &quot;method&quot;: &quot;aes-256-cfb&quot;&#125;</code></pre><p>3）启动和停止</p><p>为了省事，先关闭防火墙 :</p><p>services iptables stop</p><p>启动SS：</p><p>ssserver -c /etc/shadowsocks.json -d start</p><p>停止SS：</p><p>ssserver -c /etc/shadowsocks.json -d stop</p><p>注意：安全起见，不建议关闭防火墙，写入让SS端口通过的防火墙规则即可。</p><h3 id="3、安装加速器Google-TCP-BBR"><a href="#3、安装加速器Google-TCP-BBR" class="headerlink" title="3、安装加速器Google TCP BBR"></a>3、安装加速器Google TCP BBR</h3><p>Google 开源了其 TCP BBR 拥塞控制算法，并提交到了 Linux 内核，最新的 4.11 版内核已经用上了该算法。根据以往的传统，Google 总是先在自家的</p><p>生产环境上线运用后，才会将代码开源，此次也不例外。根据实地测试，在部署了最新版内核并开启了TCP BBR 的机器上，网速甚至可以提升好几个数量级。</p><p>谷歌出品，必属精品！</p><p><strong>使用方法：</strong></p><p>root用户登录，运行以下命令：</p><pre><code class="bash">wget --no-check-certificate https://github.com/teddysun/across/raw/master/bbr.shchmod +x bbr.sh./bbr.sh</code></pre><p>安装完成后，脚本会提示需要重启 VPS，输入 y 并回车后重启。<br>重启完成后，进入 VPS，验证一下是否成功安装最新内核并开启 TCP BBR，输入以下命令：</p><pre><code class="bash">uname -r</code></pre><p>查看内核版本，含有 4.11 就表示 OK 了</p><pre><code class="bash">sysctl net.ipv4.tcp_available_congestion_control</code></pre><p>返回值一般为：net.ipv4.tcp_available_congestion_control = bbr cubic reno</p><pre><code class="bash">sysctl net.ipv4.tcp_congestion_control</code></pre><p>返回值一般为：net.ipv4.tcp_congestion_control = bbr</p><pre><code class="bash">sysctl net.core.default_qdisc</code></pre><p>返回值一般为：net.core.default_qdisc = fq</p><pre><code class="bash">lsmod | grep bbr</code></pre><p>返回值有 tcp_bbr 模块即说明bbr已启动。   </p><p>只要最后一步BBR模块启动成功即可，其他返回值可能有出入。</p><h2 id="三、VPN和SS对比"><a href="#三、VPN和SS对比" class="headerlink" title="三、VPN和SS对比:"></a>三、VPN和SS对比:</h2><p><img src="https://s2.ax1x.com/2019/05/16/EH4ONn.png"></p><h2 id="四、附录："><a href="#四、附录：" class="headerlink" title="四、附录："></a>四、附录：</h2><p>1、<a href="https://teddysun.com/489.html">BBR安装</a></p><p>2、<a href="http://www.vultryouhui.com/uncategorized/vultrdajiananzhuangvpnpptpjiaocheng.html">Vultr安装PPTP VPN</a></p><p>3、<a href="https://wenku.baidu.com/view/1b72f809da38376baf1faed2.html%20">VPN、SSH、SHADOWSCOKS 傻瓜图解</a></p><p>3、<a href="https://www.vultr.com/?ref=7167847">Vultr官网买送活动地址</a></p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h2 id=&quot;一、缘由：&quot;&gt;&lt;a href=&quot;#一、缘由：&quot; class=&quot;headerlink&quot; title=&quot;一、缘由：&quot;&gt;&lt;/a&gt;一、缘由：&lt;/h2&gt;&lt;p&gt;　　之前自己花钱买了一年的SS影梭用来FQ，小200大洋，网速还不好，不稳定，瞬间感觉花了冤枉钱。这次借着公司&lt;/p</summary>
-      
-    
-    
-    
-    <category term="工具" scheme="https://www.langxw.com/categories/%E5%B7%A5%E5%85%B7/"/>
-    
-    <category term="翻墙" scheme="https://www.langxw.com/categories/%E5%B7%A5%E5%85%B7/%E7%BF%BB%E5%A2%99/"/>
-    
-    
-    <category term="shadowsockets" scheme="https://www.langxw.com/tags/shadowsockets/"/>
-    
-    <category term="bbr" scheme="https://www.langxw.com/tags/bbr/"/>
-    
-    <category term="vultr" scheme="https://www.langxw.com/tags/vultr/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>VSCA发邮件配置</title>
-    <link href="https://www.langxw.com/2021/02/02/VSCA%E5%8F%91%E9%82%AE%E4%BB%B6%E9%85%8D%E7%BD%AE/"/>
-    <id>https://www.langxw.com/2021/02/02/VSCA%E5%8F%91%E9%82%AE%E4%BB%B6%E9%85%8D%E7%BD%AE/</id>
-    <published>2021-02-02T02:08:20.000Z</published>
-    <updated>2021-02-02T02:09:37.860Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="一、配置前提："><a href="#一、配置前提：" class="headerlink" title="一、配置前提："></a>一、配置前提：</h2><p>需要在警报定义那里，选择发邮件告警，并填写邮件地址（多个邮件地址用，隔开）</p><h2 id="二、发邮件方法："><a href="#二、发邮件方法：" class="headerlink" title="二、发邮件方法："></a>二、发邮件方法：</h2><h3 id="1、使用操作系统sendmail程序发邮件"><a href="#1、使用操作系统sendmail程序发邮件" class="headerlink" title="1、使用操作系统sendmail程序发邮件"></a>1、使用操作系统sendmail程序发邮件</h3><ol><li>使用命令行确认发邮件是否成功 <code>echo &quot;VSCA Mail Test&quot;| sendmail -s &quot;Test&quot; langxw@efushui.com</code></li><li>如果不成功，查看系统日志，看问题出在哪里。</li><li>如果成功，那么VSCA将会调用操作系统命令发邮件，可设置并触发一个告警事件进行测试（查系统日志）。</li></ol><h3 id="2、使用smtp调用外部邮件服务器发邮件"><a href="#2、使用smtp调用外部邮件服务器发邮件" class="headerlink" title="2、使用smtp调用外部邮件服务器发邮件"></a>2、使用smtp调用外部邮件服务器发邮件</h3><ol><li>在Vcenter Server - 管理 -  设置 - 常规里面设置SMTP服务器和发件人地址，在高级设置里设置mail的用户名和密码。</li><li>目前暂时没有成功发送邮件，暂时不知道问题出在哪。有报错，具体看系统日志。</li></ol><h2 id="三、参考："><a href="#三、参考：" class="headerlink" title="三、参考："></a>三、参考：</h2><ol><li><a href="https://blog.csdn.net/xiaoxiao__cc/article/details/81561272">Esxi6.5报警</a></li></ol>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h2 id=&quot;一、配置前提：&quot;&gt;&lt;a href=&quot;#一、配置前提：&quot; class=&quot;headerlink&quot; title=&quot;一、配置前提：&quot;&gt;&lt;/a&gt;一、配置前提：&lt;/h2&gt;&lt;p&gt;需要在警报定义那里，选择发邮件告警，并填写邮件地址（多个邮件地址用，隔开）&lt;/p&gt;
-&lt;h2 id=&quot;</summary>
-      
-    
-    
-    
-    <category term="虚拟化" scheme="https://www.langxw.com/categories/%E8%99%9A%E6%8B%9F%E5%8C%96/"/>
-    
-    <category term="VMware" scheme="https://www.langxw.com/categories/%E8%99%9A%E6%8B%9F%E5%8C%96/VMware/"/>
-    
-    
-    <category term="vsca" scheme="https://www.langxw.com/tags/vsca/"/>
     
   </entry>
   

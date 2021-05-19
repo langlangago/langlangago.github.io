@@ -2,23 +2,21 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>运维人</title>
-  <meta name="keywords" content="">
-  <meta name="description" content="运维人">
+  <title>命令行获取公网IP地址 | 运维人</title>
+  <meta name="keywords" content=" shell ">
+  <meta name="description" content="命令行获取公网IP地址 | 运维人">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<meta name="description" content="一、缘由在公司报表系统没有出来之前，每日运营数据的需求由运维或者DBA查数据库手动拉取，徒增工作量。 故考虑做一个exe文件，让产品童鞋点一下就自动生成一个包含昨日的数据的Excel表格，省心省力。 二、环境Win10 + Pycharm + Python3.7 + pymysql + openpyxl + pyinstaller 说明：  因为办公环境是windows，如果是Linux、Mac则">
+<meta name="description" content="一、缘由生产某个SSL证书要到期需要更换，生产环境又特别复杂：多证书+证书名字不明确（ssl.pem），不敢随意更换，只能先核对好组织名字和到期时间后，再进行更换。 二、解决办法1、全盘搜索证书sudo find &#x2F; -name &#39;*.key&#39; 2、确认Nginx配置的证书grep pem &#x2F;etc&#x2F;nginx&#x2F;conf.d&#x2F;default.conf 3、查看证书的组织openss">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Python制作Exce报表并打包">
-<meta property="og:url" content="https://www.langxw.com/2021/04/14/Python%E5%88%B6%E4%BD%9CExce%E6%8A%A5%E8%A1%A8%E5%B9%B6%E6%89%93%E5%8C%85/index.html">
+<meta property="og:title" content="命令行查看SSL证书的有效期和组织">
+<meta property="og:url" content="https://www.langxw.com/2021/05/19/%E5%91%BD%E4%BB%A4%E8%A1%8C%E6%9F%A5%E7%9C%8BSSL%E8%AF%81%E4%B9%A6%E7%9A%84%E6%9C%89%E6%95%88%E6%9C%9F%E5%92%8C%E7%BB%84%E7%BB%87/index.html">
 <meta property="og:site_name" content="运维人">
-<meta property="og:description" content="一、缘由在公司报表系统没有出来之前，每日运营数据的需求由运维或者DBA查数据库手动拉取，徒增工作量。 故考虑做一个exe文件，让产品童鞋点一下就自动生成一个包含昨日的数据的Excel表格，省心省力。 二、环境Win10 + Pycharm + Python3.7 + pymysql + openpyxl + pyinstaller 说明：  因为办公环境是windows，如果是Linux、Mac则">
+<meta property="og:description" content="一、缘由生产某个SSL证书要到期需要更换，生产环境又特别复杂：多证书+证书名字不明确（ssl.pem），不敢随意更换，只能先核对好组织名字和到期时间后，再进行更换。 二、解决办法1、全盘搜索证书sudo find &#x2F; -name &#39;*.key&#39; 2、确认Nginx配置的证书grep pem &#x2F;etc&#x2F;nginx&#x2F;conf.d&#x2F;default.conf 3、查看证书的组织openss">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2021-04-14T07:25:45.000Z">
-<meta property="article:modified_time" content="2021-04-14T07:43:48.322Z">
+<meta property="article:published_time" content="2021-05-19T06:24:19.000Z">
+<meta property="article:modified_time" content="2021-05-19T06:25:48.390Z">
 <meta property="article:author" content="运维人">
-<meta property="article:tag" content="python">
-<meta property="article:tag" content="mysql">
-<meta property="article:tag" content="excel">
+<meta property="article:tag" content="shell">
 <meta name="twitter:card" content="summary">
 
 
@@ -60,7 +58,7 @@
 
 
 <body>
-<aside class="nav mobile">
+<aside class="nav">
     <div class="nav-left">
         <a href="/"
    class="avatar_target">
@@ -186,7 +184,7 @@
     <li>
         <div class="all active" data-rel="全部文章">全部文章
             
-                <small>(36)</small>
+                <small>(39)</small>
             
         </div>
     </li>
@@ -289,7 +287,7 @@
                         <i class="fold iconfont icon-right"></i>
                         
                         数据库
-                        <small>(4)</small>
+                        <small>(5)</small>
                         
                     </div>
                     
@@ -300,7 +298,7 @@
                                         
                                         MongoDB
                                         
-                                            <small>(4
+                                            <small>(5
                                                 )</small>
                                         
                                     </div>
@@ -324,11 +322,23 @@
                         <i class="fold iconfont icon-right"></i>
                         
                         脚本
-                        <small>(2)</small>
+                        <small>(4)</small>
                         
                     </div>
                     
                         <ul class="sub hide">
+                            
+                                <li>
+                                    <div data-rel="脚本<--->命令行">
+                                        
+                                        命令行
+                                        
+                                            <small>(2
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
                             
                                 <li>
                                     <div data-rel="脚本<--->Python脚本">
@@ -345,6 +355,10 @@
                         </ul>
                     
                 </li>
+            
+        
+    
+        
             
         
     
@@ -468,18 +482,6 @@
                         <ul class="sub hide">
                             
                                 <li>
-                                    <div data-rel="中间件<--->MongoDB">
-                                        
-                                        MongoDB
-                                        
-                                            <small>(1
-                                                )</small>
-                                        
-                                    </div>
-                                    
-                                </li>
-                            
-                                <li>
                                     <div data-rel="中间件<--->Nacos">
                                         
                                         Nacos
@@ -496,7 +498,7 @@
                                         
                                         Nginx
                                         
-                                            <small>(1
+                                            <small>(2
                                                 )</small>
                                         
                                     </div>
@@ -605,10 +607,6 @@
             
         
     
-        
-            
-        
-    
 </ul>
 <div class="left-bottom">
     <div class="menus">
@@ -629,8 +627,8 @@
         
     </div>
 </div>
-<input type="hidden" id="yelog_site_posts_number" value="36">
-<input type="hidden" id="yelog_site_word_count" value="23.3k">
+<input type="hidden" id="yelog_site_posts_number" value="39">
+<input type="hidden" id="yelog_site_word_count" value="23.8k">
 <div style="display: none">
     <span id="busuanzi_value_site_uv"></span>
     <span id="busuanzi_value_site_pv"></span>
@@ -790,6 +788,10 @@
             </li>
         
             <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>shell</a>
+            </li>
+        
+            <li class="article-tag-list-item">
                 <i class="iconfont icon-tag"></i><a>ssl证书</a>
             </li>
         
@@ -835,6 +837,30 @@
 
     
     <nav id="title-list-nav">
+        
+        <a  class="全部文章 脚本 命令行 "
+           href="/2021/05/19/%E5%91%BD%E4%BB%A4%E8%A1%8C%E6%9F%A5%E7%9C%8BSSL%E8%AF%81%E4%B9%A6%E7%9A%84%E6%9C%89%E6%95%88%E6%9C%9F%E5%92%8C%E7%BB%84%E7%BB%87/"
+           data-tag="shell"
+           data-author="" >
+            <span class="post-title" title="命令行查看SSL证书的有效期和组织">命令行查看SSL证书的有效期和组织</span>
+            <span class="post-date" title="2021-05-19 14:24:19">2021/05/19</span>
+        </a>
+        
+        <a  class="全部文章 脚本 命令行 "
+           href="/2021/05/19/%E5%91%BD%E4%BB%A4%E8%A1%8C%E8%8E%B7%E5%8F%96%E5%85%AC%E7%BD%91IP%E5%9C%B0%E5%9D%80/"
+           data-tag="shell"
+           data-author="" >
+            <span class="post-title" title="命令行获取公网IP地址">命令行获取公网IP地址</span>
+            <span class="post-date" title="2021-05-19 14:22:20">2021/05/19</span>
+        </a>
+        
+        <a  class="全部文章 中间件 Nginx "
+           href="/2021/05/19/Nginx%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E6%97%B6%E7%AB%AF%E5%8F%A3%E4%B8%A2%E5%A4%B1%E7%9A%84%E8%A7%A3%E5%86%B3/"
+           data-tag="nginx"
+           data-author="" >
+            <span class="post-title" title="Nginx反向代理时端口丢失的解决">Nginx反向代理时端口丢失的解决</span>
+            <span class="post-date" title="2021-05-19 14:20:11">2021/05/19</span>
+        </a>
         
         <a  class="全部文章 脚本 Python脚本 "
            href="/2021/04/14/Python%E5%88%B6%E4%BD%9CExce%E6%8A%A5%E8%A1%A8%E5%B9%B6%E6%89%93%E5%8C%85/"
@@ -1052,7 +1078,7 @@
             <span class="post-date" title="2021-02-01 15:35:10">2021/02/01</span>
         </a>
         
-        <a  class="全部文章 中间件 MongoDB "
+        <a  class="全部文章 数据库 MongoDB "
            href="/2021/02/01/Mongodb%E5%8D%95%E5%AE%9E%E4%BE%8B%E9%83%A8%E7%BD%B2%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%96%B9%E5%BC%8F/"
            data-tag="mongodb,数据库"
            data-author="" >
@@ -1139,12 +1165,73 @@
         </div>
     </div>
 </aside>
-<div id="post" class="index">
+<div id="post">
     <div class="pjax">
-        <article class="index">
-            <div class="toc-ref">
+        <article id="post-命令行获取公网IP地址" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Why-Blog"><span class="toc-text">Why Blog</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AF%B9%E5%8D%9A%E5%AE%A2%E7%9A%84%E7%90%86%E8%A7%A3"><span class="toc-text">对博客的理解</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E4%BA%8E%E8%BF%90%E7%BB%B4%E4%BA%BA"><span class="toc-text">关于运维人</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8D%9A%E5%AE%A2%E5%B9%B3%E5%8F%B0"><span class="toc-text">博客平台</span></a></li></ol></li></ol>
+        <h1 class="article-title">命令行获取公网IP地址</h1>
+    
+    <div class="article-meta">
+        
+        
+        
+        <span class="book">
+            <i class="iconfont icon-category"></i>
+            
+            
+            <a  data-rel="脚本">脚本</a> > 
+            
+            <a  data-rel="脚本&lt;---&gt;命令行">命令行</a>
+            
+        </span>
+        
+        
+        <span class="tag">
+            <i class="iconfont icon-tag"></i>
+            
+            <a class="color1">shell</a>
+            
+        </span>
+        
+    </div>
+    <div class="article-meta">
+        
+            发布时间 : <time class="date" title='最后更新: 2021-05-19 14:23:50'>2021-05-19 14:22</time>
+        
+    </div>
+    <div class="article-meta">
+        
+        <span>字数:49</span>
+        
+        
+        <span id="busuanzi_container_page_pv">
+            阅读 :<span id="busuanzi_value_page_pv">
+                <span class="count-comment">
+                    <span class="spinner">
+                      <div class="cube1"></div>
+                      <div class="cube2"></div>
+                    </span>
+                </span>
+            </span>
+        </span>
+        
+        
+        <span class="top-comment" title="跳转至评论区">
+            <a href="#comments">
+                评论:<span class="count-comment">
+                    <span class="spinner">
+                      <div class="cube1"></div>
+                      <div class="cube2"></div>
+                    </span>
+                </span>
+            </a>
+        </span>
+        
+    </div>
+    
+    <div class="toc-ref">
+    
+        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E7%9B%B4%E6%8E%A5%E8%8E%B7%E5%8F%96"><span class="toc-text">1、直接获取</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E8%8E%B7%E5%8F%96Json%E6%A0%BC%E5%BC%8F"><span class="toc-text">2、获取Json格式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81%E8%8E%B7%E5%8F%96%E5%9C%B0%E5%9D%80%E4%BD%8D%E7%BD%AE%E4%BF%A1%E6%81%AFJson"><span class="toc-text">3、获取地址位置信息Json</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4%E3%80%81%E5%8A%A0%E4%B8%8A%E5%9B%9E%E8%B0%83%E5%9C%B0%E5%9D%80"><span class="toc-text">4、加上回调地址</span></a></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -1157,36 +1244,27 @@
     }
 </style>
 </div>
-            <h1 id="Why-Blog"><a href="#Why-Blog" class="headerlink" title="Why Blog"></a>Why Blog</h1><h2 id="对博客的理解"><a href="#对博客的理解" class="headerlink" title="对博客的理解"></a>对博客的理解</h2><p>喜欢写Blog的人，会经历三个阶段。</p>
-<blockquote>
-<p>第一阶段，刚接触Blog，觉得很新鲜，试着选择一个免费空间来写。</p>
-</blockquote>
-<blockquote>
-<p>第二阶段，发现免费空间限制太多，就自己购买域名和空间，搭建独立博客。</p>
-</blockquote>
-<blockquote>
-<p>第三阶段，觉得独立博客的管理太麻烦，最好在保留控制权的前提下，让别人来管，自己只负责写文章。</p>
-</blockquote>
-<p>我们每个人的在网络上产生的数据越来越多，这些信息是我们在互联网上存在过的痕迹，值得我们认真对待。但是它们被分散分布在各个网站上。很多时候我们很难将它们聚合在一起，而且各个网站的信息排布方式也没有办法自由控制，所以我们需要一个可以由自己主宰的空间——博客。</p>
-<p>通过博客，我们可以记录自己的生活和成长的轨迹。它不像 Twitter 那样碎片化，也不像 Facebook 那样关系化，它是私人的空间。</p>
-<h2 id="关于运维人"><a href="#关于运维人" class="headerlink" title="关于运维人"></a>关于运维人</h2><p><strong>运维人</strong> 是郎晓伟的个人站。</p>
-<p>到目前为止已经写了<code class="article_number"></code>篇文章， 共<code class="site_word_count"></code>字。</p>
-<p>本站访问人数：<code class="site_uv"></code>人次 ， 访问量：<code class="site_pv"></code>次</p>
-<h2 id="博客平台"><a href="#博客平台" class="headerlink" title="博客平台"></a>博客平台</h2><p>这个博客通过 <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a> 生成，部署在 <a target="_blank" rel="noopener" href="https://pages.github.com/">GitHub Pages</a>主题 <a target="_blank" rel="noopener" href="https://github.com/yelog/hexo-theme-3-hexo">3-hexo</a> 已经在github上开源</p>
-<p>主要功能：</p>
-<ul>
-<li>搜索支持文章标题、标签(#标签)、作者(@作者)</li>
-<li>pad/手机等移动端适配</li>
-<li>页面全局快捷键 <a target="_blank" rel="noopener" href='http://yelog.org/2017/03/24/3-hexo-shortcuts/'>3-hexo快捷键说明</a></li>
-</ul>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="1、直接获取"><a href="#1、直接获取" class="headerlink" title="1、直接获取"></a>1、直接获取</h3><p><code>curl ip.sb</code></p>
+<h3 id="2、获取Json格式"><a href="#2、获取Json格式" class="headerlink" title="2、获取Json格式"></a>2、获取Json格式</h3><p><code>curl https://api.ip.sb/jsonip </code></p>
+<h3 id="3、获取地址位置信息Json"><a href="#3、获取地址位置信息Json" class="headerlink" title="3、获取地址位置信息Json"></a>3、获取地址位置信息Json</h3><p><code>curl https://api.ip.sb/geoip</code></p>
+<h3 id="4、加上回调地址"><a href="#4、加上回调地址" class="headerlink" title="4、加上回调地址"></a>4、加上回调地址</h3><p><code>curl https://api.ip.sb/jsonip?callback=myip</code> </p>
 
-        </article>
-        
-        <p>
-            <a  class="dashang" onclick="dashangToggle()">赏</a>
-        </p>
-        
-        
+      
+       <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 lxwno.1@163.com </span>
+    </div>
+</article>
+
+
+<p>
+    <a  class="dashang" onclick="dashangToggle()">赏</a>
+</p>
+
+
+
+
     <div id="comments"></div>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
 
@@ -1208,6 +1286,13 @@
 </script>
 
 
+
+
+    
+
+
+
+
     </div>
     <div class="copyright">
         <p class="footer-entry">
@@ -1216,11 +1301,11 @@
 <p class="footer-entry">Built with <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/yelog/hexo-theme-3-hexo" target="_blank">3-hexo</a> theme</p>
 
     </div>
-</div>
-<div class="full-toc">
-    <button class="full" data-title="切换全屏 快捷键 s"><span class="min "></span></button>
+    <div class="full-toc">
+        <button class="full" data-title="切换全屏 快捷键 s"><span class="min "></span></button>
 <a class="" id="rocket" ></a>
 
+    </div>
 </div>
 
 <div class="hide_box" onclick="dashangToggle()"></div>
