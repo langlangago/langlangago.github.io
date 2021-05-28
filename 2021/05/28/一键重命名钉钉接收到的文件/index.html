@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Hello World | 运维人</title>
-  <meta name="keywords" content="">
-  <meta name="description" content="Hello World | 运维人">
+  <title>一键重命名钉钉接收到的文件 | 运维人</title>
+  <meta name="keywords" content=" python ">
+  <meta name="description" content="一键重命名钉钉接收到的文件 | 运维人">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="一、缘由生产某个SSL证书要到期需要更换，生产环境又特别复杂：多证书+证书名字不明确（ssl.pem），不敢随意更换，只能先核对好组织名字和到期时间后，再进行更换。 二、解决办法1、全盘搜索证书sudo find &#x2F; -name &#39;*.key&#39; 2、确认Nginx配置的证书grep pem &#x2F;etc&#x2F;nginx&#x2F;conf.d&#x2F;default.conf 3、查看证书的组织openss">
 <meta property="og:type" content="article">
@@ -1175,24 +1175,41 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="post-hello-world" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-一键重命名钉钉接收到的文件" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">Hello World</h1>
+        <h1 class="article-title">一键重命名钉钉接收到的文件</h1>
     
     <div class="article-meta">
         
         
         
+        <span class="book">
+            <i class="iconfont icon-category"></i>
+            
+            
+            <a  data-rel="脚本">脚本</a> > 
+            
+            <a  data-rel="脚本&lt;---&gt;Python脚本">Python脚本</a>
+            
+        </span>
+        
+        
+        <span class="tag">
+            <i class="iconfont icon-tag"></i>
+            
+            <a class="color2">python</a>
+            
+        </span>
         
     </div>
     <div class="article-meta">
         
-            发布时间 : <time class="date" title='最后更新: 2021-01-29 10:34:11'>2021-01-29 10:34</time>
+            发布时间 : <time class="date" title='最后更新: 2021-05-28 17:23:35'>2021-05-28 17:21</time>
         
     </div>
     <div class="article-meta">
         
-        <span>字数:75</span>
+        <span>字数:413</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -1222,7 +1239,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Quick-Start"><span class="toc-text">Quick Start</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Create-a-new-post"><span class="toc-text">Create a new post</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Run-server"><span class="toc-text">Run server</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Generate-static-files"><span class="toc-text">Generate static files</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Deploy-to-remote-sites"><span class="toc-text">Deploy to remote sites</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E7%BC%98%E7%94%B1"><span class="toc-text">一、缘由</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="toc-text">二、代码实现</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E5%B0%86Python%E4%BB%A3%E7%A0%81%E6%89%93%E5%8C%85%E6%88%90exe%E6%96%87%E4%BB%B6"><span class="toc-text">三、将Python代码打包成exe文件</span></a></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -1238,19 +1255,49 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><pre><code class="bash">$ hexo new &quot;My New Post&quot;
+        <h2 id="一、缘由"><a href="#一、缘由" class="headerlink" title="一、缘由"></a>一、缘由</h2><p>由于某些原因，公司的程序只能手动发版，开发本地打包好后通过钉钉发送给运维。但是钉钉接收到名字一样的文件后，会自动重命名，加上括号和数字，比如apollo-1.0.RELEASE(2).jar，这样你就需要手动处理掉后面的括号和数字。</p>
+<p>手动太麻烦，索性就用python来实现自动重名，并将python代码打包成exe程序，后将exe程序固定在任务栏。这样鼠标点一下任务栏图标，就可以实现一键重命名阿里云接收到的文件，Nice。</p>
+<h2 id="二、代码实现"><a href="#二、代码实现" class="headerlink" title="二、代码实现"></a>二、代码实现</h2><pre><code class="ptyhon">import os
+import re
+
+download_dir = &#39;C:\\Users\\Thinkpad\\Downloads&#39;
+file_dic = &#123;&#125;
+
+
+# 重命名最新的一个文件，去掉文件名的括号和数字
+# apollo-1.0.RELEASE(2).jar --&gt; apollo-1.0.RELEASE.jar
+# downloads文件夹就一个文件怎么处理。文件夹为空，就先就报错吧。
+# 如果有downloads下有文件夹，也会报错，需要调用os.rmdir()来处理。
+def delete_other_files():
+    files = os.listdir(download_dir)
+    for file in files:
+        mtime = os.stat(os.path.join(download_dir, file)).st_mtime
+        file_dic[mtime] = file
+    time_list = list(file_dic.keys())
+    max_time = max(time_list)
+    if len(file_dic) &gt; 1:
+        time_list.remove(max_time)
+        for time in time_list:
+            os.remove(os.path.join(download_dir, file_dic[time]))
+    return file_dic[max_time]
+
+
+# 如果只有一个正常的文件，不做替换，
+def rename_file(file):
+    new_name = re.sub(r&#39;\(\d+\)&#39;, &#39;&#39;, file)
+    os.chdir(download_dir)
+    os.rename(file, new_name)
+
+
+if __name__ == &#39;__main__&#39;:
+    file_name = delete_other_files()
+    # file_name = &#39;dist.zip&#39;
+    rename_file(file_name)
 </code></pre>
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><pre><code class="bash">$ hexo server
+<h2 id="三、将Python代码打包成exe文件"><a href="#三、将Python代码打包成exe文件" class="headerlink" title="三、将Python代码打包成exe文件"></a>三、将Python代码打包成exe文件</h2><p>这里使用pyinstaller模块，具体命令为：</p>
+<pre><code class="shell">pyinstaller -F -c main.py
 </code></pre>
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><pre><code class="bash">$ hexo generate
-</code></pre>
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><pre><code class="bash">$ hexo deploy
-</code></pre>
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+<p>将Python打包成exe文件的具体介绍见另一篇文章：<a href="https://www.langxw.com/2021/04/14/Python%E5%88%B6%E4%BD%9CExce%E6%8A%A5%E8%A1%A8%E5%B9%B6%E6%89%93%E5%8C%85/">Python制作Exce报表并打包</a></p>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 lxwno.1@163.com </span>
