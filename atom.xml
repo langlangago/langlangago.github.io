@@ -6,7 +6,7 @@
   <link href="https://www.langxw.com/atom.xml" rel="self"/>
   
   <link href="https://www.langxw.com/"/>
-  <updated>2021-05-28T09:23:35.847Z</updated>
+  <updated>2021-06-04T11:04:04.905Z</updated>
   <id>https://www.langxw.com/</id>
   
   <author>
@@ -15,6 +15,32 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>使用Privoxy将http代理转换成socks5代理</title>
+    <link href="https://www.langxw.com/2021/06/04/%E4%BD%BF%E7%94%A8Privoxy%E5%B0%86http%E4%BB%A3%E7%90%86%E8%BD%AC%E6%8D%A2%E6%88%90socks5%E4%BB%A3%E7%90%86/"/>
+    <id>https://www.langxw.com/2021/06/04/%E4%BD%BF%E7%94%A8Privoxy%E5%B0%86http%E4%BB%A3%E7%90%86%E8%BD%AC%E6%8D%A2%E6%88%90socks5%E4%BB%A3%E7%90%86/</id>
+    <published>2021-06-04T11:00:16.000Z</published>
+    <updated>2021-06-04T11:04:04.905Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="一、缘由"><a href="#一、缘由" class="headerlink" title="一、缘由"></a>一、缘由</h2><p>在工作电脑上（Win10系统）安装了SSR客户端，实现了浏览器的科学上网。但是呢，使用命令行（无论是cmd还是Shell）从github上拉取代码、拉取Docker镜像，依然很慢，有时候还会连接超时，被墙，很是苦恼。</p><p>最典型的场景，在使用kubeadm工具安装k8s的时候，拉取的都是google的镜像，由于被墙，压根访问不通。你当然可以指定使用阿里云镜像库，但是其他插件的安装，比如存储插件rook、网络插件weave，还是要访问被墙的镜像库，就会下载不到 ，很烦。</p><p>最一劳永逸的办法就是，搞通网络，让Shell终端或者Docker pull可以使用sockts5代理访问被墙的资源。</p><h2 id="二、思路"><a href="#二、思路" class="headerlink" title="二、思路"></a>二、思路</h2><ul><li><p>我工作电脑本地存在SSR客户端，可以翻墙，使用的是socks5协议。</p></li><li><p>一般cmd、shell、docker pull、git clone等命使用的都是http协议，可以配置http代理。</p></li><li><p>故考虑将http代理转换成socks5代理，这样命令行就能翻墙了。</p></li></ul><p>具体流程图如下：</p><pre class="mermaid">graph LR    Cmd -->|http代理| Privoxy --> |Socks5代理|SSR客户端 --> SSR服务端</pre><h2 id="三、解决办法"><a href="#三、解决办法" class="headerlink" title="三、解决办法"></a>三、解决办法</h2><h3 id="1、实验环境"><a href="#1、实验环境" class="headerlink" title="1、实验环境"></a>1、实验环境</h3><p><strong>Ubuntu16.04 + Privoxy 3.0.24 + Win10 SSR客户端</strong></p><h3 id="2、安装privoxy"><a href="#2、安装privoxy" class="headerlink" title="2、安装privoxy"></a>2、安装privoxy</h3><pre><code class="bash">sudo apt-get install privoxy</code></pre><h3 id="3、修改配置"><a href="#3、修改配置" class="headerlink" title="3、修改配置"></a>3、修改配置</h3><p>打开配置文件<code>vim  /etc/privoxy/config</code>，修改如下两处：</p><pre><code class="shell"># 如果想让其他主机使用这个代理转换，可以监听0.0.0.0listen-address  127.0.0.1:8118# 这里填写局域网内SSR客户端的IP和端口，端口默认1080。# 如果SSR客户端是在本地就写127.0.0.1:1080forward-socks5   /               192.168.101.79:1080 .</code></pre><h3 id="4、启动privoxy服务"><a href="#4、启动privoxy服务" class="headerlink" title="4、启动privoxy服务"></a>4、启动privoxy服务</h3><pre><code class="bash">sudo  service  privoxy start</code></pre><h3 id="5、设置http和https的全局代理"><a href="#5、设置http和https的全局代理" class="headerlink" title="5、设置http和https的全局代理"></a>5、设置http和https的全局代理</h3><pre><code class="bash">export http_proxy=&#39;http://127.0.0.1:8118&#39;export https_proxy=&#39;http://127.0.0.1:8118&#39;</code></pre><p><strong>注意：不建议将这个代理的环境变量写入profile文件，只建议在需要的时候在当前shell窗口写入这个变量即可。</strong></p><h3 id="6、测试"><a href="#6、测试" class="headerlink" title="6、测试"></a>6、测试</h3><p>使用wget或者curl命令访问<a href="http://www.google.com,返回正常页面内容即成功./">www.google.com，返回正常页面内容即成功。</a></p><pre><code class="bash">wget www.google.com curl www.google.com</code></pre>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h2 id=&quot;一、缘由&quot;&gt;&lt;a href=&quot;#一、缘由&quot; class=&quot;headerlink&quot; title=&quot;一、缘由&quot;&gt;&lt;/a&gt;一、缘由&lt;/h2&gt;&lt;p&gt;在工作电脑上（Win10系统）安装了SSR客户端，实现了浏览器的科学上网。但是呢，使用命令行（无论是cmd还是Shell）从</summary>
+      
+    
+    
+    
+    <category term="工具" scheme="https://www.langxw.com/categories/%E5%B7%A5%E5%85%B7/"/>
+    
+    <category term="翻墙" scheme="https://www.langxw.com/categories/%E5%B7%A5%E5%85%B7/%E7%BF%BB%E5%A2%99/"/>
+    
+    
+    <category term="privoxy" scheme="https://www.langxw.com/tags/privoxy/"/>
+    
+  </entry>
   
   <entry>
     <title>一键重命名钉钉接收到的文件</title>
@@ -542,32 +568,6 @@
     <category term="lets-encrypt" scheme="https://www.langxw.com/tags/lets-encrypt/"/>
     
     <category term="ssl证书" scheme="https://www.langxw.com/tags/ssl%E8%AF%81%E4%B9%A6/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Nginx利用源升级</title>
-    <link href="https://www.langxw.com/2021/02/02/Nginx%E5%88%A9%E7%94%A8%E6%BA%90%E5%8D%87%E7%BA%A7/"/>
-    <id>https://www.langxw.com/2021/02/02/Nginx%E5%88%A9%E7%94%A8%E6%BA%90%E5%8D%87%E7%BA%A7/</id>
-    <published>2021-02-02T02:16:55.000Z</published>
-    <updated>2021-02-02T02:18:00.392Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="二、升级步骤"><a href="#二、升级步骤" class="headerlink" title="二、升级步骤"></a>二、升级步骤</h2><h3 id="1-先添加源信任签名文件"><a href="#1-先添加源信任签名文件" class="headerlink" title="1 . 先添加源信任签名文件"></a>1 . 先添加源信任签名文件</h3><pre><code class="bash">wget http://nginx.org/keys/nginx_signing.keysudo apt-key add nginx_signing.key</code></pre><h3 id="2-编辑-etc-apt-sources-list-在最后加入"><a href="#2-编辑-etc-apt-sources-list-在最后加入" class="headerlink" title="2 . 编辑 /etc/apt/sources.list 在最后加入"></a>2 . 编辑 /etc/apt/sources.list 在最后加入</h3><pre><code class="bash">deb http://nginx.org/packages/ubuntu/ trusty nginxdeb-src http://nginx.org/packages/ubuntu/ trusty nginx</code></pre><p>其中，这个没有包含 mainline 的地址是稳定版（推荐用稳定版，当然加上 mainline 保持最新也无所谓）；</p><p>trusty 是 Ubuntu 14.04 的代号，其他版本或者系统就要自己去<a href="http://nginx.org/en/linux_packages.html#stable">http://nginx.org/en/linux_packages.html#stable</a> 看了</p><h3 id="3-可以安装了"><a href="#3-可以安装了" class="headerlink" title="3 . 可以安装了"></a>3 . 可以安装了</h3><pre><code class="bash">sudo apt-get updatesudo apt-get clean &amp;&amp; sudo apt-get install nginx</code></pre><h3 id="4-如果再次按照遇到这个错误"><a href="#4-如果再次按照遇到这个错误" class="headerlink" title="4 . 如果再次按照遇到这个错误"></a>4 . 如果再次按照遇到这个错误</h3><pre><code class="bash">Unpacking nginx (1.10.2-1~trusty) over (1.4.6-1ubuntu3.7) ...dpkg: error processing archive /var/cache/apt/archives/nginx_1.10.2-1~trusty_amd64.deb (--unpack): trying to overwrite &#39;/etc/default/nginx&#39;, which is also in package nginx-common 1.4.6-1ubuntu3.7dpkg-deb: error: subprocess paste was killed by signal (Broken pipe)</code></pre><p>可以先删除之前的版本再安装，删除之前注意备份 /etc/nginx/ 下的配置文件</p><pre><code class="bash">sudo apt-get purge nginx nginx-commonsudo apt-get clean &amp;&amp; sudo apt-get install nginx</code></pre><h3 id="5-最后把配置文件恢复（可以用-nginx-t-测试一下配置文件是否正确），然后就可以启动了"><a href="#5-最后把配置文件恢复（可以用-nginx-t-测试一下配置文件是否正确），然后就可以启动了" class="headerlink" title="5 . 最后把配置文件恢复（可以用 nginx -t 测试一下配置文件是否正确），然后就可以启动了"></a>5 . 最后把配置文件恢复（可以用 nginx -t 测试一下配置文件是否正确），然后就可以启动了</h3><pre><code class="bash">sudo service nginx start</code></pre>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h2 id=&quot;二、升级步骤&quot;&gt;&lt;a href=&quot;#二、升级步骤&quot; class=&quot;headerlink&quot; title=&quot;二、升级步骤&quot;&gt;&lt;/a&gt;二、升级步骤&lt;/h2&gt;&lt;h3 id=&quot;1-先添加源信任签名文件&quot;&gt;&lt;a href=&quot;#1-先添加源信任签名文件&quot; class=&quot;head</summary>
-      
-    
-    
-    
-    <category term="中间件" scheme="https://www.langxw.com/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/"/>
-    
-    <category term="Nginx" scheme="https://www.langxw.com/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/Nginx/"/>
-    
-    
-    <category term="nginx" scheme="https://www.langxw.com/tags/nginx/"/>
     
   </entry>
   
