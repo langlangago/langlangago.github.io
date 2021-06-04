@@ -6,7 +6,7 @@
   <link href="https://www.langxw.com/atom.xml" rel="self"/>
   
   <link href="https://www.langxw.com/"/>
-  <updated>2021-06-04T11:07:54.375Z</updated>
+  <updated>2021-06-04T11:33:32.239Z</updated>
   <id>https://www.langxw.com/</id>
   
   <author>
@@ -15,6 +15,34 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Docker添加http代理</title>
+    <link href="https://www.langxw.com/2021/06/04/Docker%E6%B7%BB%E5%8A%A0http%E4%BB%A3%E7%90%86/"/>
+    <id>https://www.langxw.com/2021/06/04/Docker%E6%B7%BB%E5%8A%A0http%E4%BB%A3%E7%90%86/</id>
+    <published>2021-06-04T11:32:02.000Z</published>
+    <updated>2021-06-04T11:33:32.239Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="一、缘由"><a href="#一、缘由" class="headerlink" title="一、缘由"></a>一、缘由</h2><p>当docker在拉取国外的镜像，并且没有国内加速源的资源，速度很慢，甚至访问不到，比如安装k8s的时候。这时候就需要添加http、https代理，来进行下载加速。</p><h2 id="二、环境"><a href="#二、环境" class="headerlink" title="二、环境"></a>二、环境</h2><ul><li>**Ubuntu16.04 + Docker 20.10.6 **</li><li><strong>适用于Debian/Ubuntu，RedHat/CentOS系统。修改配置后，会持续生效，其中的设置将覆盖docker.service中的选项</strong></li></ul><h2 id="三、步骤"><a href="#三、步骤" class="headerlink" title="三、步骤"></a>三、步骤</h2><h3 id="1、创建目录"><a href="#1、创建目录" class="headerlink" title="1、创建目录"></a>1、创建目录</h3><pre><code class="bash">mkdir -p /etc/systemd/system/docker.service.d</code></pre><h3 id="2、添加网络代理配置文件"><a href="#2、添加网络代理配置文件" class="headerlink" title="2、添加网络代理配置文件"></a>2、添加网络代理配置文件</h3><pre><code class="bash">cat &gt;&gt; a &lt;&lt; EOF[Service]Environment=&quot;HTTP_PROXY=http://proxy-addr:proxy-port/&quot; &quot;HTTPS_PROXY=http://proxy-addr:proxy-port/&quot; &quot;NO_PROXY=localhost,127.0.0.1,docker.io,yanzhe919.mirror.aliyuncs.com,99nkhzdo.mirror.aliyuncs.com,*.aliyuncs.com,*.mirror.aliyuncs.com,registry.docker-cn.com,hub.c.163.com,hub-auth.c.163.com,&quot;EOF</code></pre><p>proxy-addr为代理IP或域名；proxy-port为代理端口；NO_PROXY后面接不需要代理的仓库的域名或者IP，以英文逗号结尾。</p><p><strong>注意：如果使用privoxy将http代理转换为socks5代理，这里porxy-addr和port就要写privoxy的IP和端口，比如127.0.0.1:8118</strong></p><h3 id="3、重载配置并重启docker服务"><a href="#3、重载配置并重启docker服务" class="headerlink" title="3、重载配置并重启docker服务"></a>3、重载配置并重启docker服务</h3><pre><code class="bash">systemctl daemon-reloadsystemctl restart docker</code></pre>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h2 id=&quot;一、缘由&quot;&gt;&lt;a href=&quot;#一、缘由&quot; class=&quot;headerlink&quot; title=&quot;一、缘由&quot;&gt;&lt;/a&gt;一、缘由&lt;/h2&gt;&lt;p&gt;当docker在拉取国外的镜像，并且没有国内加速源的资源，速度很慢，甚至访问不到，比如安装k8s的时候。这时候就需要添加ht</summary>
+      
+    
+    
+    
+    <category term="虚拟化" scheme="https://www.langxw.com/categories/%E8%99%9A%E6%8B%9F%E5%8C%96/"/>
+    
+    <category term="Docker" scheme="https://www.langxw.com/categories/%E8%99%9A%E6%8B%9F%E5%8C%96/Docker/"/>
+    
+    
+    <category term="docker" scheme="https://www.langxw.com/tags/docker/"/>
+    
+    <category term="http代理" scheme="https://www.langxw.com/tags/http%E4%BB%A3%E7%90%86/"/>
+    
+  </entry>
   
   <entry>
     <title>使用Privoxy将http代理转换成socks5代理</title>
@@ -538,36 +566,6 @@
     
     
     <category term="git" scheme="https://www.langxw.com/tags/git/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Lets-encrypt免费SSL证书申请</title>
-    <link href="https://www.langxw.com/2021/02/02/Lets-encrypt%E5%85%8D%E8%B4%B9SSL%E8%AF%81%E4%B9%A6%E7%94%B3%E8%AF%B7/"/>
-    <id>https://www.langxw.com/2021/02/02/Lets-encrypt%E5%85%8D%E8%B4%B9SSL%E8%AF%81%E4%B9%A6%E7%94%B3%E8%AF%B7/</id>
-    <published>2021-02-02T02:18:38.000Z</published>
-    <updated>2021-03-16T11:59:58.551Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="一、环境准备："><a href="#一、环境准备：" class="headerlink" title="一、环境准备："></a>一、环境准备：</h2><ol><li>建议Debain操作系统，比如Ubuntu</li><li>Python 2.7以及以上版本</li><li>git</li><li>pip源修改：~/.pip/pip.conf（选做）</li></ol><h2 id="二、获取SSL证书："><a href="#二、获取SSL证书：" class="headerlink" title="二、获取SSL证书："></a>二、获取SSL证书：</h2><pre><code class="bash">git clone https://github.com/letsencrypt/letsencrypt  cd letsencrypt  sudo ./letsencrypt-auto certonly --manual --preferred-challenges dns --email 1282148721@qq.com -d fangxinpei.cn -d www.fangxinpei.cn</code></pre><p>生成证书时，验证的方法有很多。这里我们用手动指定DNS验证的方法。</p><p>介绍下相关参数：</p><ul><li>certonly，表示安装模式，Certbot 有安装模式和验证模式两种类型的插件。</li><li>–manual  表示手动安装插件，Certbot 有很多插件，不同的插件都可以申请证书，用户可以根据需要自行选择</li><li>-d 为那些主机申请证书，如果是通配符，输入 *.newyingyong.cn（可以替换为你自己的域名）</li><li>–preferred-challenges dns，使用 DNS 方式校验域名所有权</li></ul><pre><code class="bash">Saving debug log to /var/log/letsencrypt/letsencrypt.logPlugins selected: Authenticator manual, Installer NoneEnter email address (used for urgent renewal and security notices) (Enter &#39;c&#39; tocancel): ywdblog@gmail.com-------------------------------------------------------------------------------Please read the Terms of Service athttps://letsencrypt.org/documents/LE-SA-v1.2-November-15-2017.pdf. You mustagree in order to register with the ACME server athttps://acme-v02.api.letsencrypt.org/directory-------------------------------------------------------------------------------(A)gree/(C)ancel: APlugins selected: Authenticator manual, Installer NoneObtaining a new certificatePerforming the following challenges:dns-01 challenge for newyingyong.cn-------------------------------------------------------------------------------NOTE: The IP of this machine will be publicly logged as having requested thiscertificate. If you&#39;re running certbot in manual mode on a machine that is notyour server, please ensure you&#39;re okay with that.Are you OK with your IP being logged?-------------------------------------------------------------------------------(Y)es/(N)o: y</code></pre><p>上述有两个交互式的提示：</p><ul><li>是否同意 Let’s Encrypt 协议要求</li><li>询问是否对域名和机器（IP）进行绑定</li></ul><p>确认同意才能继续。</p><p>继续查看命令行的输出，非常关键</p><pre><code class="bash">-------------------------------------------------------------------------------Please deploy a DNS TXT record under the name_acme-challenge.newyingyong.cn with the following value:2_8KBE_jXH8nYZ2unEViIbW52LhIqxkg6i9mcwsRvhQBefore continuing, verify the record is deployed.-------------------------------------------------------------------------------Press Enter to ContinueWaiting for verification...Cleaning up challenges </code></pre><p>要求配置 DNS TXT 记录，从而校验域名所有权，也就是判断证书申请者是否有域名的所有权。</p><p>上面输出要求给 _acme-challenge.fangxinpei.cn 配置一条 TXT 记录，在没有确认 TXT 记录生效之前不要回车执行。</p><p>在阿里云操作DNS解析后，输入以下命令，查看TXT记录是否已经生效：</p><pre><code class="bash">$ dig  -t txt  _acme-challenge.fangxinpei.cn @8.8.8.8    ;; OPT PSEUDOSECTION:; EDNS: version: 0, flags:; udp: 512;; QUESTION SECTION:;_acme-challenge.fangxinpei.cn.        IN      TXT;; ANSWER SECTION:_acme-challenge.fangxinpei.cn.cn. 599 IN  TXT    &quot;2_8KBE_jXH8nYZ2unEViIbW52LhIqxkg6i9mcwsRvhQ&quot;</code></pre><p>确认生效后，回车执行，输出如下：</p><pre><code class="bash">IMPORTANT NOTES: - Congratulations! Your certificate and chain have been saved at:   /etc/letsencrypt/live/fangxinpei.cn/fullchain.pem   Your key file has been saved at:   /etc/letsencrypt/live/fangxinpei.cn/privkey.pem   Your cert will expire on 2019-06-09. To obtain a new or tweaked   version of this certificate in the future, simply run   letsencrypt-auto again. To non-interactively renew *all* of your   certificates, run &quot;letsencrypt-auto renew&quot; - If you like Certbot, please consider supporting our work by:   Donating to ISRG / Let&#39;s Encrypt:   https://letsencrypt.org/donate   Donating to EFF:                    https://eff.org/donate-le</code></pre><p>恭喜您，证书申请成功，证书和密钥保存在下列目录：</p><pre><code class="bash">$ tree /etc/letsencrypt/archive/fangxinpei.cn .├── cert1.pem├── chain1.pem├── fullchain1.pem└── privkey1.pem</code></pre><p>然后校验证书信息，输入如下命令：</p><pre><code class="bash">sudo openssl x509 -in  /etc/letsencrypt/archive/fangxinpei.cn/cert1.pem -noout -text </code></pre><p>关键输出如下：</p><pre><code class="bash">            X509v3 Subject Alternative Name:                 DNS:fangxinpei.cn, DNS:www.fangxinpei.cn</code></pre><p><strong>其他生成证书方式：</strong></p><pre><code class="bash">./certbot certonly --webroot -w /usr/share/nginx/html -d ubock.com -d www.ubock.com</code></pre><pre><code class="bash">./letsencrypt-auto certonly --standalone --email xxxxx@qq.com -d fangxinpei.cn -d www.fangxinpei.cn</code></pre><p>以上两种方式坑略多，不建议这么操作。</p><h2 id="三、证书的应用："><a href="#三、证书的应用：" class="headerlink" title="三、证书的应用："></a>三、证书的应用：</h2><p>在完成Let’s Encrypt证书的生成之后，我们会在”/etc/letsencrypt/live/zhaoheqiang.me/“域名目录下有4个文件就是生成的密钥证书文件(软连接)。</p><p>cert.pem  - Apache服务器端证书<br> chain.pem  - Apache根证书和中继证书<br> fullchain.pem  - Nginx所需要ssl_certificate文件<br> privkey.pem - 安全证书KEY文件</p><p>如果我们使用的Nginx环境，那就需要用到fullchain.pem和privkey.pem两个证书文件，在部署Nginx的时候需要用到。在Nginx环境中，只要将对应的ssl_certificate和ssl_certificate_key路径设置成我们生成的2个文件就可以</p><pre><code class="bash">#打开linux配置文件，找到HTTPS 443端口配置的server ssl_certificate /etc/letsencrypt/live/zhaoheqiang.me/fullchain.pem; ssl_certificate_key /etc/letsencrypt/live/zhaoheqiang.me/privkey.pem</code></pre><h2 id="四、证书续期的问题："><a href="#四、证书续期的问题：" class="headerlink" title="四、证书续期的问题："></a>四、证书续期的问题：</h2><p>Let’s Encrypt证书是有效期90天的，需要我们自己手工更新续期才可以。</p><pre><code class="bash"> ./letsencrypt-auto certonly --renew-by-default --email quiniton@163.com -d zhaoheqiang.me -d www.zhaoheqiang.me</code></pre><p>这样我们在90天内再去执行一次就可以解决续期问题，这样又可以继续使用90天。如果我们怕忘记的话也可以利用linux crontab定时执行更新任务</p><pre><code class="bash">30 4 * * 1 certbot renew --renew-hook &quot;systemctl restart nginx&quot; --quiet &gt; /dev/null 2&gt;&amp;1 &amp;</code></pre>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h2 id=&quot;一、环境准备：&quot;&gt;&lt;a href=&quot;#一、环境准备：&quot; class=&quot;headerlink&quot; title=&quot;一、环境准备：&quot;&gt;&lt;/a&gt;一、环境准备：&lt;/h2&gt;&lt;ol&gt;
-&lt;li&gt;建议Debain操作系统，比如Ubuntu&lt;/li&gt;
-&lt;li&gt;Python 2.7以及以</summary>
-      
-    
-    
-    
-    <category term="工具" scheme="https://www.langxw.com/categories/%E5%B7%A5%E5%85%B7/"/>
-    
-    <category term="免费证书" scheme="https://www.langxw.com/categories/%E5%B7%A5%E5%85%B7/%E5%85%8D%E8%B4%B9%E8%AF%81%E4%B9%A6/"/>
-    
-    
-    <category term="lets-encrypt" scheme="https://www.langxw.com/tags/lets-encrypt/"/>
-    
-    <category term="ssl证书" scheme="https://www.langxw.com/tags/ssl%E8%AF%81%E4%B9%A6/"/>
     
   </entry>
   

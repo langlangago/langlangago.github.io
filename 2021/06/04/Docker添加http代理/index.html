@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>使用Privoxy将http代理转换成socks5代理 | 运维人</title>
-  <meta name="keywords" content=" privoxy ">
-  <meta name="description" content="使用Privoxy将http代理转换成socks5代理 | 运维人">
+  <title>Docker添加http代理 | 运维人</title>
+  <meta name="keywords" content=" docker , http代理 ">
+  <meta name="description" content="Docker添加http代理 | 运维人">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="一、缘由当docker在拉取国外的镜像，并且没有国内加速源的资源，速度很慢，甚至访问不到，比如安装k8s的时候。这时候就需要添加http、https代理，来进行下载加速。 二、环境 **Ubuntu16.04 + Docker 20.10.6 ** 适用于Debian&#x2F;Ubuntu，RedHat&#x2F;CentOS系统。修改配置后，会持续生效，其中的设置将覆盖docker.service中的选项  三、">
 <meta property="og:type" content="article">
@@ -1200,9 +1200,9 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="post-使用Privoxy将http代理转换成socks5代理" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-Docker添加http代理" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">使用Privoxy将http代理转换成socks5代理</h1>
+        <h1 class="article-title">Docker添加http代理</h1>
     
     <div class="article-meta">
         
@@ -1212,9 +1212,9 @@
             <i class="iconfont icon-category"></i>
             
             
-            <a  data-rel="工具">工具</a> > 
+            <a  data-rel="虚拟化">虚拟化</a> > 
             
-            <a  data-rel="工具&lt;---&gt;翻墙">翻墙</a>
+            <a  data-rel="虚拟化&lt;---&gt;Docker">Docker</a>
             
         </span>
         
@@ -1222,19 +1222,21 @@
         <span class="tag">
             <i class="iconfont icon-tag"></i>
             
-            <a class="color3">privoxy</a>
+            <a class="color2">docker</a>
+            
+            <a class="color2">http代理</a>
             
         </span>
         
     </div>
     <div class="article-meta">
         
-            发布时间 : <time class="date" title='最后更新: 2021-06-04 19:07:54'>2021-06-04 19:00</time>
+            发布时间 : <time class="date" title='最后更新: 2021-06-04 19:33:32'>2021-06-04 19:32</time>
         
     </div>
     <div class="article-meta">
         
-        <span>字数:535</span>
+        <span>字数:282</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -1264,7 +1266,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E7%BC%98%E7%94%B1"><span class="toc-text">一、缘由</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E6%80%9D%E8%B7%AF"><span class="toc-text">二、思路</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95"><span class="toc-text">三、解决办法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E5%AE%9E%E9%AA%8C%E7%8E%AF%E5%A2%83"><span class="toc-text">1、实验环境</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E5%AE%89%E8%A3%85privoxy"><span class="toc-text">2、安装privoxy</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81%E4%BF%AE%E6%94%B9%E9%85%8D%E7%BD%AE"><span class="toc-text">3、修改配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4%E3%80%81%E5%90%AF%E5%8A%A8privoxy%E6%9C%8D%E5%8A%A1"><span class="toc-text">4、启动privoxy服务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5%E3%80%81%E8%AE%BE%E7%BD%AEhttp%E5%92%8Chttps%E7%9A%84%E5%85%A8%E5%B1%80%E4%BB%A3%E7%90%86"><span class="toc-text">5、设置http和https的全局代理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6%E3%80%81%E6%B5%8B%E8%AF%95"><span class="toc-text">6、测试</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E7%BC%98%E7%94%B1"><span class="toc-text">一、缘由</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E7%8E%AF%E5%A2%83"><span class="toc-text">二、环境</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E6%AD%A5%E9%AA%A4"><span class="toc-text">三、步骤</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E5%88%9B%E5%BB%BA%E7%9B%AE%E5%BD%95"><span class="toc-text">1、创建目录</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E6%B7%BB%E5%8A%A0%E7%BD%91%E7%BB%9C%E4%BB%A3%E7%90%86%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-text">2、添加网络代理配置文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81%E9%87%8D%E8%BD%BD%E9%85%8D%E7%BD%AE%E5%B9%B6%E9%87%8D%E5%90%AFdocker%E6%9C%8D%E5%8A%A1"><span class="toc-text">3、重载配置并重启docker服务</span></a></li></ol></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -1280,40 +1282,22 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="一、缘由"><a href="#一、缘由" class="headerlink" title="一、缘由"></a>一、缘由</h2><p>在工作电脑上（Win10系统）安装了SSR客户端，实现了浏览器的科学上网。但是呢，使用命令行（无论是cmd还是Shell）从github上拉取代码、拉取Docker镜像，依然很慢，有时候还会连接超时，被墙，很是苦恼。</p>
-<p>最典型的场景，在使用kubeadm工具安装k8s的时候，拉取的都是google的镜像，由于被墙，压根访问不通。你当然可以指定使用阿里云镜像库，但是其他插件的安装，比如存储插件rook、网络插件weave，还是要访问被墙的镜像库，就会下载不到 ，很烦。</p>
-<p>最一劳永逸的办法就是，搞通网络，让Shell终端或者Docker pull可以使用sockts5代理访问被墙的资源。</p>
-<h2 id="二、思路"><a href="#二、思路" class="headerlink" title="二、思路"></a>二、思路</h2><ul>
-<li><p>我工作电脑本地存在SSR客户端，可以翻墙，使用的是socks5协议。</p>
-</li>
-<li><p>一般cmd、shell、docker pull、git clone等命使用的都是http协议，可以配置http代理。</p>
-</li>
-<li><p>故考虑将http代理转换成socks5代理，这样命令行就能翻墙了。</p>
-</li>
+        <h2 id="一、缘由"><a href="#一、缘由" class="headerlink" title="一、缘由"></a>一、缘由</h2><p>当docker在拉取国外的镜像，并且没有国内加速源的资源，速度很慢，甚至访问不到，比如安装k8s的时候。这时候就需要添加http、https代理，来进行下载加速。</p>
+<h2 id="二、环境"><a href="#二、环境" class="headerlink" title="二、环境"></a>二、环境</h2><ul>
+<li>**Ubuntu16.04 + Docker 20.10.6 **</li>
+<li><strong>适用于Debian/Ubuntu，RedHat/CentOS系统。修改配置后，会持续生效，其中的设置将覆盖docker.service中的选项</strong></li>
 </ul>
-<p>具体流程图如下：</p>
-<pre class="mermaid">graph LR
-    Cmd -->|http代理| Privoxy --> |Socks5代理|SSR客户端 --> SSR服务端</pre>
-
-<h2 id="三、解决办法"><a href="#三、解决办法" class="headerlink" title="三、解决办法"></a>三、解决办法</h2><h3 id="1、实验环境"><a href="#1、实验环境" class="headerlink" title="1、实验环境"></a>1、实验环境</h3><p><strong>Ubuntu16.04 + Privoxy 3.0.24 + Win10 SSR客户端</strong></p>
-<h3 id="2、安装privoxy"><a href="#2、安装privoxy" class="headerlink" title="2、安装privoxy"></a>2、安装privoxy</h3><pre><code class="bash">sudo apt-get install privoxy
+<h2 id="三、步骤"><a href="#三、步骤" class="headerlink" title="三、步骤"></a>三、步骤</h2><h3 id="1、创建目录"><a href="#1、创建目录" class="headerlink" title="1、创建目录"></a>1、创建目录</h3><pre><code class="bash">mkdir -p /etc/systemd/system/docker.service.d
 </code></pre>
-<h3 id="3、修改配置"><a href="#3、修改配置" class="headerlink" title="3、修改配置"></a>3、修改配置</h3><p>打开配置文件<code>vim  /etc/privoxy/config</code>，修改如下两处：</p>
-<pre><code class="shell"># 如果想让其他主机使用这个代理转换，可以监听0.0.0.0
-listen-address  127.0.0.1:8118
-# 这里填写局域网内SSR客户端的IP和端口，端口默认1080。
-# 如果SSR客户端是在本地就写127.0.0.1:1080
-forward-socks5   /               192.168.101.79:1080 .
+<h3 id="2、添加网络代理配置文件"><a href="#2、添加网络代理配置文件" class="headerlink" title="2、添加网络代理配置文件"></a>2、添加网络代理配置文件</h3><pre><code class="bash">cat &gt;&gt; a &lt;&lt; EOF
+[Service]
+Environment=&quot;HTTP_PROXY=http://proxy-addr:proxy-port/&quot; &quot;HTTPS_PROXY=http://proxy-addr:proxy-port/&quot; &quot;NO_PROXY=localhost,127.0.0.1,docker.io,yanzhe919.mirror.aliyuncs.com,99nkhzdo.mirror.aliyuncs.com,*.aliyuncs.com,*.mirror.aliyuncs.com,registry.docker-cn.com,hub.c.163.com,hub-auth.c.163.com,&quot;
+EOF
 </code></pre>
-<h3 id="4、启动privoxy服务"><a href="#4、启动privoxy服务" class="headerlink" title="4、启动privoxy服务"></a>4、启动privoxy服务</h3><pre><code class="bash">sudo  service  privoxy start
-</code></pre>
-<h3 id="5、设置http和https的全局代理"><a href="#5、设置http和https的全局代理" class="headerlink" title="5、设置http和https的全局代理"></a>5、设置http和https的全局代理</h3><pre><code class="bash">export http_proxy=&#39;http://127.0.0.1:8118&#39;
-export https_proxy=&#39;http://127.0.0.1:8118&#39;
-</code></pre>
-<p><strong>注意：不建议将这个代理的环境变量写入profile文件，只建议在需要的时候在当前shell窗口写入这个变量即可。</strong></p>
-<h3 id="6、测试"><a href="#6、测试" class="headerlink" title="6、测试"></a>6、测试</h3><p>使用wget或者curl命令访google.com，返回正常页面内容即成功。</p>
-<pre><code class="bash">wget www.google.com 
-curl www.google.com
+<p>proxy-addr为代理IP或域名；proxy-port为代理端口；NO_PROXY后面接不需要代理的仓库的域名或者IP，以英文逗号结尾。</p>
+<p><strong>注意：如果使用privoxy将http代理转换为socks5代理，这里porxy-addr和port就要写privoxy的IP和端口，比如127.0.0.1:8118</strong></p>
+<h3 id="3、重载配置并重启docker服务"><a href="#3、重载配置并重启docker服务" class="headerlink" title="3、重载配置并重启docker服务"></a>3、重载配置并重启docker服务</h3><pre><code class="bash">systemctl daemon-reload
+systemctl restart docker
 </code></pre>
 
       
