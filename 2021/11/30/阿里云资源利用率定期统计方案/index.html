@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>基于SSH服务的SFTP应用 | 运维人</title>
-  <meta name="keywords" content=" FTP , SFTP ">
-  <meta name="description" content="基于SSH服务的SFTP应用 | 运维人">
+  <title>阿里云资源利用率定期统计方案 | 运维人</title>
+  <meta name="keywords" content=" 方案 , 规范 ">
+  <meta name="description" content="阿里云资源利用率定期统计方案 | 运维人">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="一、目标为提高阿里云资源利用率，运维会定期对阿里云资源进行资源使用情况统计，根据不同指标阈值来初步判断资源是否属于低利用率状态。 每次统计后形成输出文档，而后根据文档与相关负责人进行沟通后，进行服务下线或者服务合并操作，以提高资源利用率，节省费用。 二、指标1、ECS指标   指标序号 指标名称 采样规则 计算规则 判断阈值    1 CPU使用率 采样间隔为900s，采样数值为平均值，1天会取到">
 <meta property="og:type" content="article">
@@ -1266,9 +1266,9 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="post-基于SSH服务的SFTP应用" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-阿里云资源利用率定期统计方案" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">基于SSH服务的SFTP应用</h1>
+        <h1 class="article-title">阿里云资源利用率定期统计方案</h1>
     
     <div class="article-meta">
         
@@ -1278,9 +1278,7 @@
             <i class="iconfont icon-category"></i>
             
             
-            <a  data-rel="工具">工具</a> > 
-            
-            <a  data-rel="工具&lt;---&gt;FTP">FTP</a>
+            <a  data-rel="方案">方案</a>
             
         </span>
         
@@ -1288,21 +1286,21 @@
         <span class="tag">
             <i class="iconfont icon-tag"></i>
             
-            <a class="color4">FTP</a>
+            <a class="color3">方案</a>
             
-            <a class="color5">SFTP</a>
+            <a class="color3">规范</a>
             
         </span>
         
     </div>
     <div class="article-meta">
         
-            发布时间 : <time class="date" title='最后更新: 2021-04-13 20:50:14'>2021-04-13 20:48</time>
+            发布时间 : <time class="date" title='最后更新: 2021-11-30 18:08:42'>2021-11-30 18:07</time>
         
     </div>
     <div class="article-meta">
         
-        <span>字数:823</span>
+        <span>字数:1k</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -1332,7 +1330,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E9%9C%80%E6%B1%82"><span class="toc-text">一、需求</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E6%96%B9%E6%A1%88"><span class="toc-text">二、方案</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E5%AE%9E%E6%96%BD%E6%AD%A5%E9%AA%A4"><span class="toc-text">三、实施步骤</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E6%96%B0%E5%BB%BA%E7%94%A8%E5%81%9ASFTP%E7%9A%84%E7%94%A8%E6%88%B7"><span class="toc-text">1、新建用做SFTP的用户</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E6%8E%A7%E5%88%B6%E6%9D%83%E9%99%90"><span class="toc-text">2、控制权限</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81%E4%BF%AE%E6%94%B9sshd%E9%85%8D%E7%BD%AE"><span class="toc-text">3、修改sshd配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4%E3%80%81%E9%87%8D%E5%90%AFsshd"><span class="toc-text">4、重启sshd</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5%E3%80%81%E4%BD%BF%E7%94%A8mount%E6%8C%82%E8%BD%BD%E6%97%A5%E5%BF%97%E6%96%87%E4%BB%B6"><span class="toc-text">5、使用mount挂载日志文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6%E3%80%81%E9%AA%8C%E8%AF%81"><span class="toc-text">6、验证</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E5%85%B6%E4%BB%96"><span class="toc-text">四、其他</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E7%9B%AE%E6%A0%87"><span class="toc-text">一、目标</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E6%8C%87%E6%A0%87"><span class="toc-text">二、指标</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81ECS%E6%8C%87%E6%A0%87"><span class="toc-text">1、ECS指标</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81SLB%E6%8C%87%E6%A0%87"><span class="toc-text">2、SLB指标</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81Pod%E6%8C%87%E6%A0%87"><span class="toc-text">3、Pod指标</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81%E5%8F%82%E8%80%83%E6%8C%87%E6%A0%87"><span class="toc-text">3、参考指标</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E5%85%B7%E4%BD%93%E5%AE%9E%E6%96%BD"><span class="toc-text">三、具体实施</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81ECS%E5%AE%9E%E6%96%BD"><span class="toc-text">1、ECS实施</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81SLB%E5%AE%9E%E6%96%BD"><span class="toc-text">2、SLB实施</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81%E8%BE%93%E5%85%A5%E6%96%87%E6%A1%A3"><span class="toc-text">3、输入文档</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E8%AF%B4%E6%98%8E"><span class="toc-text">四、说明</span></a></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -1348,59 +1346,133 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="一、需求"><a href="#一、需求" class="headerlink" title="一、需求"></a>一、需求</h2><p>初创公司，资源和资金有限，无法搭建日志系统。</p>
-<p>系统上线初期，开发人员需要经常查看生产日志来定位bug，且不能给予开发人员生产服务器的权限。</p>
-<p>需要一个简单、安全、轻量级、不耗费资源的方法来满足查看日志的需求。</p>
-<h2 id="二、方案"><a href="#二、方案" class="headerlink" title="二、方案"></a>二、方案</h2><p>经过调研，使用<strong>基于SSH服务的SFTP和Mount挂载本机目录</strong>的方法，可以满足需求。</p>
-<p>此方法，可以进行严格的权限控制：只读、不能访问其他目录、不能登录服务器。</p>
-<h2 id="三、实施步骤"><a href="#三、实施步骤" class="headerlink" title="三、实施步骤"></a>三、实施步骤</h2><h3 id="1、新建用做SFTP的用户"><a href="#1、新建用做SFTP的用户" class="headerlink" title="1、新建用做SFTP的用户"></a>1、新建用做SFTP的用户</h3><pre><code class="shell">groupadd log_ro -g 2000
-useradd log_ro -u 2000 -g 2000 -d /home/log_ro -s /sbin/nologin
-</code></pre>
-<ul>
-<li>如果服务器是使用密码的登录的，就需要设置log_ro用户的密码<code>passwd log_ro</code></li>
-<li>如果是使用密钥登录的，就要为log_ro做密钥登录的相关配置，和ssh登录一样</li>
-<li>-s /sbin/nologin 控制其不能登录服务器</li>
+        <h2 id="一、目标"><a href="#一、目标" class="headerlink" title="一、目标"></a>一、目标</h2><p>为提高阿里云资源利用率，运维会定期对阿里云资源进行资源使用情况统计，根据不同指标阈值来初步判断资源是否属于低利用率状态。</p>
+<p>每次统计后形成输出文档，而后根据文档与相关负责人进行沟通后，进行服务下线或者服务合并操作，以提高资源利用率，节省费用。</p>
+<h2 id="二、指标"><a href="#二、指标" class="headerlink" title="二、指标"></a>二、指标</h2><h3 id="1、ECS指标"><a href="#1、ECS指标" class="headerlink" title="1、ECS指标"></a>1、ECS指标</h3><table>
+<thead>
+<tr>
+<th>指标序号</th>
+<th>指标名称</th>
+<th>采样规则</th>
+<th>计算规则</th>
+<th>判断阈值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>CPU使用率</td>
+<td>采样间隔为900s，采样数值为平均值，1天会取到95个平均值</td>
+<td>从每天95个平均值中取<strong>中位数</strong>，15天15个中位数取平均值，得到最终的15天内CPU使用率数值，作为最终指标</td>
+<td>小于3%</td>
+</tr>
+<tr>
+<td>2</td>
+<td>内存使用率</td>
+<td>同上</td>
+<td>同上</td>
+<td>小于10%</td>
+</tr>
+<tr>
+<td>3</td>
+<td>内网流入流量平均速率</td>
+<td>同上</td>
+<td>同上</td>
+<td>小于500kbps</td>
+</tr>
+<tr>
+<td>4</td>
+<td>负载</td>
+<td>待定</td>
+<td>待定</td>
+<td>待定</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<h3 id="2、SLB指标"><a href="#2、SLB指标" class="headerlink" title="2、SLB指标"></a>2、SLB指标</h3><table>
+<thead>
+<tr>
+<th>指标序号</th>
+<th>指标名称</th>
+<th>采样规则</th>
+<th>计算规则</th>
+<th>判断阈值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>后端异常ECS实例个数</td>
+<td>采样间隔为900s，采样数值为平均值，1天会取到95个平均值</td>
+<td>从每天95个平均值中取<strong>平均值</strong>，15天15个平局值再取平均值，得到最终的15天后端异常ECS实例个数，作为最终指标</td>
+<td>大于0</td>
+</tr>
+<tr>
+<td>2</td>
+<td>实例每秒最大并发连接数</td>
+<td>同上</td>
+<td>同上</td>
+<td>小于20</td>
+</tr>
+<tr>
+<td>3</td>
+<td>实例每秒入包数（实例每秒入包数）</td>
+<td>待定</td>
+<td>待定</td>
+<td>待定</td>
+</tr>
+</tbody></table>
+<h3 id="3、Pod指标"><a href="#3、Pod指标" class="headerlink" title="3、Pod指标"></a>3、Pod指标</h3><table>
+<thead>
+<tr>
+<th>指标序号</th>
+<th>指标名称</th>
+<th>采样规则</th>
+<th>计算规则</th>
+<th>判断阈值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>CPU利用率</td>
+<td>待定</td>
+<td>待定</td>
+<td>待定</td>
+</tr>
+<tr>
+<td>2</td>
+<td>内存使用率</td>
+<td>待定</td>
+<td>待定</td>
+<td>待定</td>
+</tr>
+</tbody></table>
+<p>鉴于目前处于容器化的初期，业务模块在容器化的时候都经过严格的人为控制，比如资源的申请、HPA自动伸缩等，并且有每天巡检来确定容器业务是否稳定、资源使用是否合理。故容器的定期资源利用率统计后期再考虑。</p>
+<h3 id="3、参考指标"><a href="#3、参考指标" class="headerlink" title="3、参考指标"></a>3、参考指标</h3><p>就近选取节假日（例如国庆7天）或者寒暑假中的15天，作为高峰期对比参考指标，主要是考虑是否有业务会有那种短周期的大波动，为服务缩容或者服务合并作参考依据。</p>
+<h2 id="三、具体实施"><a href="#三、具体实施" class="headerlink" title="三、具体实施"></a>三、具体实施</h2><p><strong>使用Python编写脚本，每隔15天跑一次（暂定15号和30号），获取分析结果，形成输出文档。</strong></p>
+<h3 id="1、ECS实施"><a href="#1、ECS实施" class="headerlink" title="1、ECS实施"></a>1、ECS实施</h3><ul>
+<li>暂定采用指标1和指标2来同时进行判定资源是否处于低负载状态，也可对CPU消耗型程序和内存消耗型程序单独进行判定。</li>
+<li>对于指标3和指标4，可以在后续精细区分的时候，进行采集和判定。</li>
+<li>判定为低负载状态的资源列入黄色名单，和相关负责人沟通后，进行业务裁撤或者合并。</li>
+<li>同时，ECS会有一个已停机状态的检测，列入已停机名单，根据情况单独处理。</li>
 </ul>
-<h3 id="2、控制权限"><a href="#2、控制权限" class="headerlink" title="2、控制权限"></a>2、控制权限</h3><p>对SFTP用户，做不能切换目录和只读的权限控制。</p>
-<p>注意：只读是针对SFTP的home目录的，对于日志的只读权限，由日志本身的权限属性进行控制。</p>
-<pre><code class="shell">chown root:log_ro /home/log_ro
-chmod 755 /home/log_ro
-</code></pre>
-<h3 id="3、修改sshd配置"><a href="#3、修改sshd配置" class="headerlink" title="3、修改sshd配置"></a>3、修改sshd配置</h3><pre><code class="shell">sed -i &quot;s/Subsystem/#Subsystem/g&quot; /etc/ssh/sshd_config
-</code></pre>
-<pre><code class="shell">cat &gt;&gt; /etc/ssh/sshd_config &lt;&lt; EOF
-
-# sftp for read log    
-Subsystem sftp internal-sftp
-UsePAM yes
-Match User log_ro
-    ChrootDirectory /home/log_ro/
-    ForceCommand internal-sftp
-    AllowTcpForwarding no
-    X11Forwarding no
-EOF    
-</code></pre>
-<p>在配置文件中， User指定了sftp的用户，ChrootDirectory指定了sftp登录后的根目录。</p>
-<p>注意：</p>
-<ul>
-<li>根目录本身所属必须是root，属组为sftp用户的属组，权限最小为755。意味着log_ro本身是不能在/home/log_ro中建立新文件、文件夹或者修改文件的。</li>
-<li>虽然ftp用户对于登录后的根目录没有写权限，但是我们可以用root新建一个文件夹，比如叫upload，然后把这个文件夹所属改为log_ro，这样ftp用户就对/home/log_ro/upload拥有完全的写权限了。上传文件不要放到根目录而是放到upload下面。</li>
+<h3 id="2、SLB实施"><a href="#2、SLB实施" class="headerlink" title="2、SLB实施"></a>2、SLB实施</h3><ul>
+<li>主要使用指标1进行资源是否在使用的判定</li>
+<li>指标2可以作为次要考虑，考虑是否需要配置降级</li>
 </ul>
-<h3 id="4、重启sshd"><a href="#4、重启sshd" class="headerlink" title="4、重启sshd"></a>4、重启sshd</h3><p>关掉Selinux：<code>setenforce 0</code>，重启sshd服务<code>systemctl restart sshd</code></p>
-<h3 id="5、使用mount挂载日志文件"><a href="#5、使用mount挂载日志文件" class="headerlink" title="5、使用mount挂载日志文件"></a>5、使用mount挂载日志文件</h3><p><strong>因为软连接在ftp中不能生效，又因为硬链接不能链接目录，所以采用mount挂载本机文件系统的方法实现软连接。</strong></p>
-<pre><code class="shell">mkdir fps_logs
-chown log_ro.log_ro fps_logs
-mount --bind /data/app/fps/logs fps_logs
-</code></pre>
-<h3 id="6、验证"><a href="#6、验证" class="headerlink" title="6、验证"></a>6、验证</h3><p>使用ftp客户端来验证对于ftp用户权限的控制。</p>
-<h2 id="四、其他"><a href="#四、其他" class="headerlink" title="四、其他"></a>四、其他</h2><p>最后介绍一下，如果不使用家目录作为sftp的根目录，使用其他目录的方法。</p>
-<p>但是有一个原则还是要遵守，就是sftp所在的根目录，和其所有的上级目录，所属必须是root，不然就会碰到sftp连接马上被关闭的情况。</p>
-<p>比如我们想要登录后的根目录为/data/haha/abc</p>
-<p>/data/haha/abc 应该为root:zhongan 755</p>
-<p>/data/haha/       应该为root:root         755</p>
-<p>/data                 应该为root:root         755</p>
-<p>如果想要上传文件，应该建立/data/haha/abc/upload文件夹，所属zhongan:zhongan , 755，然后上传文件的目标路径为/upload</p>
-<p>然后修改/etc/ssh/sshd_config ,修改ChrootDirectory后面的目录为/data/haha/abc/</p>
+<h3 id="3、输入文档"><a href="#3、输入文档" class="headerlink" title="3、输入文档"></a>3、输入文档</h3><ol>
+<li>15天内ECS的CPU和内存利用率统计文档</li>
+<li>15天内ECS的停机主机统计文档</li>
+<li>15天内SLB的后端异常ECS实例个数和实例每秒最大并发连接数统计文档</li>
+</ol>
+<h2 id="四、说明"><a href="#四、说明" class="headerlink" title="四、说明"></a>四、说明</h2><ul>
+<li>以上方案为初步方案，指标、采样规则、计算规则和判断阈值等可能需要根据实际情况微调，后续可在具体实施中再次调整和完善。</li>
+<li>合并相关事宜，也可以从服务器架构上考虑下，有些用途类似的服务器，可以合并使用或者建立公用服务器，提高使用率。</li>
+</ul>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 lxwno.1@163.com </span>
