@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Docker基本操作 | 运维人</title>
-  <meta name="keywords" content=" docker ">
-  <meta name="description" content="Docker基本操作 | 运维人">
+  <title>Centos系统日常巡检脚本 | 运维人</title>
+  <meta name="keywords" content=" shell , linux ">
+  <meta name="description" content="Centos系统日常巡检脚本 | 运维人">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="一、说明Centos系统日常巡检脚本，巡检内容包含了，磁盘，内存 cpu 进程 文件更改 用户登录等一系列的操作 直接用就行了。 报告以邮件发送到邮箱 在log下生成巡检报告。 二、内容创建HostDailyCheck.sh文件，具体内容如下： #!&#x2F;bin&#x2F;bash #主机信息每日巡检  IPADDR&#x3D;$(ifconfig eth0|grep &#39;inet addr&#39;|awk -F">
 <meta property="og:type" content="article">
@@ -1228,9 +1228,9 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="post-Docker基本操作" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-Centos系统日常巡检脚本" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">Docker基本操作</h1>
+        <h1 class="article-title">Centos系统日常巡检脚本</h1>
     
     <div class="article-meta">
         
@@ -1240,9 +1240,9 @@
             <i class="iconfont icon-category"></i>
             
             
-            <a  data-rel="虚拟化">虚拟化</a> > 
+            <a  data-rel="脚本">脚本</a> > 
             
-            <a  data-rel="虚拟化&lt;---&gt;Docker">Docker</a>
+            <a  data-rel="脚本&lt;---&gt;Shell">Shell</a>
             
         </span>
         
@@ -1250,19 +1250,21 @@
         <span class="tag">
             <i class="iconfont icon-tag"></i>
             
-            <a class="color2">docker</a>
+            <a class="color1">shell</a>
+            
+            <a class="color1">linux</a>
             
         </span>
         
     </div>
     <div class="article-meta">
         
-            发布时间 : <time class="date" title='最后更新: 2021-02-02 09:56:46'>2021-02-02 09:53</time>
+            发布时间 : <time class="date" title='最后更新: 2021-11-30 17:24:32'>2021-11-30 17:19</time>
         
     </div>
     <div class="article-meta">
         
-        <span>字数:2.8k</span>
+        <span>字数:4.7k</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -1292,7 +1294,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E5%9F%BA%E6%9C%AC%E5%91%BD%E4%BB%A4"><span class="toc-text">一、基本命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E7%BD%91%E7%BB%9C%E5%91%BD%E4%BB%A4%EF%BC%9A"><span class="toc-text">二、网络命令：</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E7%AB%AF%E5%8F%A3%E6%98%A0%E5%B0%84%EF%BC%9A"><span class="toc-text">1、端口映射：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81docker%E7%BD%91%E7%BB%9C%E7%B1%BB%E5%9E%8B%EF%BC%9A"><span class="toc-text">2、docker网络类型：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81%E7%BD%91%E7%BB%9C%E4%BA%92%E8%81%94%EF%BC%9A"><span class="toc-text">3、网络互联：</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%B7%A8%E5%AE%B9%E5%99%A8%E7%BD%91%E7%BB%9C%E4%BA%92%E8%81%94%EF%BC%9A"><span class="toc-text">跨容器网络互联：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%97%A7%E7%89%88%EF%BC%9A"><span class="toc-text">旧版：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%96%B0%E7%89%88%EF%BC%9A"><span class="toc-text">新版：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A4%9A%E5%AE%B9%E5%99%A8%E4%BA%92%E8%81%94%EF%BC%9A"><span class="toc-text">多容器互联：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%B7%A8%E4%B8%BB%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%BA%92%E8%81%94%EF%BC%9A"><span class="toc-text">跨主机网络互联：</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4%E3%80%81%E6%95%B0%E6%8D%AE%E7%AE%A1%E7%90%86%EF%BC%9A"><span class="toc-text">4、数据管理：</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%8D%B7"><span class="toc-text">数据卷</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%97%A7%E7%89%88%EF%BC%88-v%EF%BC%89%EF%BC%9A"><span class="toc-text">旧版（-v）：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%96%B0%E7%89%88%EF%BC%88%E2%80%93mount%EF%BC%89%EF%BC%9A"><span class="toc-text">新版（–mount）：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%8D%B7%E5%AE%B9%E5%99%A8"><span class="toc-text">数据卷容器</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81Dokcerfile%E7%BC%96%E5%86%99"><span class="toc-text">三、Dokcerfile编写</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E6%96%87%E4%BB%B6%E4%BE%8B%E5%AD%90%EF%BC%9A"><span class="toc-text">1、文件例子：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81-%E5%88%B6%E4%BD%9C%E9%95%9C%E5%83%8F%EF%BC%9A"><span class="toc-text">2、 制作镜像：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81%E9%AA%8C%E8%AF%81%E5%B9%B6%E5%90%AF%E5%8A%A8%EF%BC%9A"><span class="toc-text">3、验证并启动：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4%E3%80%81%E6%8C%87%E4%BB%A4%E8%AF%A6%E8%A7%A3%EF%BC%9A"><span class="toc-text">4、指令详解：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E7%A7%81%E5%BA%93%E6%90%AD%E5%BB%BA"><span class="toc-text">四、私库搭建</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C%EF%BC%9A"><span class="toc-text">1、准备工作：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E5%90%AF%E5%8A%A8Registry%EF%BC%9A"><span class="toc-text">2、启动Registry：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81%E7%99%BB%E9%99%86%E5%B9%B6%E4%BD%BF%E7%94%A8%EF%BC%9A"><span class="toc-text">3、登陆并使用：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4%E3%80%81%E6%8A%A5%E9%94%99%E8%A7%A3%E5%86%B3%EF%BC%9A"><span class="toc-text">4、报错解决：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E5%AE%B9%E5%99%A8%E7%BC%96%E6%8E%92%EF%BC%88%E5%8D%95%E6%9C%BA%EF%BC%89"><span class="toc-text">五、容器编排（单机）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E5%AE%89%E8%A3%85%EF%BC%9A"><span class="toc-text">1、安装：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E4%BD%BF%E7%94%A8%EF%BC%9A"><span class="toc-text">2、使用：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AD%E3%80%81%E9%85%8D%E7%BD%AE%E5%AE%B9%E5%99%A8DNS"><span class="toc-text">六、配置容器DNS</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B9%E6%B3%95%E4%B8%80%EF%BC%9A"><span class="toc-text">方法一：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B9%E6%B3%95%E4%BA%8C%EF%BC%9A"><span class="toc-text">方法二：</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E8%AF%B4%E6%98%8E"><span class="toc-text">一、说明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E5%86%85%E5%AE%B9"><span class="toc-text">二、内容</span></a></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -1308,200 +1310,754 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="一、基本命令"><a href="#一、基本命令" class="headerlink" title="一、基本命令"></a>一、基本命令</h2><p><code>docker pull nginx</code>  下载docker镜像</p>
-<p><code>docker images</code>  查看目前下载的所有镜像</p>
-<p><code>docker rmi nginx</code> 删除nginx镜像</p>
-<p><code>docker save  nginx &gt; /tmp/nginx.tar</code> 保存nginx镜像</p>
-<p><code>docker  load &lt; /tmp/nginx.tar</code>  手动载入nginx镜像</p>
-<p><code>docker run -it nginx sh</code>  启动nginx镜像，并进入交互命令(sh)模式 ,run=create + start , -it是你需要交互的时候才用，平时用-d</p>
-<p><code>docker ps </code> 查看正在运行的docker镜像</p>
-<p><code>docker ps -a</code> 查看所有已创建docker镜像（已停止+在正运行）</p>
-<p><code>docker rm -f container_id</code> 删除docker容器</p>
-<p><code>docker container prune</code> 清除所有终止状态的容器</p>
-<p><code>docker inspect names</code> 查看容器的所有信息</p>
-<p><code>docker attach names/container_id</code>  进入容器方式1，大家共用一个tty，会互相影响，不推荐 </p>
-<p><code>docker exec -it names/container_id sh</code>  进入容器方式2，拿到不同的tty，推荐，exit退出</p>
-<p><code>nsenter -t $pid -m -i -u -n -p </code> 利用namespace进入容器，方式3，比较复杂，不推荐。</p>
-<pre><code class="bash">pid = `docker inspect --format &quot;&#123;&#123;.State.Pid&#125;&#125;&quot; $1`
-nsenter -t $pid -m -u -i -n -p
-</code></pre>
-<p><code>docker run -d --name my_nginx nginx</code> 后台方式运行nginx docker, -d</p>
-<p><code>docker logs my_nginx </code> 查看my_nginx的日志</p>
-<p><code>docker logs -f my_nginx</code> 不断刷新的查看my_nginx 日志</p>
-<p><code>docker commit container_name image_name</code> 从改变的容器创建一个新镜像</p>
-<p><code>docker tag image_id docker.io/username/iamge_name</code>  在本地对镜像打一个tag</p>
-<p><code>docker push docker.io/username/image_name</code> 上传本地的镜像到docker hub</p>
-<pre><code class="bash">docker login
-docker images
-docker tag image_id docker.io/username/image_name
-docker push docker.io/username/image_name
-</code></pre>
-<h2 id="二、网络命令："><a href="#二、网络命令：" class="headerlink" title="二、网络命令："></a>二、网络命令：</h2><h3 id="1、端口映射："><a href="#1、端口映射：" class="headerlink" title="1、端口映射："></a>1、端口映射：</h3><p><code>docker  run -d -P --name my_nginx nginx </code> 将容器暴露的端口随机映射到宿主机的端口</p>
-<p><code>docker run -d -p 80:80 --name my_nginx nginx</code>  将docker容器的80端口映射到宿主机的80端口，-p</p>
-<p>不做IP绑定，即0.0.0.0</p>
-<p><code>dcoker run -d -p 127.0.0.1:80:80 --name my_nginx  nginx</code> 将docker容器的80端口映射到宿主机的80端口，并绑定127.0.0.1</p>
-<h3 id="2、docker网络类型："><a href="#2、docker网络类型：" class="headerlink" title="2、docker网络类型："></a>2、docker网络类型：</h3><p><code>docker network ls</code> 查看docker可以设置的网络类型</p>
-<pre><code class="bash">root@langxiaowei-pc:~# docker network ls
-NETWORK ID          NAME                DRIVER              SCOPE
-1fabfe0002bb        bridge              bridge              local
-f4400c8b1fe7        host                host                local
-cb0a51a6c279        none                null                local
-</code></pre>
-<p><code>docker run -it --network=bridge alpine sh</code> 指定网络方式为桥接，启动容器，拿到172网段地址</p>
-<p><code>docker run -it --network=host alpine sh</code> 指定网络方式为主机，启动容器，使用主机的所有网卡，没有自己的IP</p>
-<p><code>docker run -it --network=none alpine sh</code> 指定网络方式为none，启动主机，只有本地回环网卡。</p>
-<h3 id="3、网络互联："><a href="#3、网络互联：" class="headerlink" title="3、网络互联："></a>3、网络互联：</h3><h4 id="跨容器网络互联："><a href="#跨容器网络互联：" class="headerlink" title="跨容器网络互联："></a>跨容器网络互联：</h4><h4 id="旧版："><a href="#旧版：" class="headerlink" title="旧版："></a>旧版：</h4><p><code>docker run -d --name web1 -p 80:80 lxwno1/lang_nginx nginx </code></p>
-<p><code>docker run -d --name web2 --link web1 -p 81:80 lxwno1/lang_nginx nginx</code></p>
-<p>– link 将容器web2 连接到容器web1，即在web2中可以使用ping web1 找到web1，本质是修改了web2的hosts文件，标识web1 在哪里：<code>172.17.0.2    web1 ae63849bb54f</code>。 单方向的连接。</p>
-<h4 id="新版："><a href="#新版：" class="headerlink" title="新版："></a>新版：</h4><pre><code class="bash">docker network create -d bridge my-net
+        <h2 id="一、说明"><a href="#一、说明" class="headerlink" title="一、说明"></a>一、说明</h2><p><strong>Centos系统日常巡检脚本，巡检内容包含了，磁盘，内存 cpu 进程 文件更改 用户登录等一系列的操作 直接用就行了。</strong></p>
+<p>报告以邮件发送到邮箱 在log下生成巡检报告。</p>
+<h2 id="二、内容"><a href="#二、内容" class="headerlink" title="二、内容"></a>二、内容</h2><p>创建HostDailyCheck.sh文件，具体内容如下：</p>
+<pre><code class="bash">#!/bin/bash
+#主机信息每日巡检
 
-docker run -it --rm --name busybox1 --network my-net busybox  sh
+IPADDR=$(ifconfig eth0|grep &#39;inet addr&#39;|awk -F &#39;[ :]&#39; &#39;&#123;print $13&#125;&#39;)
+#环境变量PATH没设好，在cron里执行时有很多命令会找不到
+export PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin
+source /etc/profile
 
-docker run -it --rm --name busybox2 --network my-net busybox  sh
+[ $(id -u) -gt 0 ] &amp;&amp; echo &quot;请用root用户执行此脚本！&quot; &amp;&amp; exit 1
+centosVersion=$(awk &#39;&#123;print $(NF-1)&#125;&#39; /etc/redhat-release)
+VERSION=&quot;2020-03-16&quot;
 
-ping busybox2
-ping busybox1
-</code></pre>
-<p>创建自定义网络连接 my-net(-d 指定网络类型)。</p>
-<p>创建容器busybox1和busybox2并加入自定义网络。</p>
-<p>再每个容器中，互ping对方，通了。</p>
-<h4 id="多容器互联："><a href="#多容器互联：" class="headerlink" title="多容器互联："></a>多容器互联：</h4><p>推荐使用Docker Compose。</p>
-<h4 id="跨主机网络互联："><a href="#跨主机网络互联：" class="headerlink" title="跨主机网络互联："></a>跨主机网络互联：</h4><p><code>route add -net 192.168.1.0/24 -gw 10.0.0.157</code> 实现两台不同宿主机的docker直接网络沟通，添加一个路由表就好，网关指向宿主机的网卡IP。</p>
-<h3 id="4、数据管理："><a href="#4、数据管理：" class="headerlink" title="4、数据管理："></a>4、数据管理：</h3><h4 id="数据卷"><a href="#数据卷" class="headerlink" title="数据卷"></a>数据卷</h4><h4 id="旧版（-v）："><a href="#旧版（-v）：" class="headerlink" title="旧版（-v）："></a>旧版（-v）：</h4><p><code>docker run -it -d -v /opt:/opt --name centos2 centos  bash</code></p>
-<p><code>docker run -it -d -v /etc/hosts:/opt/hosts --name centos3 centos bash</code></p>
-<p><code>docker run -it -d -v /etc/hosts:/opt/hosts:ro --name centos4 centos</code> bash</p>
-<p>用 -v 参数，挂在宿主机的目录到容器，完成共享，可以作代码动态加载，-v 宿主机目录：容器目录，</p>
-<p>要写绝对路径，而且俩个目录都要写。</p>
-<h4 id="新版（–mount）："><a href="#新版（–mount）：" class="headerlink" title="新版（–mount）："></a>新版（–mount）：</h4><p>创建并查看数据卷信息：</p>
-<pre><code class="bash">docker volume create my-vol
+#日志相关
+PROGPATH=`echo $0 | sed -e &#39;s,[\\/][^\\/][^\\/]*$,,&#39;`
+[ -f $PROGPATH ] &amp;&amp; PROGPATH=&quot;.&quot;
+LOGPATH=&quot;$PROGPATH/log&quot;
+[ -e $LOGPATH ] || mkdir $LOGPATH
+RESULTFILE=&quot;$LOGPATH/HostDailyCheck-$IPADDR-`date +%Y%m%d`.txt&quot;
 
-docker volume ls
 
-docker volume inspect my-vol
+#定义报表的全局变量
+report_DateTime=&quot;&quot; #日期 ok
+report_Hostname=&quot;&quot; #主机名 ok
+report_OSRelease=&quot;&quot; #发行版本 ok
+report_Kernel=&quot;&quot; #内核 ok
+report_Language=&quot;&quot; #语言/编码 ok
+report_LastReboot=&quot;&quot; #最近启动时间 ok
+report_Uptime=&quot;&quot; #运行时间（天） ok
+report_CPUs=&quot;&quot; #CPU数量 ok
+report_CPUType=&quot;&quot; #CPU类型 ok
+report_Arch=&quot;&quot; #CPU架构 ok
+report_MemTotal=&quot;&quot; #内存总容量(MB) ok
+report_MemFree=&quot;&quot; #内存剩余(MB) ok
+report_MemUsedPercent=&quot;&quot; #内存使用率% ok
+report_DiskTotal=&quot;&quot; #硬盘总容量(GB) ok
+report_DiskFree=&quot;&quot; #硬盘剩余(GB) ok
+report_DiskUsedPercent=&quot;&quot; #硬盘使用率% ok
+report_InodeTotal=&quot;&quot; #Inode总量 ok
+report_InodeFree=&quot;&quot; #Inode剩余 ok
+report_InodeUsedPercent=&quot;&quot; #Inode使用率 ok
+report_IP=&quot;&quot; #IP地址 ok
+report_MAC=&quot;&quot; #MAC地址 ok
+report_Gateway=&quot;&quot; #默认网关 ok
+report_DNS=&quot;&quot; #DNS ok
+report_Listen=&quot;&quot; #监听 ok
+report_Selinux=&quot;&quot; #Selinux ok
+report_Firewall=&quot;&quot; #防火墙 ok
+report_USERs=&quot;&quot; #用户 ok
+report_USEREmptyPassword=&quot;&quot; #空密码用户 ok
+report_USERTheSameUID=&quot;&quot; #相同ID的用户 ok 
+report_PasswordExpiry=&quot;&quot; #密码过期（天） ok
+report_RootUser=&quot;&quot; #root用户 ok
+report_Sudoers=&quot;&quot; #sudo授权 ok
+report_SSHAuthorized=&quot;&quot; #SSH信任主机 ok
+report_SSHDProtocolVersion=&quot;&quot; #SSH协议版本 ok
+report_SSHDPermitRootLogin=&quot;&quot; #允许root远程登录 ok
+report_DefunctProsess=&quot;&quot; #僵尸进程数量 ok
+report_SelfInitiatedService=&quot;&quot; #自启动服务数量 ok
+report_SelfInitiatedProgram=&quot;&quot; #自启动程序数量 ok
+report_RuningService=&quot;&quot; #运行中服务数 ok
+report_Crontab=&quot;&quot; #计划任务数 ok
+report_Syslog=&quot;&quot; #日志服务 ok
+report_SNMP=&quot;&quot; #SNMP OK
+report_NTP=&quot;&quot; #NTP ok
+report_JDK=&quot;&quot; #JDK版本 ok
+function version()&#123;
+echo &quot;&quot;
+echo &quot;&quot;
+echo &quot;系统巡检脚本：Version $VERSION&quot;
+&#125;
 
-docker volume rm my-vol
-</code></pre>
-<p>启动一个挂载数据卷的容器：</p>
-<pre><code class="bash">docker run -it -d --mount source=my-vol,target=/opt --name centos2 centos  bash
-</code></pre>
-<p>挂载一个主机目录作为数据卷（只读）：</p>
-<pre><code class="bash">docker run -it -d --mount type=bind,source=/etc/,target=/opt/,readonly --name centos3 centos bash
-</code></pre>
-<p>挂载一个本地主机文件作为数据卷：</p>
-<p><code>docker run -it -d --mount type=bind,source=$HOME/.bash_history,target=$HOME/.bash_history --name centos4 centos bash</code></p>
-<p>这样就可以将容器中的命令记录在本地。  </p>
-<h4 id="数据卷容器"><a href="#数据卷容器" class="headerlink" title="数据卷容器"></a>数据卷容器</h4><p><code>docker run -it -d --volumes-from centos3 --name centos6 centos bash</code></p>
-<p>用 –volumes 参数，从另一个容器加载数据卷。</p>
-<h2 id="三、Dokcerfile编写"><a href="#三、Dokcerfile编写" class="headerlink" title="三、Dokcerfile编写"></a>三、Dokcerfile编写</h2><h3 id="1、文件例子："><a href="#1、文件例子：" class="headerlink" title="1、文件例子："></a>1、文件例子：</h3><p>Dockerfile文件编写，以自制nginx镜像为例，如下：</p>
-<pre><code class="bash">#This is a dockerfile for nginx
+function getCpuStatus()&#123;
+echo &quot;&quot;
+echo &quot;&quot;
+echo &quot;############################ CPU检查 #############################&quot;
+Physical_CPUs=$(grep &quot;physical id&quot; /proc/cpuinfo| sort | uniq | wc -l)
+Virt_CPUs=$(grep &quot;processor&quot; /proc/cpuinfo | wc -l)
+CPU_Kernels=$(grep &quot;cores&quot; /proc/cpuinfo|uniq| awk -F &#39;: &#39; &#39;&#123;print $2&#125;&#39;)
+CPU_Type=$(grep &quot;model name&quot; /proc/cpuinfo | awk -F &#39;: &#39; &#39;&#123;print $2&#125;&#39; | sort | uniq)
+CPU_Arch=$(uname -m)
+echo &quot;物理CPU个数:$Physical_CPUs&quot;
+echo &quot;逻辑CPU个数:$Virt_CPUs&quot;
+echo &quot;每CPU核心数:$CPU_Kernels&quot;
+echo &quot; CPU型号:$CPU_Type&quot;
+echo &quot; CPU架构:$CPU_Arch&quot;
+#报表信息
+report_CPUs=$Virt_CPUs #CPU数量
+report_CPUType=$CPU_Type #CPU类型
+report_Arch=$CPU_Arch #CPU架构
+&#125;
 
-#base mirror
-FROM centos
-#maintainer information
-MAINTAINER lxw lxwno.1@163.com
-# relate command
-RUN rpm -ivh https://mirrors.aliyun.com/epel/7/x86_64/Packages/e/epel-release-7-11.noarch.rpm
-RUN yum install nginx -y
-#add files
-ADD index.html /usr/share/nginx/html/index.html
-#arguments
-RUN echo &quot;daemon off;&quot; &gt;&gt; /etc/nginx/nginx.conf
-# expose port
-EXPOSE 80
-#exec command
-CMD [&quot;nginx&quot;]
-</code></pre>
-<h3 id="2、-制作镜像："><a href="#2、-制作镜像：" class="headerlink" title="2、 制作镜像："></a>2、 制作镜像：</h3><p><code>dcoekr build -t df_nginx:v1 .</code>  从当前目录的Dockerfile制作镜像，并指定名字和tag。</p>
-<h3 id="3、验证并启动："><a href="#3、验证并启动：" class="headerlink" title="3、验证并启动："></a>3、验证并启动：</h3><p><code>dcoker images</code> 可以查看刚构建好的docker镜像。</p>
-<p><code>docker -d --name my_nginx df_nginx</code>  启动镜像，注意命令后面不要加command 比如bash，不然bash会取代Dockerfile中写好的CMD命令 nginx，切忌。</p>
-<p><code>dcoker ps -a</code> 查看docker镜像状态</p>
-<p><code>docker exec -it my_nginx bash</code> 进入my_nginx容器</p>
-<p><code>docker inspect my_nginx</code> 查看my_nginx  的IP</p>
-<p><code>curl  ip</code> 验证Nginx 启动成功</p>
-<h3 id="4、指令详解："><a href="#4、指令详解：" class="headerlink" title="4、指令详解："></a>4、指令详解：</h3><ol>
-<li>Dockerfile是一行命令创建一层，所以所有命令尽量写入一行 ，通过 &amp;&amp;。要有清除动作。</li>
-<li>每一个 RUN 都是启动一个容器、执行命令、然后提交存储层文件变更。</li>
-<li>docker build 可以从Dockerfile、指定压缩包.tar、从标准输入中读取Dockerfile和压缩包，进行构建。</li>
-<li>COPY指令用于文件复制，ADD指令在需要自动解压的场合才使用。可配合 –chown=<user>:<group></li>
-<li>容器内的主进程要以前台方式运行，容器是进程不是虚拟机，没有后台服务的概念。容器的启动程序就是容器内的应用进程（CMD），容器就是为了主进程存在的，主进程退出，容器就没存在的意义了，从而退出。</li>
-<li>CMD指令是容器启动命令，推荐格式是列表，例如 <code>CMD [&quot;nginx&quot;, &quot;-g&quot;, &quot;daemon off;&quot;]</code>，可以被docker run中的命令替换。</li>
-<li>ENTYRPOINT 入口点指令，其内容可以是脚本可以是命令，用于接收来自CMD的指令当做参数，CMD内容可以来自Dockerfile，也可以来自docker run 中的 cmd。也可以被覆盖，需docker run 的参数 –entrypoint。</li>
-<li> ENV设置环境变量，方便其他指令引用。也类似设置全局变量。容器运行的时候，就会有这些环境变量。</li>
-<li>ARG构建参数，也是设置环境变量的，但是不会带到容器中去。会被–build-arg 覆盖。类似springboot启动命令对配置文件的选择。</li>
-<li>VOLUME 定义匿名卷，容器运行时向此卷写入的数据都不会记录到容器的存储层，从而保证了这个容器的无状态化（就是容器的读写层，原则上也不要写入数据，如果要写，请将宿主机的目录挂载为卷）。<strong>VOLUME指令定义的是target目录，是容器内部的目录，source呢，是匿名的，自动生成的，在宿主机的Docker安装目录下，/var/lib/docker/volumes。</strong></li>
-<li>EXPOSE 声明端口，仅仅是告诉你我这个进程的守护端口是什么，说明而已，方便你做端口映射有个参考。另外 docker run -P 随机端口映射，会将这个声明的端口映射出去，不然鬼知道他要映射哪个端口。</li>
-<li>WORKDIR指定工作目录，改变以后各层的工作目录，类似shell中的cd效果（命令都写在一行才一样）。</li>
-<li>USER指定当前用户，改变环境状态并影响以后的层。如果你是用root执行的脚本，但是需要使用某个用户来启动特定进程，用gosu，不要用su、sudo。比如 <code>CMD [ &quot;exec&quot;, &quot;gosu&quot;, &quot;redis&quot;, &quot;redis-server]</code></li>
-<li>HEALTHCHECK 健康检查 ，HEALTHCHECK CMD <commod>  设置检查容器健康状况的命令。docker ps 里可以看到，或者 docker inspect 的Health状态。</li>
-<li>ONSUILD 为他人做嫁衣 ，后面跟其他指令：RUN COPY等，这些指令不会立即执行，只有在以当前镜像为基础镜像制作新的镜像的时候，才会执行。类似模版吧，方便修改后统一跟新。</li>
-<li>多阶段构建。推荐使用多阶段构建，而不是都写在一个Dokcerfile文件里，或者分散到多个Dockerfile。</li>
-<li>镜像迁移，应该使用Docker Registry ，而不推荐 docker save 和 docker load。SSH传输例子，带进度条：    <code>docker save &lt;镜像名&gt; | bzip2 | pv | ssh &lt;用户名&gt;@&lt;主机名&gt; &#39;cat | docker load&#39;</code></li>
-</ol>
-<h2 id="四、私库搭建"><a href="#四、私库搭建" class="headerlink" title="四、私库搭建"></a>四、私库搭建</h2><h3 id="1、准备工作："><a href="#1、准备工作：" class="headerlink" title="1、准备工作："></a>1、准备工作：</h3><p><code>docker pull registry</code>  使用docker官方的仓库镜像来做私有仓库</p>
-<p><code>mkdir auth</code> 建立密码文件目录</p>
-<p><code>docker run --entrypoint htpasswd registry:2 -Bbn langxiaowei 123456 &gt; auth/htpasswd</code> 使用registry自带的apache命令htpasswd 命令生成密码文件，以供认证使用。</p>
-<h3 id="2、启动Registry："><a href="#2、启动Registry：" class="headerlink" title="2、启动Registry："></a>2、启动Registry：</h3><pre><code class="bash">docker run -d -p 5000:5000 --restart=always --name my_registry \
--v `pwd`/auth:/auth \ 
--e &quot;REGISTRY_AUTH=htpasswd&quot; \ 
--e &quot;REGISTRY_AUTH_HTPASSWD_REALM=Registry Realm&quot; \ 
--e &quot;REGISTRY_AUTH_HTPASSWD_PATH=/auth/htpasswd&quot; \
-registry
-</code></pre>
-<p>registry 默认使用5000端口，挂在密码文件后，设置环境变量-e来启动。</p>
-<h3 id="3、登陆并使用："><a href="#3、登陆并使用：" class="headerlink" title="3、登陆并使用："></a>3、登陆并使用：</h3><p><code>docker login 10.0.0.157:5000</code>  输入用户名密码登陆私库</p>
-<p><code>dcoker tag container_id 10.0.0.157:5000/user/image</code> 将本地镜像打tag(name:latest)</p>
-<p><code>dcoker push container_id 10.0.0.157:5000/user/image</code> 上传本地镜像到私库</p>
-<p><code>docker pull 10.0.0.157:5000/user/image</code> 从 私库拉取镜像到本地</p>
-<p>注意：以上如果不写IP和port，默认拉取官方镜像docker.io</p>
-<h3 id="4、报错解决："><a href="#4、报错解决：" class="headerlink" title="4、报错解决："></a>4、报错解决：</h3><p>登陆的时候，有以下提示：</p>
-<ol>
-<li><p><code>Error response from daemon: login attempt to http://10.0.0.157:5000/v2/ failed with status: 400 Bad Request</code> 密码文件路径错误，找不到。</p>
-</li>
-<li><p><code>Error response from daemon: Get https://10.0.0.157:5000/v2/: http: server gave HTTP response to HTTPS client</code></p>
-<p>Docker自从1.3.X之后docker registry交互默认使用的是HTTPS，但是搭建私有镜像默认使用的是HTTP服务，所以与私有镜像交时出现以上错误。</p>
-<p>解决办法：</p>
-<p>/lib/systemd/system/docker.service中，ExecStar 后面加入 –insecure-registry  ip:5000</p>
-<p>然后重启docker 服务：</p>
-<pre><code class="bash">systemctl daemon-reload 
+function getMemStatus()&#123;
+echo &quot;&quot;
+echo &quot;&quot;
+echo &quot;############################ 内存检查 ############################&quot;
+if [[ $centosVersion &lt; 7 ]];then
+free -mo
+else
+free -h
+fi
+#报表信息
+MemTotal=$(grep MemTotal /proc/meminfo| awk &#39;&#123;print $2&#125;&#39;) #KB
+MemFree=$(grep MemFree /proc/meminfo| awk &#39;&#123;print $2&#125;&#39;) #KB
+let MemUsed=MemTotal-MemFree
+MemPercent=$(awk &quot;BEGIN &#123;if($MemTotal==0)&#123;printf 100&#125;else&#123;printf \&quot;%.2f\&quot;,$MemUsed*100/$MemTotal&#125;&#125;&quot;)
+report_MemTotal=&quot;$((MemTotal/1024))&quot;&quot;MB&quot; #内存总容量(MB)
+report_MemFree=&quot;$((MemFree/1024))&quot;&quot;MB&quot; #内存剩余(MB)
+report_MemUsedPercent=&quot;$(awk &quot;BEGIN &#123;if($MemTotal==0)&#123;printf 100&#125;else&#123;printf \&quot;%.2f\&quot;,$MemUsed*100/$MemTotal&#125;&#125;&quot;)&quot;&quot;%&quot; #内存使用率%
+&#125;
+function getDiskStatus()&#123;
+echo &quot;&quot;
+echo &quot;&quot;
+echo &quot;############################ 磁盘检查 ############################&quot;
+df -hiP | sed &#39;s/Mounted on/Mounted/&#39;&gt; /tmp/inode
+df -hTP | sed &#39;s/Mounted on/Mounted/&#39;&gt; /tmp/disk 
+join /tmp/disk /tmp/inode | awk &#39;&#123;print $1,$2,&quot;|&quot;,$3,$4,$5,$6,&quot;|&quot;,$8,$9,$10,$11,&quot;|&quot;,$12&#125;&#39;| column -t
+#报表信息
+diskdata=$(df -TP | sed &#39;1d&#39; | awk &#39;$2!=&quot;tmpfs&quot;&#123;print&#125;&#39;) #KB
+disktotal=$(echo &quot;$diskdata&quot; | awk &#39;&#123;total+=$3&#125;END&#123;print total&#125;&#39;) #KB
+diskused=$(echo &quot;$diskdata&quot; | awk &#39;&#123;total+=$4&#125;END&#123;print total&#125;&#39;) #KB
+diskfree=$((disktotal-diskused)) #KB
+diskusedpercent=$(echo $disktotal $diskused | awk &#39;&#123;if($1==0)&#123;printf 100&#125;else&#123;printf &quot;%.2f&quot;,$2*100/$1&#125;&#125;&#39;) 
+inodedata=$(df -iTP | sed &#39;1d&#39; | awk &#39;$2!=&quot;tmpfs&quot;&#123;print&#125;&#39;)
+inodetotal=$(echo &quot;$inodedata&quot; | awk &#39;&#123;total+=$3&#125;END&#123;print total&#125;&#39;)
+inodeused=$(echo &quot;$inodedata&quot; | awk &#39;&#123;total+=$4&#125;END&#123;print total&#125;&#39;)
+inodefree=$((inodetotal-inodeused))
+inodeusedpercent=$(echo $inodetotal $inodeused | awk &#39;&#123;if($1==0)&#123;printf 100&#125;else&#123;printf &quot;%.2f&quot;,$2*100/$1&#125;&#125;&#39;)
+report_DiskTotal=$((disktotal/1024/1024))&quot;GB&quot; #硬盘总容量(GB)
+report_DiskFree=$((diskfree/1024/1024))&quot;GB&quot; #硬盘剩余(GB)
+report_DiskUsedPercent=&quot;$diskusedpercent&quot;&quot;%&quot; #硬盘使用率%
+report_InodeTotal=$((inodetotal/1000))&quot;K&quot; #Inode总量
+report_InodeFree=$((inodefree/1000))&quot;K&quot; #Inode剩余
+report_InodeUsedPercent=&quot;$inodeusedpercent&quot;&quot;%&quot; #Inode使用率%
 
-systemctl restart docker
-</code></pre>
-</li>
-</ol>
-<h2 id="五、容器编排（单机）"><a href="#五、容器编排（单机）" class="headerlink" title="五、容器编排（单机）"></a>五、容器编排（单机）</h2><p>容器的编排，即容器的依赖启动，这里使用docker-compose 来完成容器的依赖启动，单机情况下。</p>
-<h3 id="1、安装："><a href="#1、安装：" class="headerlink" title="1、安装："></a>1、安装：</h3><p>其是用python编写的，故用pip安装：</p>
-<pre><code class="bash">apt-get install python-pip
-pip install docker-compose
-</code></pre>
-<h3 id="2、使用："><a href="#2、使用：" class="headerlink" title="2、使用："></a>2、使用：</h3><p>依赖docker-compose.yml文件，故要先编写yml文件。</p>
-<pre><code class="bash">web1:
-        image: nginx
-        expose:
-                - 80
+&#125;
 
-web2:
-        image: nginx
-        expose:
-                - 80
+function getSystemStatus()&#123;
+echo &quot;&quot;
+echo &quot;&quot;
+echo &quot;############################ 系统检查 ############################&quot;
+if [ -e /etc/sysconfig/i18n ];then
+default_LANG=&quot;$(grep &quot;LANG=&quot; /etc/sysconfig/i18n | grep -v &quot;^#&quot; | awk -F &#39;&quot;&#39; &#39;&#123;print $2&#125;&#39;)&quot;
+else
+default_LANG=$LANG
+fi
+export LANG=&quot;en_US.UTF-8&quot;
+Release=$(cat /etc/redhat-release 2&gt;/dev/null)
+Kernel=$(uname -r)
+OS=$(uname -o)
+Hostname=$(uname -n)
+SELinux=$(/usr/sbin/sestatus | grep &quot;SELinux status: &quot; | awk &#39;&#123;print $3&#125;&#39;)
+LastReboot=$(who -b | awk &#39;&#123;print $3,$4&#125;&#39;)
+uptime=$(uptime | sed &#39;s/.*up \([^,]*\), .*/\1/&#39;)
+echo &quot; 系统：$OS&quot;
+echo &quot; 发行版本：$Release&quot;
+echo &quot; 内核：$Kernel&quot;
+echo &quot; 主机名：$Hostname&quot;
+echo &quot; SELinux：$SELinux&quot;
+echo &quot;语言/编码：$default_LANG&quot;
+echo &quot; 当前时间：$(date +&#39;%F %T&#39;)&quot;
+echo &quot; 最后启动：$LastReboot&quot;
+echo &quot; 运行时间：$uptime&quot;
+#报表信息
+report_DateTime=$(date +&quot;%F %T&quot;) #日期
+report_Hostname=&quot;$Hostname&quot; #主机名
+report_OSRelease=&quot;$Release&quot; #发行版本
+report_Kernel=&quot;$Kernel&quot; #内核
+report_Language=&quot;$default_LANG&quot; #语言/编码
+report_LastReboot=&quot;$LastReboot&quot; #最近启动时间
+report_Uptime=&quot;$uptime&quot; #运行时间（天）
+report_Selinux=&quot;$SELinux&quot;
+export LANG=&quot;$default_LANG&quot;
 
-haproxy:
-        image: haproxy
-        volumes:
-                - /opt/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
-        links:
-                - web1
-                - web2
-        ports:
-                - &quot;7777:1080&quot;
-                - &quot;80:80&quot;
+&#125;
+
+function getServiceStatus()&#123;
+echo &quot;&quot;
+echo &quot;&quot;
+echo &quot;############################ 服务检查 ############################&quot;
+echo &quot;&quot;
+if [[ $centosVersion &gt; 7 ]];then
+conf=$(systemctl list-unit-files --type=service --state=enabled --no-pager | grep &quot;enabled&quot;)
+process=$(systemctl list-units --type=service --state=running --no-pager | grep &quot;.service&quot;)
+#报表信息
+report_SelfInitiatedService=&quot;$(echo &quot;$conf&quot; | wc -l)&quot; #自启动服务数量
+report_RuningService=&quot;$(echo &quot;$process&quot; | wc -l)&quot; #运行中服务数量
+else
+conf=$(/sbin/chkconfig | grep -E &quot;:on|:启用&quot;)
+process=$(/sbin/service --status-all 2&gt;/dev/null | grep -E &quot;is running|正在运行&quot;)
+#报表信息
+report_SelfInitiatedService=&quot;$(echo &quot;$conf&quot; | wc -l)&quot; #自启动服务数量
+report_RuningService=&quot;$(echo &quot;$process&quot; | wc -l)&quot; #运行中服务数量
+fi
+echo &quot;服务配置&quot;
+echo &quot;--------&quot;
+echo &quot;$conf&quot; | column -t
+echo &quot;&quot;
+echo &quot;正在运行的服务&quot;
+echo &quot;--------------&quot;
+echo &quot;$process&quot;
+
+&#125;
+
+
+function getAutoStartStatus()&#123;
+echo &quot;&quot;
+echo &quot;&quot;
+echo &quot;############################ 自启动检查 ##########################&quot;
+conf=$(grep -v &quot;^#&quot; /etc/rc.d/rc.local| sed &#39;/^$/d&#39;)
+echo &quot;$conf&quot;
+#报表信息
+report_SelfInitiatedProgram=&quot;$(echo $conf | wc -l)&quot; #自启动程序数量
+&#125;
+
+function getLoginStatus()&#123;
+echo &quot;&quot;
+echo &quot;&quot;
+echo &quot;############################ 登录检查 ############################&quot;
+last | head
+&#125;
+
+function getNetworkStatus()&#123;
+echo &quot;&quot;
+echo &quot;&quot;
+echo &quot;############################ 网络检查 ############################&quot;
+if [[ $centosVersion &lt; 7 ]];then
+/sbin/ifconfig -a | grep -v packets | grep -v collisions | grep -v inet6
+else
+#ip a
+for i in $(ip link | grep BROADCAST | awk -F: &#39;&#123;print $2&#125;&#39;);do ip add show $i | grep -E &quot;BROADCAST|global&quot;| awk &#39;&#123;print $2&#125;&#39; | tr &#39;\n&#39; &#39; &#39; ;echo &quot;&quot; ;done
+fi
+GATEWAY=$(ip route | grep default | awk &#39;&#123;print $3&#125;&#39;)
+DNS=$(grep nameserver /etc/resolv.conf| grep -v &quot;#&quot; | awk &#39;&#123;print $2&#125;&#39; | tr &#39;\n&#39; &#39;,&#39; | sed &#39;s/,$//&#39;)
+echo &quot;&quot;
+echo &quot;网关：$GATEWAY &quot;
+echo &quot; DNS：$DNS&quot;
+#报表信息
+IP=$(ip -f inet addr | grep -v 127.0.0.1 | grep inet | awk &#39;&#123;print $NF,$2&#125;&#39; | tr &#39;\n&#39; &#39;,&#39; | sed &#39;s/,$//&#39;)
+MAC=$(ip link | grep -v &quot;LOOPBACK\|loopback&quot; | awk &#39;&#123;print $2&#125;&#39; | sed &#39;N;s/\n//&#39; | tr &#39;\n&#39; &#39;,&#39; | sed &#39;s/,$//&#39;)
+report_IP=&quot;$IP&quot; #IP地址
+report_MAC=$MAC #MAC地址
+report_Gateway=&quot;$GATEWAY&quot; #默认网关
+report_DNS=&quot;$DNS&quot; #DNS
+&#125;
+
+function getListenStatus()&#123;
+echo &quot;&quot;
+echo &quot;&quot;
+echo &quot;############################ 监听检查 ############################&quot;
+TCPListen=$(ss -ntul | column -t)
+echo &quot;$TCPListen&quot;
+#报表信息
+report_Listen=&quot;$(echo &quot;$TCPListen&quot;| sed &#39;1d&#39; | awk &#39;/tcp/ &#123;print $5&#125;&#39; | awk -F: &#39;&#123;print $NF&#125;&#39; | sort | uniq | wc -l)&quot;
+&#125;
+
+function getCronStatus()&#123;
+echo &quot;&quot;
+echo &quot;&quot;
+echo &quot;############################ 计划任务检查 ########################&quot;
+Crontab=0
+for shell in $(grep -v &quot;/sbin/nologin&quot; /etc/shells);do
+for user in $(grep &quot;$shell&quot; /etc/passwd| awk -F: &#39;&#123;print $1&#125;&#39;);do
+crontab -l -u $user &gt;/dev/null 2&gt;&amp;1
+status=$?
+if [ $status -eq 0 ];then
+echo &quot;$user&quot;
+echo &quot;--------&quot;
+crontab -l -u $user
+let Crontab=Crontab+$(crontab -l -u $user | wc -l)
+echo &quot;&quot;
+fi
+done
+done
+#计划任务
+find /etc/cron* -type f | xargs -i ls -l &#123;&#125; | column -t
+let Crontab=Crontab+$(find /etc/cron* -type f | wc -l)
+#报表信息
+report_Crontab=&quot;$Crontab&quot; #计划任务数
+&#125;
+function getHowLongAgo()&#123;
+# 计算一个时间戳离现在有多久了
+datetime=&quot;$*&quot;
+[ -z &quot;$datetime&quot; ] &amp;&amp; echo &quot;错误的参数：getHowLongAgo() $*&quot;
+Timestamp=$(date +%s -d &quot;$datetime&quot;) #转化为时间戳
+Now_Timestamp=$(date +%s)
+Difference_Timestamp=$(($Now_Timestamp-$Timestamp))
+days=0;hours=0;minutes=0;
+sec_in_day=$((60*60*24));
+sec_in_hour=$((60*60));
+sec_in_minute=60
+while (( $(($Difference_Timestamp-$sec_in_day)) &gt; 1 ))
+do
+let Difference_Timestamp=Difference_Timestamp-sec_in_day
+let days++
+done
+while (( $(($Difference_Timestamp-$sec_in_hour)) &gt; 1 ))
+do
+let Difference_Timestamp=Difference_Timestamp-sec_in_hour
+let hours++
+done
+echo &quot;$days 天 $hours 小时前&quot;
+&#125;
+
+function getUserLastLogin()&#123;
+# 获取用户最近一次登录的时间，含年份
+# 很遗憾last命令不支持显示年份，只有&quot;last -t YYYYMMDDHHMMSS&quot;表示某个时间之间的登录，我
+# 们只能用最笨的方法了，对比今天之前和今年元旦之前（或者去年之前和前年之前……）某个用户
+# 登录次数，如果登录统计次数有变化，则说明最近一次登录是今年。
+username=$1
+: $&#123;username:=&quot;`whoami`&quot;&#125;
+thisYear=$(date +%Y)
+oldesYear=$(last | tail -n1 | awk &#39;&#123;print $NF&#125;&#39;)
+while(( $thisYear &gt;= $oldesYear));do
+loginBeforeToday=$(last $username | grep $username | wc -l)
+loginBeforeNewYearsDayOfThisYear=$(last $username -t $thisYear&quot;0101000000&quot; | grep $username | wc -l)
+if [ $loginBeforeToday -eq 0 ];then
+echo &quot;从未登录过&quot;
+break
+elif [ $loginBeforeToday -gt $loginBeforeNewYearsDayOfThisYear ];then
+lastDateTime=$(last -i $username | head -n1 | awk &#39;&#123;for(i=4;i&lt;(NF-2);i++)printf&quot;%s &quot;,$i&#125;&#39;)&quot; $thisYear&quot; #格式如: Sat Nov 2 20:33 2015
+lastDateTime=$(date &quot;+%Y-%m-%d %H:%M:%S&quot; -d &quot;$lastDateTime&quot;)
+echo &quot;$lastDateTime&quot;
+break
+else
+thisYear=$((thisYear-1))
+fi
+done
+
+&#125;
+
+function getUserStatus()&#123;
+echo &quot;&quot;
+echo &quot;&quot;
+echo &quot;############################ 用户检查 ############################&quot;
+#/etc/passwd 最后修改时间
+pwdfile=&quot;$(cat /etc/passwd)&quot;
+Modify=$(stat /etc/passwd | grep Modify | tr &#39;.&#39; &#39; &#39; | awk &#39;&#123;print $2,$3&#125;&#39;)
+
+echo &quot;/etc/passwd 最后修改时间：$Modify ($(getHowLongAgo $Modify))&quot;
+echo &quot;&quot;
+echo &quot;特权用户&quot;
+echo &quot;--------&quot;
+RootUser=&quot;&quot;
+for user in $(echo &quot;$pwdfile&quot; | awk -F: &#39;&#123;print $1&#125;&#39;);do
+if [ $(id -u $user) -eq 0 ];then
+echo &quot;$user&quot;
+RootUser=&quot;$RootUser,$user&quot;
+fi
+done
+echo &quot;&quot;
+echo &quot;用户列表&quot;
+echo &quot;--------&quot;
+USERs=0
+echo &quot;$(
+echo &quot;用户名 UID GID HOME SHELL 最后一次登录&quot;
+for shell in $(grep -v &quot;/sbin/nologin&quot; /etc/shells);do
+for username in $(grep &quot;$shell&quot; /etc/passwd| awk -F: &#39;&#123;print $1&#125;&#39;);do
+userLastLogin=&quot;$(getUserLastLogin $username)&quot;
+echo &quot;$pwdfile&quot; | grep -w &quot;$username&quot; |grep -w &quot;$shell&quot;| awk -F: -v lastlogin=&quot;$(echo &quot;$userLastLogin&quot; | tr &#39; &#39; &#39;_&#39;)&quot; &#39;&#123;print $1,$3,$4,$6,$7,lastlogin&#125;&#39;
+done
+let USERs=USERs+$(echo &quot;$pwdfile&quot; | grep &quot;$shell&quot;| wc -l)
+done
+)&quot; | column -t
+echo &quot;&quot;
+echo &quot;空密码用户&quot;
+echo &quot;----------&quot;
+USEREmptyPassword=&quot;&quot;
+for shell in $(grep -v &quot;/sbin/nologin&quot; /etc/shells);do
+for user in $(echo &quot;$pwdfile&quot; | grep &quot;$shell&quot; | cut -d: -f1);do
+r=$(awk -F: &#39;$2==&quot;!!&quot;&#123;print $1&#125;&#39; /etc/shadow | grep -w $user)
+if [ ! -z $r ];then
+echo $r
+USEREmptyPassword=&quot;$USEREmptyPassword,&quot;$r
+fi
+done 
+done
+echo &quot;&quot;
+echo &quot;相同ID的用户&quot;
+echo &quot;------------&quot;
+USERTheSameUID=&quot;&quot;
+UIDs=$(cut -d: -f3 /etc/passwd | sort | uniq -c | awk &#39;$1&gt;1&#123;print $2&#125;&#39;)
+for uid in $UIDs;do
+echo -n &quot;$uid&quot;;
+USERTheSameUID=&quot;$uid&quot;
+r=$(awk -F: &#39;ORS=&quot;&quot;;$3==&#39;&quot;$uid&quot;&#39;&#123;print &quot;:&quot;,$1&#125;&#39; /etc/passwd)
+echo &quot;$r&quot;
+echo &quot;&quot;
+USERTheSameUID=&quot;$USERTheSameUID $r,&quot;
+done
+#报表信息
+report_USERs=&quot;$USERs&quot; #用户
+report_USEREmptyPassword=$(echo $USEREmptyPassword | sed &#39;s/^,//&#39;) 
+report_USERTheSameUID=$(echo $USERTheSameUID | sed &#39;s/,$//&#39;) 
+report_RootUser=$(echo $RootUser | sed &#39;s/^,//&#39;) #特权用户
+&#125;
+
+
+function getPasswordStatus &#123;
+echo &quot;&quot;
+echo &quot;&quot;
+echo &quot;############################ 密码检查 ############################&quot;
+pwdfile=&quot;$(cat /etc/passwd)&quot;
+echo &quot;&quot;
+echo &quot;密码过期检查&quot;
+echo &quot;------------&quot;
+result=&quot;&quot;
+for shell in $(grep -v &quot;/sbin/nologin&quot; /etc/shells);do
+for user in $(echo &quot;$pwdfile&quot; | grep &quot;$shell&quot; | cut -d: -f1);do
+get_expiry_date=$(/usr/bin/chage -l $user | grep &#39;Password expires&#39; | cut -d: -f2)
+if [[ $get_expiry_date = &#39; never&#39; || $get_expiry_date = &#39;never&#39; ]];then
+printf &quot;%-15s 永不过期\n&quot; $user
+result=&quot;$result,$user:never&quot;
+else
+password_expiry_date=$(date -d &quot;$get_expiry_date&quot; &quot;+%s&quot;)
+current_date=$(date &quot;+%s&quot;)
+diff=$(($password_expiry_date-$current_date))
+let DAYS=$(($diff/(60*60*24)))
+printf &quot;%-15s %s天后过期\n&quot; $user $DAYS
+result=&quot;$result,$user:$DAYS days&quot;
+fi
+done
+done
+report_PasswordExpiry=$(echo $result | sed &#39;s/^,//&#39;)
+
+echo &quot;&quot;
+echo &quot;密码策略检查&quot;
+echo &quot;------------&quot;
+grep -v &quot;#&quot; /etc/login.defs | grep -E &quot;PASS_MAX_DAYS|PASS_MIN_DAYS|PASS_MIN_LEN|PASS_WARN_AGE&quot;
+
+
+&#125;
+
+function getSudoersStatus()&#123;
+echo &quot;&quot;
+echo &quot;&quot;
+echo &quot;############################ Sudoers检查 #########################&quot;
+conf=$(grep -v &quot;^#&quot; /etc/sudoers| grep -v &quot;^Defaults&quot; | sed &#39;/^$/d&#39;)
+echo &quot;$conf&quot;
+echo &quot;&quot;
+#报表信息
+report_Sudoers=&quot;$(echo $conf | wc -l)&quot;
+&#125;
+
+function getInstalledStatus()&#123;
+echo &quot;&quot;
+echo &quot;&quot;
+echo &quot;############################ 软件检查 ############################&quot;
+rpm -qa --last | head | column -t 
+&#125;
+
+function getProcessStatus()&#123;
+echo &quot;&quot;
+echo &quot;&quot;
+echo &quot;############################ 进程检查 ############################&quot;
+if [ $(ps -ef | grep defunct | grep -v grep | wc -l) -ge 1 ];then
+echo &quot;&quot;
+echo &quot;僵尸进程&quot;;
+echo &quot;--------&quot;
+ps -ef | head -n1
+ps -ef | grep defunct | grep -v grep
+fi
+echo &quot;&quot;
+echo &quot;内存占用TOP10&quot;
+echo &quot;-------------&quot;
+echo -e &quot;PID %MEM RSS COMMAND
+$(ps aux | awk &#39;&#123;print $2, $4, $6, $11&#125;&#39; | sort -k3rn | head -n 10 )&quot;| column -t 
+echo &quot;&quot;
+echo &quot;CPU占用TOP10&quot;
+echo &quot;------------&quot;
+top b -n1 | head -17 | tail -11
+#报表信息
+report_DefunctProsess=&quot;$(ps -ef | grep defunct | grep -v grep|wc -l)&quot;
+&#125;
+
+function getJDKStatus()&#123;
+echo &quot;&quot;
+echo &quot;&quot;
+echo &quot;############################ JDK检查 #############################&quot;
+java -version 2&gt;/dev/null
+if [ $? -eq 0 ];then
+java -version 2&gt;&amp;1
+fi
+echo &quot;JAVA_HOME=\&quot;$JAVA_HOME\&quot;&quot;
+#报表信息
+report_JDK=&quot;$(java -version 2&gt;&amp;1 | grep version | awk &#39;&#123;print $1,$3&#125;&#39; | tr -d &#39;&quot;&#39;)&quot;
+&#125;
+function getSyslogStatus()&#123;
+echo &quot;&quot;
+echo &quot;&quot;
+echo &quot;############################ syslog检查 ##########################&quot;
+echo &quot;服务状态：$(getState rsyslog)&quot;
+echo &quot;&quot;
+echo &quot;/etc/rsyslog.conf&quot;
+echo &quot;-----------------&quot;
+cat /etc/rsyslog.conf 2&gt;/dev/null | grep -v &quot;^#&quot; | grep -v &quot;^\\$&quot; | sed &#39;/^$/d&#39; | column -t
+#报表信息
+report_Syslog=&quot;$(getState rsyslog)&quot;
+&#125;
+function getFirewallStatus()&#123;
+echo &quot;&quot;
+echo &quot;&quot;
+echo &quot;############################ 防火墙检查 ##########################&quot;
+#防火墙状态，策略等
+if [[ $centosVersion &lt; 7 ]];then
+/etc/init.d/iptables status &gt;/dev/null 2&gt;&amp;1
+status=$?
+if [ $status -eq 0 ];then
+s=&quot;active&quot;
+elif [ $status -eq 3 ];then
+s=&quot;inactive&quot;
+elif [ $status -eq 4 ];then
+s=&quot;permission denied&quot;
+else
+s=&quot;unknown&quot;
+fi
+else
+s=&quot;$(getState iptables)&quot;
+fi
+echo &quot;iptables: $s&quot;
+echo &quot;&quot;
+echo &quot;/etc/sysconfig/iptables&quot;
+echo &quot;-----------------------&quot;
+cat /etc/sysconfig/iptables 2&gt;/dev/null
+#报表信息
+report_Firewall=&quot;$s&quot;
+&#125;
+
+function getSNMPStatus()&#123;
+#SNMP服务状态，配置等
+echo &quot;&quot;
+echo &quot;&quot;
+echo &quot;############################ SNMP检查 ############################&quot;
+status=&quot;$(getState snmpd)&quot;
+echo &quot;服务状态：$status&quot;
+echo &quot;&quot;
+if [ -e /etc/snmp/snmpd.conf ];then
+echo &quot;/etc/snmp/snmpd.conf&quot;
+echo &quot;--------------------&quot;
+cat /etc/snmp/snmpd.conf 2&gt;/dev/null | grep -v &quot;^#&quot; | sed &#39;/^$/d&#39;
+fi
+#报表信息
+report_SNMP=&quot;$(getState snmpd)&quot;
+&#125;
+
+
+
+function getState()&#123;
+if [[ $centosVersion &lt; 7 ]];then
+if [ -e &quot;/etc/init.d/$1&quot; ];then
+if [ `/etc/init.d/$1 status 2&gt;/dev/null | grep -E &quot;is running|正在运行&quot; | wc -l` -ge 1 ];then
+r=&quot;active&quot;
+else
+r=&quot;inactive&quot;
+fi
+else
+r=&quot;unknown&quot;
+fi
+else
+#CentOS 7+
+r=&quot;$(systemctl is-active $1 2&gt;&amp;1)&quot;
+fi
+echo &quot;$r&quot;
+&#125;
+
+function getSSHStatus()&#123;
+#SSHD服务状态，配置,受信任主机等
+echo &quot;&quot;
+echo &quot;&quot;
+echo &quot;############################ SSH检查 #############################&quot;
+#检查受信任主机
+pwdfile=&quot;$(cat /etc/passwd)&quot;
+echo &quot;服务状态：$(getState sshd)&quot;
+Protocol_Version=$(cat /etc/ssh/sshd_config | grep Protocol | awk &#39;&#123;print $2&#125;&#39;)
+echo &quot;SSH协议版本：$Protocol_Version&quot;
+echo &quot;&quot;
+echo &quot;信任主机&quot;
+echo &quot;--------&quot;
+authorized=0
+for user in $(echo &quot;$pwdfile&quot; | grep /bin/bash | awk -F: &#39;&#123;print $1&#125;&#39;);do
+authorize_file=$(echo &quot;$pwdfile&quot; | grep -w $user | awk -F: &#39;&#123;printf $6&quot;/.ssh/authorized_keys&quot;&#125;&#39;)
+authorized_host=$(cat $authorize_file 2&gt;/dev/null | awk &#39;&#123;print $3&#125;&#39; | tr &#39;\n&#39; &#39;,&#39; | sed &#39;s/,$//&#39;)
+if [ ! -z $authorized_host ];then
+echo &quot;$user 授权 \&quot;$authorized_host\&quot; 无密码访问&quot;
+fi
+let authorized=authorized+$(cat $authorize_file 2&gt;/dev/null | awk &#39;&#123;print $3&#125;&#39;|wc -l)
+done
+
+echo &quot;&quot;
+echo &quot;是否允许ROOT远程登录&quot;
+echo &quot;--------------------&quot;
+config=$(cat /etc/ssh/sshd_config | grep PermitRootLogin)
+firstChar=$&#123;config:0:1&#125;
+if [ $firstChar == &quot;#&quot; ];then
+PermitRootLogin=&quot;yes&quot; #默认是允许ROOT远程登录的
+else
+PermitRootLogin=$(echo $config | awk &#39;&#123;print $2&#125;&#39;)
+fi
+echo &quot;PermitRootLogin $PermitRootLogin&quot;
+
+echo &quot;&quot;
+echo &quot;/etc/ssh/sshd_config&quot;
+echo &quot;--------------------&quot;
+cat /etc/ssh/sshd_config | grep -v &quot;^#&quot; | sed &#39;/^$/d&#39;
+
+#报表信息
+report_SSHAuthorized=&quot;$authorized&quot; #SSH信任主机
+report_SSHDProtocolVersion=&quot;$Protocol_Version&quot; #SSH协议版本
+report_SSHDPermitRootLogin=&quot;$PermitRootLogin&quot; #允许root远程登录
+&#125;
+function getNTPStatus()&#123;
+#NTP服务状态，当前时间，配置等
+echo &quot;&quot;
+echo &quot;&quot;
+echo &quot;############################ NTP检查 #############################&quot;
+if [ -e /etc/ntp.conf ];then
+echo &quot;服务状态：$(getState ntpd)&quot;
+echo &quot;&quot;
+echo &quot;/etc/ntp.conf&quot;
+echo &quot;-------------&quot;
+cat /etc/ntp.conf 2&gt;/dev/null | grep -v &quot;^#&quot; | sed &#39;/^$/d&#39;
+fi
+#报表信息
+report_NTP=&quot;$(getState ntpd)&quot;
+&#125;
+
+
+function uploadHostDailyCheckReport()&#123;
+json=&quot;&#123;
+\&quot;DateTime\&quot;:\&quot;$report_DateTime\&quot;,
+\&quot;Hostname\&quot;:\&quot;$report_Hostname\&quot;,
+\&quot;OSRelease\&quot;:\&quot;$report_OSRelease\&quot;,
+\&quot;Kernel\&quot;:\&quot;$report_Kernel\&quot;,
+\&quot;Language\&quot;:\&quot;$report_Language\&quot;,
+\&quot;LastReboot\&quot;:\&quot;$report_LastReboot\&quot;,
+\&quot;Uptime\&quot;:\&quot;$report_Uptime\&quot;,
+\&quot;CPUs\&quot;:\&quot;$report_CPUs\&quot;,
+\&quot;CPUType\&quot;:\&quot;$report_CPUType\&quot;,
+\&quot;Arch\&quot;:\&quot;$report_Arch\&quot;,
+\&quot;MemTotal\&quot;:\&quot;$report_MemTotal\&quot;,
+\&quot;MemFree\&quot;:\&quot;$report_MemFree\&quot;,
+\&quot;MemUsedPercent\&quot;:\&quot;$report_MemUsedPercent\&quot;,
+\&quot;DiskTotal\&quot;:\&quot;$report_DiskTotal\&quot;,
+\&quot;DiskFree\&quot;:\&quot;$report_DiskFree\&quot;,
+\&quot;DiskUsedPercent\&quot;:\&quot;$report_DiskUsedPercent\&quot;,
+\&quot;InodeTotal\&quot;:\&quot;$report_InodeTotal\&quot;,
+\&quot;InodeFree\&quot;:\&quot;$report_InodeFree\&quot;,
+\&quot;InodeUsedPercent\&quot;:\&quot;$report_InodeUsedPercent\&quot;,
+\&quot;IP\&quot;:\&quot;$report_IP\&quot;,
+\&quot;MAC\&quot;:\&quot;$report_MAC\&quot;,
+\&quot;Gateway\&quot;:\&quot;$report_Gateway\&quot;,
+\&quot;DNS\&quot;:\&quot;$report_DNS\&quot;,
+\&quot;Listen\&quot;:\&quot;$report_Listen\&quot;,
+\&quot;Selinux\&quot;:\&quot;$report_Selinux\&quot;,
+\&quot;Firewall\&quot;:\&quot;$report_Firewall\&quot;,
+\&quot;USERs\&quot;:\&quot;$report_USERs\&quot;,
+\&quot;USEREmptyPassword\&quot;:\&quot;$report_USEREmptyPassword\&quot;,
+\&quot;USERTheSameUID\&quot;:\&quot;$report_USERTheSameUID\&quot;,
+\&quot;PasswordExpiry\&quot;:\&quot;$report_PasswordExpiry\&quot;,
+\&quot;RootUser\&quot;:\&quot;$report_RootUser\&quot;,
+\&quot;Sudoers\&quot;:\&quot;$report_Sudoers\&quot;,
+\&quot;SSHAuthorized\&quot;:\&quot;$report_SSHAuthorized\&quot;,
+\&quot;SSHDProtocolVersion\&quot;:\&quot;$report_SSHDProtocolVersion\&quot;,
+\&quot;SSHDPermitRootLogin\&quot;:\&quot;$report_SSHDPermitRootLogin\&quot;,
+\&quot;DefunctProsess\&quot;:\&quot;$report_DefunctProsess\&quot;,
+\&quot;SelfInitiatedService\&quot;:\&quot;$report_SelfInitiatedService\&quot;,
+\&quot;SelfInitiatedProgram\&quot;:\&quot;$report_SelfInitiatedProgram\&quot;,
+\&quot;RuningService\&quot;:\&quot;$report_RuningService\&quot;,
+\&quot;Crontab\&quot;:\&quot;$report_Crontab\&quot;,
+\&quot;Syslog\&quot;:\&quot;$report_Syslog\&quot;,
+\&quot;SNMP\&quot;:\&quot;$report_SNMP\&quot;,
+\&quot;NTP\&quot;:\&quot;$report_NTP\&quot;,
+\&quot;JDK\&quot;:\&quot;$report_JDK\&quot;
+&#125;&quot;
+#echo &quot;$json&quot; 
+curl -l -H &quot;Content-type: application/json&quot; -X POST -d &quot;$json&quot; &quot;$uploadHostDailyCheckReportApi&quot; 2&gt;/dev/null
+&#125;
+
+function getchage_file_24h()
+&#123;
+echo &quot;############################ 文件检查 #############################&quot;
+    check2=$(find / -name &#39;*.sh&#39; -mtime -1)
+check21=$(find / -name &#39;*.asp&#39; -mtime -1)
+check22=$(find / -name &#39;*.php&#39; -mtime -1)
+check23=$(find / -name &#39;*.aspx&#39; -mtime -1)
+check24=$(find / -name &#39;*.jsp&#39; -mtime -1)
+check25=$(find / -name &#39;*.html&#39; -mtime -1)
+check26=$(find / -name &#39;*.htm&#39; -mtime -1)
+check9=$(find / -name core -exec ls -l &#123;&#125; \;)
+check10=$(cat /etc/crontab)
+check12=$(ls -alt /usr/bin | head -10)
+cat &lt;&lt;EOF
+
+############################查看所有被修改过的文件返回最近24小时内的############################
+$&#123;check2&#125;
+$&#123;check21&#125;
+$&#123;check22&#125;
+$&#123;check23&#125;
+$&#123;check24&#125;
+$&#123;check25&#125;
+$&#123;check26&#125;
+$&#123;line&#125;
+
+############################检查定时文件的完整性############################
+$&#123;check10&#125;
+$&#123;line&#125;
+
+############################查看系统命令是否被替换############################
+$&#123;check12&#125;
+$&#123;line&#125;
+EOF
+&#125;
+
+function check()&#123;
+version
+getSystemStatus
+getCpuStatus
+getMemStatus
+getDiskStatus
+getNetworkStatus
+getListenStatus
+getProcessStatus
+getServiceStatus
+getAutoStartStatus
+getLoginStatus
+getCronStatus
+getUserStatus
+getPasswordStatus
+getSudoersStatus
+getJDKStatus
+getFirewallStatus
+getSSHStatus
+getSyslogStatus
+getSNMPStatus
+getNTPStatus
+getInstalledStatus
+getchage_file_24h
+&#125;
+
+
+#执行检查并保存检查结果
+check &gt; $RESULTFILE
+
+echo &quot;检查结果：$RESULTFILE&quot;
+echo -e &quot;`date &quot;+%Y-%m-%d %H:%M:%S&quot;` 阿里云PHP企业平台巡检报告&quot;  | mail -a $RESULTFILE -s &quot;阿里云PHP企业平台巡检报告&quot; lxwno.1@163.com
 </code></pre>
-<p><code>dcoker-compose up</code>  启动编排好的容器</p>
-<h2 id="六、配置容器DNS"><a href="#六、配置容器DNS" class="headerlink" title="六、配置容器DNS"></a>六、配置容器DNS</h2><h3 id="方法一："><a href="#方法一：" class="headerlink" title="方法一："></a>方法一：</h3><p>容器默认挂载了宿主机的三个文件<code>/etc/hosts, /etc/hostname, /etc/resolv.conf</code> 使用宿主机的DNS解析。</p>
-<h3 id="方法二："><a href="#方法二：" class="headerlink" title="方法二："></a>方法二：</h3><p>修改docker守护进程的配置文件<code>/etc/docker/daemon.json</code>，加入</p>
-<pre><code>&quot;dns&quot;: [&quot;114.114.114.114&quot;,&quot;223.5.5.5&quot;]
-</code></pre>
-<p>###方法三：</p>
-<p>docker run 命令行加入参数 -h –dns</p>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 lxwno.1@163.com </span>
