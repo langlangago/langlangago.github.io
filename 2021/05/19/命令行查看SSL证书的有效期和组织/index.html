@@ -6,18 +6,17 @@
   <meta name="keywords" content=" shell ">
   <meta name="description" content="命令行查看SSL证书的有效期和组织 | 运维人">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<meta name="description" content="一、目标为提高阿里云资源利用率，运维会定期对阿里云资源进行资源使用情况统计，根据不同指标阈值来初步判断资源是否属于低利用率状态。 每次统计后形成输出文档，而后根据文档与相关负责人进行沟通后，进行服务下线或者服务合并操作，以提高资源利用率，节省费用。 二、指标1、ECS指标   指标序号 指标名称 采样规则 计算规则 判断阈值    1 CPU使用率 采样间隔为900s，采样数值为平均值，1天会取到">
+<meta name="description" content="一、缘由本脚本是阿里云资源利用率定期统计方案中的其中一个脚本。 本脚本可实现，从每天95个平均值数据中取平均值，15天15个中位数取平均值，得到最终的15天内CPU和内存使用率数值。 进而根据阈值进行判断，资源是否处于低利用率状态。 二、环境Python3.7 + 阿里云云监控SDK + 阿里云SLB的SDK + pandas + numpy 三、代码实现# -*- coding: utf-8 -">
 <meta property="og:type" content="article">
-<meta property="og:title" content="阿里云资源利用率定期统计方案">
-<meta property="og:url" content="https://www.langxw.com/2021/11/30/%E9%98%BF%E9%87%8C%E4%BA%91%E8%B5%84%E6%BA%90%E5%88%A9%E7%94%A8%E7%8E%87%E5%AE%9A%E6%9C%9F%E7%BB%9F%E8%AE%A1%E6%96%B9%E6%A1%88/index.html">
+<meta property="og:title" content="统计15天内阿里云SLB后端异常和并发指标">
+<meta property="og:url" content="https://www.langxw.com/2021/12/01/%E7%BB%9F%E8%AE%A115%E5%A4%A9%E5%86%85%E9%98%BF%E9%87%8C%E4%BA%91SLB%E5%90%8E%E7%AB%AF%E5%BC%82%E5%B8%B8%E5%92%8C%E5%B9%B6%E5%8F%91%E6%8C%87%E6%A0%87/index.html">
 <meta property="og:site_name" content="运维人">
-<meta property="og:description" content="一、目标为提高阿里云资源利用率，运维会定期对阿里云资源进行资源使用情况统计，根据不同指标阈值来初步判断资源是否属于低利用率状态。 每次统计后形成输出文档，而后根据文档与相关负责人进行沟通后，进行服务下线或者服务合并操作，以提高资源利用率，节省费用。 二、指标1、ECS指标   指标序号 指标名称 采样规则 计算规则 判断阈值    1 CPU使用率 采样间隔为900s，采样数值为平均值，1天会取到">
+<meta property="og:description" content="一、缘由本脚本是阿里云资源利用率定期统计方案中的其中一个脚本。 本脚本可实现，从每天95个平均值数据中取平均值，15天15个中位数取平均值，得到最终的15天内CPU和内存使用率数值。 进而根据阈值进行判断，资源是否处于低利用率状态。 二、环境Python3.7 + 阿里云云监控SDK + 阿里云SLB的SDK + pandas + numpy 三、代码实现# -*- coding: utf-8 -">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2021-11-30T10:07:12.000Z">
-<meta property="article:modified_time" content="2021-11-30T10:08:42.945Z">
+<meta property="article:published_time" content="2021-12-01T03:00:46.000Z">
+<meta property="article:modified_time" content="2021-12-01T03:04:48.889Z">
 <meta property="article:author" content="运维人">
-<meta property="article:tag" content="方案">
-<meta property="article:tag" content="规范">
+<meta property="article:tag" content="Python">
 <meta name="twitter:card" content="summary">
 
 
@@ -185,7 +184,7 @@
     <li>
         <div class="all active" data-rel="全部文章">全部文章
             
-                <small>(45)</small>
+                <small>(49)</small>
             
         </div>
     </li>
@@ -337,7 +336,7 @@
                         <i class="fold iconfont icon-right"></i>
                         
                         脚本
-                        <small>(6)</small>
+                        <small>(10)</small>
                         
                     </div>
                     
@@ -356,11 +355,11 @@
                                 </li>
                             
                                 <li>
-                                    <div data-rel="脚本<--->Python脚本">
+                                    <div data-rel="脚本<--->Python">
                                         
-                                        Python脚本
+                                        Python
                                         
-                                            <small>(3
+                                            <small>(7
                                                 )</small>
                                         
                                     </div>
@@ -658,8 +657,8 @@
         
     </div>
 </div>
-<input type="hidden" id="yelog_site_posts_number" value="45">
-<input type="hidden" id="yelog_site_word_count" value="35k">
+<input type="hidden" id="yelog_site_posts_number" value="49">
+<input type="hidden" id="yelog_site_word_count" value="37.7k">
 <div style="display: none">
     <span id="busuanzi_value_site_uv"></span>
     <span id="busuanzi_value_site_pv"></span>
@@ -819,6 +818,10 @@
             </li>
         
             <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>Python</a>
+            </li>
+        
+            <li class="article-tag-list-item">
                 <i class="iconfont icon-tag"></i><a>redis</a>
             </li>
         
@@ -913,6 +916,38 @@
             <span class="post-date" title="2021-06-04 19:00:16">2021/06/04</span>
         </a>
         
+        <a  class="全部文章 脚本 Python "
+           href="/2021/12/01/%E7%BB%9F%E8%AE%A115%E5%A4%A9%E5%86%85%E9%98%BF%E9%87%8C%E4%BA%91SLB%E5%90%8E%E7%AB%AF%E5%BC%82%E5%B8%B8%E5%92%8C%E5%B9%B6%E5%8F%91%E6%8C%87%E6%A0%87/"
+           data-tag="Python"
+           data-author="" >
+            <span class="post-title" title="统计15天内阿里云SLB后端异常和并发指标">统计15天内阿里云SLB后端异常和并发指标</span>
+            <span class="post-date" title="2021-12-01 11:00:46">2021/12/01</span>
+        </a>
+        
+        <a  class="全部文章 脚本 Python "
+           href="/2021/12/01/%E7%BB%9F%E8%AE%A115%E5%A4%A9%E5%86%85%E9%98%BF%E9%87%8C%E4%BA%91ECS%E5%86%85%E5%AD%98%E4%BD%BF%E7%94%A8%E7%8E%87%E5%92%8CCPU%E4%BD%BF%E7%94%A8%E7%8E%87/"
+           data-tag="python"
+           data-author="" >
+            <span class="post-title" title="统计15天内阿里云ECS内存使用率和CPU使用率">统计15天内阿里云ECS内存使用率和CPU使用率</span>
+            <span class="post-date" title="2021-12-01 10:42:57">2021/12/01</span>
+        </a>
+        
+        <a  class="全部文章 脚本 Python "
+           href="/2021/12/01/%E7%BB%9F%E8%AE%A1%E9%98%BF%E9%87%8C%E4%BA%91ECS%E5%81%9C%E6%9C%BA%E7%8A%B6%E6%80%81%E7%9A%84%E4%B8%BB%E6%9C%BA/"
+           data-tag="python"
+           data-author="" >
+            <span class="post-title" title="统计阿里云ECS停机状态的主机">统计阿里云ECS停机状态的主机</span>
+            <span class="post-date" title="2021-12-01 10:32:24">2021/12/01</span>
+        </a>
+        
+        <a  class="全部文章 脚本 Python "
+           href="/2021/11/30/%E7%BB%9F%E8%AE%A1%E9%98%BF%E9%87%8C%E4%BA%91ECS%E7%A3%81%E7%9B%98%E4%BD%BF%E7%94%A8%E7%8E%87/"
+           data-tag="python"
+           data-author="" >
+            <span class="post-title" title="统计阿里云ECS磁盘使用率">统计阿里云ECS磁盘使用率</span>
+            <span class="post-date" title="2021-11-30 18:33:08">2021/11/30</span>
+        </a>
+        
         <a  class="全部文章 方案 "
            href="/2021/11/30/%E9%98%BF%E9%87%8C%E4%BA%91%E8%B5%84%E6%BA%90%E5%88%A9%E7%94%A8%E7%8E%87%E5%AE%9A%E6%9C%9F%E7%BB%9F%E8%AE%A1%E6%96%B9%E6%A1%88/"
            data-tag="方案,规范"
@@ -945,7 +980,7 @@
             <span class="post-date" title="2021-06-04 19:32:02">2021/06/04</span>
         </a>
         
-        <a  class="全部文章 脚本 Python脚本 "
+        <a  class="全部文章 脚本 Python "
            href="/2021/05/28/%E4%B8%80%E9%94%AE%E9%87%8D%E5%91%BD%E5%90%8D%E9%92%89%E9%92%89%E6%8E%A5%E6%94%B6%E5%88%B0%E7%9A%84%E6%96%87%E4%BB%B6/"
            data-tag="python"
            data-author="" >
@@ -977,7 +1012,7 @@
             <span class="post-date" title="2021-05-19 14:20:11">2021/05/19</span>
         </a>
         
-        <a  class="全部文章 脚本 Python脚本 "
+        <a  class="全部文章 脚本 Python "
            href="/2021/04/14/Python%E5%88%B6%E4%BD%9CExce%E6%8A%A5%E8%A1%A8%E5%B9%B6%E6%89%93%E5%8C%85/"
            data-tag="python,mysql,excel"
            data-author="" >
@@ -1193,7 +1228,7 @@
             <span class="post-date" title="2021-02-01 14:54:52">2021/02/01</span>
         </a>
         
-        <a  class="全部文章 脚本 Python脚本 "
+        <a  class="全部文章 脚本 Python "
            href="/2021/02/01/Python%E8%AF%BB%E5%8F%96Oracle%E6%95%B0%E6%8D%AE%E5%BA%93/"
            data-tag="python,oracle"
            data-author="" >

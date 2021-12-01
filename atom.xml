@@ -6,7 +6,7 @@
   <link href="https://www.langxw.com/atom.xml" rel="self"/>
   
   <link href="https://www.langxw.com/"/>
-  <updated>2021-11-30T10:08:42.945Z</updated>
+  <updated>2021-12-01T03:04:48.889Z</updated>
   <id>https://www.langxw.com/</id>
   
   <author>
@@ -15,6 +15,113 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>统计15天内阿里云SLB后端异常和并发指标</title>
+    <link href="https://www.langxw.com/2021/12/01/%E7%BB%9F%E8%AE%A115%E5%A4%A9%E5%86%85%E9%98%BF%E9%87%8C%E4%BA%91SLB%E5%90%8E%E7%AB%AF%E5%BC%82%E5%B8%B8%E5%92%8C%E5%B9%B6%E5%8F%91%E6%8C%87%E6%A0%87/"/>
+    <id>https://www.langxw.com/2021/12/01/%E7%BB%9F%E8%AE%A115%E5%A4%A9%E5%86%85%E9%98%BF%E9%87%8C%E4%BA%91SLB%E5%90%8E%E7%AB%AF%E5%BC%82%E5%B8%B8%E5%92%8C%E5%B9%B6%E5%8F%91%E6%8C%87%E6%A0%87/</id>
+    <published>2021-12-01T03:00:46.000Z</published>
+    <updated>2021-12-01T03:04:48.889Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="一、缘由"><a href="#一、缘由" class="headerlink" title="一、缘由"></a>一、缘由</h2><p><strong>本脚本是阿里云资源利用率定期统计方案中的其中一个脚本。</strong></p><p>本脚本可实现，从每天95个平均值数据中取平均值，15天15个中位数取平均值，得到最终的15天内CPU和内存使用率数值。</p><p>进而根据阈值进行判断，资源是否处于低利用率状态。</p><h2 id="二、环境"><a href="#二、环境" class="headerlink" title="二、环境"></a>二、环境</h2><p><strong>Python3.7 + 阿里云云监控SDK + 阿里云SLB的SDK + pandas + numpy</strong></p><h2 id="三、代码实现"><a href="#三、代码实现" class="headerlink" title="三、代码实现"></a>三、代码实现</h2><pre><code class="bash"># -*- coding: utf-8 -*-import timeimport numpyimport jsonimport pandas as pdfrom typing import Listfrom alibabacloud_slb20140515.client import Client as Slb20140515Clientfrom alibabacloud_tea_openapi import models as open_api_modelsfrom alibabacloud_slb20140515 import models as slb_20140515_modelsfrom alibabacloud_cms20190101.client import Client as Cms20190101Clientfrom alibabacloud_cms20190101 import models as cms_20190101_models# cn-zhangjiakou 张家口区域的SLB在其他区域的config查不到，只能用张家口configREGION_ID = [&#39;cn-beijing&#39;, &#39;cn-hangzhou&#39;, &#39;cn-hongkong&#39;]PAGE_SIZE = 100class GetMonitorData:    def __init__(self):        pass    @staticmethod    def create_client(        access_key_id: str,        access_key_secret: str,    ) -&gt; Cms20190101Client:        config = open_api_models.Config(            access_key_id=&#39;xxxxxxxx&#39;,            access_key_secret=&#39;xxxxxxxxxxxx&#39;        )        config.endpoint = &#39;metrics.cn-hangzhou.aliyuncs.com&#39;        return Cms20190101Client(config)    @staticmethod    def main(        args: List[str],    ) -&gt; None:        client = GetMonitorData.create_client(&#39;acessKeyId&#39;, &#39;accessKeySecret&#39;)        describe_metric_list_request = cms_20190101_models.DescribeMetricListRequest(            metric_name=args[1],            namespace=args[0],            period=&#39;900&#39;,            start_time=args[2],            end_time=args[3],            length=&#39;100&#39;,            dimensions=&#39;&#123;&#123;"instanceId":&#123;&#125;&#125;&#125;&#39;.format(args[4]),            next_token=args[5]        )        res = client.describe_metric_list(describe_metric_list_request)        return res.bodyclass GetInstanceIdName:    def __init__(self):        pass    @staticmethod    def create_client(        access_key_id: str,        access_key_secret: str,    ) -&gt; Slb20140515Client:        config = open_api_models.Config(            access_key_id=&#39;xxxxxxxxxxx&#39;,            access_key_secret=&#39;xxxxxxxxxxxxx&#39;        )        # 访问的域名        config.endpoint = &#39;slb.aliyuncs.com&#39;        return Slb20140515Client(config)    @staticmethod    def main(        args: List[str],    ) -&gt; None:        client = GetInstanceIdName.create_client(&#39;accessKeyId&#39;, &#39;accessKeySecret&#39;)        describe_load_balancers_request = slb_20140515_models.DescribeLoadBalancersRequest(            region_id=args[0],            page_size=PAGE_SIZE,            page_number=args[1]        )        res = client.describe_load_balancers(describe_load_balancers_request)        return res.bodydef get_id_name_dict():    instance_dict = &#123;&#125;    for i in range(0, len(REGION_ID)):        result = GetInstanceIdName.main([REGION_ID[i], 1])        total_page = result.total_count // PAGE_SIZE + 1        for j in range(0, total_page):            result2 = GetInstanceIdName.main([REGION_ID[i], j+1])            slb_info = result2.load_balancers.load_balancer            for k in range(0, len(slb_info)):                instance_dict[slb_info[k].load_balancer_id] = slb_info[k].load_balancer_name    print(&#39;实例ID和名字的字典:&#39;, instance_dict)    return instance_dictdef get_average_24h(instance_dict, pre_days, metric_name):    average_dict = &#123;&#125;    today = time.strftime(&#39;%Y-%m-%d&#39;, time.localtime(time.time()))    today_time = time.mktime(time.strptime(today, &#39;%Y-%m-%d&#39;))    # 从昨天开始，往前推15天，15次循环,取1-15。取00:00:00-23:59:59的时间戳    start_time = str(round((today_time - 86400*pre_days)*1000))    end_time = str(round((today_time - 86400*(pre_days-1) - 1)*1000))    namespace = &#39;acs_slb_dashboard&#39;    for i in instance_dict.keys():        token = &#39;init_data&#39;        average_list = []        while token:            result = GetMonitorData.main([namespace, metric_name, start_time, end_time, i, token])            token = result.next_token            res_list = json.loads(result.datapoints)            # 停机和未安装监控agent的主机拿不到监控数据，res_list是个空列表，计算平均是会报错            if len(res_list) != 0:                for j in range(0, len(res_list)):                    # print(res_list[i])                    average_list.append(round(res_list[j][&#39;Average&#39;], 2))            else:                average_list = [0.00, ]        # 取平均值        average_dict[i] = numpy.mean(average_list)        time.sleep(0.2)    return average_dictdef get_average_15days(instance_dict, metric):    temp_dict = &#123;&#125;    median_dict1 = get_average_24h(instance_dict, 1, metric)    for k, v in median_dict1.items():        temp_dict[k] = []    for k1, v1 in median_dict1.items():        temp_dict[k1].append(v1)    for i in range(2, 16):        median_dict = get_average_24h(instance_dict, i, metric)        for k2, v2 in median_dict.items():            temp_dict[k2].append(v2)    for k3, v3 in temp_dict.items():        temp_dict[k3] = round(numpy.mean(v3), 3)    print(temp_dict)    return temp_dictdef write_to_execl(data):    df = pd.DataFrame.from_dict(data, orient=&#39;index&#39;, columns=[&#39;后端异常ECS实例个数&#39;, &#39;实例每秒最大并发连接数&#39;])    df.to_excel(&#39;slb_statistics.xlsx&#39;)if __name__ == &#39;__main__&#39;:    # 获取InstanceId和InstanceName的对应字典    str_time = time.time()    instance_dict = get_id_name_dict()    # 数据合并处理    id_list_dict = &#123;&#125;    for k, v in instance_dict.items():        id_list_dict[k] = []    ecs_metric = [&#39;UnhealthyServerCount&#39;, &#39;InstanceMaxConnection&#39;]    for metric in ecs_metric:        metric_data = get_average_15days(instance_dict, metric)        for k2, v2 in metric_data.items():            id_list_dict[k2].append(v2)    for k_id, k_name in instance_dict.items():        if k_id in id_list_dict:            id_list_dict[k_name] = id_list_dict.pop(k_id)    # 数据写入excel表格    write_to_execl(id_list_dict)    print(time.time() - str_time)</code></pre>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h2 id=&quot;一、缘由&quot;&gt;&lt;a href=&quot;#一、缘由&quot; class=&quot;headerlink&quot; title=&quot;一、缘由&quot;&gt;&lt;/a&gt;一、缘由&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;本脚本是阿里云资源利用率定期统计方案中的其中一个脚本。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;本脚本可实现，从每天</summary>
+      
+    
+    
+    
+    <category term="脚本" scheme="https://www.langxw.com/categories/%E8%84%9A%E6%9C%AC/"/>
+    
+    <category term="Python" scheme="https://www.langxw.com/categories/%E8%84%9A%E6%9C%AC/Python/"/>
+    
+    
+    <category term="Python" scheme="https://www.langxw.com/tags/Python/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>统计15天内阿里云ECS内存使用率和CPU使用率</title>
+    <link href="https://www.langxw.com/2021/12/01/%E7%BB%9F%E8%AE%A115%E5%A4%A9%E5%86%85%E9%98%BF%E9%87%8C%E4%BA%91ECS%E5%86%85%E5%AD%98%E4%BD%BF%E7%94%A8%E7%8E%87%E5%92%8CCPU%E4%BD%BF%E7%94%A8%E7%8E%87/"/>
+    <id>https://www.langxw.com/2021/12/01/%E7%BB%9F%E8%AE%A115%E5%A4%A9%E5%86%85%E9%98%BF%E9%87%8C%E4%BA%91ECS%E5%86%85%E5%AD%98%E4%BD%BF%E7%94%A8%E7%8E%87%E5%92%8CCPU%E4%BD%BF%E7%94%A8%E7%8E%87/</id>
+    <published>2021-12-01T02:42:57.000Z</published>
+    <updated>2021-12-01T02:59:00.560Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="一、缘由"><a href="#一、缘由" class="headerlink" title="一、缘由"></a>一、缘由</h2><p><strong>本脚本是阿里云资源利用率定期统计方案中的其中一个脚本。</strong></p><p>本脚本可实现，从每天95个平均值数据中取中位数，15天15个中位数取平均值，得到最终的15天内CPU和内存使用率数值。</p><p>进而根据阈值进行判断，资源是否处于低利用率状态。</p><h2 id="二、环境"><a href="#二、环境" class="headerlink" title="二、环境"></a>二、环境</h2><p><strong>Python3.7 + 阿里云云监控SDK + 阿里云ECS的SDK + pandas + numpy</strong></p><h2 id="三、代码实现"><a href="#三、代码实现" class="headerlink" title="三、代码实现"></a>三、代码实现</h2><pre><code class="bash"># -*- coding: utf-7 -*-import timeimport numpyimport jsonimport pandas as pdfrom typing import Listfrom alibabacloud_cms20190101.client import Client as Cms20190101Clientfrom alibabacloud_tea_openapi import models as open_api_modelsfrom alibabacloud_cms20190101 import models as cms_20190101_modelsfrom alibabacloud_ecs20140526.client import Client as Ecs20140527Clientfrom alibabacloud_ecs20140526 import models as ecs_20140526_modelsREGION_ID = [&#39;cn-beijing&#39;, &#39;cn-hangzhou&#39;, &#39;cn-zhangjiakou&#39;, &#39;cn-shenzhen&#39;, &#39;cn-shanghai&#39;, &#39;cn-hongkong&#39;,             &#39;ap-southeast-1&#39;, &#39;ap-northeast-1&#39;]class GetMonitorData:    def __init__(self):        pass    @staticmethod    def create_client(        access_key_id: str,        access_key_secret: str,    ) -&gt; Cms20190101Client:        config = open_api_models.Config(            access_key_id=&#39;xxxxxxxxx&#39;,            access_key_secret=&#39;xxxxxxxxxxxxx&#39;        )        config.endpoint = &#39;metrics.cn-hangzhou.aliyuncs.com&#39;        return Cms20190101Client(config)    @staticmethod    def main(        args: List[str],    ) -&gt; None:        client = GetMonitorData.create_client(&#39;acessKeyId&#39;, &#39;accessKeySecret&#39;)        describe_metric_list_request = cms_20190101_models.DescribeMetricListRequest(            metric_name=args[1],            namespace=args[0],            period=&#39;900&#39;,            start_time=args[2],            end_time=args[3],            length=&#39;100&#39;,            dimensions=&#39;&#123;&#123;"instanceId":&#123;&#125;&#125;&#125;&#39;.format(args[4])        )        res = client.describe_metric_list(describe_metric_list_request)        return res.bodyclass GetInstanceIdName:    def __init__(self):        pass    @staticmethod    def create_client(        access_key_id: str,        access_key_secret: str,    ) -&gt; Ecs20140526Client:        config = open_api_models.Config(            access_key_id=&#39;xxxxxxxxxxxxxx&#39;,            access_key_secret=&#39;xxxxxxxxxxxxxxxxxxxx&#39;        )        config.endpoint = &#39;ecs-cn-hangzhou.aliyuncs.com&#39;        return Ecs20140526Client(config)    @staticmethod    def main(        args: List[str],    ) -&gt; None:        client = GetInstanceIdName.create_client(&#39;accessKeyId&#39;, &#39;accessKeySecret&#39;)        describe_instances_request = ecs_20140526_models.DescribeInstancesRequest(            region_id=args[1],            next_token=args[0],            max_results=50        )        res = client.describe_instances(describe_instances_request)        return res.bodydef get_id_name_dict():    instance_dict = &#123;&#125;    for i in range(0, len(REGION_ID)):        token = &#39;init_data&#39;        while token:            result = GetInstanceIdName.main([token, REGION_ID[i]])            token = result.next_token            info_list = result.instances.instance            for j in range(0, len(info_list)):                instance_dict[info_list[j].instance_id] = info_list[j].instance_name    print(&#39;实例ID和名字的字典:&#39;, instance_dict)    return instance_dictdef get_median_24h(instance_dict, pre_days, metric_name):    median_dict = &#123;&#125;    today = time.strftime(&#39;%Y-%m-%d&#39;, time.localtime(time.time()))    today_time = time.mktime(time.strptime(today, &#39;%Y-%m-%d&#39;))    # 从昨天开始，往前推15天，15次循环,取1-15。取00:00:00-23:59:59的时间戳    start_time = str(round((today_time - 86400*pre_days)*1000))    end_time = str(round((today_time - 86400*(pre_days-1) - 1)*1000))    namespace = &#39;acs_ecs_dashboard&#39;    for i in instance_dict.keys():        result = GetMonitorData.main([namespace, metric_name, start_time, end_time, i])        average_list = []        res_list = json.loads(result.datapoints)        # 停机和未安装监控agent的主机拿不到监控数据，res_list是个空列表，计算平均是会报错        if len(res_list) != 0:            for j in range(0, len(res_list)):                # print(res_list[i])                average_list.append(round(res_list[j][&#39;Average&#39;], 2))        else:            average_list = [0.00, ]        # print(len(average_list), average_list)        # 取中位数        median_dict[i] = numpy.median(average_list)        time.sleep(0.2)    return median_dictdef get_average_15days(instance_dict, metric):    temp_dict = &#123;&#125;    median_dict1 = get_median_24h(instance_dict, 1, metric)    for k, v in median_dict1.items():        temp_dict[k] = []    for k1, v1 in median_dict1.items():        temp_dict[k1].append(v1)    for i in range(2, 16):        median_dict = get_median_24h(instance_dict, i, metric)        for k2, v2 in median_dict.items():            temp_dict[k2].append(v2)    for k3, v3 in temp_dict.items():        temp_dict[k3] = round(numpy.mean(v3), 3)    print(temp_dict)    return temp_dictdef write_to_execl(data):    df = pd.DataFrame.from_dict(data, orient=&#39;index&#39;, columns=[&#39;CPU使用率&#39;, &#39;内存使用率&#39;])    df.to_excel(&#39;cpu_mem_15days.xlsx&#39;)if __name__ == &#39;__main__&#39;:    # 获取InstanceId和InstanceName的对应字典    # str_time = time.time()    instance_dict = get_id_name_dict()    # 数据合并处理，比较复杂    id_list_dict = &#123;&#125;    for k, v in instance_dict.items():        id_list_dict[k] = []    ecs_metric = [&#39;CPUUtilization&#39;, &#39;memory_usedutilization&#39;]    for metric in ecs_metric:        metric_data = get_average_15days(instance_dict, metric)        for k2, v2 in metric_data.items():            id_list_dict[k2].append(v2)    for k_id, k_name in instance_dict.items():        if k_id in id_list_dict:            id_list_dict[k_name] = id_list_dict.pop(k_id)    # 数据写入excel表格    write_to_execl(id_list_dict)    # print(time.time() - str_time)</code></pre><p><strong>注意：以上代码中24小时内的数据，是一个实例一个循环取的数据，调用接口次数多，耗时较长。经实践400个ECS，执行完本脚本要5个小时左右，可耐心等待。</strong></p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h2 id=&quot;一、缘由&quot;&gt;&lt;a href=&quot;#一、缘由&quot; class=&quot;headerlink&quot; title=&quot;一、缘由&quot;&gt;&lt;/a&gt;一、缘由&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;本脚本是阿里云资源利用率定期统计方案中的其中一个脚本。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;本脚本可实现，从每天</summary>
+      
+    
+    
+    
+    <category term="脚本" scheme="https://www.langxw.com/categories/%E8%84%9A%E6%9C%AC/"/>
+    
+    <category term="Python" scheme="https://www.langxw.com/categories/%E8%84%9A%E6%9C%AC/Python/"/>
+    
+    
+    <category term="python" scheme="https://www.langxw.com/tags/python/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>统计阿里云ECS停机状态的主机</title>
+    <link href="https://www.langxw.com/2021/12/01/%E7%BB%9F%E8%AE%A1%E9%98%BF%E9%87%8C%E4%BA%91ECS%E5%81%9C%E6%9C%BA%E7%8A%B6%E6%80%81%E7%9A%84%E4%B8%BB%E6%9C%BA/"/>
+    <id>https://www.langxw.com/2021/12/01/%E7%BB%9F%E8%AE%A1%E9%98%BF%E9%87%8C%E4%BA%91ECS%E5%81%9C%E6%9C%BA%E7%8A%B6%E6%80%81%E7%9A%84%E4%B8%BB%E6%9C%BA/</id>
+    <published>2021-12-01T02:32:24.000Z</published>
+    <updated>2021-12-01T03:05:15.354Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="一、缘由"><a href="#一、缘由" class="headerlink" title="一、缘由"></a>一、缘由</h2><p><strong>本脚本是阿里云资源利用率定期统计方案中的其中一个脚本。</strong></p><p>公司阿里云ECS比较多，地区比较多，乃至有多个账号，一个个查看和统计比较费事费力。现编写一个统计阿里云ECS处于停机状态的主机的脚本，输出Excel文档后，我们可以区分，哪些还处于停机收费状态，哪些可以释放，哪些不可以释放。</p><h2 id="二、环境"><a href="#二、环境" class="headerlink" title="二、环境"></a>二、环境</h2><p>**Python3.7 + 阿里云ECS的SDK + pandas **</p><h2 id="三、代码实现"><a href="#三、代码实现" class="headerlink" title="三、代码实现"></a>三、代码实现</h2><pre><code class="bash"># -*- coding: utf-8 -*-from typing import Listimport pandas as pdfrom alibabacloud_tea_openapi import models as open_api_modelsfrom alibabacloud_ecs20140526.client import Client as Ecs20140526Clientfrom alibabacloud_ecs20140526 import models as ecs_20140526_modelsREGION_ID = [&#39;cn-beijing&#39;, &#39;cn-hangzhou&#39;, &#39;cn-zhangjiakou&#39;, &#39;cn-shenzhen&#39;, &#39;cn-shanghai&#39;, &#39;cn-hongkong&#39;,             &#39;ap-southeast-1&#39;, &#39;ap-northeast-1&#39;]class GetInstanceIdName:    def __init__(self):        pass    @staticmethod    def create_client(        access_key_id: str,        access_key_secret: str,    ) -&gt; Ecs20140526Client:        config = open_api_models.Config(            access_key_id=&#39;xxxxxxxxxx&#39;,            access_key_secret=&#39;xxxxxxxxxx&#39;        )        config.endpoint = &#39;ecs-cn-hangzhou.aliyuncs.com&#39;        return Ecs20140526Client(config)    @staticmethod    def main(        args: List[str],    ) -&gt; None:        client = GetInstanceIdName.create_client(&#39;accessKeyId&#39;, &#39;accessKeySecret&#39;)        describe_instances_request = ecs_20140526_models.DescribeInstancesRequest(            region_id=args[1],            next_token=args[0],            max_results=50        )        res = client.describe_instances(describe_instances_request)        return res.bodydef get_instance_status():    instance_dict = &#123;&#125;    for i in range(0, len(REGION_ID)):        token = &#39;init_data&#39;        while token:            result = GetInstanceIdName.main([token, REGION_ID[i]])            token = result.next_token            info_list = result.instances.instance            # print(dir(info_list[0]))            for j in range(0, len(info_list)):                if info_list[j].status == &#39;Stopped&#39;:                    instance_dict[info_list[j].instance_id] = []            for k in range(0, len(info_list)):                if info_list[k].status == &#39;Stopped&#39;:                    instance_dict[info_list[k].instance_id].append(info_list[k].instance_name)                    instance_dict[info_list[k].instance_id].append(info_list[k].status)                    instance_dict[info_list[k].instance_id].append(info_list[k].stopped_mode)                    instance_dict[info_list[k].instance_id].append(info_list[k].description)    return instance_dictdef write_to_execl(data):    df = pd.DataFrame.from_dict(data, orient=&#39;index&#39;, columns=[&#39;实例名称&#39;, &#39;实例状态&#39;, &#39;停机收费状态&#39;, &#39;实例备注&#39;])    df.to_excel(&#39;ecs_stopped.xlsx&#39;)if __name__ == &#39;__main__&#39;:    instance_info = get_instance_status()    write_to_execl(instance_info)</code></pre>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h2 id=&quot;一、缘由&quot;&gt;&lt;a href=&quot;#一、缘由&quot; class=&quot;headerlink&quot; title=&quot;一、缘由&quot;&gt;&lt;/a&gt;一、缘由&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;本脚本是阿里云资源利用率定期统计方案中的其中一个脚本。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;公司阿里云ECS比较</summary>
+      
+    
+    
+    
+    <category term="脚本" scheme="https://www.langxw.com/categories/%E8%84%9A%E6%9C%AC/"/>
+    
+    <category term="Python" scheme="https://www.langxw.com/categories/%E8%84%9A%E6%9C%AC/Python/"/>
+    
+    
+    <category term="python" scheme="https://www.langxw.com/tags/python/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>统计阿里云ECS磁盘使用率</title>
+    <link href="https://www.langxw.com/2021/11/30/%E7%BB%9F%E8%AE%A1%E9%98%BF%E9%87%8C%E4%BA%91ECS%E7%A3%81%E7%9B%98%E4%BD%BF%E7%94%A8%E7%8E%87/"/>
+    <id>https://www.langxw.com/2021/11/30/%E7%BB%9F%E8%AE%A1%E9%98%BF%E9%87%8C%E4%BA%91ECS%E7%A3%81%E7%9B%98%E4%BD%BF%E7%94%A8%E7%8E%87/</id>
+    <published>2021-11-30T10:33:08.000Z</published>
+    <updated>2021-12-01T03:05:21.200Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="一、缘由"><a href="#一、缘由" class="headerlink" title="一、缘由"></a>一、缘由</h2><p>公司阿里云主机很多业务模块，经常受磁盘告警烦恼，尤其是在周末或者假期，运维不敢随意清理，就得找开发确认乐之后才能清理。</p><p>为了减少假期的磁盘告警，保证业务的正常运行，可在周五或者假期前一天统计所有主机的磁盘使用率，对于大于65%的，一一进行核对和清理。</p><h2 id="二、环境"><a href="#二、环境" class="headerlink" title="二、环境"></a>二、环境</h2><p><strong>Python3.7 + 阿里云云监控SDK。</strong></p><h2 id="三、代码实现"><a href="#三、代码实现" class="headerlink" title="三、代码实现"></a>三、代码实现</h2><p><strong>调用阿里云云监控的接口，来查询磁盘使用率，并最终输出文档，按磁盘使用率倒序排列。</strong></p><pre><code class="bash"># -*- coding: utf-8 -*-import sysimport jsonimport timefrom typing import Listfrom operator import itemgetterfrom alibabacloud_cms20190101.client import Client as Cms20190101Clientfrom alibabacloud_tea_openapi import models as open_api_modelsfrom alibabacloud_cms20190101 import models as cms_20190101_modelsclass Sample:    def __init__(self):        pass    @staticmethod    def create_client(        access_key_id: str,        access_key_secret: str,    ) -&gt; Cms20190101Client:        &quot;&quot;&quot;        使用AK&amp;SK初始化账号Client        @param access_key_id:        @param access_key_secret:        @return: Client        @throws Exception        &quot;&quot;&quot;        config = open_api_models.Config(            # 您的AccessKey ID,            access_key_id=&#39;xxxxxxxxx&#39;,            # 您的AccessKey Secret,            access_key_secret=&#39;xxxxxxxx&#39;        )        # 访问的域名        config.endpoint = &#39;metrics.cn-hangzhou.aliyuncs.com&#39;        return Cms20190101Client(config)    @staticmethod    def main(        args: List[str],    ) -&gt; None:        client = Sample.create_client(&#39;accessKeyId&#39;, &#39;accessKeySecret&#39;)        describe_metric_list_request = cms_20190101_models.DescribeMetricListRequest(            metric_name=&#39;diskusage_utilization&#39;,            namespace=&#39;acs_ecs_dashboard&#39;,            period=&#39;60&#39;,            start_time=args[1],            end_time=args[2],            length=&#39;100&#39;,            next_token=args[0]        )        # 复制代码运行请自行打印 API 的返回值        res = client.describe_metric_list(describe_metric_list_request)        return res.bodydef get_disk_usage(api_res):    disk_list = []    # print(dir(api_res))    res_list = json.loads(api_res.datapoints)    for i in range(0, len(res_list)):        disk_list_tmp = [res_list[i][&#39;instanceId&#39;], res_list[i][&#39;diskname&#39;], res_list[i][&#39;Average&#39;]]        disk_list.append(disk_list_tmp)    return disk_listif __name__ == &#39;__main__&#39;:    token = &#39;init_data&#39;    disk_info = []    # 不能取当前时间，当前时间太近了，没有最新的监控数据。    day = time.strftime(&#39;%Y-%m-%d&#39;, time.localtime())    start_time = str(round((time.time()-300)*1000))    end_time = str(round((time.time()-240)*1000))    while token:        result = Sample.main([token, start_time, end_time])        token = result.next_token        disk_res = get_disk_usage(result)        disk_info.extend(disk_res)    order_disk_info = sorted(disk_info, key=itemgetter(2), reverse=True)    with open(&#39;statistics_disk_&#123;&#125;.txt&#39;.format(day), &#39;w&#39;) as f:        f.write(&#39;ECS实例ID \t\t盘符 \t\t磁盘使用率\n&#39;)        for i in range(0, len(order_disk_info)):            f.write(str(order_disk_info[i])+&#39;\n&#39;)</code></pre><p><strong>注意：输出文档只有实例ID，如果显示实例名称，可以参考另一篇文章的接口调用。</strong></p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h2 id=&quot;一、缘由&quot;&gt;&lt;a href=&quot;#一、缘由&quot; class=&quot;headerlink&quot; title=&quot;一、缘由&quot;&gt;&lt;/a&gt;一、缘由&lt;/h2&gt;&lt;p&gt;公司阿里云主机很多业务模块，经常受磁盘告警烦恼，尤其是在周末或者假期，运维不敢随意清理，就得找开发确认乐之后才能清理。&lt;/p</summary>
+      
+    
+    
+    
+    <category term="脚本" scheme="https://www.langxw.com/categories/%E8%84%9A%E6%9C%AC/"/>
+    
+    <category term="Python" scheme="https://www.langxw.com/categories/%E8%84%9A%E6%9C%AC/Python/"/>
+    
+    
+    <category term="python" scheme="https://www.langxw.com/tags/python/"/>
+    
+  </entry>
   
   <entry>
     <title>阿里云资源利用率定期统计方案</title>
@@ -155,7 +262,7 @@
     <link href="https://www.langxw.com/2021/05/28/%E4%B8%80%E9%94%AE%E9%87%8D%E5%91%BD%E5%90%8D%E9%92%89%E9%92%89%E6%8E%A5%E6%94%B6%E5%88%B0%E7%9A%84%E6%96%87%E4%BB%B6/"/>
     <id>https://www.langxw.com/2021/05/28/%E4%B8%80%E9%94%AE%E9%87%8D%E5%91%BD%E5%90%8D%E9%92%89%E9%92%89%E6%8E%A5%E6%94%B6%E5%88%B0%E7%9A%84%E6%96%87%E4%BB%B6/</id>
     <published>2021-05-28T09:21:30.000Z</published>
-    <updated>2021-05-28T09:23:35.847Z</updated>
+    <updated>2021-11-30T10:47:36.591Z</updated>
     
     <content type="html"><![CDATA[<h2 id="一、缘由"><a href="#一、缘由" class="headerlink" title="一、缘由"></a>一、缘由</h2><p>由于某些原因，公司的程序只能手动发版，开发本地打包好后通过钉钉发送给运维。但是钉钉接收到名字一样的文件后，会自动重命名，加上括号和数字，比如apollo-1.0.RELEASE(2).jar，这样你就需要手动处理掉后面的括号和数字。</p><p>手动太麻烦，索性就用python来实现自动重名，并将python代码打包成exe程序，后将exe程序固定在任务栏。这样鼠标点一下任务栏图标，就可以实现一键重命名阿里云接收到的文件，Nice。</p><h2 id="二、代码实现"><a href="#二、代码实现" class="headerlink" title="二、代码实现"></a>二、代码实现</h2><pre><code class="ptyhon">import osimport redownload_dir = &#39;C:\\Users\\Thinkpad\\Downloads&#39;file_dic = &#123;&#125;# 重命名最新的一个文件，去掉文件名的括号和数字# apollo-1.0.RELEASE(2).jar --&gt; apollo-1.0.RELEASE.jar# downloads文件夹就一个文件怎么处理。文件夹为空，就先就报错吧。# 如果有downloads下有文件夹，也会报错，需要调用os.rmdir()来处理。def delete_other_files():    files = os.listdir(download_dir)    for file in files:        mtime = os.stat(os.path.join(download_dir, file)).st_mtime        file_dic[mtime] = file    time_list = list(file_dic.keys())    max_time = max(time_list)    if len(file_dic) &gt; 1:        time_list.remove(max_time)        for time in time_list:            os.remove(os.path.join(download_dir, file_dic[time]))    return file_dic[max_time]# 如果只有一个正常的文件，不做替换，def rename_file(file):    new_name = re.sub(r&#39;\(\d+\)&#39;, &#39;&#39;, file)    os.chdir(download_dir)    os.rename(file, new_name)if __name__ == &#39;__main__&#39;:    file_name = delete_other_files()    # file_name = &#39;dist.zip&#39;    rename_file(file_name)</code></pre><h2 id="三、将Python代码打包成exe文件"><a href="#三、将Python代码打包成exe文件" class="headerlink" title="三、将Python代码打包成exe文件"></a>三、将Python代码打包成exe文件</h2><p>这里使用pyinstaller模块，具体命令为：</p><pre><code class="shell">pyinstaller -F -c main.py</code></pre><p>将Python打包成exe文件的具体介绍见另一篇文章：<a href="https://www.langxw.com/2021/04/14/Python%E5%88%B6%E4%BD%9CExce%E6%8A%A5%E8%A1%A8%E5%B9%B6%E6%89%93%E5%8C%85/">Python制作Exce报表并打包</a></p>]]></content>
     
@@ -169,7 +276,7 @@
     
     <category term="脚本" scheme="https://www.langxw.com/categories/%E8%84%9A%E6%9C%AC/"/>
     
-    <category term="Python脚本" scheme="https://www.langxw.com/categories/%E8%84%9A%E6%9C%AC/Python%E8%84%9A%E6%9C%AC/"/>
+    <category term="Python" scheme="https://www.langxw.com/categories/%E8%84%9A%E6%9C%AC/Python/"/>
     
     
     <category term="python" scheme="https://www.langxw.com/tags/python/"/>
@@ -260,7 +367,7 @@
     <link href="https://www.langxw.com/2021/04/14/Python%E5%88%B6%E4%BD%9CExce%E6%8A%A5%E8%A1%A8%E5%B9%B6%E6%89%93%E5%8C%85/"/>
     <id>https://www.langxw.com/2021/04/14/Python%E5%88%B6%E4%BD%9CExce%E6%8A%A5%E8%A1%A8%E5%B9%B6%E6%89%93%E5%8C%85/</id>
     <published>2021-04-14T07:25:45.000Z</published>
-    <updated>2021-04-14T07:43:48.322Z</updated>
+    <updated>2021-11-30T10:46:34.600Z</updated>
     
     <content type="html"><![CDATA[<h2 id="一、缘由"><a href="#一、缘由" class="headerlink" title="一、缘由"></a>一、缘由</h2><p>在公司报表系统没有出来之前，每日运营数据的需求由运维或者DBA查数据库手动拉取，徒增工作量。</p><p>故考虑做一个exe文件，让产品童鞋点一下就自动生成一个包含昨日的数据的Excel表格，省心省力。</p><h2 id="二、环境"><a href="#二、环境" class="headerlink" title="二、环境"></a>二、环境</h2><p><strong>Win10 + Pycharm + Python3.7 + pymysql + openpyxl + pyinstaller</strong></p><p>说明：</p><ol><li>因为办公环境是windows，如果是Linux、Mac则可以设置定时任务来自动跑Python脚本</li><li>openpyxl模块，用来处理excel文档，操作简单，功能强大</li><li>pyinstaller模块，可以将python脚本打包成exe程序，还可以加密除入口函数外的pyhon脚本。</li></ol><h2 id="三、代码实现"><a href="#三、代码实现" class="headerlink" title="三、代码实现"></a>三、代码实现</h2><pre><code class="python">import pymysqlimport timefrom openpyxl import Workbook# MySQL查询函数def query_db(sql):    conn = pymysql.connect(host=&#39;1.1.1.1&#39;,                           port=3306,                           user=&#39;test_ro&#39;,                           password=&#39;$uT%8ono&#39;,                           db=&#39;test&#39;,                           cursorclass=pymysql.cursors.DictCursor                           )    with conn.cursor() as cursor:        # 为了避免SQL注入，生产环境这里不要直接传入SQL，要带参数的拼接形式        cursor.execute(sql)        result = cursor.fetchall()    conn.close()    return result# 处理多个SQL查询语句，并将结果拼接成包含多个字典的列表def handle_result():    # 获得昨天的日期    yesterday_time = time.localtime(time.time()-86400)    yesterday = time.strftime(&#39;%Y-%m-%d&#39;, yesterday_time)    res_list = [&#123;&#39;日期&#39;: &#39;&#123;&#125;&#39;.format(yesterday)&#125;, ]    sql_list = [        &quot;SELECT COUNT(*) AS &#39;累计进件总笔数&#39; FROM ( SELECT COUNT(*) FROM test_apply_account WHERE apply_date &lt; &#39;&#123;&#125; 23:59:59&#39; GROUP BY cert_no) A&quot;.format(yesterday),        &quot;SELECT count(*) AS &#39;当日进件总笔数&#39; FROM (SELECT count(*) FROM test_apply_account WHERE apply_date BETWEEN &#39;&#123;&#125; 00:00:00&#39; AND &#39;&#123;&#125; 23:59:59&#39; GROUP BY cert_no) A&quot;.format(yesterday, yesterday),        &quot;SELECT  count(*) as &#39;当日授信总笔数数&#39; FROM test_credit_apply WHERE credit_date BETWEEN &#39;&#123;&#125; 00:00:00&#39; AND &#39;&#123;&#125; 23:59:59&#39;&quot;.format(yesterday, yesterday),        &quot;SELECT count(*) as &#39;当日授信通过笔数&#39; FROM test_credit_apply WHERE credit_date BETWEEN &#39;&#123;&#125; 00:00:00&#39; AND &#39;&#123;&#125; 23:59:59&#39; AND credit_status=&#39;SUCCESS&#39;&quot;.format(yesterday, yesterday),    ]    for sql in sql_list:        res = query_db(sql)        res_list += res    return res_list# 将拼接好的数据写入excel，以新建excel表格的形式def write_excel(data):    wb = Workbook()    wb.create_sheet(&#39;XX每日数据&#39;, 0)    sheet = wb.active    i = 1    for item in data:        sheet.cell(row=1, column=i, value=list(item.keys())[0])        sheet.cell(row=2, column=i, value=list(item.values())[0])        i += 1    wb.save(&#39;xx_everyday.xlsx&#39;)if __name__ == &#39;__main__&#39;:    res_list = handle_result()    write_excel(res_list)</code></pre><h2 id="四、将python脚本打包成exe文件"><a href="#四、将python脚本打包成exe文件" class="headerlink" title="四、将python脚本打包成exe文件"></a>四、将python脚本打包成exe文件</h2><p>这里使用pyinstaller模块，具体命令为：</p><pre><code class="shell">pyinstaller -F -c --key 123456 main.py</code></pre><p>参数解释：</p><ol><li>-F 打包成单个exe文件，相反的参数为-D</li><li>-c 显示cmd控制台，相反的参数为-w</li><li>–key 密钥，加密打包，但是只对引入的库文件进行加密，所以建议main.py中只写入口函数，其他的函数进行引用</li><li>这样的加密基本安全，要想完全反编译，没点水平很难做到。</li></ol><p><strong>注意：pyinstaller 加密需要tinyaes包，tinyaes又依赖于Microsoft Visual C++，C++也要安装Win10 SDK。</strong></p>]]></content>
     
@@ -275,7 +382,7 @@
     
     <category term="脚本" scheme="https://www.langxw.com/categories/%E8%84%9A%E6%9C%AC/"/>
     
-    <category term="Python脚本" scheme="https://www.langxw.com/categories/%E8%84%9A%E6%9C%AC/Python%E8%84%9A%E6%9C%AC/"/>
+    <category term="Python" scheme="https://www.langxw.com/categories/%E8%84%9A%E6%9C%AC/Python/"/>
     
     
     <category term="python" scheme="https://www.langxw.com/tags/python/"/>
@@ -450,116 +557,6 @@
     
     
     <category term="mongodb" scheme="https://www.langxw.com/tags/mongodb/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>ss免费账号</title>
-    <link href="https://www.langxw.com/2021/02/22/ss%E5%85%8D%E8%B4%B9%E8%B4%A6%E5%8F%B7/"/>
-    <id>https://www.langxw.com/2021/02/22/ss%E5%85%8D%E8%B4%B9%E8%B4%A6%E5%8F%B7/</id>
-    <published>2021-02-22T07:38:35.000Z</published>
-    <updated>2021-11-30T09:50:21.311Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="一、免费账号"><a href="#一、免费账号" class="headerlink" title="一、免费账号"></a>一、免费账号</h2><p><a href="https://github.com/Alvin9999/new-pac/wiki/ss%E5%85%8D%E8%B4%B9%E8%B4%A6%E5%8F%B7">免费账号连接：https://github.com/Alvin9999/new-pac/wiki/ss%E5%85%8D%E8%B4%B9%E8%B4%A6%E5%8F%B7</a></p><p><strong>账号可能会失效，失效后请到以上页面获取新的账号。</strong></p><h2 id="二、自由上网"><a href="#二、自由上网" class="headerlink" title="二、自由上网"></a>二、自由上网</h2><p><a href="https://github.com/Alvin9999/new-pac/wiki">自由上网：https://github.com/Alvin9999/new-pac/wiki</a></p><h2 id="三、注意事项"><a href="#三、注意事项" class="headerlink" title="三、注意事项"></a>三、注意事项</h2><ol><li>本资源仅供用于学习和交流,请遵循相关法律法规,本资源不代表本站立场,并禁止以下行为</li><li>不得使用 BT，eMule，迅雷，FlashGet，Tor 等 P2P 工具下载非法和国家禁止的互联网信息内容</li><li>不得用于“注册机/发贴机/垃圾邮件/群发外链/黑帽SEO/网络攻击/网络诈骗”等用途</li><li>不得下载或传播侵犯知识产权相关内容</li><li>不得发布任何非法、威胁、诽谤、反动、淫秽、色情信息或其它违法信息</li><li>不得利用本系统可能存在漏洞以各种形式为自己及他人牟利</li><li>不散布电子邮件广告、垃圾邮件（SPAM）：不利用本平台提供的服务散发大量不受欢迎的或者未经请求的电子邮件、电子广告或包含反动、色情等有害信息的电子邮件</li><li>不利用本平台提供的服务上传、下载、发布如下信息或者内容，不为他人发布该等信息提供任何便利</li><li>违反国家规定的政治宣传或新闻信息</li><li>涉及国家秘密或安全的信息</li><li>封建迷信或淫秽、色情、下流的信息或教唆犯罪的信息</li><li>违反国家民族和宗教政策的信息</li><li>妨碍互联网运行安全的信息</li><li>侵害他人合法权益的信息或其他有损于社会秩序、社会治安、公共道德的信息或内容</li><li>其他违反法律法规、部门规章或国家政策的内容</li><li>不进行任何破坏或试图破坏网络安全的行为（包括钓鱼，黑客，网络诈骗等）</li></ol>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h2 id=&quot;一、免费账号&quot;&gt;&lt;a href=&quot;#一、免费账号&quot; class=&quot;headerlink&quot; title=&quot;一、免费账号&quot;&gt;&lt;/a&gt;一、免费账号&lt;/h2&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/Alvin9999/new-pac/wiki/ss%</summary>
-      
-    
-    
-    
-    <category term="工具" scheme="https://www.langxw.com/categories/%E5%B7%A5%E5%85%B7/"/>
-    
-    <category term="翻墙" scheme="https://www.langxw.com/categories/%E5%B7%A5%E5%85%B7/%E7%BF%BB%E5%A2%99/"/>
-    
-    
-    <category term="shadowsocks" scheme="https://www.langxw.com/tags/shadowsocks/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>DockerHub加速</title>
-    <link href="https://www.langxw.com/2021/02/02/DockerHub%E5%8A%A0%E9%80%9F/"/>
-    <id>https://www.langxw.com/2021/02/02/DockerHub%E5%8A%A0%E9%80%9F/</id>
-    <published>2021-02-02T02:34:29.000Z</published>
-    <updated>2021-02-02T02:35:58.143Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="一、缘由："><a href="#一、缘由：" class="headerlink" title="一、缘由："></a>一、缘由：</h2><p>　　今天学习Flask，书上建议用Docker，那我就安装了DockerToolBox（WIN10系统只能用toolbox）。其中从docker hub拉取ubuntu镜像时</p><p>docker pull xxxx，网速简直是龟速。想到中国的长城防火墙，再想到毕竟是国外的网站，瞬间心灰意冷，想诅骂作者搞了个那么大个镜像在Docker Hub。</p><p>　　按以往的经验，对于国外网站或者源，我们都喜欢更换国内源、使用代理VPN、使用加速器，来解决访问不了或者访问慢的问题。</p><p><strong>环境：WIN 10  ；Docker 17</strong></p><h2 id="二、解决办法："><a href="#二、解决办法：" class="headerlink" title="二、解决办法："></a>二、解决办法：</h2><p>　　<strong>Docker加速器 DaoCloud</strong></p><p>　　DaoCloud 加速器 是广受欢迎的 Docker 工具，解决了国内用户访问 Docker Hub 缓慢的问题。DaoCloud 加速器结合国内的 CDN 服务与协议层优化，成倍的提升了下载速度。</p><p>　　<a href="https://www.daocloud.io/">https://www.daocloud.io/</a> 注册并登陆，在dashboard右上角有一个火箭图标，他就是加速器。点开后获得加速地址：<a href="http://xxxx.m.daocloud.io.(请注意自己的宿主机操作系统,不要选错加速地址)/">http://xxxx.m.daocloud.io。（请注意自己的宿主机操作系统，不要选错加速地址）</a></p><p>　　下面就是将加速地址加入docker的配置文件里，重启docker即可。</p><p>　　我用的是Docker Toolbox，启动Docker Quickstart Terminal，然后按如下步骤操作：</p><pre><code class="bash">docker-machine ssh defaultsudo sed -i &quot;s|EXTRA_ARGS=&#39;|EXTRA_ARGS=&#39;--registry-mirror=加速地址 |g&quot; /var/lib/boot2docker/profileexitdocker-machine restart default </code></pre><p>之后就可以飞速的下载Docker镜像了，O(∩_∩)O哈哈~。</p><p>　　不同的操作系统，不同的docker版本，使用docker加速器配置方法不同，具体请参考官方文档。</p><p>　　<strong>或者使用，阿里云加速器</strong></p><h2 id="三、附件："><a href="#三、附件：" class="headerlink" title="三、附件："></a>三、附件：</h2><p>1、<a href="http://guide.daocloud.io/dcs/daocloud-9153151.html">Docker 加速器官方文档</a></p><p>2、Docker加速器简介：</p><p>Docker加速器是 DaoCloud 推出的 Docker Hub Mirror 服务的官方名称。</p><p>Docker加速器提供Docker Registry（Docker Hub）在中国的镜像代理服务，为中国用户在国内服务器上缓存诸多镜像。</p><p>当用户的Docker设定了–registry-mirror参数后，用户的Docker拉取镜像时，首先去Docker加速器中查找镜像，若命中则说明该镜像已经在Docker加速器中缓存，用户直接从Docker加速器中下载。</p><p>若没有命中，则说该镜像还没有被缓存，那么Docker加速器首先会被驱使去Docker Hub中下载该镜像，并进行缓存，最终让用户从Docker加速器中下载该镜像。</p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h2 id=&quot;一、缘由：&quot;&gt;&lt;a href=&quot;#一、缘由：&quot; class=&quot;headerlink&quot; title=&quot;一、缘由：&quot;&gt;&lt;/a&gt;一、缘由：&lt;/h2&gt;&lt;p&gt;　　今天学习Flask，书上建议用Docker，那我就安装了DockerToolBox（WIN10系统只能用tool</summary>
-      
-    
-    
-    
-    <category term="虚拟化" scheme="https://www.langxw.com/categories/%E8%99%9A%E6%8B%9F%E5%8C%96/"/>
-    
-    <category term="Docker" scheme="https://www.langxw.com/categories/%E8%99%9A%E6%8B%9F%E5%8C%96/Docker/"/>
-    
-    
-    <category term="docker" scheme="https://www.langxw.com/tags/docker/"/>
-    
-    <category term="加速器" scheme="https://www.langxw.com/tags/%E5%8A%A0%E9%80%9F%E5%99%A8/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Docker修改默认时区</title>
-    <link href="https://www.langxw.com/2021/02/02/Docker%E4%BF%AE%E6%94%B9%E9%BB%98%E8%AE%A4%E6%97%B6%E5%8C%BA/"/>
-    <id>https://www.langxw.com/2021/02/02/Docker%E4%BF%AE%E6%94%B9%E9%BB%98%E8%AE%A4%E6%97%B6%E5%8C%BA/</id>
-    <published>2021-02-02T02:32:07.000Z</published>
-    <updated>2021-02-02T02:43:52.169Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="一、缘由："><a href="#一、缘由：" class="headerlink" title="一、缘由："></a>一、缘由：</h2><p><strong>Docker Hub中的镜像默认都是0时区，而我们在东八区，差8小时，会导致我们看日志不能准确定位时间，这是很要命的。</strong></p><h2 id="二、解决办法："><a href="#二、解决办法：" class="headerlink" title="二、解决办法："></a>二、解决办法：</h2><h3 id="1、环境变量方式："><a href="#1、环境变量方式：" class="headerlink" title="1、环境变量方式："></a>1、环境变量方式：</h3><ol><li><p>docker run 启动时加入环境变量：<code>docker run -e &quot;TZ=Asia/Shanghai&quot;</code></p></li><li><p>docker-compose 方式启动时，加入 </p><pre><code class="bash">environment: - TZ=Asia/Shanghai</code></pre><h3 id="2、重新制作镜像方式："><a href="#2、重新制作镜像方式：" class="headerlink" title="2、重新制作镜像方式："></a>2、重新制作镜像方式：</h3></li></ol><p>如果你是基于某个官方Image来制作自己的镜像，比如Alpine。那么你可以在Dockerfile中，加入:</p><pre><code class="bash">RUN apk --no-cache add tzdata  &amp;&amp; \  ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime &amp;&amp; \  echo &quot;Asia/Shanghai&quot; &gt; /etc/timezone</code></pre>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h2 id=&quot;一、缘由：&quot;&gt;&lt;a href=&quot;#一、缘由：&quot; class=&quot;headerlink&quot; title=&quot;一、缘由：&quot;&gt;&lt;/a&gt;一、缘由：&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;Docker Hub中的镜像默认都是0时区，而我们在东八区，差8小时，会导致我们看日志不能准确定位时</summary>
-      
-    
-    
-    
-    <category term="虚拟化" scheme="https://www.langxw.com/categories/%E8%99%9A%E6%8B%9F%E5%8C%96/"/>
-    
-    <category term="Docker" scheme="https://www.langxw.com/categories/%E8%99%9A%E6%8B%9F%E5%8C%96/Docker/"/>
-    
-    
-    <category term="docker" scheme="https://www.langxw.com/tags/docker/"/>
-    
-    <category term="timezone" scheme="https://www.langxw.com/tags/timezone/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>ELK-Docker化安装</title>
-    <link href="https://www.langxw.com/2021/02/02/ELK-Docker%E5%8C%96%E5%AE%89%E8%A3%85/"/>
-    <id>https://www.langxw.com/2021/02/02/ELK-Docker%E5%8C%96%E5%AE%89%E8%A3%85/</id>
-    <published>2021-02-02T02:28:20.000Z</published>
-    <updated>2021-02-02T02:31:38.026Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="一、环境："><a href="#一、环境：" class="headerlink" title="一、环境："></a>一、环境：</h2><p><strong>Ubuntu18.04 + Docker 18.09 + ELK Docker Image 7.1</strong> </p><h2 id="二、安装部署："><a href="#二、安装部署：" class="headerlink" title="二、安装部署："></a>二、安装部署：</h2><h3 id="1、Docker"><a href="#1、Docker" class="headerlink" title="1、Docker"></a>1、Docker</h3><pre><code class="bash">curl -fsSL https://get.docker.com -o get-docker.shsudo sh get-docker.shsudo usermod -aG docker $(whoami)sudo systemctl start dockersudo systemctl status docker</code></pre><h3 id="2、Elasticsearch"><a href="#2、Elasticsearch" class="headerlink" title="2、Elasticsearch"></a>2、Elasticsearch</h3><pre><code class="bash">docker pull docker.elastic.co/elasticsearch/elasticsearch:7.1.0sudo apt install docker-composesudo bash -c &quot;echo &#39;vm.max_map_count=262144&#39; &gt;&gt; /etc/sysctl.conf&quot;sudo sysctl -psudo mkdir -p /data/elasticsearch/datasudo vim docker-compose.ymlsudo chown -R yimi.yimi  elasticsearch/sudo docker-compose up -ddocker ps -acurl http://127.0.0.1:9200/_cat/healthdocker-compose down -v</code></pre><h3 id="3、Kibana"><a href="#3、Kibana" class="headerlink" title="3、Kibana"></a>3、Kibana</h3><pre><code class="bash">docker pull docker.elastic.co/kibana/kibana:7.1.0sudo mkdir /data/kibanasudo vim docker-compose.ymlsudo docker-compose  up -ddocker logs kibana </code></pre><h3 id="4、Logstash"><a href="#4、Logstash" class="headerlink" title="4、Logstash"></a>4、Logstash</h3><pre><code>docker pull docker.elastic.co/logstash/logstash:7.1.0docker run -it --rm docker.elastic.co/logstash/logstash:7.1.0 -e &#39;input &#123; stdin &#123; &#125; &#125; output &#123; stdout &#123; &#125; &#125;&#39;sudo mkdir /data/logstash/sudo chown -R yimi.yimi logstash/docker run -d -p 5044:5044 --name logstash --network elasticsearch_esnet \-v /data/logstash/logstash.conf:/usr/share/logstash/pipeline/logstash.conf \-v /data/logstash/logstash.yml:/usr/share/logstash/config/logstash.yml \docker.elastic.co/logstash/logstash:7.1.0</code></pre><h3 id="5、Filebeat"><a href="#5、Filebeat" class="headerlink" title="5、Filebeat"></a>5、Filebeat</h3><h4 id="1）非Docker模式："><a href="#1）非Docker模式：" class="headerlink" title="1）非Docker模式："></a>1）非Docker模式：</h4><pre><code class="bash"># 1.edit config with logstash # 2.Index setup filebeat setup --template -E output.logstash.enabled=false -E &#39;output.elasticsearch.hosts=[&quot;http://10.15.1.27:9200&quot;]&#39;# 3.kibana setupfilebeat setup -e \  -E output.logstash.enabled=false \  -E output.elasticsearch.hosts=[&#39;http://10.15.1.27:9200&#39;] \  -E setup.kibana.host=http://10.15.1.27:5601  # 4.startup filebeat:sudo service filebeat start</code></pre><p>####2）Docker模式：</p><pre><code class="bash">docker run \docker.elastic.co/beats/filebeat:7.1.1 \setup -E setup.kibana.host=kibana:5601 \-E output.elasticsearch.hosts=[&quot;elasticsearch:9200&quot;]docker run docker.elastic.co/beats/filebeat:7.1.1 setup \--network elasticsearch_esnet --template -E output.logstash.enabled=false \-E &#39;output.elasticsearch.hosts=[&quot;es01:9200&quot;]&#39;docker run --net=&quot;host&quot; docker.elastic.co/beats/filebeat:7.1.1 setup -e \  -E output.logstash.enabled=false \  -E output.elasticsearch.hosts=[&#39;localhost:9200&#39;] \  -E output.elasticsearch.username=filebeat_internal \  -E output.elasticsearch.password=YOUR_PASSWORD \  -E setup.kibana.host=localhost:5601</code></pre><h3 id="6、X-PACK"><a href="#6、X-PACK" class="headerlink" title="6、X-PACK"></a>6、X-PACK</h3><p>x-pack是elasticsearch的一个扩展包，将安全，警告，监视，图形和报告功能捆绑在一个易于安装的软件包中。 </p><p>因为x-pack是收费的，所以试用期只有一个月。长期使用就必须根据官网文档说得来，也是给我们后门，一年一年的续期。</p><p><strong>如果要认证，建议用Nginx做反向代理+认证</strong></p><h2 id="三、ELK-使用步骤："><a href="#三、ELK-使用步骤：" class="headerlink" title="三、ELK 使用步骤："></a>三、ELK 使用步骤：</h2><p>Spring Boot 日志输出到指定目录，Filebeat 进行采集，Logstash 进行过滤，Elasticsearch 进行存储，Kibana 进行展示。</p><p>Filebeat 示例配置（<code>vi /etc/filebeat/filebeat.yml</code>）：</p><pre><code class="yaml">filebeat.prospectors:- input_type: log  paths:    - /var/log/spring-boot-log4j2/*.log  document_type: &quot;spring-boot-log4j2&quot; # 定义写入 ES 时的 _type 值  multiline:    #pattern: &#39;^\s*(\d&#123;4&#125;|\d&#123;2&#125;)\-(\d&#123;2&#125;|[a-zA-Z]&#123;3&#125;)\-(\d&#123;2&#125;|\d&#123;4&#125;)&#39;   # 指定匹配的表达式（匹配以 2017-11-15 08:04:23:889 时间格式开头的字符串）    pattern: &#39;^\s*(&quot;&#123;)&#39;                         # 指定匹配的表达式（匹配以 &quot;&#123; 开头的字符串）    negate: true                                # 是否匹配到    match: after                                # 合并到上一行的末尾    max_lines: 1000                             # 最大的行数    timeout: 30s                                # 如果在规定的时候没有新的日志事件就不等待后面的日志  fields:    logsource: node1    logtype: spring-boot-log4j2- input_type: log  paths:    - /var/log/messages    #- /var/log/*.log  document_type: &quot;syslog&quot; # 定义写入 ES 时的 _type 值  fields:    logsource: node1    logtype: syslog#output.elasticsearch:  #hosts: [&quot;node1:9200&quot;]output.logstash:  hosts: [&quot;node1:10515&quot;]</code></pre><p>上面的配置需要注意几点：</p><ul><li><code>pattern</code>：配置的正则表达式，是为了合并异常信息（而不是单行显示），匹配以<code>&quot;&#123;</code>开头的字符串（判断是否 Json 格式），如果匹配不到的话，就进行合并行。</li><li><code>document_type</code>：配置的是 Elasticsearch 的 Type 值，方便 Elasticsearch 对日志数据的归类。</li><li><code>logtype</code>：新增的字段，用于 Filebeat 和 Logstash 之间传递参数，进行过滤的判断逻辑。</li></ul><p>Logstash 示例配置（<code>vi /etc/logstash/conf.d/logstash.conf</code>）：</p><pre><code class="yaml">input &#123; beats &#123;   port =&gt; 10515  &#125;&#125;filter &#123;  if [fields][logtype] == &quot;syslog&quot; &#123;    grok &#123;      match =&gt; &#123; &quot;message&quot; =&gt; &quot;%&#123;SYSLOGTIMESTAMP:syslog_timestamp&#125; %&#123;SYSLOGHOST:syslog_hostname&#125; %&#123;DATA:syslog_program&#125;(?:\[%&#123;POSINT:syslog_pid&#125;\])?: %&#123;GREEDYDATA:syslog_message&#125;&quot;       add_field =&gt; [ &quot;received_at&quot;, &quot;%&#123;@timestamp&#125;&quot; ]      add_field =&gt; [ &quot;received_from&quot;, &quot;%&#123;host&#125;&quot; ]    &#125;    syslog_pri &#123; &#125;    date &#123;      match =&gt; [ &quot;syslog_timestamp&quot;, &quot;MMM  d HH:mm:ss&quot;, &quot;MMM dd HH:mm:ss&quot; ]    &#125;  &#125;  if [fields][logtype] == &quot;spring-boot-log4j2&quot; &#123;    json &#123;      source =&gt; &quot;message&quot;      target =&gt; &quot;data&quot;    &#125;  &#125;&#125;output &#123;  if [fields][logtype] == &quot;spring-boot-log4j2&quot;&#123;    elasticsearch &#123;      hosts =&gt; [&quot;127.0.0.1:9200&quot;]      index =&gt; &quot;spring-boot-log4j2-%&#123;+YYYY.MM.dd&#125;&quot;    &#125;  &#125;    if [fields][logtype] == &quot;syslog&quot;&#123;    elasticsearch &#123;      hosts =&gt; [&quot;127.0.0.1:9200&quot;]      index =&gt; &quot;filebeat-%&#123;+YYYY.MM.dd&#125;&quot;    &#125;  &#125;&#125;</code></pre><p>上面的配置需要注意几点：</p><ul><li>logstash.conf：配置文件可以配置多个，<code>input</code>、<code>filter</code>和<code>output</code>可以单独文件配置。</li><li>fields logtype：就是上面 Filebeat 配置的字段，这边用来判断服务来源，然后进行单独的处理。</li><li>filter：过滤器做了两件事，一个是使用<code>grok</code>插件，匹配数据和增加字段值，另一个就是使用<code>json</code>插件，将字符串转换成 Json 对象（会创建<code>data</code>层级结构，如果不想新建层级的话，删掉<code>target</code>配置即可）。</li><li>output：根据<code>logtype</code>判断，输出到指定的 Elasticsearch 地址，以及创建指定的索引。</li></ul><p>简单总结下， Filebeat 是客户端，一般部署在 Service 所在服务器（有多少服务器，就有多少 Filebeat），不同 Service 配置不同的<code>input_type</code>（也可以配置一个），采集的数据源可以配置多个，然后 Filebeat 将采集的日志数据，传输到指定的 Logstash 进行过滤，最后将处理好的日志数据，存储到指定的 Elasticsearch。</p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h2 id=&quot;一、环境：&quot;&gt;&lt;a href=&quot;#一、环境：&quot; class=&quot;headerlink&quot; title=&quot;一、环境：&quot;&gt;&lt;/a&gt;一、环境：&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;Ubuntu18.04 + Docker 18.09 + ELK Docker Image 7.1&lt;</summary>
-      
-    
-    
-    
-    <category term="工具" scheme="https://www.langxw.com/categories/%E5%B7%A5%E5%85%B7/"/>
-    
-    <category term="ELK" scheme="https://www.langxw.com/categories/%E5%B7%A5%E5%85%B7/ELK/"/>
-    
-    
-    <category term="docker" scheme="https://www.langxw.com/tags/docker/"/>
-    
-    <category term="ELK" scheme="https://www.langxw.com/tags/ELK/"/>
     
   </entry>
   
