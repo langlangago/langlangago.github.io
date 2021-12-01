@@ -410,14 +410,14 @@
   </url>
   
   <url>
-    <loc>https://www.langxw.com/tags/git/</loc>
+    <loc>https://www.langxw.com/tags/filebeat/</loc>
     <lastmod>2021-12-01</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>https://www.langxw.com/tags/filebeat/</loc>
+    <loc>https://www.langxw.com/tags/git/</loc>
     <lastmod>2021-12-01</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -571,14 +571,14 @@
   </url>
   
   <url>
-    <loc>https://www.langxw.com/tags/win10/</loc>
+    <loc>https://www.langxw.com/tags/zookeeper/</loc>
     <lastmod>2021-12-01</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>https://www.langxw.com/tags/zookeeper/</loc>
+    <loc>https://www.langxw.com/tags/win10/</loc>
     <lastmod>2021-12-01</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -748,13 +748,6 @@
   </url>
   
   <url>
-    <loc>https://www.langxw.com/categories/%E5%B7%A5%E5%85%B7/Git/</loc>
-    <lastmod>2021-12-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://www.langxw.com/categories/%E8%99%9A%E6%8B%9F%E5%8C%96/VMware/</loc>
     <lastmod>2021-12-01</lastmod>
     <changefreq>daily</changefreq>
@@ -763,6 +756,13 @@
   
   <url>
     <loc>https://www.langxw.com/categories/%E5%B7%A5%E5%85%B7/%E7%A0%B4%E8%A7%A3/</loc>
+    <lastmod>2021-12-01</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.langxw.com/categories/%E5%B7%A5%E5%85%B7/Git/</loc>
     <lastmod>2021-12-01</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -791,13 +791,6 @@
   
   <url>
     <loc>https://www.langxw.com/categories/%E5%B7%A5%E5%85%B7/FTP/</loc>
-    <lastmod>2021-12-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.langxw.com/categories/%E6%96%B9%E6%A1%88/</loc>
     <lastmod>2021-12-01</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -847,6 +840,13 @@
   
   <url>
     <loc>https://www.langxw.com/categories/%E8%84%9A%E6%9C%AC/%E5%91%BD%E4%BB%A4%E8%A1%8C/</loc>
+    <lastmod>2021-12-01</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.langxw.com/categories/%E6%96%B9%E6%A1%88/</loc>
     <lastmod>2021-12-01</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
