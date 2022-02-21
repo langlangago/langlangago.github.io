@@ -431,6 +431,20 @@
   </url>
   
   <url>
+    <loc>https://www.langxw.com/tags/k8s/</loc>
+    <lastmod>2022-02-21</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.langxw.com/tags/sysctl/</loc>
+    <lastmod>2022-02-21</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://www.langxw.com/tags/lets-encrypt/</loc>
     <lastmod>2022-02-21</lastmod>
     <changefreq>daily</changefreq>
@@ -578,14 +592,14 @@
   </url>
   
   <url>
-    <loc>https://www.langxw.com/tags/zookeeper/</loc>
+    <loc>https://www.langxw.com/tags/win10/</loc>
     <lastmod>2022-02-21</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>https://www.langxw.com/tags/win10/</loc>
+    <loc>https://www.langxw.com/tags/zookeeper/</loc>
     <lastmod>2022-02-21</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -675,20 +689,6 @@
     <priority>0.6</priority>
   </url>
   
-  <url>
-    <loc>https://www.langxw.com/tags/k8s/</loc>
-    <lastmod>2022-02-21</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.langxw.com/tags/sysctl/</loc>
-    <lastmod>2022-02-21</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
 
   
   <url>
@@ -727,6 +727,13 @@
   </url>
   
   <url>
+    <loc>https://www.langxw.com/categories/%E8%99%9A%E6%8B%9F%E5%8C%96/K8s/</loc>
+    <lastmod>2022-02-21</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://www.langxw.com/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/</loc>
     <lastmod>2022-02-21</lastmod>
     <changefreq>daily</changefreq>
@@ -741,14 +748,14 @@
   </url>
   
   <url>
-    <loc>https://www.langxw.com/categories/%E8%84%9A%E6%9C%AC/</loc>
+    <loc>https://www.langxw.com/categories/%E5%B7%A5%E5%85%B7/ELK/</loc>
     <lastmod>2022-02-21</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>https://www.langxw.com/categories/%E5%B7%A5%E5%85%B7/ELK/</loc>
+    <loc>https://www.langxw.com/categories/%E8%84%9A%E6%9C%AC/</loc>
     <lastmod>2022-02-21</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -776,14 +783,14 @@
   </url>
   
   <url>
-    <loc>https://www.langxw.com/categories/%E5%B7%A5%E5%85%B7/%E7%A0%B4%E8%A7%A3/</loc>
+    <loc>https://www.langxw.com/categories/%E5%B7%A5%E5%85%B7/Git/</loc>
     <lastmod>2022-02-21</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>https://www.langxw.com/categories/%E5%B7%A5%E5%85%B7/Git/</loc>
+    <loc>https://www.langxw.com/categories/%E5%B7%A5%E5%85%B7/%E7%A0%B4%E8%A7%A3/</loc>
     <lastmod>2022-02-21</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -812,6 +819,13 @@
   
   <url>
     <loc>https://www.langxw.com/categories/%E5%B7%A5%E5%85%B7/FTP/</loc>
+    <lastmod>2022-02-21</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.langxw.com/categories/%E6%96%B9%E6%A1%88/</loc>
     <lastmod>2022-02-21</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -867,21 +881,7 @@
   </url>
   
   <url>
-    <loc>https://www.langxw.com/categories/%E6%96%B9%E6%A1%88/</loc>
-    <lastmod>2022-02-21</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://www.langxw.com/categories/%E8%84%9A%E6%9C%AC/Shell/</loc>
-    <lastmod>2022-02-21</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.langxw.com/categories/%E8%99%9A%E6%8B%9F%E5%8C%96/K8s/</loc>
     <lastmod>2022-02-21</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
