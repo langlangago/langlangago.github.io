@@ -6,17 +6,18 @@
   <meta name="keywords" content=" mongodb , 数据库 ">
   <meta name="description" content="Mongodb单实例部署的两种方式 | 运维人">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<meta name="description" content="一、缘由本脚本是阿里云资源利用率定期统计方案中的其中一个脚本。 本脚本可实现，从每天95个平均值数据中取平均值，15天15个中位数取平均值，得到最终的15天内CPU和内存使用率数值。 进而根据阈值进行判断，资源是否处于低利用率状态。 二、环境Python3.7 + 阿里云云监控SDK + 阿里云SLB的SDK + pandas + numpy 三、代码实现# -*- coding: utf-8 -">
+<meta name="description" content="一、缘由我司从云主机向k8s迁移的过程中，由于在云主机上对内核参数进行过优化，所以尽量想K8s也和云主机的内存参数保持一致。 二、解决办法：k8s并不是支持所有的linux的内核参数，具体支持情况看k8s集群环境和参考官方文档。 1、设置集群的PSP1.1 解释可以通过在 PodSecurityPolicy 的 forbiddenSysctls 或 allowedUnsafeSysctls 字段中">
 <meta property="og:type" content="article">
-<meta property="og:title" content="统计15天内阿里云SLB后端异常和并发指标">
-<meta property="og:url" content="https://www.langxw.com/2021/12/01/%E7%BB%9F%E8%AE%A115%E5%A4%A9%E5%86%85%E9%98%BF%E9%87%8C%E4%BA%91SLB%E5%90%8E%E7%AB%AF%E5%BC%82%E5%B8%B8%E5%92%8C%E5%B9%B6%E5%8F%91%E6%8C%87%E6%A0%87/index.html">
+<meta property="og:title" content="K8S启用非安全内核参数">
+<meta property="og:url" content="https://www.langxw.com/2022/02/21/K8S%E5%90%AF%E7%94%A8%E9%9D%9E%E5%AE%89%E5%85%A8%E5%86%85%E6%A0%B8%E5%8F%82%E6%95%B0/index.html">
 <meta property="og:site_name" content="运维人">
-<meta property="og:description" content="一、缘由本脚本是阿里云资源利用率定期统计方案中的其中一个脚本。 本脚本可实现，从每天95个平均值数据中取平均值，15天15个中位数取平均值，得到最终的15天内CPU和内存使用率数值。 进而根据阈值进行判断，资源是否处于低利用率状态。 二、环境Python3.7 + 阿里云云监控SDK + 阿里云SLB的SDK + pandas + numpy 三、代码实现# -*- coding: utf-8 -">
+<meta property="og:description" content="一、缘由我司从云主机向k8s迁移的过程中，由于在云主机上对内核参数进行过优化，所以尽量想K8s也和云主机的内存参数保持一致。 二、解决办法：k8s并不是支持所有的linux的内核参数，具体支持情况看k8s集群环境和参考官方文档。 1、设置集群的PSP1.1 解释可以通过在 PodSecurityPolicy 的 forbiddenSysctls 或 allowedUnsafeSysctls 字段中">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2021-12-01T03:00:46.000Z">
-<meta property="article:modified_time" content="2021-12-01T03:04:48.889Z">
+<meta property="article:published_time" content="2022-02-21T10:03:19.000Z">
+<meta property="article:modified_time" content="2022-02-21T10:05:35.808Z">
 <meta property="article:author" content="运维人">
-<meta property="article:tag" content="Python">
+<meta property="article:tag" content="k8s">
+<meta property="article:tag" content="sysctl">
 <meta name="twitter:card" content="summary">
 
 
@@ -184,7 +185,7 @@
     <li>
         <div class="all active" data-rel="全部文章">全部文章
             
-                <small>(49)</small>
+                <small>(50)</small>
             
         </div>
     </li>
@@ -458,7 +459,7 @@
                         <i class="fold iconfont icon-right"></i>
                         
                         虚拟化
-                        <small>(8)</small>
+                        <small>(9)</small>
                         
                     </div>
                     
@@ -470,6 +471,18 @@
                                         Docker
                                         
                                             <small>(6
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                                <li>
+                                    <div data-rel="虚拟化<--->K8s">
+                                        
+                                        K8s
+                                        
+                                            <small>(1
                                                 )</small>
                                         
                                     </div>
@@ -637,6 +650,10 @@
             
         
     
+        
+            
+        
+    
 </ul>
 <div class="left-bottom">
     <div class="menus">
@@ -657,8 +674,8 @@
         
     </div>
 </div>
-<input type="hidden" id="yelog_site_posts_number" value="49">
-<input type="hidden" id="yelog_site_word_count" value="37.8k">
+<input type="hidden" id="yelog_site_posts_number" value="50">
+<input type="hidden" id="yelog_site_word_count" value="38.6k">
 <div style="display: none">
     <span id="busuanzi_value_site_uv"></span>
     <span id="busuanzi_value_site_pv"></span>
@@ -778,6 +795,10 @@
             </li>
         
             <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>k8s</a>
+            </li>
+        
+            <li class="article-tag-list-item">
                 <i class="iconfont icon-tag"></i><a>lets-encrypt</a>
             </li>
         
@@ -854,6 +875,10 @@
             </li>
         
             <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>sysctl</a>
+            </li>
+        
+            <li class="article-tag-list-item">
                 <i class="iconfont icon-tag"></i><a>timezone</a>
             </li>
         
@@ -914,6 +939,14 @@
            data-author="" >
             <span class="post-title" title="使用Privoxy将http代理转换成socks5代理">使用Privoxy将http代理转换成socks5代理</span>
             <span class="post-date" title="2021-06-04 19:00:16">2021/06/04</span>
+        </a>
+        
+        <a  class="全部文章 虚拟化 K8s "
+           href="/2022/02/21/K8S%E5%90%AF%E7%94%A8%E9%9D%9E%E5%AE%89%E5%85%A8%E5%86%85%E6%A0%B8%E5%8F%82%E6%95%B0/"
+           data-tag="k8s,sysctl"
+           data-author="" >
+            <span class="post-title" title="K8S启用非安全内核参数">K8S启用非安全内核参数</span>
+            <span class="post-date" title="2022-02-21 18:03:19">2022/02/21</span>
         </a>
         
         <a  class="全部文章 脚本 Python "
