@@ -6,18 +6,18 @@
   <meta name="keywords" content=" docker , http代理 ">
   <meta name="description" content="Docker添加http代理 | 运维人">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<meta name="description" content="一、缘由我司从云主机向k8s迁移的过程中，由于在云主机上对内核参数进行过优化，所以尽量想K8s也和云主机的内存参数保持一致。 二、解决办法：k8s并不是支持所有的linux的内核参数，具体支持情况看k8s集群环境和参考官方文档。 实际设定还是结合产品自身用以下方式进行操作了，原则就是pod镜像系统里面进去看没有的就不能开启了，具体进容器里面看一下&#x2F;proc&#x2F;sys&#x2F;的文件信息。 1、设置集群的PS">
+<meta name="description" content="一、缘由我们在管理k8s集群的时候，避免不了使用kubectl命令工具，但是该命令还是挺复杂的，使用中也记不住那么多的api选项，故这里介绍一下kubectl命令补全工具的安装。 二、实现1、安装bash-completionyum install -y bash-completion  source &#x2F;usr&#x2F;share&#x2F;bash-completion&#x2F;bash_completion  2、应用">
 <meta property="og:type" content="article">
-<meta property="og:title" content="K8S启用非安全内核参数">
-<meta property="og:url" content="https://www.langxw.com/2022/02/21/K8S%E5%90%AF%E7%94%A8%E9%9D%9E%E5%AE%89%E5%85%A8%E5%86%85%E6%A0%B8%E5%8F%82%E6%95%B0/index.html">
+<meta property="og:title" content="kubelet命令自动补全功能">
+<meta property="og:url" content="https://www.langxw.com/2022/03/02/kubelet%E5%91%BD%E4%BB%A4%E8%87%AA%E5%8A%A8%E8%A1%A5%E5%85%A8%E5%8A%9F%E8%83%BD/index.html">
 <meta property="og:site_name" content="运维人">
-<meta property="og:description" content="一、缘由我司从云主机向k8s迁移的过程中，由于在云主机上对内核参数进行过优化，所以尽量想K8s也和云主机的内存参数保持一致。 二、解决办法：k8s并不是支持所有的linux的内核参数，具体支持情况看k8s集群环境和参考官方文档。 实际设定还是结合产品自身用以下方式进行操作了，原则就是pod镜像系统里面进去看没有的就不能开启了，具体进容器里面看一下&#x2F;proc&#x2F;sys&#x2F;的文件信息。 1、设置集群的PS">
+<meta property="og:description" content="一、缘由我们在管理k8s集群的时候，避免不了使用kubectl命令工具，但是该命令还是挺复杂的，使用中也记不住那么多的api选项，故这里介绍一下kubectl命令补全工具的安装。 二、实现1、安装bash-completionyum install -y bash-completion  source &#x2F;usr&#x2F;share&#x2F;bash-completion&#x2F;bash_completion  2、应用">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2022-02-21T10:03:19.000Z">
-<meta property="article:modified_time" content="2022-02-21T10:51:37.011Z">
+<meta property="article:published_time" content="2022-03-02T09:22:57.000Z">
+<meta property="article:modified_time" content="2022-03-02T09:28:11.843Z">
 <meta property="article:author" content="运维人">
 <meta property="article:tag" content="k8s">
-<meta property="article:tag" content="sysctl">
+<meta property="article:tag" content="kubelet">
 <meta name="twitter:card" content="summary">
 
 
@@ -185,7 +185,7 @@
     <li>
         <div class="all active" data-rel="全部文章">全部文章
             
-                <small>(50)</small>
+                <small>(51)</small>
             
         </div>
     </li>
@@ -459,7 +459,7 @@
                         <i class="fold iconfont icon-right"></i>
                         
                         虚拟化
-                        <small>(9)</small>
+                        <small>(10)</small>
                         
                     </div>
                     
@@ -471,6 +471,18 @@
                                         Docker
                                         
                                             <small>(6
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                                <li>
+                                    <div data-rel="虚拟化<--->k8s">
+                                        
+                                        k8s
+                                        
+                                            <small>(1
                                                 )</small>
                                         
                                     </div>
@@ -654,6 +666,10 @@
             
         
     
+        
+            
+        
+    
 </ul>
 <div class="left-bottom">
     <div class="menus">
@@ -674,8 +690,8 @@
         
     </div>
 </div>
-<input type="hidden" id="yelog_site_posts_number" value="50">
-<input type="hidden" id="yelog_site_word_count" value="38.7k">
+<input type="hidden" id="yelog_site_posts_number" value="51">
+<input type="hidden" id="yelog_site_word_count" value="38.8k">
 <div style="display: none">
     <span id="busuanzi_value_site_uv"></span>
     <span id="busuanzi_value_site_pv"></span>
@@ -796,6 +812,10 @@
         
             <li class="article-tag-list-item">
                 <i class="iconfont icon-tag"></i><a>k8s</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>kubelet</a>
             </li>
         
             <li class="article-tag-list-item">
@@ -939,6 +959,14 @@
            data-author="" >
             <span class="post-title" title="使用Privoxy将http代理转换成socks5代理">使用Privoxy将http代理转换成socks5代理</span>
             <span class="post-date" title="2021-06-04 19:00:16">2021/06/04</span>
+        </a>
+        
+        <a  class="全部文章 虚拟化 k8s "
+           href="/2022/03/02/kubelet%E5%91%BD%E4%BB%A4%E8%87%AA%E5%8A%A8%E8%A1%A5%E5%85%A8%E5%8A%9F%E8%83%BD/"
+           data-tag="k8s,kubelet"
+           data-author="" >
+            <span class="post-title" title="kubelet命令自动补全功能">kubelet命令自动补全功能</span>
+            <span class="post-date" title="2022-03-02 17:22:57">2022/03/02</span>
         </a>
         
         <a  class="全部文章 虚拟化 K8s "
