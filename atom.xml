@@ -6,7 +6,7 @@
   <link href="https://www.langxw.com/atom.xml" rel="self"/>
   
   <link href="https://www.langxw.com/"/>
-  <updated>2022-03-02T09:28:11.843Z</updated>
+  <updated>2022-03-22T05:02:53.774Z</updated>
   <id>https://www.langxw.com/</id>
   
   <author>
@@ -15,6 +15,34 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>自建k8s使用阿里云存储插件csi</title>
+    <link href="https://www.langxw.com/2022/03/22/%E8%87%AA%E5%BB%BAk8s%E4%BD%BF%E7%94%A8%E9%98%BF%E9%87%8C%E4%BA%91%E5%AD%98%E5%82%A8%E6%8F%92%E4%BB%B6csi/"/>
+    <id>https://www.langxw.com/2022/03/22/%E8%87%AA%E5%BB%BAk8s%E4%BD%BF%E7%94%A8%E9%98%BF%E9%87%8C%E4%BA%91%E5%AD%98%E5%82%A8%E6%8F%92%E4%BB%B6csi/</id>
+    <published>2022-03-22T05:01:45.000Z</published>
+    <updated>2022-03-22T05:02:53.774Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="一、前言"><a href="#一、前言" class="headerlink" title="一、前言"></a>一、前言</h2><p>k8s在阿里云上使用，推荐还是使用阿里云的ack。无论是从稳定性，以及后期的维护来说，ack 都是最优的方案，自建k8s 阿里云不提供任何帮助，一旦集群出现问题（主要是网络问题）很难进行排查。</p><p>如果出于特殊原因，希望在阿里云上进行自建k8s当然也可以。<strong>自建k8s需要集成阿里云两个重要的插件cloud-controller-manager（负载均衡插件），csi(存储插件)。</strong>下面只介绍csi 存储插安装。</p><h2 id="二、部署"><a href="#二、部署" class="headerlink" title="二、部署"></a>二、部署</h2><h3 id="1、准备操作："><a href="#1、准备操作：" class="headerlink" title="1、准备操作："></a>1、准备操作：</h3><h4 id="1-1-自建k8s集群添加节点标签"><a href="#1-1-自建k8s集群添加节点标签" class="headerlink" title="1.1 自建k8s集群添加节点标签"></a>1.1 自建k8s集群添加节点标签</h4><ul><li>手动添加</li></ul><pre><code class="shell"># 获取providerIDMETA_EP=http://100.100.100.200/latest/meta-data &amp;&amp;echo `curl -s $META_EP/region-id`.`curl -s $META_EP/instance-id`# 打标签，注意修改node节点名称和providerIDkubectl patch node master1 -p &#39;&#123;&quot;spec&quot;:&#123;&quot;providerID&quot;: &quot;cn-zhangjiakou.i-8vbhy24ntae8zwo8zudn&quot;&#125;&#125;&#39;kubectl patch node master2 -p &#39;&#123;&quot;spec&quot;:&#123;&quot;providerID&quot;: &quot;cn-zhangjiakou.i-8vbhy24ntae8zwo8zudo&quot;&#125;&#125;&#39;kubectl patch node master3 -p &#39;&#123;&quot;spec&quot;:&#123;&quot;providerID&quot;: &quot;cn-zhangjiakou.i-8vbhy24ntae8zwo8zudr&quot;&#125;&#125;&#39;</code></pre><h4 id="1-2-配置CSI组建的RAM权限"><a href="#1-2-配置CSI组建的RAM权限" class="headerlink" title="1.2 配置CSI组建的RAM权限"></a>1.2 配置CSI组建的RAM权限</h4><ul><li><p>创建RAM用户 </p></li><li><p>创建并给予RAM用户自定义权限</p><pre><code class="json">&#123;    &quot;Version&quot;: &quot;1&quot;,    &quot;Statement&quot;: [        &#123;            &quot;Action&quot;: [                &quot;ecs:AttachDisk&quot;,                &quot;ecs:DetachDisk&quot;,                &quot;ecs:DescribeDisks&quot;,                &quot;ecs:CreateDisk&quot;,                &quot;ecs:ResizeDisk&quot;,                &quot;ecs:CreateSnapshot&quot;,                &quot;ecs:DeleteSnapshot&quot;,                &quot;ecs:CreateAutoSnapshotPolicy&quot;,                &quot;ecs:ApplyAutoSnapshotPolicy&quot;,                &quot;ecs:CancelAutoSnapshotPolicy&quot;,                &quot;ecs:DeleteAutoSnapshotPolicy&quot;,                &quot;ecs:DescribeAutoSnapshotPolicyEX&quot;,                &quot;ecs:ModifyAutoSnapshotPolicyEx&quot;,                &quot;ecs:AddTags&quot;,                &quot;ecs:DescribeTags&quot;,                &quot;ecs:DescribeSnapshots&quot;,                &quot;ecs:ListTagResources&quot;,                &quot;ecs:TagResources&quot;,                &quot;ecs:UntagResources&quot;,                &quot;ecs:ModifyDiskSpec&quot;,                &quot;ecs:CreateSnapshot&quot;,                &quot;ecs:DeleteDisk&quot;,                &quot;ecs:DescribeInstanceAttribute&quot;,                &quot;ecs:DescribeInstances&quot;            ],            &quot;Resource&quot;: [                &quot;*&quot;            ],            &quot;Effect&quot;: &quot;Allow&quot;        &#125;,        &#123;            &quot;Action&quot;: [                &quot;nas:DescribeFileSystems&quot;,                &quot;nas:DescribeMountTargets&quot;,                &quot;nas:AddTags&quot;,                &quot;nas:DescribeTags&quot;,                &quot;nas:RemoveTags&quot;,                &quot;nas:CreateFileSystem&quot;,                &quot;nas:DeleteFileSystem&quot;,                &quot;nas:ModifyFileSystem&quot;,                &quot;nas:CreateMountTarget&quot;,                &quot;nas:DeleteMountTarget&quot;,                &quot;nas:ModifyMountTarget&quot;,                &quot;nas:TagResources&quot;,                &quot;nas:SetDirQuota&quot;,                &quot;nas:EnableRecycleBin&quot;,                &quot;nas:GetRecycleBinAttribute&quot;            ],            &quot;Resource&quot;: [                &quot;*&quot;            ],            &quot;Effect&quot;: &quot;Allow&quot;        &#125;,        &#123;            &quot;Action&quot;: [                &quot;oss:PutBucket&quot;,                &quot;oss:GetObjectTagging&quot;,                &quot;oss:ListBuckets&quot;,                &quot;oss:PutBucketTags&quot;,                &quot;oss:GetBucketTags&quot;,                &quot;oss:PutBucketEncryption&quot;,                &quot;oss:GetBucketInfo&quot;            ],            &quot;Resource&quot;: [                &quot;*&quot;            ],            &quot;Effect&quot;: &quot;Allow&quot;        &#125;    ]&#125;</code></pre></li><li><p>为RAM用户创建AccessKsy。</p></li></ul><h3 id="2、安装CSI组件"><a href="#2、安装CSI组件" class="headerlink" title="2、安装CSI组件"></a>2、安装CSI组件</h3><p>  <strong>下载ACK相关组件，支持块存储、NAS和OSS</strong></p><h4 id="2-1-配置AK"><a href="#2-1-配置AK" class="headerlink" title="2.1 配置AK"></a>2.1 配置AK</h4><pre><code class="shell">kubectl -n kube-system create secret generic alibaba-addon-secret --from-literal=&#39;access-key-id=xxxxx&#39; --from-literal=&#39;access-key-secret=xxxxx&#39;</code></pre><h4 id="2-2-CSI插件下载"><a href="#2-2-CSI插件下载" class="headerlink" title="2.2 CSI插件下载"></a>2.2 CSI插件下载</h4><ul><li><p>阿里云csi插件<a href="https://github.com/kubernetes-sigs/alibaba-cloud-csi-driver">地址</a>： <code>git clone https://github.com/kubernetes-sigs/alibaba-cloud-csi-driver.git</code></p></li><li><p>rbac.yaml，csi-plugin.yaml，csi-provisioner.yaml 三个文件都需要。</p><pre><code class="shell">wget https://github.com/kubernetes-sigs/alibaba-cloud-csi-driver/blob/master/deploy/rbac.yamlwget https://github.com/kubernetes-sigs/alibaba-cloud-csi-driver/blob/master/deploy/ack/csi-plugin.yamlhttps://github.com/kubernetes-sigs/alibaba-cloud-csi-driver/blob/master/deploy/ack/csi-provisioner.yaml</code></pre><h4 id="2-3-编辑配置"><a href="#2-3-编辑配置" class="headerlink" title="2.3 编辑配置"></a>2.3 编辑配置</h4><p>在csi-plugin.yaml、csi-provisioner.yaml中添加如下env参数</p><pre><code class="yaml">          - name: ACCESS_KEY_ID            valueFrom:              secretKeyRef:                key: access-key-id                name: alibaba-addon-secret          - name: ACCESS_KEY_SECRET            valueFrom:              secretKeyRef:                key: access-key-secret                name: alibaba-addon-secret</code></pre><h4 id="2-4-部署rbac-yaml"><a href="#2-4-部署rbac-yaml" class="headerlink" title="2.4 部署rbac.yaml"></a>2.4 部署rbac.yaml</h4></li><li><p>部署 <code>kubectl  apply -f rbac.yaml</code></p></li><li><p>查看生成的 secrets 的csi token 名字 <code>kubectl get secrets -A |grep csi</code></p></li><li><p>替换两个csi*.yaml文件中secretName为上一步sc的名字，比如csi-admin-token-ssflh</p><h4 id="2-5-部署CSI"><a href="#2-5-部署CSI" class="headerlink" title="2.5 部署CSI"></a>2.5 部署CSI</h4><pre><code class="shell">kubectl apply -f csi-plugin.yamlkubectl apply -f csi-provisioner.yaml</code></pre><h4 id="2-6-查看部署情况"><a href="#2-6-查看部署情况" class="headerlink" title="2.6 查看部署情况"></a>2.6 查看部署情况</h4><p><code>kubectl get pods -A |grep csi</code></p></li></ul><h2 id="三、使用"><a href="#三、使用" class="headerlink" title="三、使用"></a>三、使用</h2><h3 id="1、创建StorageClass"><a href="#1、创建StorageClass" class="headerlink" title="1、创建StorageClass"></a>1、创建StorageClass</h3><p>SC已在csi-provisioner.yaml中创建成功。</p><h3 id="2、创建PVC"><a href="#2、创建PVC" class="headerlink" title="2、创建PVC"></a>2、创建PVC</h3><pre><code class="yaml">apiVersion: v1kind: PersistentVolumeClaimmetadata:  name: aliyun-csi-pvcspec:  accessModes:    - ReadWriteOnce  storageClassName: alicloud-disk-essd   resources:    requests:      storage: 20Gi</code></pre><p>然后执行<code>kubectl apply -f pvc.yaml</code></p><h3 id="3、创建Pod"><a href="#3、创建Pod" class="headerlink" title="3、创建Pod"></a>3、创建Pod</h3><pre><code class="yaml">apiVersion: v1 kind: Podmetadata:  name: nginx-aliyun-csispec:  containers:    - name: webserver      image: nginx      volumeMounts:        - name: mypvc          mountPath: /usr/share/nginx/html  volumes:    - name: mypvc      persistentVolumeClaim:        claimName: aliyun-csi-pvc        readOnly: false</code></pre><p>然后执行<code>kubectl apply -f nginx-pod.yaml</code></p><h3 id="4、查看创建情况"><a href="#4、查看创建情况" class="headerlink" title="4、查看创建情况"></a>4、查看创建情况</h3><pre><code class="she"># 查看pvc创建和绑定情况kubectl get pvc # 查看pod创建情况kubectl get pod</code></pre><h3 id="5、验证"><a href="#5、验证" class="headerlink" title="5、验证"></a>5、验证</h3><ul><li>登录阿里云控制台查看云盘创建和挂载情况</li><li>登录nginx-pod用<code>df -h &amp;&amp; fdisk -l &amp;&amp; mount</code> 等命令查看阿里云盘挂载情况</li></ul>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h2 id=&quot;一、前言&quot;&gt;&lt;a href=&quot;#一、前言&quot; class=&quot;headerlink&quot; title=&quot;一、前言&quot;&gt;&lt;/a&gt;一、前言&lt;/h2&gt;&lt;p&gt;k8s在阿里云上使用，推荐还是使用阿里云的ack。无论是从稳定性，以及后期的维护来说，ack 都是最优的方案，自建k8s 阿</summary>
+      
+    
+    
+    
+    <category term="虚拟化" scheme="https://www.langxw.com/categories/%E8%99%9A%E6%8B%9F%E5%8C%96/"/>
+    
+    <category term="K8s" scheme="https://www.langxw.com/categories/%E8%99%9A%E6%8B%9F%E5%8C%96/K8s/"/>
+    
+    
+    <category term="k8s" scheme="https://www.langxw.com/tags/k8s/"/>
+    
+    <category term="csi-plugin" scheme="https://www.langxw.com/tags/csi-plugin/"/>
+    
+  </entry>
   
   <entry>
     <title>kubelet命令自动补全功能</title>
@@ -531,33 +559,6 @@
     <category term="FTP" scheme="https://www.langxw.com/tags/FTP/"/>
     
     <category term="日志系统" scheme="https://www.langxw.com/tags/%E6%97%A5%E5%BF%97%E7%B3%BB%E7%BB%9F/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Mongodb复制集建议奇数个节点的原因</title>
-    <link href="https://www.langxw.com/2021/03/12/Mongodb%E5%A4%8D%E5%88%B6%E9%9B%86%E5%BB%BA%E8%AE%AE%E5%A5%87%E6%95%B0%E4%B8%AA%E8%8A%82%E7%82%B9%E7%9A%84%E5%8E%9F%E5%9B%A0/"/>
-    <id>https://www.langxw.com/2021/03/12/Mongodb%E5%A4%8D%E5%88%B6%E9%9B%86%E5%BB%BA%E8%AE%AE%E5%A5%87%E6%95%B0%E4%B8%AA%E8%8A%82%E7%82%B9%E7%9A%84%E5%8E%9F%E5%9B%A0/</id>
-    <published>2021-03-12T14:58:06.000Z</published>
-    <updated>2021-03-16T12:21:15.271Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="一、官方建议"><a href="#一、官方建议" class="headerlink" title="一、官方建议"></a>一、官方建议</h2><p><strong>奇数个就不用带仲裁节点了，偶数个要带一个仲裁节点。</strong></p><h2 id="二、原因分析"><a href="#二、原因分析" class="headerlink" title="二、原因分析"></a>二、原因分析</h2><ol><li><p>防止网络阻隔；防止脑列，导致选举失败。两个IDC机房网络中断，或者两个机柜网络中断。</p></li><li><p>存活数（参与选举数）大与50%，集群才能正常工作的原则，说明了偶数个节点基本就是浪费资源（除了多个一个可读的副本）</p></li></ol><h2 id="三、三节点复制集带仲裁节点与不带的优劣"><a href="#三、三节点复制集带仲裁节点与不带的优劣" class="headerlink" title="三、三节点复制集带仲裁节点与不带的优劣"></a>三、三节点复制集带仲裁节点与不带的优劣</h2><ul><li>带仲裁节点，仲裁节点占用资源小，可节省资源。</li><li>不带，多一个可读副本集，分散读的压力。多一个数据备份。</li></ul>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h2 id=&quot;一、官方建议&quot;&gt;&lt;a href=&quot;#一、官方建议&quot; class=&quot;headerlink&quot; title=&quot;一、官方建议&quot;&gt;&lt;/a&gt;一、官方建议&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;奇数个就不用带仲裁节点了，偶数个要带一个仲裁节点。&lt;/strong&gt;&lt;/p&gt;
-&lt;h2 id=</summary>
-      
-    
-    
-    
-    <category term="数据库" scheme="https://www.langxw.com/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
-    
-    <category term="MongoDB" scheme="https://www.langxw.com/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/MongoDB/"/>
-    
-    
-    <category term="mongodb" scheme="https://www.langxw.com/tags/mongodb/"/>
     
   </entry>
   
