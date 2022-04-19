@@ -18,7 +18,7 @@
 <meta property="og:image" content="https://s1.ax1x.com/2022/04/19/L0Urxf.png">
 <meta property="og:image" content="https://s1.ax1x.com/2022/04/19/L0wFPA.png">
 <meta property="article:published_time" content="2022-04-19T05:57:02.000Z">
-<meta property="article:modified_time" content="2022-04-19T06:19:02.917Z">
+<meta property="article:modified_time" content="2022-04-19T06:22:25.255Z">
 <meta property="article:author" content="运维人">
 <meta property="article:tag" content="k8s">
 <meta property="article:tag" content="Prometheus">
@@ -487,19 +487,7 @@
                                         
                                         k8s
                                         
-                                            <small>(3
-                                                )</small>
-                                        
-                                    </div>
-                                    
-                                </li>
-                            
-                                <li>
-                                    <div data-rel="虚拟化<--->K8s">
-                                        
-                                        K8s
-                                        
-                                            <small>(1
+                                            <small>(4
                                                 )</small>
                                         
                                     </div>
@@ -600,10 +588,6 @@
                         </ul>
                     
                 </li>
-            
-        
-    
-        
             
         
     
@@ -974,7 +958,7 @@
             <span class="post-date" title="2021-06-04 19:00:16">2021/06/04</span>
         </a>
         
-        <a  class="全部文章 虚拟化 K8s "
+        <a  class="全部文章 虚拟化 k8s "
            href="/2022/04/19/Kube-prometheus%E6%B7%BB%E5%8A%A0%E8%87%AA%E5%AE%9A%E4%B9%89%E7%9B%91%E6%8E%A7%E9%A1%B9/"
            data-tag="k8s,Prometheus"
            data-author="" >
@@ -1405,7 +1389,7 @@
             
             <a  data-rel="虚拟化">虚拟化</a> > 
             
-            <a  data-rel="虚拟化&lt;---&gt;K8s">K8s</a>
+            <a  data-rel="虚拟化&lt;---&gt;k8s">k8s</a>
             
         </span>
         
@@ -1422,7 +1406,7 @@
     </div>
     <div class="article-meta">
         
-            发布时间 : <time class="date" title='最后更新: 2022-04-19 14:19:02'>2022-04-19 13:57</time>
+            发布时间 : <time class="date" title='最后更新: 2022-04-19 14:22:25'>2022-04-19 13:57</time>
         
     </div>
     <div class="article-meta">
@@ -1457,7 +1441,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E7%BC%98%E7%94%B1"><span class="toc-text">一、缘由</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E9%83%A8%E7%BD%B2%E6%AD%A5%E9%AA%A4%EF%BC%88%E8%87%AA%E5%BB%BAK8S%E7%9A%84Prometheus%EF%BC%89"><span class="toc-text">二、部署步骤（自建K8S的Prometheus）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81Exporter%E4%BB%8B%E7%BB%8D"><span class="toc-text">1、Exporter介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-Exporter%E6%8C%89%E6%9D%A5%E6%BA%90%E5%88%86%E7%B1%BB"><span class="toc-text">1.1 Exporter按来源分类</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-Exporter%E6%8C%89%E8%BF%90%E8%A1%8C%E6%96%B9%E5%BC%8F%E5%88%86%E7%B1%BB"><span class="toc-text">1.2 Exporter按运行方式分类</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E9%83%A8%E7%BD%B2Prometheus"><span class="toc-text">2、部署Prometheus</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-%E4%B8%8B%E8%BD%BD"><span class="toc-text">2.1 下载</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-%E9%83%A8%E7%BD%B2"><span class="toc-text">2.2 部署</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-3-%E5%88%A0%E9%99%A4%EF%BC%88%E6%A0%B9%E6%8D%AE%E9%9C%80%E6%B1%82%EF%BC%89"><span class="toc-text">2.3 删除（根据需求）</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81%E6%B7%BB%E5%8A%A0target%E5%B9%B6%E5%BA%94%E7%94%A8%E5%88%B0%E9%9B%86%E7%BE%A4"><span class="toc-text">3、添加target并应用到集群</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-1-%E5%A2%9E%E5%8A%A0target"><span class="toc-text">3.1 增加target</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-%E5%88%9B%E5%BB%BA%E6%96%B0%E7%9A%84secret%E5%B9%B6%E5%BA%94%E7%94%A8%E5%88%B0prometheus"><span class="toc-text">3.2 创建新的secret并应用到prometheus</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-3-%E5%B0%86target%E5%BA%94%E7%94%A8%E5%88%B0%E9%9B%86%E7%BE%A4"><span class="toc-text">3.3 将target应用到集群</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4%E3%80%81%E9%AA%8C%E8%AF%81"><span class="toc-text">4、验证</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E9%83%A8%E7%BD%B2%E6%AD%A5%E9%AA%A4%EF%BC%88%E9%98%BF%E9%87%8C%E4%BA%91Prometheus%EF%BC%89"><span class="toc-text">三、部署步骤（阿里云Prometheus）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E9%83%A8%E7%BD%B2"><span class="toc-text">1、部署</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E9%AA%8C%E8%AF%81"><span class="toc-text">2、验证</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E6%8C%81%E4%B9%85%E5%8C%96%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8"><span class="toc-text">四、持久化数据存储</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-%E6%A0%B9%E6%8D%AE%E9%9C%80%E8%A6%81%E8%B0%83%E6%95%B4%E6%8C%81%E4%B9%85%E5%8C%96%E5%AD%98%E5%82%A8%E7%AD%96%E7%95%A5%EF%BC%9A"><span class="toc-text">4.1 根据需要调整持久化存储策略：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E5%8F%82%E8%80%83"><span class="toc-text">五、参考</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E7%BC%98%E7%94%B1"><span class="toc-text">一、缘由</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E9%83%A8%E7%BD%B2%E6%AD%A5%E9%AA%A4%EF%BC%88%E8%87%AA%E5%BB%BAK8S%E7%9A%84Prometheus%EF%BC%89"><span class="toc-text">二、部署步骤（自建K8S的Prometheus）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81Exporter%E4%BB%8B%E7%BB%8D"><span class="toc-text">1、Exporter介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-Exporter%E6%8C%89%E6%9D%A5%E6%BA%90%E5%88%86%E7%B1%BB"><span class="toc-text">1.1 Exporter按来源分类</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-Exporter%E6%8C%89%E8%BF%90%E8%A1%8C%E6%96%B9%E5%BC%8F%E5%88%86%E7%B1%BB"><span class="toc-text">1.2 Exporter按运行方式分类</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E9%83%A8%E7%BD%B2Prometheus"><span class="toc-text">2、部署Prometheus</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-%E4%B8%8B%E8%BD%BD"><span class="toc-text">2.1 下载</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-%E9%83%A8%E7%BD%B2"><span class="toc-text">2.2 部署</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-3-%E5%88%A0%E9%99%A4%EF%BC%88%E6%A0%B9%E6%8D%AE%E9%9C%80%E6%B1%82%EF%BC%89"><span class="toc-text">2.3 删除（根据需求）</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81%E6%B7%BB%E5%8A%A0target%E5%B9%B6%E5%BA%94%E7%94%A8%E5%88%B0%E9%9B%86%E7%BE%A4"><span class="toc-text">3、添加target并应用到集群</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-1-%E5%A2%9E%E5%8A%A0target"><span class="toc-text">3.1 增加target</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-%E5%88%9B%E5%BB%BA%E6%96%B0%E7%9A%84secret%E5%B9%B6%E5%BA%94%E7%94%A8%E5%88%B0prometheus"><span class="toc-text">3.2 创建新的secret并应用到prometheus</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-3-%E5%B0%86target%E5%BA%94%E7%94%A8%E5%88%B0%E9%9B%86%E7%BE%A4"><span class="toc-text">3.3 将target应用到集群</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4%E3%80%81%E9%AA%8C%E8%AF%81"><span class="toc-text">4、验证</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E9%83%A8%E7%BD%B2%E6%AD%A5%E9%AA%A4%EF%BC%88%E9%98%BF%E9%87%8C%E4%BA%91Prometheus%EF%BC%89"><span class="toc-text">三、部署步骤（阿里云Prometheus）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E9%83%A8%E7%BD%B2"><span class="toc-text">1、部署</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E9%AA%8C%E8%AF%81"><span class="toc-text">2、验证</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E6%8C%81%E4%B9%85%E5%8C%96%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8"><span class="toc-text">四、持久化数据存储</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-%E6%A0%B9%E6%8D%AE%E9%9C%80%E8%A6%81%E8%B0%83%E6%95%B4%E6%8C%81%E4%B9%85%E5%8C%96%E5%AD%98%E5%82%A8%E7%AD%96%E7%95%A5"><span class="toc-text">4.1 根据需要调整持久化存储策略</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E5%8F%82%E8%80%83"><span class="toc-text">五、参考</span></a></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -1620,7 +1604,7 @@ scrape_configs:
 </ol>
 <h3 id="2、验证"><a href="#2、验证" class="headerlink" title="2、验证"></a>2、验证</h3><p>在阿里云Prometheus监控服务页面，选择某个地区对应的实例后，选择客户端接入后，即可看到我们自定义接入的target。</p>
 <p><a target="_blank" rel="noopener" href="https://imgtu.com/i/L0wFPA"><img src="https://s1.ax1x.com/2022/04/19/L0wFPA.png" alt="L0wFPA.png"></a></p>
-<h2 id="四、持久化数据存储"><a href="#四、持久化数据存储" class="headerlink" title="四、持久化数据存储"></a>四、持久化数据存储</h2><h3 id="4-1-根据需要调整持久化存储策略："><a href="#4-1-根据需要调整持久化存储策略：" class="headerlink" title="4.1 根据需要调整持久化存储策略："></a>4.1 根据需要调整持久化存储策略：</h3><ul>
+<h2 id="四、持久化数据存储"><a href="#四、持久化数据存储" class="headerlink" title="四、持久化数据存储"></a>四、持久化数据存储</h2><h3 id="4-1-根据需要调整持久化存储策略"><a href="#4-1-根据需要调整持久化存储策略" class="headerlink" title="4.1 根据需要调整持久化存储策略"></a>4.1 根据需要调整持久化存储策略</h3><ul>
 <li><p>grafana和prometheus的数据都需要做持久存储。</p>
 </li>
 <li><p>grafana持久持久存储是因为可能安装些第三方的插件。</p>
