@@ -6,7 +6,7 @@
   <link href="https://www.langxw.com/atom.xml" rel="self"/>
   
   <link href="https://www.langxw.com/"/>
-  <updated>2022-04-19T06:22:25.255Z</updated>
+  <updated>2022-07-04T07:45:53.161Z</updated>
   <id>https://www.langxw.com/</id>
   
   <author>
@@ -15,6 +15,36 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Nacos集群搭建-K8s环境</title>
+    <link href="https://www.langxw.com/2022/07/04/Nacos%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-K8s%E7%8E%AF%E5%A2%83/"/>
+    <id>https://www.langxw.com/2022/07/04/Nacos%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-K8s%E7%8E%AF%E5%A2%83/</id>
+    <published>2022-07-04T07:44:51.000Z</published>
+    <updated>2022-07-04T07:45:53.161Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="一、预备环境"><a href="#一、预备环境" class="headerlink" title="一、预备环境"></a>一、预备环境</h2><ol><li>阿里云ASK集群 k8s版本：1.20.4-aliyun.1</li><li> nacos镜像：nacos/nacos-server:v2.0.3</li></ol><h2 id="二、流程图"><a href="#二、流程图" class="headerlink" title="二、流程图"></a>二、流程图</h2><pre class="mermaid">graph LRA[集群外部SLB] --> B[阿里云 Ingress] --> C[headless-Svc] --> D[statefulSet-Pod] --> E[MySQL]F[集群内部FQDN] --> CD --> G[PVC数据持久化]</pre><p>说明：</p><ul><li>集群入口：外部入口是SLB，主要是后台管理；内部入口是headless-svc的FQDN域名，内部服务间通信。</li><li>集群数据持久化：可以采用NAS，CEPH。如果不太关注落地数据，可以不需要，此篇文档就没有配置PVC。</li><li>如果不太想用Ingress，可以用LoadBlance类型的Service替代Ingress，只管理界面用途可以这么做。</li></ul><h2 id="三、搭建步骤"><a href="#三、搭建步骤" class="headerlink" title="三、搭建步骤"></a>三、搭建步骤</h2><h3 id="1、全部所需yaml文件概览"><a href="#1、全部所需yaml文件概览" class="headerlink" title="1、全部所需yaml文件概览"></a>1、全部所需yaml文件概览</h3><pre><code class="bash">nacos-k8s-cm.yamlnacos-k8s-headless-svc.yamlnacos-k8s-stateful.yamlnacos-k8s-svc.yaml                #可不用nginx_ingress_svc.yamlnginx_ingress.yaml</code></pre><h3 id="2、创建Config-Map数据库信息"><a href="#2、创建Config-Map数据库信息" class="headerlink" title="2、创建Config-Map数据库信息"></a>2、创建Config-Map数据库信息</h3><p>新建nacos-k8s-cm.yaml文件，并写入以下内容：</p><pre><code class="yaml">apiVersion: v1kind: ConfigMapmetadata:  name: nacos-cm  namespace: zhwdata:  mysql.host: &quot;xxxxxxx.mysql.rds.aliyuncs.com&quot;  mysql.db.name: &quot;nacos_cluster&quot;  mysql.port: &quot;3306&quot;  mysql.user: &quot;nacos&quot;  mysql.password: &quot;XN5lqwtnl8jUbWsu&quot;</code></pre><h3 id="3、创建Headless-Service"><a href="#3、创建Headless-Service" class="headerlink" title="3、创建Headless Service"></a>3、创建Headless Service</h3><p>新建nacos-k8s-headless-svc.yaml文件，并写入以下内容</p><pre><code class="yaml">apiVersion: v1kind: Servicemetadata:  name: nacos-headless  namespace: zhw  labels:    app: nacos-headlessspec:  type: ClusterIP  clusterIP: None  ports:    - port: 8848       name: server      targetPort: 8848    - port: 9848      name: client-rpc      targetPort: 9848    - port: 9849      name: raft-rpc      targetPort: 9849      ## 兼容1.4.x版本的选举端口    - port: 7848      name: old-raft-rpc      targetPort: 7848  selector:    app: nacos</code></pre><h3 id="4、创建StatefulSet有状态Pod"><a href="#4、创建StatefulSet有状态Pod" class="headerlink" title="4、创建StatefulSet有状态Pod"></a>4、创建StatefulSet有状态Pod</h3><p>新建nacos-k8s-stateful.yaml文件，并写入以下内容：</p><pre><code class="yaml">apiVersion: apps/v1kind: StatefulSetmetadata:  name: nacos  namespace: zhw  labels:    app: nacosspec:  # 上一步中headless-svc的名字  serviceName: nacos-headless  # nacos集群必须是三个节点  replicas: 3  selector:    matchLabels:      app: nacos  template:    metadata:      labels:        app: nacos      annotations:        # 阿里云ASK申请ECI的配置，可以忽略        k8s.aliyun.com/eci-use-specs : &quot;2-4Gi&quot;    spec:      affinity:        podAntiAffinity:          requiredDuringSchedulingIgnoredDuringExecution:            - labelSelector:                matchExpressions:                  - key: &quot;app&quot;                    operator: In                    values:                      - nacos              topologyKey: &quot;kubernetes.io/hostname&quot;      containers:        - name: nacos          imagePullPolicy: Always          image: nacos/nacos-server:v2.0.3           resources:            requests:              memory: &quot;4Gi&quot;              cpu: &quot;2&quot;          ports:            - containerPort: 8848              name: client            - containerPort: 9848              name: client-rpc            - containerPort: 9849              name: raft-rpc            - containerPort: 7848              name: old-raft-rpc          livenessProbe:            tcpSocket:              port: 8848            periodSeconds: 10            initialDelaySeconds: 30          readinessProbe:            tcpSocket:              port: 8848            initialDelaySeconds: 30            timeoutSeconds: 5            periodSeconds: 5          env:            - name: MYSQL_SERVICE_DB_PARAM              value: &quot;characterEncoding=utf8&amp;connectTimeout=1000&amp;socketTimeout=3000&amp;autoReconnect=true&amp;useSSL=false&quot;            - name: NACOS_REPLICAS              value: &quot;3&quot;            - name: MYSQL_SERVICE_HOST              valueFrom:                configMapKeyRef:                  name: nacos-cm                  key: mysql.host            - name: MYSQL_SERVICE_DB_NAME              valueFrom:                configMapKeyRef:                  name: nacos-cm                  key: mysql.db.name            - name: MYSQL_SERVICE_PORT              valueFrom:                configMapKeyRef:                  name: nacos-cm                  key: mysql.port            - name: MYSQL_SERVICE_USER              valueFrom:                configMapKeyRef:                  name: nacos-cm                  key: mysql.user            - name: MYSQL_SERVICE_PASSWORD              valueFrom:                configMapKeyRef:                  name: nacos-cm                  key: mysql.password            - name: MODE              value: &quot;cluster&quot;            - name: NACOS_SERVER_PORT              value: &quot;8848&quot;            - name: PREFER_HOST_MODE              value: &quot;hostname&quot;            - name: NACOS_SERVERS              # 集群的主机配置，这个value必须写对，格式为FQDN形式，pod-编号.headless-svc的名字.命名空间.svc.cluster.local:8848              value: &quot;nacos-0.nacos-headless.zhw.svc.cluster.local:8848 nacos-1.nacos-headless.zhw.svc.cluster.local:8848 nacos-2.nacos-headless.zhw.svc.cluster.local:8848&quot;</code></pre><p><strong>以上三步完成后，整个nacos集群基本已经就绪，应用可以使用headless-svc的域名<code>nacos-headless.zhw.svc.cluster.local</code>和nacos集群通信。如果想访问管理界面，就需要创建Ingress SLB或者LB类型的Service。</strong></p><h3 id="5、创建Ingress"><a href="#5、创建Ingress" class="headerlink" title="5、创建Ingress"></a>5、创建Ingress</h3><p>安装完ingress组件后，即可创建ingress规则文件nginx-ingress.yaml</p><pre><code class="yaml">apiVersion: extensions/v1beta1 kind: Ingressmetadata:  name: nacos-ingress  namespace: zhwspec:  rules:  # 配置七层域名。  - host: test.nacos.com    http:      paths:      # 配置Context Path。      - path: /        backend:          serviceName: nacos-headless          servicePort: 8848 </code></pre><p><strong>根据具体情况，可继续添加9848、9849等端口。</strong></p><h3 id="6、创建-ingress-lb-svc"><a href="#6、创建-ingress-lb-svc" class="headerlink" title="6、创建 ingress-lb-svc"></a>6、创建 ingress-lb-svc</h3><p>先手动创建好阿里云内网SLB，然后创建nginx-ingress-svc.yaml文件</p><pre><code class="yaml">#nginx ingress slb serviceapiVersion: v1kind: Servicemetadata:  name: nginx-ingress-lb  namespace: kube-system   labels:    app: nginx-ingress-lb  annotations:    # 指明SLB实例地址类型为私网类型。    service.beta.kubernetes.io/alicloud-loadbalancer-address-type: intranet    # 修改为您的私网SLB实例ID,事先创建好的slb。    service.beta.kubernetes.io/alicloud-loadbalancer-id: lb-2zev3l6hna765zkfi94ru     # 是否自动创建SLB端口监听（会覆写已有端口监听），也可手动创建端口监听。    service.beta.kubernetes.io/alicloud-loadbalancer-force-override-listeners: &#39;true&#39;spec:  type: LoadBalancer  # route traffic to other nodes  externalTrafficPolicy: &quot;Cluster&quot;  ports:  - port: 80    name: http    targetPort: 80  - port: 443    name: https    targetPort: 443  selector:    # select app=ingress-nginx pods    app: ingress-nginx</code></pre><p><strong>注意：这里的SLB既作为管理界面的入口，也可以作为Nacos集群的一个入口配置到各个服务的配置文件中，需要加上9848、9849等端口。</strong></p><h3 id="7、创建LB类型的Service"><a href="#7、创建LB类型的Service" class="headerlink" title="7、创建LB类型的Service"></a>7、创建LB类型的Service</h3><p>创建nacos-k8s-svc.yaml 文件，并写入以下内容：</p><pre><code class="yaml">apiVersion: v1kind: Servicemetadata:  annotations:    service.beta.kubernetes.io/alibaba-cloud-loadbalancer-health-check-connect-port: &#39;8848&#39;    service.beta.kubernetes.io/alibaba-cloud-loadbalancer-health-check-flag: &#39;on&#39;    service.beta.kubernetes.io/alibaba-cloud-loadbalancer-health-check-interval: &#39;3&#39;    service.beta.kubernetes.io/alibaba-cloud-loadbalancer-health-check-type: tcp    service.beta.kubernetes.io/alibaba-cloud-loadbalancer-healthy-threshold: &#39;4&#39;    service.beta.kubernetes.io/alibaba-cloud-loadbalancer-scheduler: wlc    service.beta.kubernetes.io/alibaba-cloud-loadbalancer-spec: slb.s1.small    service.beta.kubernetes.io/alibaba-cloud-loadbalancer-unhealthy-threshold: &#39;4&#39;    service.beta.kubernetes.io/alicloud-loadbalancer-address-type: intranet  name: nacos-svc  namespace: zhwspec:  ports:    - name: http      port: 80      protocol: TCP      targetPort: 8848  selector:    app: nacos  type: LoadBalancer</code></pre><p>在不想使用Ingress的情况下，可以用LB的类型SVC来创建一个管理入口。但是这个只建议做管理入口，不建议做集群入口。</p><h2 id="四、参考信息"><a href="#四、参考信息" class="headerlink" title="四、参考信息"></a>四、参考信息</h2><ul><li><a href="https://github.com/nacos-group/nacos-k8s">官方文档</a></li></ul>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h2 id=&quot;一、预备环境&quot;&gt;&lt;a href=&quot;#一、预备环境&quot; class=&quot;headerlink&quot; title=&quot;一、预备环境&quot;&gt;&lt;/a&gt;一、预备环境&lt;/h2&gt;&lt;ol&gt;
+&lt;li&gt;阿里云ASK集群 k8s版本：1.20.4-aliyun.1&lt;/li&gt;
+&lt;li&gt; nacos镜像</summary>
+      
+    
+    
+    
+    <category term="中间件" scheme="https://www.langxw.com/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/"/>
+    
+    <category term="Nacos" scheme="https://www.langxw.com/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/Nacos/"/>
+    
+    
+    <category term="k8s" scheme="https://www.langxw.com/tags/k8s/"/>
+    
+    <category term="nacos" scheme="https://www.langxw.com/tags/nacos/"/>
+    
+  </entry>
   
   <entry>
     <title>Kube-prometheus添加自定义监控项</title>
@@ -530,35 +560,6 @@
     
     
     <category term="mongodb" scheme="https://www.langxw.com/tags/mongodb/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>基于SSH服务的SFTP应用</title>
-    <link href="https://www.langxw.com/2021/04/13/%E5%9F%BA%E4%BA%8ESSH%E6%9C%8D%E5%8A%A1%E7%9A%84SFTP%E5%BA%94%E7%94%A8/"/>
-    <id>https://www.langxw.com/2021/04/13/%E5%9F%BA%E4%BA%8ESSH%E6%9C%8D%E5%8A%A1%E7%9A%84SFTP%E5%BA%94%E7%94%A8/</id>
-    <published>2021-04-13T12:48:55.000Z</published>
-    <updated>2021-04-13T12:50:14.357Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="一、需求"><a href="#一、需求" class="headerlink" title="一、需求"></a>一、需求</h2><p>初创公司，资源和资金有限，无法搭建日志系统。</p><p>系统上线初期，开发人员需要经常查看生产日志来定位bug，且不能给予开发人员生产服务器的权限。</p><p>需要一个简单、安全、轻量级、不耗费资源的方法来满足查看日志的需求。</p><h2 id="二、方案"><a href="#二、方案" class="headerlink" title="二、方案"></a>二、方案</h2><p>经过调研，使用<strong>基于SSH服务的SFTP和Mount挂载本机目录</strong>的方法，可以满足需求。</p><p>此方法，可以进行严格的权限控制：只读、不能访问其他目录、不能登录服务器。</p><h2 id="三、实施步骤"><a href="#三、实施步骤" class="headerlink" title="三、实施步骤"></a>三、实施步骤</h2><h3 id="1、新建用做SFTP的用户"><a href="#1、新建用做SFTP的用户" class="headerlink" title="1、新建用做SFTP的用户"></a>1、新建用做SFTP的用户</h3><pre><code class="shell">groupadd log_ro -g 2000useradd log_ro -u 2000 -g 2000 -d /home/log_ro -s /sbin/nologin</code></pre><ul><li>如果服务器是使用密码的登录的，就需要设置log_ro用户的密码<code>passwd log_ro</code></li><li>如果是使用密钥登录的，就要为log_ro做密钥登录的相关配置，和ssh登录一样</li><li>-s /sbin/nologin 控制其不能登录服务器</li></ul><h3 id="2、控制权限"><a href="#2、控制权限" class="headerlink" title="2、控制权限"></a>2、控制权限</h3><p>对SFTP用户，做不能切换目录和只读的权限控制。</p><p>注意：只读是针对SFTP的home目录的，对于日志的只读权限，由日志本身的权限属性进行控制。</p><pre><code class="shell">chown root:log_ro /home/log_rochmod 755 /home/log_ro</code></pre><h3 id="3、修改sshd配置"><a href="#3、修改sshd配置" class="headerlink" title="3、修改sshd配置"></a>3、修改sshd配置</h3><pre><code class="shell">sed -i &quot;s/Subsystem/#Subsystem/g&quot; /etc/ssh/sshd_config</code></pre><pre><code class="shell">cat &gt;&gt; /etc/ssh/sshd_config &lt;&lt; EOF# sftp for read log    Subsystem sftp internal-sftpUsePAM yesMatch User log_ro    ChrootDirectory /home/log_ro/    ForceCommand internal-sftp    AllowTcpForwarding no    X11Forwarding noEOF    </code></pre><p>在配置文件中， User指定了sftp的用户，ChrootDirectory指定了sftp登录后的根目录。</p><p>注意：</p><ul><li>根目录本身所属必须是root，属组为sftp用户的属组，权限最小为755。意味着log_ro本身是不能在/home/log_ro中建立新文件、文件夹或者修改文件的。</li><li>虽然ftp用户对于登录后的根目录没有写权限，但是我们可以用root新建一个文件夹，比如叫upload，然后把这个文件夹所属改为log_ro，这样ftp用户就对/home/log_ro/upload拥有完全的写权限了。上传文件不要放到根目录而是放到upload下面。</li></ul><h3 id="4、重启sshd"><a href="#4、重启sshd" class="headerlink" title="4、重启sshd"></a>4、重启sshd</h3><p>关掉Selinux：<code>setenforce 0</code>，重启sshd服务<code>systemctl restart sshd</code></p><h3 id="5、使用mount挂载日志文件"><a href="#5、使用mount挂载日志文件" class="headerlink" title="5、使用mount挂载日志文件"></a>5、使用mount挂载日志文件</h3><p><strong>因为软连接在ftp中不能生效，又因为硬链接不能链接目录，所以采用mount挂载本机文件系统的方法实现软连接。</strong></p><pre><code class="shell">mkdir fps_logschown log_ro.log_ro fps_logsmount --bind /data/app/fps/logs fps_logs</code></pre><h3 id="6、验证"><a href="#6、验证" class="headerlink" title="6、验证"></a>6、验证</h3><p>使用ftp客户端来验证对于ftp用户权限的控制。</p><h2 id="四、其他"><a href="#四、其他" class="headerlink" title="四、其他"></a>四、其他</h2><p>最后介绍一下，如果不使用家目录作为sftp的根目录，使用其他目录的方法。</p><p>但是有一个原则还是要遵守，就是sftp所在的根目录，和其所有的上级目录，所属必须是root，不然就会碰到sftp连接马上被关闭的情况。</p><p>比如我们想要登录后的根目录为/data/haha/abc</p><p>/data/haha/abc 应该为root:zhongan 755</p><p>/data/haha/       应该为root:root         755</p><p>/data                 应该为root:root         755</p><p>如果想要上传文件，应该建立/data/haha/abc/upload文件夹，所属zhongan:zhongan , 755，然后上传文件的目标路径为/upload</p><p>然后修改/etc/ssh/sshd_config ,修改ChrootDirectory后面的目录为/data/haha/abc/</p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h2 id=&quot;一、需求&quot;&gt;&lt;a href=&quot;#一、需求&quot; class=&quot;headerlink&quot; title=&quot;一、需求&quot;&gt;&lt;/a&gt;一、需求&lt;/h2&gt;&lt;p&gt;初创公司，资源和资金有限，无法搭建日志系统。&lt;/p&gt;
-&lt;p&gt;系统上线初期，开发人员需要经常查看生产日志来定位bug，且不能给</summary>
-      
-    
-    
-    
-    <category term="工具" scheme="https://www.langxw.com/categories/%E5%B7%A5%E5%85%B7/"/>
-    
-    <category term="FTP" scheme="https://www.langxw.com/categories/%E5%B7%A5%E5%85%B7/FTP/"/>
-    
-    
-    <category term="FTP" scheme="https://www.langxw.com/tags/FTP/"/>
-    
-    <category term="SFTP" scheme="https://www.langxw.com/tags/SFTP/"/>
     
   </entry>
   
