@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://www.langxw.com/2023/08/18/%E6%B5%85%E6%9E%90OCI%E3%80%81CRI%E3%80%81Docker%E3%80%81Containerd%E3%80%81runc%E3%80%81Dockershim%E3%80%81Containerd-shim%E5%88%86%E5%88%AB%E6%98%AF%E4%BB%80%E4%B9%88/</loc>
+    
+    <lastmod>2023-08-18</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://www.langxw.com/2023/08/18/ES%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-K8s%E7%8E%AF%E5%A2%83/</loc>
     
     <lastmod>2023-08-18</lastmod>
@@ -952,6 +959,20 @@
   
   <url>
     <loc>https://www.langxw.com/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/ZK/</loc>
+    <lastmod>2023-08-18</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.langxw.com/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</loc>
+    <lastmod>2023-08-18</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.langxw.com/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/Kubernetes/</loc>
     <lastmod>2023-08-18</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
