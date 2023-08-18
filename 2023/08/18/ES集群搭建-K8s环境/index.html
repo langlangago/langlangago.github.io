@@ -2,28 +2,22 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Nacos集群搭建 | 运维人</title>
-  <meta name="keywords" content=" nacos ">
-  <meta name="description" content="Nacos集群搭建 | 运维人">
+  <title>ES集群搭建-K8s环境 | 运维人</title>
+  <meta name="keywords" content=" es ">
+  <meta name="description" content="ES集群搭建-K8s环境 | 运维人">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<meta name="description" content="一、缘由本文档题目也可叫做，kube-prometheus添加target。 公司有个canal项目想接入prometheus进行监控告警，从canal官档介绍看到只需配置prometheus.yaml添加canal的job后重启服务，即可将canal接入prometheus监控。 官档介绍的是非容器部署的prometheus，鉴于我司有k8s环境，我就想将canal接入k8s集群的prometh">
+<meta name="description" content="一、缘由ES集群上K8s，主要解决横向扩展复杂的问题，次要可以节约一定的成本。 通过更改StatefulSet的副本数，可以有序横向扩展ES集群，并通过集群自动平衡数据的方法，将数据迁移到新加入的节点。 二、预备环境 阿里云ASK集群：版本1.22.15-aliyun.1  ES集群：版本 elasticsearch:6.3.2  存储：阿里云SSD云盘   三、架构部署在阿里云ASK集群的sta">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Kube-prometheus添加自定义监控项">
-<meta property="og:url" content="https://www.langxw.com/2022/04/19/Kube-prometheus%E6%B7%BB%E5%8A%A0%E8%87%AA%E5%AE%9A%E4%B9%89%E7%9B%91%E6%8E%A7%E9%A1%B9/index.html">
+<meta property="og:title" content="ES集群搭建-K8s环境">
+<meta property="og:url" content="https://www.langxw.com/2023/08/18/ES%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-K8s%E7%8E%AF%E5%A2%83/index.html">
 <meta property="og:site_name" content="运维人">
-<meta property="og:description" content="一、缘由本文档题目也可叫做，kube-prometheus添加target。 公司有个canal项目想接入prometheus进行监控告警，从canal官档介绍看到只需配置prometheus.yaml添加canal的job后重启服务，即可将canal接入prometheus监控。 官档介绍的是非容器部署的prometheus，鉴于我司有k8s环境，我就想将canal接入k8s集群的prometh">
+<meta property="og:description" content="一、缘由ES集群上K8s，主要解决横向扩展复杂的问题，次要可以节约一定的成本。 通过更改StatefulSet的副本数，可以有序横向扩展ES集群，并通过集群自动平衡数据的方法，将数据迁移到新加入的节点。 二、预备环境 阿里云ASK集群：版本1.22.15-aliyun.1  ES集群：版本 elasticsearch:6.3.2  存储：阿里云SSD云盘   三、架构部署在阿里云ASK集群的sta">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://s1.ax1x.com/2022/04/18/LdOyEF.png">
-<meta property="og:image" content="https://s1.ax1x.com/2022/04/19/L0NIDe.png">
-<meta property="og:image" content="https://s1.ax1x.com/2022/04/19/L0Urxf.png">
-<meta property="og:image" content="https://s1.ax1x.com/2022/04/19/L0wFPA.png">
-<meta property="article:published_time" content="2022-04-19T05:57:02.000Z">
-<meta property="article:modified_time" content="2022-04-19T06:22:25.255Z">
+<meta property="article:published_time" content="2023-08-18T01:42:56.000Z">
+<meta property="article:modified_time" content="2023-08-18T01:49:53.561Z">
 <meta property="article:author" content="运维人">
-<meta property="article:tag" content="k8s">
-<meta property="article:tag" content="Prometheus">
+<meta property="article:tag" content="es">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://s1.ax1x.com/2022/04/18/LdOyEF.png">
 
 
 <link rel="icon" href="/img/avatar.jpg">
@@ -190,7 +184,7 @@
     <li>
         <div class="all active" data-rel="全部文章">全部文章
             
-                <small>(54)</small>
+                <small>(55)</small>
             
         </div>
     </li>
@@ -293,11 +287,23 @@
                         <i class="fold iconfont icon-right"></i>
                         
                         数据库
-                        <small>(5)</small>
+                        <small>(6)</small>
                         
                     </div>
                     
                         <ul class="sub hide">
+                            
+                                <li>
+                                    <div data-rel="数据库<--->ES">
+                                        
+                                        ES
+                                        
+                                            <small>(1
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
                             
                                 <li>
                                     <div data-rel="数据库<--->MongoDB">
@@ -659,6 +665,10 @@
             
         
     
+        
+            
+        
+    
 </ul>
 <div class="left-bottom">
     <div class="menus">
@@ -679,8 +689,8 @@
         
     </div>
 </div>
-<input type="hidden" id="yelog_site_posts_number" value="54">
-<input type="hidden" id="yelog_site_word_count" value="43k">
+<input type="hidden" id="yelog_site_posts_number" value="55">
+<input type="hidden" id="yelog_site_word_count" value="44.8k">
 <div style="display: none">
     <span id="busuanzi_value_site_uv"></span>
     <span id="busuanzi_value_site_pv"></span>
@@ -777,6 +787,10 @@
         
             <li class="article-tag-list-item">
                 <i class="iconfont icon-tag"></i><a>ELK</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>es</a>
             </li>
         
             <li class="article-tag-list-item">
@@ -956,6 +970,14 @@
            data-author="" >
             <span class="post-title" title="使用Privoxy将http代理转换成socks5代理">使用Privoxy将http代理转换成socks5代理</span>
             <span class="post-date" title="2021-06-04 19:00:16">2021/06/04</span>
+        </a>
+        
+        <a  class="全部文章 数据库 ES "
+           href="/2023/08/18/ES%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-K8s%E7%8E%AF%E5%A2%83/"
+           data-tag="es"
+           data-author="" >
+            <span class="post-title" title="ES集群搭建-K8s环境">ES集群搭建-K8s环境</span>
+            <span class="post-date" title="2023-08-18 09:42:56">2023/08/18</span>
         </a>
         
         <a  class="全部文章 中间件 Nacos "
@@ -1310,6 +1332,14 @@
             <span class="post-date" title="2021-02-01 14:54:52">2021/02/01</span>
         </a>
         
+        <a  class="全部文章 中间件 Nacos "
+           href="/2021/02/01/Nacos%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA/"
+           data-tag="nacos"
+           data-author="" >
+            <span class="post-title" title="Nacos集群搭建">Nacos集群搭建</span>
+            <span class="post-date" title="2021-02-01 14:53:54">2021/02/01</span>
+        </a>
+        
         <a  class="全部文章 脚本 Python "
            href="/2021/02/01/Python%E8%AF%BB%E5%8F%96Oracle%E6%95%B0%E6%8D%AE%E5%BA%93/"
            data-tag="python,oracle"
@@ -1350,20 +1380,12 @@
             <span class="post-date" title="2021-01-31 19:19:16">2021/01/31</span>
         </a>
         
-        <a  class="全部文章 中间件 Nacos "
-           href="/2021/01/29/Nacos%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA/"
-           data-tag="nacos"
-           data-author="" >
-            <span class="post-title" title="Nacos集群搭建">Nacos集群搭建</span>
-            <span class="post-date" title="2021-01-29 14:14:34">2021/01/29</span>
-        </a>
-        
         <a  class="全部文章 "
            href="/2021/01/29/hello-world/"
            data-tag=""
            data-author="" >
             <span class="post-title" title="Hello World">Hello World</span>
-            <span class="post-date" title="2021-01-29 10:34:11">2021/01/29</span>
+            <span class="post-date" title="2021-01-29 10:34:12">2021/01/29</span>
         </a>
         
         <div id="no-item-tips">
@@ -1383,9 +1405,9 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="post-Nacos集群搭建" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-ES集群搭建-K8s环境" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">Nacos集群搭建</h1>
+        <h1 class="article-title">ES集群搭建-K8s环境</h1>
     
     <div class="article-meta">
         
@@ -1395,9 +1417,9 @@
             <i class="iconfont icon-category"></i>
             
             
-            <a  data-rel="中间件">中间件</a> > 
+            <a  data-rel="数据库">数据库</a> > 
             
-            <a  data-rel="中间件&lt;---&gt;Nacos">Nacos</a>
+            <a  data-rel="数据库&lt;---&gt;ES">ES</a>
             
         </span>
         
@@ -1405,19 +1427,19 @@
         <span class="tag">
             <i class="iconfont icon-tag"></i>
             
-            <a class="color1">nacos</a>
+            <a class="color3">es</a>
             
         </span>
         
     </div>
     <div class="article-meta">
         
-            发布时间 : <time class="date" title='最后更新: 2021-02-01 14:53:53'>2021-01-29 14:14</time>
+            发布时间 : <time class="date" title='最后更新: 2023-08-18 09:49:53'>2023-08-18 09:42</time>
         
     </div>
     <div class="article-meta">
         
-        <span>字数:779</span>
+        <span>字数:1.8k</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -1447,7 +1469,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E9%A2%84%E5%A4%87%E7%8E%AF%E5%A2%83%E8%AF%B4%E6%98%8E%EF%BC%9A"><span class="toc-text">一、预备环境说明：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E9%9B%86%E7%BE%A4%E6%9E%B6%E6%9E%84%EF%BC%9A"><span class="toc-text">二、集群架构：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E9%83%A8%E7%BD%B2%E6%AD%A5%E9%AA%A4%EF%BC%9A"><span class="toc-text">三、部署步骤：</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E8%A7%A3%E5%8E%8B%EF%BC%9A"><span class="toc-text">1、解压：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E5%AF%BC%E5%85%A5%E6%95%B0%E6%8D%AE%E6%96%87%E4%BB%B6%EF%BC%9A"><span class="toc-text">2、导入数据文件：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81%E4%BF%AE%E6%94%B9%E6%95%B0%E6%8D%AE%E6%BA%90%EF%BC%9A"><span class="toc-text">3、修改数据源：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4%E3%80%81%E4%BF%AE%E6%94%B9%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE%EF%BC%9A"><span class="toc-text">4、修改集群配置：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5%E3%80%81%E4%BF%AE%E6%94%B9%E5%86%85%E5%AD%98%E5%8D%A0%E7%94%A8%EF%BC%9A"><span class="toc-text">5、修改内存占用：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6%E3%80%81%E5%90%AF%E5%8A%A8%EF%BC%9A"><span class="toc-text">6、启动：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7%E3%80%81%E9%85%8D%E7%BD%AENginx%E4%BB%A3%E7%90%86Upstream"><span class="toc-text">7、配置Nginx代理Upstream</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8%E3%80%81%E9%AA%8C%E8%AF%81%EF%BC%9A"><span class="toc-text">8、验证：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E5%85%B6%E4%BB%96"><span class="toc-text">四、其他</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E7%BC%98%E7%94%B1"><span class="toc-text">一、缘由</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E9%A2%84%E5%A4%87%E7%8E%AF%E5%A2%83"><span class="toc-text">二、预备环境</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E6%9E%B6%E6%9E%84"><span class="toc-text">三、架构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E9%83%A8%E7%BD%B2%E6%AD%A5%E9%AA%A4"><span class="toc-text">四、部署步骤</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E5%85%A8%E9%83%A8%E6%89%80%E9%9C%80yaml%E6%96%87%E4%BB%B6%E9%A2%84%E8%A7%88"><span class="toc-text">1、全部所需yaml文件预览</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E5%88%9B%E5%BB%BAelasticsearch%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4"><span class="toc-text">2、创建elasticsearch命名空间</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81%E5%88%9B%E5%BB%BAheadless%E7%B1%BB%E5%9E%8B%E7%9A%84svc"><span class="toc-text">3、创建headless类型的svc</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4%E3%80%81%E5%88%9B%E5%BB%BA%E5%8A%A8%E6%80%81%E5%AD%98%E5%82%A8%E5%8D%B7storageclass"><span class="toc-text">4、创建动态存储卷storageclass</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5%E3%80%81%E5%88%9B%E5%BB%BA%E6%9C%89%E7%8A%B6%E6%80%81%E5%BA%94%E7%94%A8ES"><span class="toc-text">5、创建有状态应用ES</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6%E3%80%81%E5%88%9B%E5%BB%BAES%E9%9B%86%E7%BE%A4%E5%85%A5%E5%8F%A3SLB"><span class="toc-text">6、创建ES集群入口SLB</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7%E3%80%81%E5%88%9B%E5%BB%BAKibana"><span class="toc-text">7、创建Kibana</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98"><span class="toc-text">五、遇到的问题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E4%BA%A4%E6%8D%A2%E5%88%86%E5%8C%BAmemory-lock%E9%97%AE%E9%A2%98"><span class="toc-text">1、交换分区memory_lock问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E7%BC%A9%E5%AE%B9PVC%E9%87%8A%E6%94%BE%E9%97%AE%E9%A2%98"><span class="toc-text">2、缩容PVC释放问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81%E7%89%88%E6%9C%AC%E9%97%AE%E9%A2%98"><span class="toc-text">3、版本问题</span></a></li></ol></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -1463,100 +1485,276 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="一、预备环境说明："><a href="#一、预备环境说明：" class="headerlink" title="一、预备环境说明："></a>一、预备环境说明：</h2><ol>
-<li>64位JDK ，这里使用 JDK 1.8.0_261</li>
-<li>下载编译好的压缩包，nacos-server-1.4.0.tar.gz</li>
-<li>准备三台主机A(192.168.1.1)、B(192.168.1.2)、C(192.168.1.3)</li>
-<li>准备高可用Nginx集群、MySQL集群</li>
+        <h2 id="一、缘由"><a href="#一、缘由" class="headerlink" title="一、缘由"></a>一、缘由</h2><p><strong>ES集群上K8s，主要解决横向扩展复杂的问题，次要可以节约一定的成本。</strong></p>
+<p>通过更改StatefulSet的副本数，可以有序横向扩展ES集群，并通过集群自动平衡数据的方法，将数据迁移到新加入的节点。</p>
+<h2 id="二、预备环境"><a href="#二、预备环境" class="headerlink" title="二、预备环境"></a>二、预备环境</h2><ol>
+<li><p>阿里云ASK集群：版本1.22.15-aliyun.1</p>
+</li>
+<li><p>ES集群：版本 elasticsearch:6.3.2</p>
+</li>
+<li><p>存储：阿里云SSD云盘</p>
+</li>
 </ol>
-<h2 id="二、集群架构："><a href="#二、集群架构：" class="headerlink" title="二、集群架构："></a>二、集群架构：</h2><pre class="mermaid">graph LR
-A[微服务] --> B(Nginx集群)
-    B --> D[Nacos1]
-    B --> E[Nacos2]
-    B --> F[Nacos3]
-    D --> G(MySQL集群)
-    E --> G
-    F --> G</pre>
-
-
+<h2 id="三、架构"><a href="#三、架构" class="headerlink" title="三、架构"></a>三、架构</h2><p><strong>部署在阿里云ASK集群的statefulset，不存在资源竞争</strong></p>
 <ul>
-<li><p><strong>高可用Nginx集群</strong></p>
+<li><p>方案1（正常方案）：master节点3个，data节点N个。</p>
 </li>
-<li><p><strong>高可用Nacos集群（至少三个实例）</strong></p>
-</li>
-<li><p><strong>高可用MySQL集群</strong></p>
+<li><p>方案2（简单粗暴）：初始3个节点，所有节点都是master节点和node节点；后续扩容不用在意discovery，保持master是初期节点即可。（<strong>本例采用</strong>）</p>
 </li>
 </ul>
-<h2 id="三、部署步骤："><a href="#三、部署步骤：" class="headerlink" title="三、部署步骤："></a>三、部署步骤：</h2><h3 id="1、解压："><a href="#1、解压：" class="headerlink" title="1、解压："></a>1、解压：</h3><p><code>tar -zxvf nacos-server-1.4.0.tar.gz -C /data</code></p>
-<h3 id="2、导入数据文件："><a href="#2、导入数据文件：" class="headerlink" title="2、导入数据文件："></a>2、导入数据文件：</h3><p>创建数据库nacos_test，将<code>/data/nacos/conf/nacos-mysql.sql</code>导入数据库，并创建应用程序访问账号。</p>
-<h3 id="3、修改数据源："><a href="#3、修改数据源：" class="headerlink" title="3、修改数据源："></a>3、修改数据源：</h3><p>这里我们使用外置MySQL集群作为数据存储。</p>
-<p>修改<code>conf/application.properties</code>中关于MySQL数据源的配置。</p>
-<pre><code class="yaml">#*************** Config Module Related Configurations ***************#
-### If use MySQL as datasource:
-spring.datasource.platform=mysql
-
-### Count of DB:
-db.num=1
-
-### Connect URL of DB:
-db.url.0=jdbc:mysql://192.168.1.1:3306/nacos_test?characterEncoding=utf8&amp;connectTim
-eout=1000&amp;socketTimeout=3000&amp;auto
-Reconnect=true&amp;useUnicode=true&amp;useSSL=false&amp;serverTimezone=UTC
-db.user=nacos_test_rw
-db.password=POUZV#Of
+<h2 id="四、部署步骤"><a href="#四、部署步骤" class="headerlink" title="四、部署步骤"></a>四、部署步骤</h2><h3 id="1、全部所需yaml文件预览"><a href="#1、全部所需yaml文件预览" class="headerlink" title="1、全部所需yaml文件预览"></a>1、全部所需yaml文件预览</h3><pre><code class="bash">create-ns.yaml             # 命名空间
+mhw-es-headless-svc.yaml   # 通过headless-svc配置es集群域名
+mhw-storage-class.yaml     # 动态存储卷
+mhw-es-statefulset.yaml    # 有状态应用ES
+mhw-es-svc.yaml            # LoadBalance类型的svc，作为集群入口
+mhw-kibana.yaml            # kibana
 </code></pre>
-<h3 id="4、修改集群配置："><a href="#4、修改集群配置：" class="headerlink" title="4、修改集群配置："></a>4、修改集群配置：</h3><p>修改<code>conf/cluster.conf</code>文件的末尾关于IP和端口配置（若没有cluster.conf就用cluster.conf.example复制）</p>
-<pre><code>192.168.1.1:8848
-192.168.1.2:8848
-192.168.1.3:8848
+<h3 id="2、创建elasticsearch命名空间"><a href="#2、创建elasticsearch命名空间" class="headerlink" title="2、创建elasticsearch命名空间"></a>2、创建elasticsearch命名空间</h3><p>新建<strong>create-ns.yaml</strong></p>
+<pre><code class="yaml">apiVersion: v1
+kind: Namespace
+metadata:
+  name: elasticsearch
+  labels:
+    name: elasticsearch
 </code></pre>
-<p>这里写上集群内三台主机的IP和nacos监听端口</p>
-<h3 id="5、修改内存占用："><a href="#5、修改内存占用：" class="headerlink" title="5、修改内存占用："></a>5、修改内存占用：</h3><p>如果机器内存本身不大，那么不建议使用默认配置，根据具体情况修改<code>nacos/bin/startup.sh</code>中关于java内存占用的配置，</p>
-<p>比如将集群的内存占用从2G修改为512M（standalone配置可以保持不变），集群模式是else中内容：</p>
-<pre><code class="shell">#===========================================================================================
-# JVM Configuration
-#===========================================================================================
-if [[ &quot;$&#123;MODE&#125;&quot; == &quot;standalone&quot; ]]; then
-    JAVA_OPT=&quot;$&#123;JAVA_OPT&#125; -Xms512m -Xmx512m -Xmn256m&quot;
-    JAVA_OPT=&quot;$&#123;JAVA_OPT&#125; -Dnacos.standalone=true&quot;
-else
-    if [[ &quot;$&#123;EMBEDDED_STORAGE&#125;&quot; == &quot;embedded&quot; ]]; then
-        JAVA_OPT=&quot;$&#123;JAVA_OPT&#125; -DembeddedStorage=true&quot;
-    fi
-    JAVA_OPT=&quot;$&#123;JAVA_OPT&#125; -server -Xms512m -Xmx512m -Xmn256m -XX:MetaspaceSize=128m -XX:MaxMetaspaceSize=320m&quot;
-    JAVA_OPT=&quot;$&#123;JAVA_OPT&#125; -XX:-OmitStackTraceInFastThrow -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=$&#123;BASE_D
-IR&#125;/logs/java_heapdump.hprof&quot;
+<p>说明：创建专属的namespace和业务应用网络隔离，资源隔离。</p>
+<h3 id="3、创建headless类型的svc"><a href="#3、创建headless类型的svc" class="headerlink" title="3、创建headless类型的svc"></a>3、创建headless类型的svc</h3><p>新建<strong>mhw-es-headless-svc.yaml</strong></p>
+<pre><code class="yaml">kind: Service
+apiVersion: v1
+metadata:
+  name: mhw-es-svc
+  namespace: elasticsearch
+spec:
+  selector:
+    app: mhw-es 
+  clusterIP: None
+  ports:
+  - name: rest # 节点与外部通信端口
+    port: 9200
+  - name: inter-node # 节点内部通信端口
+    port: 9300
 </code></pre>
-<h3 id="6、启动："><a href="#6、启动：" class="headerlink" title="6、启动："></a>6、启动：</h3><p>依次启动，先启动的是主节点。</p>
-<p>执行<code>bin/startup.sh</code>即可，默认是集群模式。</p>
-<p>启动后可以查看日志文件和端口监听来确定集群是否启动成功 <code>tail -f nacos/logs/start.out</code>。</p>
-<p>注意：<code>./startup.sh -m standalone</code> 是启动单实例模式。</p>
-<h3 id="7、配置Nginx代理Upstream"><a href="#7、配置Nginx代理Upstream" class="headerlink" title="7、配置Nginx代理Upstream"></a>7、配置Nginx代理Upstream</h3><p>修改Nginx配置文件default.conf，加入负载均衡和反向代理的配置。</p>
-<pre><code class="shell"># 在server外部
-upstream nacos-cluster &#123;
-  server 192.168.1.1:8848;
-  server 192.168.1.2:8848;
-  server 192.168.1.3:8848;
-&#125;
-# 在server内部.location / 之前
-server &#123;
-    # 省略。。。。。
-    location /nacos &#123;
-        proxy_redirect off;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_pass http://nacos-cluster;
-    &#125;
-&#125;
+<p>说明：有状态应用通过headless-svc所确定的域名来相互通信。</p>
+<h3 id="4、创建动态存储卷storageclass"><a href="#4、创建动态存储卷storageclass" class="headerlink" title="4、创建动态存储卷storageclass"></a>4、创建动态存储卷storageclass</h3><p>新建<strong>mhw-storage-class.yaml</strong></p>
+<pre><code class="yaml">apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: alicloud-disk-ssd-es
+provisioner: diskplugin.csi.alibabacloud.com
+parameters:
+  type: cloud_ssd
+  fstype: ext4
+  resourceGroupId: &quot;rg-aek2q6kagvjz2zq&quot;
+volumeBindingMode: Immediate # 立即绑定，非延迟绑定
+reclaimPolicy: Delete # 保留策略，不保留，删除pvc的时候删除云盘
+allowVolumeExpansion: false # 是否动态扩展
 </code></pre>
-<p><strong>注意：nginx upstream 的name中不要带下划线，不然springboot会报400错误。</strong></p>
-<h3 id="8、验证："><a href="#8、验证：" class="headerlink" title="8、验证："></a>8、验证：</h3><p>通过Nginx代理来访问整个集群（建议Nginx集群使用一个域名来访问）。</p>
-<p>可通过<a target="_blank" rel="noopener" href="http://192.168.1.1/nacos%E8%AE%BF%E9%97%AEnacos%E9%9B%86%E7%BE%A4%EF%BC%8C%E9%BB%98%E8%AE%A4%E5%B8%90%E5%8F%B7nacos%E3%80%81%E5%AF%86%E7%A0%81nacos%E3%80%82">http://192.168.1.1/nacos访问nacos集群，默认帐号nacos、密码nacos。</a></p>
-<p>或者使用域名访问<a target="_blank" rel="noopener" href="http://nacos.xxx.com/nacos%E3%80%82">http://nacos.xxx.com/nacos。</a></p>
-<h2 id="四、其他"><a href="#四、其他" class="headerlink" title="四、其他"></a>四、其他</h2><ol>
-<li><a target="_blank" rel="noopener" href="https://nacos.io/zh-cn/docs/what-is-nacos.html">Nacos官方文档 https://nacos.io/zh-cn/docs/what-is-nacos.html</a></li>
-</ol>
+<p>说明：数据存储采用云盘，云盘可以选择类型和IOPS，就是按量付费可能略贵。具体参数见文档：[使用阿里云云盘动态存储卷](<a target="_blank" rel="noopener" href="https://help.aliyun.com/document_detail/134859.html?spm=a2c4g.134767.0.0.fe0e2b5aEvth5d">使用云盘动态存储卷 (aliyun.com)</a>)</p>
+<h3 id="5、创建有状态应用ES"><a href="#5、创建有状态应用ES" class="headerlink" title="5、创建有状态应用ES"></a>5、创建有状态应用ES</h3><p>新建<strong>mhw-es-statefulset.yaml</strong></p>
+<pre><code class="yaml">apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mhw-es-cluster # statefuleSet的名称
+  namespace: elasticsearch # 所属命名空间
+spec:
+  serviceName: mhw-es-svc # headless-svc的名称
+  selector:
+    matchLabels:
+      app: mhw-es
+  replicas: 3 # 3个节点
+  template:
+    metadata:
+      labels:
+        app: mhw-es # es容器标签
+      annotations:
+        k8s.aliyun.com/eci-use-specs : &quot;2-8Gi&quot; # 实例配置
+    spec:
+      containers:
+      - name: mhw-es # es容器名称
+        image: registry-vpc.cn-beijing.aliyuncs.com/zuhaowan-tools/elasticsearch:6.3.2
+        resources: # 分配的资源
+          requests:
+            cpu: 2
+            memory: 8Gi
+          limits: 
+            cpu: 2
+            memory: 8Gi
+        livenessProbe: 
+          tcpSocket:
+            port: 9200
+          initialDelaySeconds: 40
+          timeoutSeconds: 5
+          periodSeconds: 5
+        ports:
+        - containerPort: 9200
+          name: rest
+          protocol: TCP
+        - name: inter-node
+          containerPort: 9300
+          protocol: TCP
+        volumeMounts: # 数据卷挂载
+        - name: data
+          mountPath: /usr/share/elasticsearch/data
+        env:
+        - name: TZ # 时区设置
+          value: Asia/Shanghai
+        - name: cluster.name # ES集群名称
+          value: mhw-cluster
+        - name: node.name # ES节点名称，来自有状态应用自身名字
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: discovery.zen.ping.unicast.hosts # 自动发现种子节点列表，用于后期选主节点
+          value: &quot;mhw-es-cluster-0.mhw-es-svc,mhw-es-cluster-1.mhw-es-svc,mhw-es-cluster-2.mhw-es-svc&quot;
+        - name: discovery.zen.minimum_master_nodes # 防止脑裂的配置
+          value: &quot;2&quot;
+        - name: ES_JAVA_OPTS # Java堆内存
+          value: &quot;-Xms4g -Xmx4g&quot;
+        - name: network.host 
+          value: &quot;0.0.0.0&quot;
+        - name: http.cors.allow-origin
+          value: &quot;*&quot;
+        - name: http.cors.enabled
+          value: &quot;true&quot;
+        - name: http.max_initial_line_length
+          value: &quot;8k&quot;
+        - name: http.max_header_size
+          value: &quot;16k&quot;
+        - name: bootstrap.memory_lock # 内存锁定
+          value: &quot;false&quot;
+      initContainers: # init容器解决es数据目录权限问题
+      - name: fix-permissions
+        image: busybox
+        command: [&quot;sh&quot;, &quot;-c&quot;, &quot;chown -R 1000:1000 /usr/share/elasticsearch/data&quot;]
+        volumeMounts: # es数据目录挂载路径
+          - name:  data
+            mountPath:  /usr/share/elasticsearch/data
+  volumeClaimTemplates:  # PVC模版，使用storageclass动态创建pv
+  - metadata:
+      name: data
+    spec:
+      accessModes: [ &quot;ReadWriteOnce&quot; ] # 单节点读写
+      storageClassName: alicloud-disk-ssd-es
+      resources:
+        requests:
+          storage: 50Gi # 创建云盘的大小
+</code></pre>
+<p>说明：</p>
+<ul>
+<li><p>ES6集群不需要配置集群初始化时引导选择主节点的配置，所以这个配置cluster.initial_master_nodes 可以不写。</p>
+</li>
+<li><p>这个集群三个节点默认都是master和data节点。</p>
+</li>
+<li><p>discovery.zen.ping.unicast.hosts 只在最开始配置三个节点即可，后续节点不用再添加进来，永远使用这三个选一个当主节点的意思。</p>
+</li>
+<li><p>注意指定时区</p>
+</li>
+</ul>
+<h3 id="6、创建ES集群入口SLB"><a href="#6、创建ES集群入口SLB" class="headerlink" title="6、创建ES集群入口SLB"></a>6、创建ES集群入口SLB</h3><p>创建<strong>mhw-es-svc.yaml</strong></p>
+<pre><code class="yaml">apiVersion: v1
+kind: Service
+metadata:
+  annotations: # 创建按量付费的SLB
+    service.beta.kubernetes.io/alibaba-cloud-loadbalancer-health-check-connect-port: &#39;9200&#39;
+    service.beta.kubernetes.io/alibaba-cloud-loadbalancer-health-check-flag: &#39;on&#39;
+    service.beta.kubernetes.io/alibaba-cloud-loadbalancer-health-check-interval: &#39;3&#39;
+    service.beta.kubernetes.io/alibaba-cloud-loadbalancer-health-check-type: tcp
+    service.beta.kubernetes.io/alibaba-cloud-loadbalancer-healthy-threshold: &#39;4&#39;
+    service.beta.kubernetes.io/alibaba-cloud-loadbalancer-scheduler: wlc
+    service.beta.kubernetes.io/alibaba-cloud-loadbalancer-instance-charge-type: &quot;PayByCLCU&quot;
+    service.beta.kubernetes.io/alibaba-cloud-loadbalancer-unhealthy-threshold: &#39;4&#39;
+    service.beta.kubernetes.io/alicloud-loadbalancer-address-type: intranet
+    service.beta.kubernetes.io/alibaba-cloud-loadbalancer-name: &quot;mhw-es&quot;
+  name: mhw-es-svc-slb
+  namespace: elasticsearch 
+spec:
+  ports:
+    - name: http
+      port: 9200 
+      protocol: TCP
+      targetPort: 9200 
+  selector:
+    app: mhw-es
+  type: LoadBalancer
+</code></pre>
+<p>说明：因为本实例中ES集群和业务应用分属于不同namespace，网络隔离了，通过headless-svc名称无法访问通。所以需要一个集群外的访问入口，这里使用私网SLB。</p>
+<h3 id="7、创建Kibana"><a href="#7、创建Kibana" class="headerlink" title="7、创建Kibana"></a>7、创建Kibana</h3><p>创建<strong>mhw-kibana.yaml</strong></p>
+<pre><code class="yaml">apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mhw-kibana-deployment
+  namespace: elasticsearch
+  labels:
+    app: mhw-kibana
+spec:
+  minReadySeconds: 15
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mhw-kibana
+  template:
+    metadata:
+      labels:
+        app: mhw-kibana
+      annotations:
+        k8s.aliyun.com/eci-use-specs : &quot;1-2Gi&quot;
+    spec:
+      terminationGracePeriodSeconds: 40
+      containers:
+      - name: mhw-kibana
+        image: registry-vpc.cn-beijing.aliyuncs.com/zuhaowan-tools/kibana:6.3.2
+        ports:
+        - containerPort: 5601
+        resources:
+          requests:
+            cpu: 1
+            memory: 2Gi
+          limits: 
+            cpu: 1
+            memory: 2Gi
+        livenessProbe:
+          tcpSocket:
+            port: 5601
+          initialDelaySeconds: 40
+          timeoutSeconds: 5
+          periodSeconds: 5
+        env:
+        - name: TZ # 时区
+          value: &quot;Asia/Shanghai&quot;
+        - name: ELASTICSEARCH_URL # ES集群的地址
+          value: &quot;http://mhw-es-svc:9200&quot;
+        - name: XPACK.MONITORING.UI.CONTAINER.ELASTICSEARCH.ENABLED # 关闭x-pack
+          value: &quot;false&quot;
+        - name: I18N.DEFAULTLOCALE # 本地化
+          value: &quot;zh-CN&quot;
+      imagePullSecrets:          
+      - name: zhw-user-secret
+</code></pre>
+<p>说明：</p>
+<ul>
+<li><p>注意连接ES集群地址的变量配置即可，ES6和ES7可能不一样。</p>
+</li>
+<li><p>可以直接使用容器IP或者创建nodeport和loadblance类型的svc来访问kibana。</p>
+</li>
+<li><p>本例是部署在ASK集群，集群内网是打通的，故直接使用容器IP访问Kibana。</p>
+</li>
+</ul>
+<h2 id="五、遇到的问题"><a href="#五、遇到的问题" class="headerlink" title="五、遇到的问题"></a>五、遇到的问题</h2><h3 id="1、交换分区memory-lock问题"><a href="#1、交换分区memory-lock问题" class="headerlink" title="1、交换分区memory_lock问题"></a>1、交换分区memory_lock问题</h3><p>在ES的配置文件中，官方建议不使用交换分区（使用交换分区会使ES性能急剧下降），将bootstrap.memory_lock设置为true，或者最本质方法彻底禁用交换内存。</p>
+<p>在本例中，ASK集群的底层是ECI主机，默认交换分区是禁用的（阿里云ECS交换分区默认也是禁用的）。故可以在配置文件中将bootstrap.memory_lock设置为false。</p>
+<h3 id="2、缩容PVC释放问题"><a href="#2、缩容PVC释放问题" class="headerlink" title="2、缩容PVC释放问题"></a>2、缩容PVC释放问题</h3><ul>
+<li><p>缩容的时候PVC默认是保留的，同样对应的PV和云盘都是保留的。</p>
+</li>
+<li><p>上面storageclass设置的PVC删除的时候PV和云盘是同时删除的。</p>
+</li>
+<li><p>基于以上，如果确认不再使用对应的PVC（存储），需要手动删除，云盘会立刻释放。</p>
+</li>
+</ul>
+<h3 id="3、版本问题"><a href="#3、版本问题" class="headerlink" title="3、版本问题"></a>3、版本问题</h3><ul>
+<li><p>以上是基于ES6部署的配置文件，如果是ES7或者ES8集群，可能会有所差别。</p>
+</li>
+<li><p>以上是基于阿里云ASK集群，如果是阿里云ACK集群（普通K8s集群），yaml文件可能有差别。</p>
+</li>
+</ul>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 lxwno.1@163.com </span>
