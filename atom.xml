@@ -6,7 +6,7 @@
   <link href="https://www.langxw.com/atom.xml" rel="self"/>
   
   <link href="https://www.langxw.com/"/>
-  <updated>2023-08-18T08:50:53.282Z</updated>
+  <updated>2023-12-08T03:26:56.291Z</updated>
   <id>https://www.langxw.com/</id>
   
   <author>
@@ -15,6 +15,32 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>命令行sed提取字符串中的字段</title>
+    <link href="https://www.langxw.com/2023/12/08/%E5%91%BD%E4%BB%A4%E8%A1%8Csed%E6%8F%90%E5%8F%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B8%AD%E7%9A%84%E5%AD%97%E6%AE%B5/"/>
+    <id>https://www.langxw.com/2023/12/08/%E5%91%BD%E4%BB%A4%E8%A1%8Csed%E6%8F%90%E5%8F%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B8%AD%E7%9A%84%E5%AD%97%E6%AE%B5/</id>
+    <published>2023-12-08T03:23:50.000Z</published>
+    <updated>2023-12-08T03:26:56.291Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="一、缘由"><a href="#一、缘由" class="headerlink" title="一、缘由"></a>一、缘由</h2><p>一般切割提取字符串的字段，如果有规律可寻，采用awk或者cut就可以搞定。如果无规律的分隔符，就必须要用正则表达式来提取需要的数据了。</p><h2 id="二、解决办法"><a href="#二、解决办法" class="headerlink" title="二、解决办法"></a>二、解决办法</h2><p>使用sed时，我通常通过搜索除分隔符之外的任何东西来实现非贪婪搜索，直到分隔符为止：</p><pre><code class="bash">echo &quot;http://www.suon.co.uk/product/1/7/3/&quot; | sed -n &#39;s;\(http://[^/]*\)/.*;\1;p&#39;</code></pre><p>输出</p><pre><code class="bash">http://www.suon.co.uk</code></pre><p>这是：</p><ul><li>不输出不打印 <code>-n</code></li><li>s搜索，匹配模式，替换并打印 <code>s/&lt;pattern&gt;/&lt;replace&gt;/p</code></li><li>使用<code>;</code>搜索命令分隔符而不是<code>/</code>使其更容易键入，以便<code>s;&lt;pattern&gt;;&lt;replace&gt;;p</code></li><li>记住括号之间的匹配<code>\(</code>… <code>\)</code>，以后可通过<code>\1</code>，<code>\2</code>… 访问</li><li>固定匹配 <code>http://</code></li><li>后面在括号任何东西<code>[]</code>，<code>[ab/]</code>就意味着无论是<code>a</code>或<code>b</code>或<code>/</code></li><li>首先<code>^</code>是<code>[]</code>中的<code>not</code>，所以<code>[^/]</code>是除了<code>/</code>的其他字符</li><li><code>*</code>是重复前一组，<code>[^/]*</code>表示重复除<code>/</code>以外的字符，也意味着重复到<code>/</code>就结束了。</li><li>到目前为止，<code>sed -n &#39;s;\(http://[^/]*\)</code>表示搜索并记住（提取），<code>http://</code>后面紧跟任何字符，除了<code>/</code>，记住（提取）您找到的内容</li><li>我们要搜索直到域的末尾，所以在下一个<code>/</code>停止，因此<code>/</code>在末尾添加。另一个：<code>sed -n &#39;s;\(http://[^/]*\)/&#39;</code>。（可以不需要）</li><li>我们要匹配域后的其余行，因此添加<code>.*</code></li><li>在组1（<code>\1</code>）中记住的匹配项是域，因此将匹配的行替换为保存在组中<code>\1</code>并把内容打印<code>p</code>出来：<code>sed -n &#39;s;\(http://[^/]*\)/.*;\1;p&#39;</code></li></ul><h2 id="三、实际例子"><a href="#三、实际例子" class="headerlink" title="三、实际例子"></a>三、实际例子</h2><p>提取SQL语句中的某个字段（goods_sku）</p><p>SQL语句如下：</p><pre><code>string=&quot;UPDATE \`db\`.\`purchase_mould\` SET \`update_time\`=1, \`__dropped_col_16__\`=\`2023-11-14 23:27:55\`, \`goods_id\`=\`123123123\`, \`mould_id\`=123123, \`specs_crc\`=123123, \`pid\`=123123, \`state\`=8.00, \`pusername\`=\`aaaa\`, \`protect_price\`=2, \`shop_id\`=123123, \`create_time\`=\`2023-12-02 19:37:56\`, \`game_name\`=\`火影\`, \`goods_sku\`=316123123, \`duration\`=1, \`game_id\`=560, \`mould_name\`=\`鲛肌\`, \`id\`=54916 WHERE \`update_time\`=2 AND \`__dropped_col_16__\`=\`2023-11-14 23:27:55\` AND \`goods_id\`=\`5123431\` AND \`mould_id\`=12222 AND \`specs_crc\`=123123444 AND \`pid\`=1122222 AND \`state\`=1.00 AND \`pusername\`=\`zaaaaa\` AND \`protect_price\`=2 AND \`shop_id\`=741231 AND \`create_time\`=\`2023-12-02 19:37:27\` AND \`game_name\`=\`火影\` AND \`goods_sku\`=316123 AND \`duration\`=1 AND \`game_id\`=560 AND \`mould_name\`=\`鲛肌` AND \`id\`=5123 LIMIT 1; #start 349365354 end 349365957 time 2023-12-02 19:37:56&quot;</code></pre><p>sed正则表达式：</p><pre><code class="bash"> echo $string |sed -n &quot;s;.*\(\`goods_sku\`=[^ ]*\).*;\1;p</code></pre><p>如果只具体的值，不要字段，只需要把字段移到分组括号外就行。</p><pre><code class="bash">echo $string1 |sed -n &quot;s;.*\`goods_sku\`=\([^ ]*\).*;\1;p&quot;</code></pre>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h2 id=&quot;一、缘由&quot;&gt;&lt;a href=&quot;#一、缘由&quot; class=&quot;headerlink&quot; title=&quot;一、缘由&quot;&gt;&lt;/a&gt;一、缘由&lt;/h2&gt;&lt;p&gt;一般切割提取字符串的字段，如果有规律可寻，采用awk或者cut就可以搞定。如果无规律的分隔符，就必须要用正则表达式来提取需要</summary>
+      
+    
+    
+    
+    <category term="脚本" scheme="https://www.langxw.com/categories/%E8%84%9A%E6%9C%AC/"/>
+    
+    <category term="命令行" scheme="https://www.langxw.com/categories/%E8%84%9A%E6%9C%AC/%E5%91%BD%E4%BB%A4%E8%A1%8C/"/>
+    
+    
+    <category term="shell" scheme="https://www.langxw.com/tags/shell/"/>
+    
+  </entry>
   
   <entry>
     <title>浅析OCI、CRI、Docker、Containerd、runc、Dockershim、Containerd-shim分别是什么</title>
@@ -529,32 +555,6 @@
     
     
     <category term="shell" scheme="https://www.langxw.com/tags/shell/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Nginx反向代理时端口丢失的解决</title>
-    <link href="https://www.langxw.com/2021/05/19/Nginx%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E6%97%B6%E7%AB%AF%E5%8F%A3%E4%B8%A2%E5%A4%B1%E7%9A%84%E8%A7%A3%E5%86%B3/"/>
-    <id>https://www.langxw.com/2021/05/19/Nginx%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E6%97%B6%E7%AB%AF%E5%8F%A3%E4%B8%A2%E5%A4%B1%E7%9A%84%E8%A7%A3%E5%86%B3/</id>
-    <published>2021-05-19T06:20:11.000Z</published>
-    <updated>2021-05-19T06:21:54.000Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="一、缘由"><a href="#一、缘由" class="headerlink" title="一、缘由"></a>一、缘由</h2><p>nginx有时候并不像apache那样智能，对于redirect location的处理尤为惨淡，几乎只能用户手工处理非标准端口的问题。</p><p>比如，因为种种原因，nginx并不能监听在80端口，或者外部通过NAT方式将请求丢给nginx，外部地址并不是标准http(s)端口（非80和443端口），此时nginx并不能美好的处理这些重定向。发生重定向的时候会丢失端口。</p><p>例如：Nginx监听非80端口，访问欢迎页面时应该是重定向到登录页面，在这个重定向的过程中端口丢失了。</p><h2 id="二、解决办法"><a href="#二、解决办法" class="headerlink" title="二、解决办法"></a>二、解决办法</h2><p>一般是在将反向代理配置在location中，以匹配不同代理规则的需要。</p><p>经实践，以下办法都可以实现，三选一即可，优先选择1，再者选择2。</p><pre><code class="shell">1、 proxy_set_header Host $host:$server_port; （跟版本有关系，我的失效）2、 proxy_set_header Host $http_host;（跟版本有关系，我的失效）3、 proxy_set_header Host $host:11011;（直接强制注入端口号，亲测有效）</code></pre>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h2 id=&quot;一、缘由&quot;&gt;&lt;a href=&quot;#一、缘由&quot; class=&quot;headerlink&quot; title=&quot;一、缘由&quot;&gt;&lt;/a&gt;一、缘由&lt;/h2&gt;&lt;p&gt;nginx有时候并不像apache那样智能，对于redirect location的处理尤为惨淡，几乎只能用户手工处理非标准</summary>
-      
-    
-    
-    
-    <category term="中间件" scheme="https://www.langxw.com/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/"/>
-    
-    <category term="Nginx" scheme="https://www.langxw.com/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/Nginx/"/>
-    
-    
-    <category term="nginx" scheme="https://www.langxw.com/tags/nginx/"/>
     
   </entry>
   
