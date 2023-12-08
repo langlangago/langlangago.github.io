@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>浅析OCI、CRI、Docker、Containerd、runc、Dockershim、Containerd-shim分别是什么 | 运维人</title>
-  <meta name="keywords" content=" k8s ">
-  <meta name="description" content="浅析OCI、CRI、Docker、Containerd、runc、Dockershim、Containerd-shim分别是什么 | 运维人">
+  <title>定期检查某个SSL证书的有效期并告警 | 运维人</title>
+  <meta name="keywords" content=" shell , linux ">
+  <meta name="description" content="定期检查某个SSL证书的有效期并告警 | 运维人">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="一、缘由由于历史原因，我司SSL证书分散在不同的云服务器上，更换证书的时候可能会有遗漏。故将分散的SSL证书记录在文件里，定期用脚本检查剩余有效期天数，并告警。可以防止更换遗漏的事情发生。 二、脚本 记录ssl证书所在服务器的位置  &#x2F;root&#x2F;ops_scripts&#x2F;ip_ssl_path.txt  10.10.10.1#&#x2F;usr&#x2F;local&#x2F;nginx&#x2F;conf&#x2F;cert&#x2F;didikaihei">
 <meta property="og:type" content="article">
@@ -1473,9 +1473,9 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="post-浅析OCI、CRI、Docker、Containerd、runc、Dockershim、Containerd-shim分别是什么" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-定期检查某个SSL证书的有效期并告警" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">浅析OCI、CRI、Docker、Containerd、runc、Dockershim、Containerd-shim分别是什么</h1>
+        <h1 class="article-title">定期检查某个SSL证书的有效期并告警</h1>
     
     <div class="article-meta">
         
@@ -1485,9 +1485,9 @@
             <i class="iconfont icon-category"></i>
             
             
-            <a  data-rel="学习笔记">学习笔记</a> > 
+            <a  data-rel="脚本">脚本</a> > 
             
-            <a  data-rel="学习笔记&lt;---&gt;Kubernetes">Kubernetes</a>
+            <a  data-rel="脚本&lt;---&gt;Shell">Shell</a>
             
         </span>
         
@@ -1495,19 +1495,21 @@
         <span class="tag">
             <i class="iconfont icon-tag"></i>
             
-            <a class="color4">k8s</a>
+            <a class="color1">shell</a>
+            
+            <a class="color1">linux</a>
             
         </span>
         
     </div>
     <div class="article-meta">
         
-            发布时间 : <time class="date" title='最后更新: 2023-08-18 16:50:53'>2023-08-18 15:25</time>
+            发布时间 : <time class="date" title='最后更新: 2023-12-08 11:55:27'>2023-12-08 11:48</time>
         
     </div>
     <div class="article-meta">
         
-        <span>字数:3.9k</span>
+        <span>字数:408</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -1537,7 +1539,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E8%83%8C%E6%99%AF"><span class="toc-text">一、背景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E5%90%8D%E8%AF%8D%E8%A7%A3%E9%87%8A"><span class="toc-text">二、名词解释</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E5%AE%B9%E5%99%A8%E7%94%9F%E6%80%81%E7%B3%BB%E7%BB%9F"><span class="toc-text">1、容器生态系统</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81Docker"><span class="toc-text">2、Docker</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-docker%E9%A1%B9%E7%9B%AE%E7%BB%84%E6%88%90"><span class="toc-text">2.1 docker项目组成</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-Docker%E6%A8%A1%E5%9D%97%E8%AF%A6%E8%A7%A3"><span class="toc-text">2.2 Docker模块详解</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81Dockershim"><span class="toc-text">3、Dockershim</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4%E3%80%81Docker%E9%95%9C%E5%83%8F"><span class="toc-text">4、Docker镜像</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5%E3%80%81CRI"><span class="toc-text">5、CRI</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6%E3%80%81Containerd"><span class="toc-text">6、Containerd</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7%E3%80%81CRI-O"><span class="toc-text">7、CRI-O</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8%E3%80%81OCI"><span class="toc-text">8、OCI</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#9%E3%80%81Containerd-shim"><span class="toc-text">9、Containerd-shim</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#10%E3%80%81Runc"><span class="toc-text">10、Runc</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#11%E3%80%81Low-Level%E5%92%8CHigh-Level%E5%AE%B9%E5%99%A8%E8%BF%90%E8%A1%8C%E6%97%B6"><span class="toc-text">11、Low-Level和High-Level容器运行时</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#11-1%E3%80%81Low-Level%E5%AE%B9%E5%99%A8%E8%BF%90%E8%A1%8C%E6%97%B6"><span class="toc-text">11.1、Low-Level容器运行时</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#11-2%E3%80%81High-Level%E5%AE%B9%E5%99%A8%E8%BF%90%E8%A1%8C%E6%97%B6"><span class="toc-text">11.2、High-Level容器运行时</span></a></li></ol></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E7%BC%98%E7%94%B1"><span class="toc-text">一、缘由</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E8%84%9A%E6%9C%AC"><span class="toc-text">二、脚本</span></a></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -1553,139 +1555,63 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="一、背景"><a href="#一、背景" class="headerlink" title="一、背景"></a>一、背景</h2><p>在学习K8S的过程中，会经常看到runc，cri，containerd容器运行时这些名词，必须弄清楚了，才能对K8S的架构又更清晰深入的了解。</p>
-<p><strong>如今容器已不再与Docker紧密耦合，我们可以使用Docker或者其他非Docker工具运行容器。Docker不能代表容器，日常中紧紧指代Docker工具。</strong></p>
-<h2 id="二、名词解释"><a href="#二、名词解释" class="headerlink" title="二、名词解释"></a>二、名词解释</h2><h3 id="1、容器生态系统"><a href="#1、容器生态系统" class="headerlink" title="1、容器生态系统"></a>1、容器生态系统</h3><p>容器生态系统是由许多令人兴奋的技术、大量行话组成，是由许多大公司共同维护。</p>
-<p><strong>容器相关主流标准：</strong></p>
-<ol>
-<li><p>Open Container Initiative（OCI）发布了容器运行时标准和容器镜像标准</p>
-</li>
-<li><p>Container Runtime Interface（CRI）定义了 Kubernetes 和下层容器运行时之间的 API</p>
-</li>
-</ol>
-<p>下图准确展示了 Kubernetes、Docker、CRI、OCI、containerd 和 runc 在这个生态系统中是如何组织到一起的。</p>
-<p><img src="https://s2.loli.net/2023/08/18/ztofpl4ga2b1WIc.png" alt="container-ecosystem.drawio.png"></p>
-<h3 id="2、Docker"><a href="#2、Docker" class="headerlink" title="2、Docker"></a>2、Docker</h3><p>Docker是最流行的容器工具，Docker被设计成安装在个人电脑或者服务器上的一组工具，开发者能够轻松的用它投建或者运行容器。</p>
-<h4 id="2-1-docker项目组成"><a href="#2-1-docker项目组成" class="headerlink" title="2.1 docker项目组成"></a>2.1 docker项目组成</h4><ul>
-<li><p>docker-cli：docker daemon的命令行交互工具，我们说的docker默认指它</p>
-</li>
-<li><p>containerd：运行和管理容器的守护进程，推送和拉取镜像、管理存储和网络并监视容器的运行状态。<strong>高级别容器运行时。</strong></p>
-</li>
-<li><p>containerd-shim：属于containerd，是一个代理，负责containerd和底层runc进行交互。</p>
-</li>
-<li><p>runc：底层的容器运行时，<strong>低级别容器运行时</strong>，真正创建并运行容器的东西，包括 libcontainer。创建完容器后会退出，由containerd-shim接管。</p>
-</li>
+        <h2 id="一、缘由"><a href="#一、缘由" class="headerlink" title="一、缘由"></a>一、缘由</h2><p>由于历史原因，我司SSL证书分散在不同的云服务器上，更换证书的时候可能会有遗漏。故将分散的SSL证书记录在文件里，定期用脚本检查剩余有效期天数，并告警。可以防止更换遗漏的事情发生。</p>
+<h2 id="二、脚本"><a href="#二、脚本" class="headerlink" title="二、脚本"></a>二、脚本</h2><ul>
+<li>记录ssl证书所在服务器的位置</li>
 </ul>
-<p>Docker简版调用图：</p>
-<p><img src="https://s2.loli.net/2023/08/18/2takTCcVYzMUegs.png" alt="container-ecosystem-docker.drawio.png"></p>
-<p>更进一步逻辑：</p>
-<p><img src="https://s2.loli.net/2023/08/18/LWwxvCmlsFKGejU.png" alt="微信截图_20230818141342.png"></p>
-<h4 id="2-2-Docker模块详解"><a href="#2-2-Docker模块详解" class="headerlink" title="2.2 Docker模块详解"></a>2.2 Docker模块详解</h4><p>从 Docker 1.11 之后，Docker Daemon 被分成了多个模块以适应 OCI 标准。拆分之后，结构分成了以下几个部分。</p>
-<p><img src="https://s2.loli.net/2023/08/18/Ud2kCmyLapzOgMP.png" alt="6b576aff173724d6a8055bde5d06a1e7.png"></p>
-<p>其中，containerd 独立负责容器运行时和生命周期(如创建、启动、停止、中止、信号处理、删除等)，其他一些如镜像构建、卷管理、日志等由 Docker Daemon 的其他模块处理。</p>
+<pre><code>/root/ops_scripts/ip_ssl_path.txt
+
+10.10.10.1#/usr/local/nginx/conf/cert/didikaihei.com.pem
+10.10.10.2#/usr/local/nginx/conf/vhost/cert/zuhaowan.com.cn.pem
+</code></pre>
 <ul>
-<li><p>Docker 的模块块拥抱了开放标准，希望通过 OCI 的标准化，容器技术能够有很快的发展。</p>
-</li>
-<li><p>现在创建一个docker容器的时候，Docker Daemon 并不能直接帮我们创建了，而是请求 containerd 来创建一个容器。当containerd 收到请求后，也不会直接去操作容器，而是创建一个叫做 containerd-shim 的进程。让这个进程去操作容器，我们指定容器进程是需要一个父进程来做状态收集、维持 stdin 等 fd 打开等工作的，假如这个父进程就是 containerd，那如果 containerd 挂掉的话，整个宿主机上所有的容器都得退出了，而引入 containerd-shim 这个垫片就可以来规避这个问题了，就是提供的live-restore的功能。这里需要注意systemd的 MountFlags=slave。</p>
-</li>
-<li><p>然后创建容器需要做一些 namespaces 和 cgroups 的配置，以及挂载 root 文件系统等操作。runc 就可以按照这个 OCI 文档来创建一个符合规范的容器。</p>
-</li>
-<li><p>真正启动容器是通过 containerd-shim 去调用 runc 来启动容器的，runc 启动完容器后本身会直接退出，containerd-shim 则会成为容器进程的父进程, 负责收集容器进程的状态, 上报给 containerd, 并在容器中 pid 为 1 的进程退出后接管容器中的子进程进行清理, 确保不会出现僵尸进程。containerd，containerd-shim和容器进程(即容器主进程)三个进程，是有依赖关系的。</p>
-</li>
+<li>设置Crontab定时任务执行脚本，并发送微信告警</li>
 </ul>
-<h3 id="3、Dockershim"><a href="#3、Dockershim" class="headerlink" title="3、Dockershim"></a>3、Dockershim</h3><p>Kubernetes 曾经包含了一个叫做 dockershim 的组件（v1.24 版本中彻底移除），使它能够支持 Docker。</p>
-<p>Kubernetes 偏向于通过支持 Container Runtime Interface（CRI）接口的任何容易运行时运行容器，但 Docker 比 Kubernetes 出现得更早，Docker 并不支持 CRI（容器运行时接口）这一 Kubernetes 运行时 API，而 Kubernetes 用户一直以来所使用的其实是名为“dockershim”的桥接服务。Dockershim 能够转换 Docker API 与 CRI。</p>
-<blockquote>
-<p>在软件系统中，shim 垫片扮演不同 API 之间桥的角色，或作为兼容层。当你想使用一个第三方的组件，但需要少许胶水代码来使其奏效，有时候就会添加一个 shim。</p>
-</blockquote>
-<p><img src="https://s2.loli.net/2023/08/18/3XOPYnV2QN9koJb.png" alt="cri-performance.png"></p>
-<p>移除 dockershim 并不意味着 Kubernetes 无法运行 Docker 格式的容器。不论 containerd 还是 CRI-O 都能运行 Docker 格式（实际上是 OCI 格式）的镜像，只是无需通过 <code>docker</code> 命令或 Docker daemon 来进行。</p>
-<h3 id="4、Docker镜像"><a href="#4、Docker镜像" class="headerlink" title="4、Docker镜像"></a>4、Docker镜像</h3><p><strong>大家所说的 Docker 镜像，实际上是以 Open Container Initiative（OCI）格式打包的。</strong></p>
-<p>不论从 Docker Hub 还是其他 registry 拉取的镜像，都能够用 <code>docker</code> 命令使用它，亦或者是 Kubernetes 集群中，或者通过 podman 工具，还是其他支持 OCI 镜像格式规范的工具。</p>
-<p>这就是有一个开放的标准的好处——任何人都可以编写支持标准的软件。</p>
-<h3 id="5、CRI"><a href="#5、CRI" class="headerlink" title="5、CRI"></a>5、CRI</h3><p><strong>CRI-Container Runtime Interface） 是 Kubernetes 用来控制不同运行时创建和管理容器的协议。</strong></p>
-<p>CRI 抽象了容器运行时，Kubernetes 无需关心到底是哪一种。Kubernetes 不应该自身支持<br>每一种容器运行时，那样代码库会更庞大而且难以管理，CRI API 描述了 Kubernetes 如何与运行时交互。这样，实际上管理容器的是下面的容器运行时。</p>
-<p><img src="https://s2.loli.net/2023/08/18/Mybwf92K1IpRYtC.png" alt="微信截图_20230818144646.png"></p>
-<p>不论 containerd 还是 CRI-O 都可以使用，因为这两种运行时都实现了 CRI 规范。作为用户的我们无需关心，每种 CRI 实现略有不同但旨在可插拔和无缝修改。</p>
-<p>红帽的 OpenShift 使用 CRI-O 并为其提供支持而 Docker 支持它们自己的 containerd。</p>
-<h3 id="6、Containerd"><a href="#6、Containerd" class="headerlink" title="6、Containerd"></a>6、Containerd</h3><p><strong>containerd 是来自于 Docker 的高级别容器运行时，并实现了 CRI 规范。真正创建和运行容器进程的是它所控制的底层运行时。</strong></p>
-<ul>
-<li>containerd 从 Docker 项目中拆分出来使其更模块化。</li>
-<li>Docker 自己内部使用 containerd，安装 Docker 同时也会安装 containerd。</li>
-<li>containerd 通过它的 cri 插件实现了 Kubernetes CRI。</li>
-</ul>
-<p><img src="https://s2.loli.net/2023/08/18/qgZteIOWBzj68xK.png" alt="1d2badf2b2f92fcfc4386dca8854e995.png"></p>
-<p>containerd 是一个工业级标准的容器运行时，它强调简单性、健壮性和可移植性，containerd 可以负责干下面这些事情：</p>
-<ul>
-<li>管理容器的生命周期(从创建容器到销毁容器)</li>
-<li>拉取/推送容器镜像</li>
-<li>存储管理(管理镜像及容器数据的存储)</li>
-<li>调用 runc 运行容器(与 runc 等容器运行时交互)</li>
-<li>管理容器网络接口及网络</li>
-</ul>
-<p><img src="https://s2.loli.net/2023/08/18/4o7sQJbXmpB9tqG.png" alt="v2-dd73d91848ccbdb6db2d920da3b6db95_720w.png"></p>
-<p>上图是 Containerd 整体的架构。由下往上，Containerd支持的操作系统和架构有 Linux、<br>Windows 以及像 ARM 的一些平台。在这些底层的操作系统之上运行的就是底层容器运行<br>时，其中有上文提到的runc、gVisor 等。在底层容器运行时之上的是Containerd 相关的组件，比如 Containerd 的 runtime、core、API、backend、store 还有metadata 等等。构筑在 Containerd 组件之上以及跟这些组件做交互的都是 Containerd 的 client，Kubernetes 跟 Containerd 通过 CRI 做交互时，本身也作为 Containerd 的一个 client。Containerd 本身有提供了一个 CRI，叫 ctr，不过这个命令行工具并不是很好用。</p>
-<p>在这些组件之上就是真正的平台，Google Cloud、Docker、IBM、阿里云、微软云还有RANCHER等等都是，这些平台目前都已经支持 containerd， 并且有些已经作为自己的默认容器运行时了。</p>
-<p>从 k8s 的角度看，选择 containerd作为运行时的组件，它调用链更短，组件更少，更稳定，占用节点资源更少。</p>
-<p><img src="https://s2.loli.net/2023/08/18/oJbW5Lf7BVK9ZlT.png" alt="33c809cc2219b915c1168da271097d02.png"></p>
-<h3 id="7、CRI-O"><a href="#7、CRI-O" class="headerlink" title="7、CRI-O"></a>7、CRI-O</h3><p><strong>CRI-O 是另一种高级别的容器运行时，也实现了 CRI。它作为 containerd 的替代选项，也通过底层容器运行时运行容器进程。</strong></p>
-<ul>
-<li>CRI-O 诞生于 Red Hat、IBM、Intel、SUSE 等大公司。</li>
-<li>它就是专门作为 Kubernetes 容器运行时被打造的。</li>
-</ul>
-<h3 id="8、OCI"><a href="#8、OCI" class="headerlink" title="8、OCI"></a>8、OCI</h3><p><strong>OCI 是一组科技公司维护的规范，定义了容器镜像格式还有容器应该如何运行。</strong></p>
-<p>OCI（Open Container Initiative）即开放的容器运行时<code>规范</code>，目的在于定义一个容器运行时及镜像的相关标准和规范，其中包括</p>
-<ul>
-<li>runtime-spec：容器的生命周期管理，具体参考<a target="_blank" rel="noopener" href="https://github.com/opencontainers/runtime-spec/blob/master/runtime.md">runtime-spec</a>。</li>
-<li>image-spec：镜像的生命周期管理，具体参考<a target="_blank" rel="noopener" href="https://github.com/opencontainers/image-spec/blob/main/spec.md">image-spec</a>。</li>
-</ul>
-<p>实现OCI标准的容器运行时有<code>runc</code>，<code>kata</code>等。</p>
-<p><img src="https://s2.loli.net/2023/08/18/WNiTGpHqQ7sxdbt.png" alt="oci-1.png"></p>
-<p>OCI 对容器 runtime 的标准主要是指定容器的运行状态，和 runtime 需要提供的命令。下图可以是容器状态转换图：</p>
-<p><img src="https://s2.loli.net/2023/08/18/QKAWrTw1Etf45vO.png" alt="oci-2.png"></p>
-<ul>
-<li>init 状态：这个是我自己添加的状态，并不在标准中，表示没有容器存在的初始状态</li>
-<li>creating：使用 create 命令创建容器，这个过程称为创建中</li>
-<li>created：容器创建出来，但是还没有运行，表示镜像和配置没有错误，容器能够运行在当前平台</li>
-<li>running：容器的运行状态，里面的进程处于 up 状态，正在执行用户设定的任务</li>
-<li>stopped：容器运行完成，或者运行出错，或者 stop 命令之后，容器处于暂停状态。这个状态，容器还有很多信息保存在平台中，并没有完全被删除</li>
-</ul>
-<h3 id="9、Containerd-shim"><a href="#9、Containerd-shim" class="headerlink" title="9、Containerd-shim"></a>9、Containerd-shim</h3><p><strong>containerd 并不直接调用 runc 去创建和运行容器，而是通过 containerd-shim 来进行。</strong></p>
-<p>runc 创建完容器会直接退出，于是 containerd-shim 就成为容器的父进程，伴随容器的整个生命周期监控其运行状态。这样避免了 containerd 进程挂掉导致主机上的所有容器都退出。</p>
-<h3 id="10、Runc"><a href="#10、Runc" class="headerlink" title="10、Runc"></a>10、Runc</h3><p><strong>runc 是一种 OCI 兼容的底层容器运行时。它实现了 OCI 规范并运行容器进程。</strong></p>
-<p>runc 是 OCI 的<em>参考实现</em>。</p>
-<blockquote>
-<p>参考实现通常是第一个根据规范开发的软件。</p>
-</blockquote>
-<p>runc 为容器提供了所有底层功能：利用底层的 Linux 功能，例如命名空间和控制组。</p>
-<p>runc 的几个替代选项：</p>
-<ul>
-<li><a target="_blank" rel="noopener" href="https://github.com/containers/crun">crun</a>：C 编写的容器运行时（runc 是 Go 编写的）</li>
-<li>KataContainer 项目的 <a target="_blank" rel="noopener" href="https://github.com/kata-containers/kata-containers/tree/main/src/runtime">kata-runtime</a>：将 OCI 规范实现为轻量级的虚机</li>
-<li>Google 的 <a target="_blank" rel="noopener" href="https://gvisor.dev/">gVisor</a>：创建<em>有自己内核的容器</em>。它在自己的运行时 runsc 中实现 OCI。</li>
-</ul>
-<blockquote>
-<p>runc 是在 Linux 上运行容器的工具；在 Windows 操作系统中则是微软的 Host Compute Service(HCS)，包括了一个叫 runhcs 的工具。</p>
-</blockquote>
-<p>在命令行中使用 runc，我们可以根据需要启动任意数量的容器。但是，如果我们想自动化这个过程，我们需要一个容器管理器。为什么这样?想象一下，我们需要启动数十个容器来跟踪它们的状态。其中一些需要在失败时重新启动，需要在终止时释放资源，必须从注册表中提取图像，需要配置容器间网络等等。就需要有Low-Level和High-Level容器运行时，runc就是Low-Level实现的实现。</p>
-<h3 id="11、Low-Level和High-Level容器运行时"><a href="#11、Low-Level和High-Level容器运行时" class="headerlink" title="11、Low-Level和High-Level容器运行时"></a>11、Low-Level和High-Level容器运行时</h3><p>当人们想到容器运行时，可能会想到一系列示例;runc、lxc、lmctfy、Docker(容器)、rkt、cri-o。<br>这些中的每一个都是为不同的情况而构建的，并实现了不同的功能。有些，如 containerd 和 cri-o，实际上使用 runc 来运行容器，在High-Level实现镜像管理和 API。<br>与 runc 的Low-Level实现相比，可以将这些功能(包括镜像传输、镜像管理、镜像解包和 API)视为High-Level功能。考虑到这一点，您可以看到容器运行时空间相当复杂。每个运行时都涵盖了这个Low-Level到High-Level频谱的不同部分。<br>这是一个非常主观的图表：</p>
-<p><img src="https://s2.loli.net/2023/08/18/xvOFHyViBe1I28l.png" alt="Low-Level和High-Level容器运行时.png"></p>
-<p>因此，从实际出发，通常只专注于正在运行的容器的runtime通常称为“Low-Level容器运行时”，支持更多高级功能(如镜像管理和gRPC / Web API)的运行时通常称为“High-Level容器运行时”，“High-Level容器运行时”或通常仅称为“容器运行时”，我将它们称为“High-Level容器运行时”。<br>值得注意的是，Low-Level容器运行时和High-Level容器运行时是解决不同问题的、从根本上不同的事物。</p>
-<h4 id="11-1、Low-Level容器运行时"><a href="#11-1、Low-Level容器运行时" class="headerlink" title="11.1、Low-Level容器运行时"></a>11.1、Low-Level容器运行时</h4><p>容器是通过Linux nanespace和Cgroups实现的，Namespace能让你为每个容器提供虚拟化系统资源，像是文件系统和网络，Cgroups提供了限制每个容器所能使用的资源的如内存和CPU使用量的方法。在最低级别的运行时中，容器运行时负责为容器建立namespaces和cgroups,然后在其中运行命令，Low-Level容器运行时支持在容器中使用这些操作系统特性。</p>
-<p>目前来看低级容器运行时有：</p>
-<ul>
-<li><p>runc ：我们最熟悉也是被广泛使用的容器运行时，代表实现Docker。</p>
-</li>
-<li><p>runv：runV 是一个基于虚拟机管理程序(OCI)的运行时。它通过虚拟化 guest kernel，将容器和主机隔离开来，使得其边界更加清晰，这种方式很容易就能帮助加强主机和容器的安全性。代表实现是kata和Firecracker。</p>
-</li>
-<li><p>runsc：runsc = runc + safety ，典型实现就是谷歌的gvisor，通过拦截应用程序的所有系统调用，提供安全隔离的轻量级容器运行时沙箱。截止目前，貌似并不没有生产环境使用案例。</p>
-</li>
-<li><p>wasm : Wasm的沙箱机制带来的隔离性和安全性，都比Docker做的更好。但是wasm 容器处于草案阶段，距离生产环境尚有很长的一段路。</p>
-</li>
-</ul>
-<h4 id="11-2、High-Level容器运行时"><a href="#11-2、High-Level容器运行时" class="headerlink" title="11.2、High-Level容器运行时"></a>11.2、High-Level容器运行时</h4><p>通常情况下，开发人员想要运行一个容器不仅仅需要Low-Level容器运行时提供的这些特性同时也需要与镜像格式、镜像管理和共享镜像相关的API接口和特性，而这些特性一般由High-Level容器运行时提供。<br>就日常使用来说，Low-Level容器运行时提供的这些特性可能满足不了日常所需，因为这个缘故，唯一会使用Low-Level容器运行时的人是那些实现High-Level容器运行时以及容器工具的开发人员。<br>那些实现Low-Level容器运行时的开发者会说High-Level容器运行时比如containerd和cri-o不像真正的容器运行时，因为从他们的角度来看，他们将容器运行的实现外包给了runc。但是从用户的角度来看，它们只是提供容器功能的单个组件，可以被另一个的实现替换，因此从这个角度将其称为runtime仍然是有意义的。即使containerd和cri-o都使用runc，但是它们是截然不同的项目，支持的特性也是非常不同的。</p>
-<p>dockershim, containerd 和cri-o都是遵循CRI的容器运行时，我们称他们为高层级运行时(High-level Runtime)。</p>
-<p>Kubernetes 只需支持 containerd 等high-level container runtime即可。由containerd 按照OCI 规范去对接不同的low-level container runtime，比如通用的runc，安全增强的gvisor，隔离性更好的runv。</p>
+<pre><code class="shell">#!/bin/bash
+
+export LC_ALL=C
+error_ips=&quot;&quot;
+
+notify()&#123;
+   curl &#39;https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=5b37f5cc-d1ed-48d4-a4b4-7d4f8a9da478&#39; \
+   -H &#39;Content-Type: application/json&#39; \
+   -d &#39;
+   &#123;
+        &quot;msgtype&quot;: &quot;text&quot;,
+        &quot;text&quot;: &#123;
+            &quot;content&quot;: &quot;SSL证书有效期小于30天的IP列表(非Proxy机器):\n&#39;$1&#39;&quot;,
+            &quot;mentioned_mobile_list&quot;:[&quot;@all&quot;,]
+        &#125;
+   &#125;&#39;
+&#125;
+
+for line in `cat /root/ops_scripts/ip_ssl_path.txt`
+do
+        echo &quot;================================&quot;
+        ip=$(echo $line|awk -F&quot;#&quot; &#39;&#123;print $1&#125;&#39;)
+        ssl_path=$(echo $line|awk -F&quot;#&quot; &#39;&#123;print $2&#125;&#39;)
+        echo $ip
+        end_time=$(ssh $ip &quot;openssl x509 -in $ssl_path -noout -enddate |awk -F &#39;=&#39; &#39;&#123;print \$2&#125;&#39;&quot;)
+        end_times=`date -d &quot;$end_time&quot; +%s `
+        current_times=`date -d &quot;$(date -u &#39;+%b %d %T %Y GMT&#39;) &quot; +%s `
+
+        let left_time=$end_times-$current_times
+        days=`expr $left_time / 86400`
+        echo &quot;剩余天数: &quot; $days
+        [ $days -lt 31 ] &amp;&amp; echo &quot;https 证书有效期少于30天，存在风险&quot; &amp;&amp; error_ips=&quot;$error_ips#$ip&quot; 
+
+done
+
+echo -e &quot;准备过期的域名为： \n  $error_ips&quot;
+
+if [ &quot;$error_ips&quot; = &quot;&quot; ]
+then
+        echo &quot;不包含准备过期的域名&quot;
+else
+        notify $error_ips
+        echo &quot;包含准备过期的域名&quot; 
+fi
+</code></pre>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 lxwno.1@163.com </span>

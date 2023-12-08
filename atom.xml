@@ -6,7 +6,7 @@
   <link href="https://www.langxw.com/atom.xml" rel="self"/>
   
   <link href="https://www.langxw.com/"/>
-  <updated>2023-12-08T03:26:56.291Z</updated>
+  <updated>2023-12-08T03:55:27.462Z</updated>
   <id>https://www.langxw.com/</id>
   
   <author>
@@ -15,6 +15,62 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>定期检查某个SSL证书的有效期并告警</title>
+    <link href="https://www.langxw.com/2023/12/08/%E5%AE%9A%E6%9C%9F%E6%A3%80%E6%9F%A5%E6%9F%90%E4%B8%AASSL%E8%AF%81%E4%B9%A6%E7%9A%84%E6%9C%89%E6%95%88%E6%9C%9F%E5%B9%B6%E5%91%8A%E8%AD%A6/"/>
+    <id>https://www.langxw.com/2023/12/08/%E5%AE%9A%E6%9C%9F%E6%A3%80%E6%9F%A5%E6%9F%90%E4%B8%AASSL%E8%AF%81%E4%B9%A6%E7%9A%84%E6%9C%89%E6%95%88%E6%9C%9F%E5%B9%B6%E5%91%8A%E8%AD%A6/</id>
+    <published>2023-12-08T03:48:03.000Z</published>
+    <updated>2023-12-08T03:55:27.462Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="一、缘由"><a href="#一、缘由" class="headerlink" title="一、缘由"></a>一、缘由</h2><p>由于历史原因，我司SSL证书分散在不同的云服务器上，更换证书的时候可能会有遗漏。故将分散的SSL证书记录在文件里，定期用脚本检查剩余有效期天数，并告警。可以防止更换遗漏的事情发生。</p><h2 id="二、脚本"><a href="#二、脚本" class="headerlink" title="二、脚本"></a>二、脚本</h2><ul><li>记录ssl证书所在服务器的位置</li></ul><pre><code>/root/ops_scripts/ip_ssl_path.txt10.10.10.1#/usr/local/nginx/conf/cert/didikaihei.com.pem10.10.10.2#/usr/local/nginx/conf/vhost/cert/zuhaowan.com.cn.pem</code></pre><ul><li>设置Crontab定时任务执行脚本，并发送微信告警</li></ul><pre><code class="shell">#!/bin/bashexport LC_ALL=Cerror_ips=&quot;&quot;notify()&#123;   curl &#39;https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=5b37f5cc-d1ed-48d4-a4b4-7d4f8a9da478&#39; \   -H &#39;Content-Type: application/json&#39; \   -d &#39;   &#123;        &quot;msgtype&quot;: &quot;text&quot;,        &quot;text&quot;: &#123;            &quot;content&quot;: &quot;SSL证书有效期小于30天的IP列表(非Proxy机器):\n&#39;$1&#39;&quot;,            &quot;mentioned_mobile_list&quot;:[&quot;@all&quot;,]        &#125;   &#125;&#39;&#125;for line in `cat /root/ops_scripts/ip_ssl_path.txt`do        echo &quot;================================&quot;        ip=$(echo $line|awk -F&quot;#&quot; &#39;&#123;print $1&#125;&#39;)        ssl_path=$(echo $line|awk -F&quot;#&quot; &#39;&#123;print $2&#125;&#39;)        echo $ip        end_time=$(ssh $ip &quot;openssl x509 -in $ssl_path -noout -enddate |awk -F &#39;=&#39; &#39;&#123;print \$2&#125;&#39;&quot;)        end_times=`date -d &quot;$end_time&quot; +%s `        current_times=`date -d &quot;$(date -u &#39;+%b %d %T %Y GMT&#39;) &quot; +%s `        let left_time=$end_times-$current_times        days=`expr $left_time / 86400`        echo &quot;剩余天数: &quot; $days        [ $days -lt 31 ] &amp;&amp; echo &quot;https 证书有效期少于30天，存在风险&quot; &amp;&amp; error_ips=&quot;$error_ips#$ip&quot; doneecho -e &quot;准备过期的域名为： \n  $error_ips&quot;if [ &quot;$error_ips&quot; = &quot;&quot; ]then        echo &quot;不包含准备过期的域名&quot;else        notify $error_ips        echo &quot;包含准备过期的域名&quot; fi</code></pre>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h2 id=&quot;一、缘由&quot;&gt;&lt;a href=&quot;#一、缘由&quot; class=&quot;headerlink&quot; title=&quot;一、缘由&quot;&gt;&lt;/a&gt;一、缘由&lt;/h2&gt;&lt;p&gt;由于历史原因，我司SSL证书分散在不同的云服务器上，更换证书的时候可能会有遗漏。故将分散的SSL证书记录在文件里，定期用脚本</summary>
+      
+    
+    
+    
+    <category term="脚本" scheme="https://www.langxw.com/categories/%E8%84%9A%E6%9C%AC/"/>
+    
+    <category term="Shell" scheme="https://www.langxw.com/categories/%E8%84%9A%E6%9C%AC/Shell/"/>
+    
+    
+    <category term="shell" scheme="https://www.langxw.com/tags/shell/"/>
+    
+    <category term="linux" scheme="https://www.langxw.com/tags/linux/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>批量检查域名SSL证书的有效期</title>
+    <link href="https://www.langxw.com/2023/12/08/%E6%89%B9%E9%87%8F%E6%A3%80%E6%9F%A5%E5%9F%9F%E5%90%8DSSL%E8%AF%81%E4%B9%A6%E7%9A%84%E6%9C%89%E6%95%88%E6%9C%9F/"/>
+    <id>https://www.langxw.com/2023/12/08/%E6%89%B9%E9%87%8F%E6%A3%80%E6%9F%A5%E5%9F%9F%E5%90%8DSSL%E8%AF%81%E4%B9%A6%E7%9A%84%E6%9C%89%E6%95%88%E6%9C%9F/</id>
+    <published>2023-12-08T03:35:10.000Z</published>
+    <updated>2023-12-08T03:45:30.148Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="一、缘由"><a href="#一、缘由" class="headerlink" title="一、缘由"></a>一、缘由</h2><p>我司的某个主域名有很多子域名，SSL证书到期提示更换，由于没有记录哪个域名使用了https，手动一个个去验证很麻烦，就想到靠一个脚本解决。</p><h2 id="二、脚本"><a href="#二、脚本" class="headerlink" title="二、脚本"></a>二、脚本</h2><p>先将子域名一行一个地写入https_list.txt文件里，然后执行脚本即可。</p><pre><code class="bash">#!/bin/bash# 检测https证书有效echo &#39;开始检查 https证书有效期 &#39;# 先手动写域名到文件https_list.txt中，再读取文件检查证书是否过期了# 例子：#echo &#39;www.baidu.com&#39; &gt;&gt; https_list.txtsource /etc/profile# 定义错误的域名errorDominStr=&quot;&quot;while read line; do    echo &quot;=====================================================================================&quot;    echo &quot;当前检测的域名：&quot; $line    end_time=$(echo | timeout 1 openssl s_client -servername $line -connect $line:443 2&gt;/dev/null | openssl x509 -noout -enddate 2&gt;/dev/null | awk -F &#39;=&#39; &#39;&#123;print $2&#125;&#39;)    ([ $? -ne 0 ] || [[ $end_time == &#39;&#39; ]]) &amp;&amp; echo &#39;该域名链接不上,跳到下一个域名&#39; &amp;&amp; continue    end_times=`date -d &quot;$end_time&quot; +%s `    current_times=`date -d &quot;$(date -u &#39;+%b %d %T %Y GMT&#39;) &quot; +%s `    let left_time=$end_times-$current_times    days=`expr $left_time / 86400`    echo &quot;剩余天数: &quot; $days    [ $days -lt 60 ] &amp;&amp; echo &quot;https 证书有效期少于60天，存在风险&quot;  &amp;&amp; errorDominStr=&quot;$errorDominStr \n $line&quot;done &lt; ~/https_list.txtecho -e &quot;准备过期的域名为： \n  $errorDominStr&quot;if [ &quot;$errorDominStr&quot; = &quot;&quot; ]then  echo &quot;不包含准备过期的域名&quot;else  echo &quot;包含准备过期的域名&quot; &amp;&amp; exit 10fiecho &quot;Good bye!&quot;exit 0</code></pre><p><strong>注意：脚本输出的准备过期的域名提示仅供参考，具体还需要看脚本的详细日志逐个甄别</strong></p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h2 id=&quot;一、缘由&quot;&gt;&lt;a href=&quot;#一、缘由&quot; class=&quot;headerlink&quot; title=&quot;一、缘由&quot;&gt;&lt;/a&gt;一、缘由&lt;/h2&gt;&lt;p&gt;我司的某个主域名有很多子域名，SSL证书到期提示更换，由于没有记录哪个域名使用了https，手动一个个去验证很麻烦，就想到靠</summary>
+      
+    
+    
+    
+    <category term="脚本" scheme="https://www.langxw.com/categories/%E8%84%9A%E6%9C%AC/"/>
+    
+    <category term="Shell" scheme="https://www.langxw.com/categories/%E8%84%9A%E6%9C%AC/Shell/"/>
+    
+    
+    <category term="shell" scheme="https://www.langxw.com/tags/shell/"/>
+    
+    <category term="linux" scheme="https://www.langxw.com/tags/linux/"/>
+    
+  </entry>
   
   <entry>
     <title>命令行sed提取字符串中的字段</title>
@@ -502,59 +558,6 @@
     
     
     <category term="python" scheme="https://www.langxw.com/tags/python/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>命令行查看SSL证书的有效期和组织</title>
-    <link href="https://www.langxw.com/2021/05/19/%E5%91%BD%E4%BB%A4%E8%A1%8C%E6%9F%A5%E7%9C%8BSSL%E8%AF%81%E4%B9%A6%E7%9A%84%E6%9C%89%E6%95%88%E6%9C%9F%E5%92%8C%E7%BB%84%E7%BB%87/"/>
-    <id>https://www.langxw.com/2021/05/19/%E5%91%BD%E4%BB%A4%E8%A1%8C%E6%9F%A5%E7%9C%8BSSL%E8%AF%81%E4%B9%A6%E7%9A%84%E6%9C%89%E6%95%88%E6%9C%9F%E5%92%8C%E7%BB%84%E7%BB%87/</id>
-    <published>2021-05-19T06:24:19.000Z</published>
-    <updated>2021-05-19T06:25:50.000Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="一、缘由"><a href="#一、缘由" class="headerlink" title="一、缘由"></a>一、缘由</h2><p>生产某个SSL证书要到期需要更换，生产环境又特别复杂：多证书+证书名字不明确（ssl.pem），不敢随意更换，只能先核对好组织名字和到期时间后，再进行更换。</p><h2 id="二、解决办法"><a href="#二、解决办法" class="headerlink" title="二、解决办法"></a>二、解决办法</h2><h3 id="1、全盘搜索证书"><a href="#1、全盘搜索证书" class="headerlink" title="1、全盘搜索证书"></a>1、全盘搜索证书</h3><p><code>sudo find / -name &#39;*.key&#39;</code></p><h3 id="2、确认Nginx配置的证书"><a href="#2、确认Nginx配置的证书" class="headerlink" title="2、确认Nginx配置的证书"></a>2、确认Nginx配置的证书</h3><p><code>grep pem /etc/nginx/conf.d/default.conf</code></p><h3 id="3、查看证书的组织"><a href="#3、查看证书的组织" class="headerlink" title="3、查看证书的组织"></a>3、查看证书的组织</h3><p><code>openssl x509 -in ssl.pem -noout -text|grep &#39;CN&#39;</code></p><h3 id="4、查看证书的到期时间"><a href="#4、查看证书的到期时间" class="headerlink" title="4、查看证书的到期时间"></a>4、查看证书的到期时间</h3><p><code>openssl x509 -in ssl.pem -noout -dates</code></p><h3 id="5、批量查看证书到期时间"><a href="#5、批量查看证书到期时间" class="headerlink" title="5、批量查看证书到期时间"></a>5、批量查看证书到期时间</h3><p><code>ls  /ssl/ |grep -e &#39;pem$&#39;| xargs -I &#123;&#125; openssl x509 -in &#123;&#125; -noout -dates</code></p><p>xargs的参数-I 用来指定一个替换字符串{}，表示字符串{}会被前面的输出替换掉</p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h2 id=&quot;一、缘由&quot;&gt;&lt;a href=&quot;#一、缘由&quot; class=&quot;headerlink&quot; title=&quot;一、缘由&quot;&gt;&lt;/a&gt;一、缘由&lt;/h2&gt;&lt;p&gt;生产某个SSL证书要到期需要更换，生产环境又特别复杂：多证书+证书名字不明确（ssl.pem），不敢随意更换，只能先核对好组</summary>
-      
-    
-    
-    
-    <category term="脚本" scheme="https://www.langxw.com/categories/%E8%84%9A%E6%9C%AC/"/>
-    
-    <category term="命令行" scheme="https://www.langxw.com/categories/%E8%84%9A%E6%9C%AC/%E5%91%BD%E4%BB%A4%E8%A1%8C/"/>
-    
-    
-    <category term="shell" scheme="https://www.langxw.com/tags/shell/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>命令行获取公网IP地址</title>
-    <link href="https://www.langxw.com/2021/05/19/%E5%91%BD%E4%BB%A4%E8%A1%8C%E8%8E%B7%E5%8F%96%E5%85%AC%E7%BD%91IP%E5%9C%B0%E5%9D%80/"/>
-    <id>https://www.langxw.com/2021/05/19/%E5%91%BD%E4%BB%A4%E8%A1%8C%E8%8E%B7%E5%8F%96%E5%85%AC%E7%BD%91IP%E5%9C%B0%E5%9D%80/</id>
-    <published>2021-05-19T06:22:20.000Z</published>
-    <updated>2021-05-19T06:23:52.000Z</updated>
-    
-    <content type="html"><![CDATA[<h3 id="1、直接获取"><a href="#1、直接获取" class="headerlink" title="1、直接获取"></a>1、直接获取</h3><p><code>curl ip.sb</code></p><h3 id="2、获取Json格式"><a href="#2、获取Json格式" class="headerlink" title="2、获取Json格式"></a>2、获取Json格式</h3><p><code>curl https://api.ip.sb/jsonip </code></p><h3 id="3、获取地址位置信息Json"><a href="#3、获取地址位置信息Json" class="headerlink" title="3、获取地址位置信息Json"></a>3、获取地址位置信息Json</h3><p><code>curl https://api.ip.sb/geoip</code></p><h3 id="4、加上回调地址"><a href="#4、加上回调地址" class="headerlink" title="4、加上回调地址"></a>4、加上回调地址</h3><p><code>curl https://api.ip.sb/jsonip?callback=myip</code> </p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h3 id=&quot;1、直接获取&quot;&gt;&lt;a href=&quot;#1、直接获取&quot; class=&quot;headerlink&quot; title=&quot;1、直接获取&quot;&gt;&lt;/a&gt;1、直接获取&lt;/h3&gt;&lt;p&gt;&lt;code&gt;curl ip.sb&lt;/code&gt;&lt;/p&gt;
-&lt;h3 id=&quot;2、获取Json格式&quot;&gt;&lt;a hre</summary>
-      
-    
-    
-    
-    <category term="脚本" scheme="https://www.langxw.com/categories/%E8%84%9A%E6%9C%AC/"/>
-    
-    <category term="命令行" scheme="https://www.langxw.com/categories/%E8%84%9A%E6%9C%AC/%E5%91%BD%E4%BB%A4%E8%A1%8C/"/>
-    
-    
-    <category term="shell" scheme="https://www.langxw.com/tags/shell/"/>
     
   </entry>
   
