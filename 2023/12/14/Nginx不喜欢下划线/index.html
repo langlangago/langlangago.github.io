@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Hello World | 运维人</title>
-  <meta name="keywords" content="">
-  <meta name="description" content="Hello World | 运维人">
+  <title>Nginx不喜欢下划线(_) | 运维人</title>
+  <meta name="keywords" content=" nginx ">
+  <meta name="description" content="Nginx不喜欢下划线(_) | 运维人">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="一、缘由我司的某个主域名有很多子域名，SSL证书到期提示更换，由于没有记录哪个域名使用了https，手动一个个去验证很麻烦，就想到靠一个脚本解决。 二、脚本先将子域名一行一个地写入https_list.txt文件里，然后执行脚本即可。 #!&#x2F;bin&#x2F;bash # 检测https证书有效 echo &#39;开始检查 https证书有效期 &#39;  # 先手动写域名到文件https_list.t">
 <meta property="og:type" content="article">
@@ -1481,24 +1481,41 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="post-hello-world" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-Nginx不喜欢下划线" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">Hello World</h1>
+        <h1 class="article-title">Nginx不喜欢下划线(_)</h1>
     
     <div class="article-meta">
         
         
         
+        <span class="book">
+            <i class="iconfont icon-category"></i>
+            
+            
+            <a  data-rel="中间件">中间件</a> > 
+            
+            <a  data-rel="中间件&lt;---&gt;Nginx">Nginx</a>
+            
+        </span>
+        
+        
+        <span class="tag">
+            <i class="iconfont icon-tag"></i>
+            
+            <a class="color1">nginx</a>
+            
+        </span>
         
     </div>
     <div class="article-meta">
         
-            发布时间 : <time class="date" title='最后更新: 2021-01-29 10:34:12'>2021-01-29 10:34</time>
+            发布时间 : <time class="date" title='最后更新: 2023-12-14 17:26:37'>2023-12-14 14:00</time>
         
     </div>
     <div class="article-meta">
         
-        <span>字数:75</span>
+        <span>字数:1k</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -1528,7 +1545,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Quick-Start"><span class="toc-text">Quick Start</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Create-a-new-post"><span class="toc-text">Create a new post</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Run-server"><span class="toc-text">Run server</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Generate-static-files"><span class="toc-text">Generate static files</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Deploy-to-remote-sites"><span class="toc-text">Deploy to remote sites</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E7%BC%98%E7%94%B1"><span class="toc-text">一、缘由</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E8%87%AA%E5%AE%9A%E4%B9%89Header%E4%B8%8D%E5%96%9C%E6%AC%A2%E4%B8%8B%E5%88%92%E7%BA%BF"><span class="toc-text">二、自定义Header不喜欢下划线</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E5%8E%9F%E5%9B%A0"><span class="toc-text">1、原因</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81Nginx%E5%85%B3%E4%BA%8E%E5%A4%B4%E9%83%A8%E7%9A%84%E4%B8%A4%E4%B8%AA%E9%85%8D%E7%BD%AE"><span class="toc-text">2、Nginx关于头部的两个配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95"><span class="toc-text">3、解决办法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4%E3%80%81nginx%E7%9A%84header%E8%BF%98%E7%A6%81%E6%AD%A2dot"><span class="toc-text">4、nginx的header还禁止dot(.)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81Upstream-name%E4%B8%8D%E5%96%9C%E6%AC%A2%E4%B8%8B%E5%88%92%E7%BA%BF"><span class="toc-text">三、Upstream name不喜欢下划线</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E5%8E%9F%E5%9B%A0-1"><span class="toc-text">1、原因</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95"><span class="toc-text">2、解决办法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E6%8E%92%E6%9F%A5%E6%89%8B%E6%AE%B5"><span class="toc-text">四、排查手段</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81Nginx-%E9%94%99%E8%AF%AF%E6%97%A5%E5%BF%97%E7%BA%A7%E5%88%AB"><span class="toc-text">1、Nginx 错误日志级别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81Curl-%E6%A8%A1%E6%8B%9F%E8%AF%B7%E6%B1%82"><span class="toc-text">2、Curl 模拟请求</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81Tcpdump%E6%8A%93%E5%8C%85"><span class="toc-text">3、Tcpdump抓包</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E5%90%AF%E7%A4%BA"><span class="toc-text">五、启示</span></a></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -1544,19 +1561,81 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><pre><code class="bash">$ hexo new &quot;My New Post&quot;
+        <h2 id="一、缘由"><a href="#一、缘由" class="headerlink" title="一、缘由"></a>一、缘由</h2><p>最近有发生过一个诡异想象：</p>
+<ol>
+<li><p>生产环境异常，客户端添加的自定义Header：app_versiion，经过nginx和网关后，传到后端服务会丢失。</p>
+</li>
+<li><p>预发布环境正常，预发布和生产的差别在没经过nginx代理。初步判断是Nginx的问题。</p>
+</li>
+<li><p>在生产环境访问日志中打印Header信息$http_app_version，值为空。确认是Nginx丢弃了。</p>
+</li>
+<li><p>联想到之前upstream下划线的问题，怀疑是下划线的问题。更换Header中下划线为中划线即app-version后，再次通过curl模拟请求，Nginx日志正常打印了app-version的Header信息。</p>
+</li>
+</ol>
+<h2 id="二、自定义Header不喜欢下划线"><a href="#二、自定义Header不喜欢下划线" class="headerlink" title="二、自定义Header不喜欢下划线"></a>二、自定义Header不喜欢下划线</h2><p><strong>Nginx会把header中变量的大写字母转化为小写字母，把中划线转换为下划线，再加上前缀http：比如X-LIST 转换为http_x_list。</strong></p>
+<h3 id="1、原因"><a href="#1、原因" class="headerlink" title="1、原因"></a>1、原因</h3><p>为什么会使nginx和apache服务器对名称中带下划线header不做转发呢，查阅相关资料后发现是CGI（公共网关接口Common Gateway Interface，CGI是Web 服务器运行时外部程序的规范）的历史遗留问题如下，大概意思就是 下划线和中划线都为会被映射为 CGI 系统变量中名中的下划线，这样容易引起混淆。官方解释如下：</p>
+<blockquote>
+<p>If you do not explicitly set underscores_in_headers on;, NGINX will silently drop HTTP headers with underscores (which are perfectly valid according to the HTTP standard). This is done in order to prevent ambiguities when mapping headers to CGI variables as both dashes and underscores are mapped to underscores during that process.</p>
+</blockquote>
+<h3 id="2、Nginx关于头部的两个配置"><a href="#2、Nginx关于头部的两个配置" class="headerlink" title="2、Nginx关于头部的两个配置"></a>2、Nginx关于头部的两个配置</h3><ul>
+<li>ignore_invalid_headers 默认on</li>
+</ul>
+<blockquote>
+<p>Controls whether header fields with invalid names should be ignored. Valid names are composed of English letters, digits, hyphens, and possibly underscores (as controlled by the underscores_in_headers directive).</p>
+</blockquote>
+<ul>
+<li>underscores_in_headers  默认off</li>
+</ul>
+<blockquote>
+<p>Enables or disables the use of underscores in client request header fields. When the use of underscores is disabled, request header fields whose names contain underscores are marked as invalid and become subject to the ignore_invalid_headers directive.</p>
+</blockquote>
+<p>上述说明：</p>
+<ol>
+<li><p>underscores_in_headers 默认为off，带有下划线的header默认是invalid。</p>
+</li>
+<li><p>Nginx对valid_headers的规定就是英文字母，数字，连字号和下划线(可以通过underscores_in_headers控制)，默认情况下其他invalid_headers会忽略并丢弃。</p>
+</li>
+</ol>
+<h3 id="3、解决办法"><a href="#3、解决办法" class="headerlink" title="3、解决办法"></a>3、解决办法</h3><ol>
+<li><p><strong>在自定义header中要使用中划线，禁止使用下划线（推荐）。</strong></p>
+</li>
+<li><p>在http或者server中，将underscores_in_headers参数设置为on。</p>
+</li>
+</ol>
+<h3 id="4、nginx的header还禁止dot"><a href="#4、nginx的header还禁止dot" class="headerlink" title="4、nginx的header还禁止dot(.)"></a>4、nginx的header还禁止dot(.)</h3><h2 id="三、Upstream-name不喜欢下划线"><a href="#三、Upstream-name不喜欢下划线" class="headerlink" title="三、Upstream name不喜欢下划线"></a>三、Upstream name不喜欢下划线</h2><p><strong>后端是Java服务</strong>的情况下，在配置upstream的name的时候，如果带有下划线，比如big_data，前端会反回400错误。</p>
+<h3 id="1、原因-1"><a href="#1、原因-1" class="headerlink" title="1、原因"></a>1、原因</h3><ul>
+<li><p>nginx在转发http请求的时候会加上实际的Host请求头，nginx在没有配置<code>proxy_set_header HOST $host</code> 的时候，在转发http请求的时候会默认把upstream的名称作为Host头部的内容。</p>
+</li>
+<li><p>比如<code>proxy_pass http://big_data;</code>中http header中Host字段值为big_data。</p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://github.com/spring-projects/spring-boot/issues/13236">[tomcat] Spring boot web always return 400 when use a domain name · Issue #13236 · spring-projects/spring-boot · GitHub</a> 从这里可以看出问题的原因是带有下划线的Host的http请求，tomcat认为是有问题。</p>
+</li>
+</ul>
+<h3 id="2、解决办法"><a href="#2、解决办法" class="headerlink" title="2、解决办法"></a>2、解决办法</h3><ol>
+<li><p>upsrteam的名字不是用下划线，使用中划线或者驼峰。</p>
+</li>
+<li><p>在location处设置 <code>proxy_set_header HOST $host</code></p>
+<blockquote>
+<p>这个配置的主要是在nginx在转发http请求的时候会加上实际的Host请求头。如http请求是 <a target="_blank" rel="noopener" href="http://abc.com/hello%EF%BC%8C">http://abc.com/hello，</a> 那么nginx在转发http请求的时候会原封不动的把host请求头(Host:abc.com)转发给后台服务。对于nginx而言，如果没有配置proxy_set_header HOST $host的时候会默认修改Host为upstream的名称。</p>
+</blockquote>
+</li>
+</ol>
+<h2 id="四、排查手段"><a href="#四、排查手段" class="headerlink" title="四、排查手段"></a>四、排查手段</h2><h3 id="1、Nginx-错误日志级别"><a href="#1、Nginx-错误日志级别" class="headerlink" title="1、Nginx 错误日志级别"></a>1、Nginx 错误日志级别</h3><p>nginx error日志默认级别是error，只打印重要的错误日志。在调试和定位nginx问题的时候可以提高日志级别为debug 或者 info。</p>
+<p><code>error_log logs/app_err.log debug;</code></p>
+<h3 id="2、Curl-模拟请求"><a href="#2、Curl-模拟请求" class="headerlink" title="2、Curl 模拟请求"></a>2、Curl 模拟请求</h3><pre><code class="bash">curl -H &quot;app-version:1.2.3&quot; http://www.abc.com:/health-check
 </code></pre>
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><pre><code class="bash">$ hexo server
-</code></pre>
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><pre><code class="bash">$ hexo generate
-</code></pre>
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><pre><code class="bash">$ hexo deploy
-</code></pre>
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+<h3 id="3、Tcpdump抓包"><a href="#3、Tcpdump抓包" class="headerlink" title="3、Tcpdump抓包"></a>3、Tcpdump抓包</h3><h2 id="五、启示"><a href="#五、启示" class="headerlink" title="五、启示"></a>五、启示</h2><ul>
+<li><p>排查问题，第一是看日志，debug级别的日志。</p>
+</li>
+<li><p>排查问题，第二是看官方文档的相关说明。</p>
+</li>
+<li><p>运维必须系统地学习常用工具组件的官档和教程。</p>
+</li>
+<li><p>最好能看懂源代码，源代码能解决一切疑问。</p>
+</li>
+<li><p>抓包，当实在无法确认问题出在哪一个环节的时候，就抓包。</p>
+</li>
+</ul>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 lxwno.1@163.com </span>
