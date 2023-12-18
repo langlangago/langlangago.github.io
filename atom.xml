@@ -38,9 +38,9 @@
     <category term="Shell" scheme="https://www.langxw.com/categories/%E8%84%9A%E6%9C%AC/Shell/"/>
     
     
-    <category term="shell" scheme="https://www.langxw.com/tags/shell/"/>
-    
     <category term="docker" scheme="https://www.langxw.com/tags/docker/"/>
+    
+    <category term="shell" scheme="https://www.langxw.com/tags/shell/"/>
     
     <category term="k8s" scheme="https://www.langxw.com/tags/k8s/"/>
     
