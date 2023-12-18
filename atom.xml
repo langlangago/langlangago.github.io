@@ -6,7 +6,7 @@
   <link href="https://www.langxw.com/atom.xml" rel="self"/>
   
   <link href="https://www.langxw.com/"/>
-  <updated>2023-12-14T09:29:09.780Z</updated>
+  <updated>2023-12-18T03:36:14.461Z</updated>
   <id>https://www.langxw.com/</id>
   
   <author>
@@ -15,6 +15,36 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>容器内抓包</title>
+    <link href="https://www.langxw.com/2023/12/18/%E5%AE%B9%E5%99%A8%E5%86%85%E6%8A%93%E5%8C%85/"/>
+    <id>https://www.langxw.com/2023/12/18/%E5%AE%B9%E5%99%A8%E5%86%85%E6%8A%93%E5%8C%85/</id>
+    <published>2023-12-18T02:03:29.000Z</published>
+    <updated>2023-12-18T03:36:14.461Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="一、使用脚本一键进入Pod-netns-抓包"><a href="#一、使用脚本一键进入Pod-netns-抓包" class="headerlink" title="一、使用脚本一键进入Pod netns 抓包"></a>一、使用脚本一键进入Pod netns 抓包</h2><ol><li>执行以下命令，获取该 Pod 副本所在的节点和 Pod 名称。</li></ol><pre><code class="Plaintext">kubectl get pod -o wide</code></pre><ol start="2"><li>登录到Pod所在的节点</li></ol><pre><code class="Bash">#!/usr/bin/env bashfunction debug_net() &#123;  set -eu  echo $pod_name  containerID=$(crictl ps -q --label io.kubernetes.pod.name=$pod_name |sed -n 1p)  echo $containerID  pid=$(crictl inspect $&#123;containerID&#125; |grep -i pid --m 1 |awk &#39;&#123;print $2 &#125;&#39; |awk -F, &#39;&#123;print $1&#125;&#39;)  echo $pid  cmd=&quot;nsenter -n -t $&#123;pid&#125;&quot;  echo -e &quot;\033[32m Execute the command: $&#123;cmd&#125; \033[0m&quot;  $&#123;cmd&#125;    &#125;# 运行函数pod_name=$1debug_net</code></pre><p>在节点上执行命令进入Pod的容器的网络命名空间</p><pre><code class="Bash">./debug.sh &#123;PodName&#125;ip a ## 验证是否已经进入 查看ip是否是容器ip</code></pre><p>使用示例:</p><p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=ZTU0MDE3MmIwMDFhMzM2MTBlNGI4Yzc5NTY1MTU3M2RfbDlTVFM0b3hKUU12RXFzcU42UXIxdHpROEJ1YTRkWXVfVG9rZW46Ym94Y25HQWlFQ1YzSmxaQ25DQzdoRk81RzBiXzE3MDI4NjUyMjA6MTcwMjg2ODgyMF9WNA"></p><p>在Pod的网络命名空间内抓包命令:</p><pre><code class="Bash">nohup tcpdump -i any tcp and host 域名 -C 100M -W 10 -w /tmp/debug-&#123;podName&#125;.pcap &amp;</code></pre><p>在节点上抓包不需要进入容器的网络命名空间</p><pre><code class="Bash">nohup tcpdump -i any tcp and host 域名 -C 100M -W 10 -w /tmp/debug-&#123;NodeName&#125;.pcap &amp;</code></pre><hr><h2 id="二、定制脚本对单个节点多个容器进行抓包，一键执行抓包"><a href="#二、定制脚本对单个节点多个容器进行抓包，一键执行抓包" class="headerlink" title="二、定制脚本对单个节点多个容器进行抓包，一键执行抓包"></a>二、定制脚本对单个节点多个容器进行抓包，一键执行抓包</h2><pre><code class="Bash">#!/usr/bin/env bashfunction debug_net() &#123;  set -eu  echo $pod_name  podID=$(crictl pods |grep $&#123;pod_name&#125;|awk &#39;&#123;print $1&#125;&#39;)  echo &quot;--&gt; $&#123;podID&#125;&quot;  pid=`crictl pods |grep $pod_name |awk &#39;&#123;print $1&#125;&#39; |xargs -n 1 -I &#123;&#125; sh -c &#39;crictl inspect $(crictl ps --pod &#123;&#125; -q) |grep -i pid --m 1&#39; |awk &#39;&#123;print $2&#125;&#39;|awk -F, &#39;&#123;print $1&#125;&#39;`  for p in $&#123;pid&#125;  do          echo -e &quot;\033[32m currunt PID: $p \033[0m&quot;        nohup  nsenter -n -t $&#123;p&#125; sh -c &quot;tcpdump -i any port 80 and host img-faceplay-dy-1300308946.cos.ap-guangzhou.myqcloud.com or host sh-segment-dp.oss-cn-shanghai.aliyuncs.com -C 100M -W 50 -w /tmp/debug-$p.pcap &quot; &amp;          echo -e &quot;\033[32m tcpdump started \033[0m&quot;  done&#125;# 运行函数pod_name=$1debug_net</code></pre><p>保存名称为容器pid.pcapxx</p><p>使用示例:</p><pre><code class="Bash">./debug.sh &#123;pod关键字&#125;</code></pre><p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=NTdhZDYyMTMyMTk0NTUwMjcxOGNlYmM4ZWM5MjIyZmVfa1FqS3FHdDI3UFV4WlJ1Sk92V0JTVVMyNklRQWpOMkxfVG9rZW46Ym94Y24xMm9sdlZqYW5zUzFYb29ydkxxS1RoXzE3MDI4NjUyMjA6MTcwMjg2ODgyMF9WNA"></p><h2 id="三、其他方式"><a href="#三、其他方式" class="headerlink" title="三、其他方式"></a>三、其他方式</h2><p><strong>kubelet debug</strong> </p><pre><code class="bash"> kubectl debug -it -n zhw-test zhw-test-shqclient-deploy-578df65c55-5dvmj \--image=busybox --share-processes \--copy-to=zhw-test-shqclient-deploy-578df65c55-5dvmj-debug \--container=shqclient-container-debug</code></pre>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h2 id=&quot;一、使用脚本一键进入Pod-netns-抓包&quot;&gt;&lt;a href=&quot;#一、使用脚本一键进入Pod-netns-抓包&quot; class=&quot;headerlink&quot; title=&quot;一、使用脚本一键进入Pod netns 抓包&quot;&gt;&lt;/a&gt;一、使用脚本一键进入Pod netns </summary>
+      
+    
+    
+    
+    <category term="脚本" scheme="https://www.langxw.com/categories/%E8%84%9A%E6%9C%AC/"/>
+    
+    <category term="Shell" scheme="https://www.langxw.com/categories/%E8%84%9A%E6%9C%AC/Shell/"/>
+    
+    
+    <category term="shell" scheme="https://www.langxw.com/tags/shell/"/>
+    
+    <category term="docker" scheme="https://www.langxw.com/tags/docker/"/>
+    
+    <category term="k8s" scheme="https://www.langxw.com/tags/k8s/"/>
+    
+  </entry>
   
   <entry>
     <title>Nginx不喜欢下划线_</title>
@@ -534,32 +564,6 @@
     <category term="docker" scheme="https://www.langxw.com/tags/docker/"/>
     
     <category term="http代理" scheme="https://www.langxw.com/tags/http%E4%BB%A3%E7%90%86/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>使用Privoxy将http代理转换成socks5代理</title>
-    <link href="https://www.langxw.com/2021/06/04/%E4%BD%BF%E7%94%A8Privoxy%E5%B0%86http%E4%BB%A3%E7%90%86%E8%BD%AC%E6%8D%A2%E6%88%90socks5%E4%BB%A3%E7%90%86/"/>
-    <id>https://www.langxw.com/2021/06/04/%E4%BD%BF%E7%94%A8Privoxy%E5%B0%86http%E4%BB%A3%E7%90%86%E8%BD%AC%E6%8D%A2%E6%88%90socks5%E4%BB%A3%E7%90%86/</id>
-    <published>2021-06-04T11:00:16.000Z</published>
-    <updated>2021-11-30T09:50:56.000Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="一、缘由"><a href="#一、缘由" class="headerlink" title="一、缘由"></a>一、缘由</h2><p>在工作电脑上（Win10系统）安装了SSR客户端，实现了浏览器的科学上网。但是呢，使用命令行（无论是cmd还是Shell）从github上拉取代码、拉取Docker镜像，依然很慢，有时候还会连接超时，被墙，很是苦恼。</p><p>最典型的场景，在使用kubeadm工具安装k8s的时候，拉取的都是google的镜像，由于被墙，压根访问不通。你当然可以指定使用阿里云镜像库，但是其他插件的安装，比如存储插件rook、网络插件weave，还是要访问被墙的镜像库，就会下载不到 ，很烦。</p><p>最一劳永逸的办法就是，搞通网络，让Shell终端或者Docker pull可以使用sockts5代理访问被墙的资源。</p><h2 id="二、思路"><a href="#二、思路" class="headerlink" title="二、思路"></a>二、思路</h2><ul><li><p>我工作电脑本地存在SSR客户端，可以翻墙，使用的是socks5协议。</p></li><li><p>一般cmd、shell、docker pull、git clone等命使用的都是http协议，可以配置http代理。</p></li><li><p>故考虑将http代理转换成socks5代理，这样命令行就能翻墙了。</p></li></ul><p>具体流程图如下：</p><pre class="mermaid">graph LR    Cmd -->|http代理| Privoxy --> |Socks5代理|SSR客户端 --> SSR服务端</pre><h2 id="三、解决办法"><a href="#三、解决办法" class="headerlink" title="三、解决办法"></a>三、解决办法</h2><h3 id="1、实验环境"><a href="#1、实验环境" class="headerlink" title="1、实验环境"></a>1、实验环境</h3><p><strong>Ubuntu16.04 + Privoxy 3.0.24 + Win10 SSR客户端</strong></p><h3 id="2、安装privoxy"><a href="#2、安装privoxy" class="headerlink" title="2、安装privoxy"></a>2、安装privoxy</h3><pre><code class="bash">sudo apt-get install privoxy</code></pre><h3 id="3、修改配置"><a href="#3、修改配置" class="headerlink" title="3、修改配置"></a>3、修改配置</h3><p>打开配置文件<code>vim  /etc/privoxy/config</code>，修改如下两处：</p><pre><code class="shell"># 如果想让其他主机使用这个代理转换，可以监听0.0.0.0listen-address  127.0.0.1:8118# 这里填写局域网内SSR客户端的IP和端口，端口默认1080。# 如果SSR客户端是在本地就写127.0.0.1:1080forward-socks5   /               192.168.101.79:1080 .</code></pre><h3 id="4、启动privoxy服务"><a href="#4、启动privoxy服务" class="headerlink" title="4、启动privoxy服务"></a>4、启动privoxy服务</h3><pre><code class="bash">sudo  service  privoxy start</code></pre><h3 id="5、设置http和https的全局代理"><a href="#5、设置http和https的全局代理" class="headerlink" title="5、设置http和https的全局代理"></a>5、设置http和https的全局代理</h3><pre><code class="bash">export http_proxy=&#39;http://127.0.0.1:8118&#39;export https_proxy=&#39;http://127.0.0.1:8118&#39;</code></pre><p><strong>注意：不建议将这个代理的环境变量写入profile文件，只建议在需要的时候在当前shell窗口写入这个变量即可。</strong></p><h3 id="6、测试"><a href="#6、测试" class="headerlink" title="6、测试"></a>6、测试</h3><p>使用wget或者curl命令访google.com，返回正常页面内容即成功。</p><pre><code class="bash">wget www.google.com curl www.google.com</code></pre>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h2 id=&quot;一、缘由&quot;&gt;&lt;a href=&quot;#一、缘由&quot; class=&quot;headerlink&quot; title=&quot;一、缘由&quot;&gt;&lt;/a&gt;一、缘由&lt;/h2&gt;&lt;p&gt;在工作电脑上（Win10系统）安装了SSR客户端，实现了浏览器的科学上网。但是呢，使用命令行（无论是cmd还是Shell）从</summary>
-      
-    
-    
-    
-    <category term="工具" scheme="https://www.langxw.com/categories/%E5%B7%A5%E5%85%B7/"/>
-    
-    <category term="翻墙" scheme="https://www.langxw.com/categories/%E5%B7%A5%E5%85%B7/%E7%BF%BB%E5%A2%99/"/>
-    
-    
-    <category term="privoxy" scheme="https://www.langxw.com/tags/privoxy/"/>
     
   </entry>
   
