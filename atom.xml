@@ -6,7 +6,7 @@
   <link href="https://www.langxw.com/atom.xml" rel="self"/>
   
   <link href="https://www.langxw.com/"/>
-  <updated>2023-12-18T06:38:52.216Z</updated>
+  <updated>2024-02-06T10:27:11.816Z</updated>
   <id>https://www.langxw.com/</id>
   
   <author>
@@ -15,6 +15,28 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>K8s学习笔记</title>
+    <link href="https://www.langxw.com/2024/02/06/K8s%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"/>
+    <id>https://www.langxw.com/2024/02/06/K8s%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</id>
+    <published>2024-02-06T10:25:15.000Z</published>
+    <updated>2024-02-06T10:27:11.816Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="一、存储"><a href="#一、存储" class="headerlink" title="一、存储"></a>一、存储</h2><h3 id="1、StorageClass和volumeClaimTemplates"><a href="#1、StorageClass和volumeClaimTemplates" class="headerlink" title="1、StorageClass和volumeClaimTemplates"></a>1、StorageClass和volumeClaimTemplates</h3><ul><li><p>storageClass是PV的自动化实现，动态PV</p></li><li><p>volumeClaimTemplates是PVC的自动化实现，用在StatefulSet里</p></li></ul><h3 id="2、PV和PVC"><a href="#2、PV和PVC" class="headerlink" title="2、PV和PVC"></a>2、PV和PVC</h3><ul><li><p>PV和PVC是成对存在的。</p></li><li><p>PV默认会先和PVC进行绑定，再进行Pod的调度和创建。</p></li><li><p>PV可以通过StorageClass设置延时绑定，即Pod完成调度，再去和PVC绑定。</p></li></ul><h2 id="二、可观测性"><a href="#二、可观测性" class="headerlink" title="二、可观测性"></a>二、可观测性</h2><h3 id="1、-三种探针"><a href="#1、-三种探针" class="headerlink" title="1、 三种探针"></a>1、 三种探针</h3><ul><li><p>readinessProbe（可以没有），就绪探针，失败就由kube-proxy拆除流量</p></li><li><p>livenessProbe（一定要有），存活探针，失败就由kubelet杀死重启</p></li><li><p>startupProbe(不一定要有，第一优先级)，解决启动慢的问题。</p></li><li><p>livenessProbe和readinessProbe可以一致，即服务假死就重启Pod。</p></li><li><p>startup探针优先级最高，readness和liveness在启动的时候可能是并行的。</p></li></ul><h3 id="2、-重启策略"><a href="#2、-重启策略" class="headerlink" title="2、 重启策略"></a>2、 重启策略</h3><ul><li><p>默认Always，总是重启（包括正常退出0和异常退出）</p></li><li><p>Onfailure 异常失败才重启（非0状态，OOM等异常）</p></li><li><p>Never不重启</p></li></ul><h3 id="3、-远程调试service"><a href="#3、-远程调试service" class="headerlink" title="3、 远程调试service"></a>3、 远程调试service</h3><ul><li><p>port-forward 将集群中服务代理到本地，本地可以访问集群中服务（正向流量）</p></li><li><p>Telepresence 将本地服务代理到集群中，集群可以访问本地服务（反向流量）–swap-deployment （将本地的开发程序插入到kubernetes集群内部，包括DNS）</p></li></ul><h3 id="4、-调试node和pod"><a href="#4、-调试node和pod" class="headerlink" title="4、 调试node和pod"></a>4、 调试node和pod</h3><ul><li>使用kubectl debug 附加一个Ephemeral Containers到pod中，可共享网络、磁盘，进程等。在pod不断重启、pod中不存在调试工具的时候，推荐使用。</li></ul><h2 id="二、Pod"><a href="#二、Pod" class="headerlink" title="二、Pod"></a>二、Pod</h2><h3 id="1、静态Pod"><a href="#1、静态Pod" class="headerlink" title="1、静态Pod"></a>1、静态Pod</h3><h4 id="1-1-概念"><a href="#1-1-概念" class="headerlink" title="1.1 概念"></a>1.1 概念</h4><p>静态Pod直接由特定节点上的kubelet进程来管理，不通过master节点上的apiserver。无法与我们常用的控制器<code>Deployment</code>或者<code>DaemonSet</code>进行关联，它由<code>kubelet</code>进程自己来监控，当<code>pod</code>崩溃时重启该<code>pod</code>，<code>kubelet</code>也无法对他们进行健康检查。静态 pod 始终绑定在某一个<code>kubelet</code>，并且始终运行在同一个节点上。 <code>kubelet</code>会自动为每一个静态 pod 在 Kubernetes 的 apiserver 上创建一个镜像 Pod（Mirror Pod），因此我们可以在 apiserver 中查询到该 pod，但是不能通过 apiserver 进行控制（例如不能删除）</p><h4 id="1-2-创建方式"><a href="#1-2-创建方式" class="headerlink" title="1.2 创建方式"></a>1.2 创建方式</h4><ul><li><p><strong>配置文件</strong>：一般默认在<code>/etc/kubernetes/manifest/</code>目录下存在yaml文件</p></li><li><p><strong>HTTP</strong>：kubelet 周期地从<code>–manifest-url=</code>参数指定的地址下载文件，并且把它翻译成 JSON/YAML 格式的 pod。</p></li></ul><h4 id="1-3-其他"><a href="#1-3-其他" class="headerlink" title="1.3 其他"></a>1.3 其他</h4><ul><li><p>通过命令<code>systemctl status kubelet</code>查看kubelet的配置文件路径为 <code>/etc/systemd/system/kubelet.service.d/10-kubeadm.conf</code>，其中<code>Environment=&quot;KUBELET_SYSTEM_PODS_ARGS=--pod-manifest-path=/etc/kubernetes/manifests</code> 参数代表了静态pod的目录。</p></li><li><p>在master节点上可以看到<code>etcd.yaml kube-apiserver.yaml kube-controller-manager.yaml kube-scheduler.yaml</code> master 节点上面的几个重要组件都是用静态 Pod 的方式运行的。这些Pod不会受到apiserver控制，同时防止误删除apiserver自己删除自己。</p></li></ul><h3 id="2、Pod更新策略"><a href="#2、Pod更新策略" class="headerlink" title="2、Pod更新策略"></a>2、Pod更新策略</h3><ul><li><p>Deployment的更新策略：RollingUpdate和Recreate</p></li><li><p>StatefulSet的更新策略：RollingUpdate和OnDelete（禁止自动删除，必须手动删除才能出发更新重建。）</p></li></ul><h2 id="三、容器运行时"><a href="#三、容器运行时" class="headerlink" title="三、容器运行时"></a>三、容器运行时</h2><h3 id="1、k8s的cgroup驱动"><a href="#1、k8s的cgroup驱动" class="headerlink" title="1、k8s的cgroup驱动"></a>1、k8s的cgroup驱动</h3><ul><li><p>cgroupfs和systemd是linux系统cgroup的两种不同实现方式，systemd操作简单，且在一些发行版上默认支持使用。</p></li><li><p>K8s的cgroup驱动官方推荐选择systemd，和宿主机操作系统的cgroup、容器运行时的cgroup保持一致。</p></li><li><p>如果K8s和docker的cgroup驱动选择cgroupfs，而宿主机节点是systemd，在负载压力大的情况下，会导致k8s系统不稳定。</p></li><li><p>k8s和容器运行时要使用相同的cgroup驱动，最好和操作系统也一致，即systemd</p></li></ul><h2 id="四、调度"><a href="#四、调度" class="headerlink" title="四、调度"></a>四、调度</h2><h3 id="1、Taints和Toleration"><a href="#1、Taints和Toleration" class="headerlink" title="1、Taints和Toleration"></a>1、Taints和Toleration</h3><ul><li><p>节点亲和性是pod和node的亲和，pod被调度到特定的node上。</p></li><li><p>污点taints则相反，是一种洁癖，他排斥一类特定的Pod（不能容忍这个污点的Pod）。</p></li><li><p>容忍度Toleration是应用于Pod上的，如果Pod不容忍node的污点，则不能被调度到这个Node上</p></li></ul><p>比如： <code>kubectl taint nodes node1 key1=value1:NoSchedule</code> 在说，我有洁癖，key1=value1且不能调度；如果一个pod 有<code>tolerations:key: &quot;key1&quot; operator: &quot;Equal&quot; value: “value1” effect: &quot;NoSchedule&quot;</code></p><p>的容忍度标签，代表我接受key1=value1且效果为不能调度的洁癖，他就可以调度到node1上。当然也可以调度到其他没这个污点的node上。</p><ul><li><p>污点的作用：专用节点（别人别和我抢）、我有特殊硬件（GPU）、基于污点的驱逐。</p></li><li><p>Pod的容忍度和node的污点要在KV和调度策略两方面都匹配才行。</p></li></ul><h2 id="五、安全"><a href="#五、安全" class="headerlink" title="五、安全"></a>五、安全</h2><h3 id="1、K8s-API请求"><a href="#1、K8s-API请求" class="headerlink" title="1、K8s API请求"></a>1、K8s API请求</h3><ul><li><p>用户通过kubectl请求api</p></li><li><p>pod等通过service account请求api</p></li></ul><h3 id="2、K8s支持的请求认证方式"><a href="#2、K8s支持的请求认证方式" class="headerlink" title="2、K8s支持的请求认证方式"></a>2、K8s支持的请求认证方式</h3><ul><li><p>Basic认证</p></li><li><p>X509证书认证–集群间组件通讯</p></li><li><p>JWT（Json Web Token）</p><ul><li><p>Service Account</p></li><li><p>OpenID Connet</p></li><li><p>Webhooks</p></li></ul></li><li><p>Kubernetes中的用户通常是通过请求凭证设置</p><ul><li>User=dahu</li><li>Groups=[“tester”,“developer”]</li></ul></li><li><p>service account 对用的token 会被装载到secret中</p></li></ul><h3 id="3、RBAC"><a href="#3、RBAC" class="headerlink" title="3、RBAC"></a>3、RBAC</h3><ul><li><p><strong>Role</strong>：作用于指定的命名空间，定义在某个命名空间资源上可以进行的操作。</p></li><li><p><strong>ClusterRole</strong>：作用于集群所有命名空间，定义针对所有命名空间的资源进行的操作。</p></li><li><p>RoleBinding和ClusterRoleBinding差别仅在于ns的有无。</p></li><li><p>默认ClusterRolebinding</p><ul><li><p>system:basic-user，未认证用户组(group system:unauthenticated)的默认角色，不具备任何操作权限</p></li><li><p>cluster-admin，是system:master组默认的集群角色绑定，具体集群所有资源操作权限。</p></li><li><p>集群系统组件都有默认clusterrolebing，包括controller-manage、scheduler、kube-proxy等。</p></li></ul></li><li><p>安全上下文</p><ul><li><p>权限最小化原则</p></li><li><p>在pod或者container维度设置Security Context</p></li><li><p>开启PSP</p></li></ul></li></ul><h3 id="4、多租安全加固"><a href="#4、多租安全加固" class="headerlink" title="4、多租安全加固"></a>4、多租安全加固</h3><ul><li><p>RBAC和基于namespace的软隔离是基本且必要的安全措施</p></li><li><p>使用PSP(Pod Security Policies)对Pod的安全参数进行校验，同时加固Pod运行时刻安全</p></li><li><p>使用Rerouce Quota &amp; Limit Range限制租户的资源使用配额</p></li><li><p>敏感信息保护（secret encryption at REST）</p></li><li><p>在应用运行时刻遵循权限的最小化原则，尽可能缩小podn内容器的系统权限</p></li><li><p>使用NetworkPolicy进行业务应用间东西向网络流量的访问控制</p></li><li><p>Log everything（包括终端日志）</p></li><li><p>对接监控系统，实现容器应用维度的监控</p></li></ul>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h2 id=&quot;一、存储&quot;&gt;&lt;a href=&quot;#一、存储&quot; class=&quot;headerlink&quot; title=&quot;一、存储&quot;&gt;&lt;/a&gt;一、存储&lt;/h2&gt;&lt;h3 id=&quot;1、StorageClass和volumeClaimTemplates&quot;&gt;&lt;a href=&quot;#1、StorageC</summary>
+      
+    
+    
+    
+    
+    <category term="k8s" scheme="https://www.langxw.com/tags/k8s/"/>
+    
+  </entry>
   
   <entry>
     <title>容器内抓包</title>
@@ -536,34 +558,6 @@
     <category term="shell" scheme="https://www.langxw.com/tags/shell/"/>
     
     <category term="linux" scheme="https://www.langxw.com/tags/linux/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Docker添加http代理</title>
-    <link href="https://www.langxw.com/2021/06/04/Docker%E6%B7%BB%E5%8A%A0http%E4%BB%A3%E7%90%86/"/>
-    <id>https://www.langxw.com/2021/06/04/Docker%E6%B7%BB%E5%8A%A0http%E4%BB%A3%E7%90%86/</id>
-    <published>2021-06-04T11:32:02.000Z</published>
-    <updated>2021-06-04T11:33:34.000Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="一、缘由"><a href="#一、缘由" class="headerlink" title="一、缘由"></a>一、缘由</h2><p>当docker在拉取国外的镜像，并且没有国内加速源的资源，速度很慢，甚至访问不到，比如安装k8s的时候。这时候就需要添加http、https代理，来进行下载加速。</p><h2 id="二、环境"><a href="#二、环境" class="headerlink" title="二、环境"></a>二、环境</h2><ul><li>**Ubuntu16.04 + Docker 20.10.6 **</li><li><strong>适用于Debian/Ubuntu，RedHat/CentOS系统。修改配置后，会持续生效，其中的设置将覆盖docker.service中的选项</strong></li></ul><h2 id="三、步骤"><a href="#三、步骤" class="headerlink" title="三、步骤"></a>三、步骤</h2><h3 id="1、创建目录"><a href="#1、创建目录" class="headerlink" title="1、创建目录"></a>1、创建目录</h3><pre><code class="bash">mkdir -p /etc/systemd/system/docker.service.d</code></pre><h3 id="2、添加网络代理配置文件"><a href="#2、添加网络代理配置文件" class="headerlink" title="2、添加网络代理配置文件"></a>2、添加网络代理配置文件</h3><pre><code class="bash">cat &gt;&gt; a &lt;&lt; EOF[Service]Environment=&quot;HTTP_PROXY=http://proxy-addr:proxy-port/&quot; &quot;HTTPS_PROXY=http://proxy-addr:proxy-port/&quot; &quot;NO_PROXY=localhost,127.0.0.1,docker.io,yanzhe919.mirror.aliyuncs.com,99nkhzdo.mirror.aliyuncs.com,*.aliyuncs.com,*.mirror.aliyuncs.com,registry.docker-cn.com,hub.c.163.com,hub-auth.c.163.com,&quot;EOF</code></pre><p>proxy-addr为代理IP或域名；proxy-port为代理端口；NO_PROXY后面接不需要代理的仓库的域名或者IP，以英文逗号结尾。</p><p><strong>注意：如果使用privoxy将http代理转换为socks5代理，这里porxy-addr和port就要写privoxy的IP和端口，比如127.0.0.1:8118</strong></p><h3 id="3、重载配置并重启docker服务"><a href="#3、重载配置并重启docker服务" class="headerlink" title="3、重载配置并重启docker服务"></a>3、重载配置并重启docker服务</h3><pre><code class="bash">systemctl daemon-reloadsystemctl restart docker</code></pre>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h2 id=&quot;一、缘由&quot;&gt;&lt;a href=&quot;#一、缘由&quot; class=&quot;headerlink&quot; title=&quot;一、缘由&quot;&gt;&lt;/a&gt;一、缘由&lt;/h2&gt;&lt;p&gt;当docker在拉取国外的镜像，并且没有国内加速源的资源，速度很慢，甚至访问不到，比如安装k8s的时候。这时候就需要添加ht</summary>
-      
-    
-    
-    
-    <category term="虚拟化" scheme="https://www.langxw.com/categories/%E8%99%9A%E6%8B%9F%E5%8C%96/"/>
-    
-    <category term="Docker" scheme="https://www.langxw.com/categories/%E8%99%9A%E6%8B%9F%E5%8C%96/Docker/"/>
-    
-    
-    <category term="docker" scheme="https://www.langxw.com/tags/docker/"/>
-    
-    <category term="http代理" scheme="https://www.langxw.com/tags/http%E4%BB%A3%E7%90%86/"/>
     
   </entry>
   
