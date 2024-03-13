@@ -1,0 +1,4237 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>K8s 1.28版本二进制部署 | 运维人</title>
+  <meta name="keywords" content=" k8s ">
+  <meta name="description" content="K8s 1.28版本二进制部署 | 运维人">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="description" content="一、高可用架构1、架构图 2、架构说明k8s分为Master节点和Node节点，Master节点是控制节点，Node节点是工作节点。其中，Master节点包含kube-apiserver、kube-scheduler、kube-controller-manager、etcd、kubelet、kube-proxy；Node节点包含kubelet、kube-proxy。 关于Master节点和Node">
+<meta property="og:type" content="article">
+<meta property="og:title" content="K8s 1.28版本二进制部署">
+<meta property="og:url" content="https://www.langxw.com/2024/03/13/K8s-1-28%E7%89%88%E6%9C%AC%E4%BA%8C%E8%BF%9B%E5%88%B6%E9%83%A8%E7%BD%B2/index.html">
+<meta property="og:site_name" content="运维人">
+<meta property="og:description" content="一、高可用架构1、架构图 2、架构说明k8s分为Master节点和Node节点，Master节点是控制节点，Node节点是工作节点。其中，Master节点包含kube-apiserver、kube-scheduler、kube-controller-manager、etcd、kubelet、kube-proxy；Node节点包含kubelet、kube-proxy。 关于Master节点和Node">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s2.loli.net/2024/03/12/7qYdlwvnbEOCI2p.jpg">
+<meta property="article:published_time" content="2024-03-13T10:49:37.000Z">
+<meta property="article:modified_time" content="2024-03-13T10:50:55.997Z">
+<meta property="article:author" content="运维人">
+<meta property="article:tag" content="k8s">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s2.loli.net/2024/03/12/7qYdlwvnbEOCI2p.jpg">
+
+
+<link rel="icon" href="/img/avatar.jpg">
+
+<link href="/css/style.css?v=1.1.0" rel="stylesheet">
+
+<link href="/css/hl_theme/atom-light.css?v=1.1.0" rel="stylesheet">
+
+<link href="//cdn.jsdelivr.net/npm/animate.css@4.1.0/animate.min.css" rel="stylesheet">
+
+<script src="//cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+<script src="/js/titleTip.js?v=1.1.0" ></script>
+
+<script src="//cdn.jsdelivr.net/npm/highlightjs@9.16.2/highlight.pack.min.js"></script>
+<script>
+    hljs.initHighlightingOnLoad();
+</script>
+
+<script src="//cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js"></script>
+
+
+
+<script src="//cdn.jsdelivr.net/npm/jquery.cookie@1.4.1/jquery.cookie.min.js" ></script>
+
+<script src="/js/iconfont.js?v=1.1.0" ></script>
+
+<meta name="generator" content="Hexo 5.3.0"><link rel="alternate" href="/atom.xml" title="运维人" type="application/atom+xml">
+</head>
+<div style="display: none">
+  <input class="theme_disqus_on" value="false">
+  <input class="theme_preload_comment" value="">
+  <input class="theme_blog_path" value="">
+  <input id="theme_shortcut" value="true" />
+  <input id="theme_highlight_on" value="true" />
+  <input id="theme_code_copy" value="true" />
+</div>
+
+
+
+<body>
+<aside class="nav">
+    <div class="nav-left">
+        <a href="/"
+   class="avatar_target">
+    <img class="avatar"
+         src="/img/avatar.jpg"/>
+</a>
+<div class="author">
+    <span>运维人</span>
+</div>
+
+<div class="icon">
+    
+        
+            <a title="rss"
+               href="/atom.xml"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-rss"></use>
+                    </svg>
+                
+            </a>
+        
+    
+        
+            <a title="github"
+               href="https://github.com/langlangago"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-github"></use>
+                    </svg>
+                
+            </a>
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+            <a title="weibo"
+               href="https://weibo.com/u/1661089304"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-weibo"></use>
+                    </svg>
+                
+            </a>
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+            <a title="email"
+               href="mailto:lxwno.1@163.com"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-email"></use>
+                    </svg>
+                
+            </a>
+        
+    
+        
+            <a title="qq"
+               href="http://wpa.qq.com/msgrd?v=3&uin=458590981&site=qq&menu=yes"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-qq"></use>
+                    </svg>
+                
+            </a>
+        
+    
+        
+            <a title="kugou"
+               href="https://www.kugou.com/"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-kugou"></use>
+                    </svg>
+                
+            </a>
+        
+    
+        
+            <a title="neteasemusic"
+               href="https://music.163.com/"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-neteasemusic"></use>
+                    </svg>
+                
+            </a>
+        
+    
+</div>
+
+
+
+
+<ul>
+    <li>
+        <div class="all active" data-rel="全部文章">全部文章
+            
+                <small>(63)</small>
+            
+        </div>
+    </li>
+    
+        
+            
+                <li>
+                    <div data-rel="工具">
+                        <i class="fold iconfont icon-right"></i>
+                        
+                        工具
+                        <small>(11)</small>
+                        
+                    </div>
+                    
+                        <ul class="sub hide">
+                            
+                                <li>
+                                    <div data-rel="工具<--->翻墙">
+                                        
+                                        翻墙
+                                        
+                                            <small>(3
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                                <li>
+                                    <div data-rel="工具<--->免费证书">
+                                        
+                                        免费证书
+                                        
+                                            <small>(1
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                                <li>
+                                    <div data-rel="工具<--->破解">
+                                        
+                                        破解
+                                        
+                                            <small>(1
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                                <li>
+                                    <div data-rel="工具<--->ELK">
+                                        
+                                        ELK
+                                        
+                                            <small>(3
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                                <li>
+                                    <div data-rel="工具<--->FTP">
+                                        
+                                        FTP
+                                        
+                                            <small>(2
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                                <li>
+                                    <div data-rel="工具<--->Git">
+                                        
+                                        Git
+                                        
+                                            <small>(1
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                        </ul>
+                    
+                </li>
+            
+        
+    
+        
+            
+                <li>
+                    <div data-rel="数据库">
+                        <i class="fold iconfont icon-right"></i>
+                        
+                        数据库
+                        <small>(6)</small>
+                        
+                    </div>
+                    
+                        <ul class="sub hide">
+                            
+                                <li>
+                                    <div data-rel="数据库<--->ES">
+                                        
+                                        ES
+                                        
+                                            <small>(1
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                                <li>
+                                    <div data-rel="数据库<--->MongoDB">
+                                        
+                                        MongoDB
+                                        
+                                            <small>(5
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                        </ul>
+                    
+                </li>
+            
+        
+    
+        
+            
+        
+    
+        
+            
+                <li>
+                    <div data-rel="方案">
+                        
+                        方案
+                        <small>(1)</small>
+                        
+                    </div>
+                    
+                </li>
+            
+        
+    
+        
+            
+                <li>
+                    <div data-rel="脚本">
+                        <i class="fold iconfont icon-right"></i>
+                        
+                        脚本
+                        <small>(14)</small>
+                        
+                    </div>
+                    
+                        <ul class="sub hide">
+                            
+                                <li>
+                                    <div data-rel="脚本<--->命令行">
+                                        
+                                        命令行
+                                        
+                                            <small>(3
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                                <li>
+                                    <div data-rel="脚本<--->Python">
+                                        
+                                        Python
+                                        
+                                            <small>(7
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                                <li>
+                                    <div data-rel="脚本<--->Shell">
+                                        
+                                        Shell
+                                        
+                                            <small>(4
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                        </ul>
+                    
+                </li>
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+                <li>
+                    <div data-rel="系统">
+                        <i class="fold iconfont icon-right"></i>
+                        
+                        系统
+                        <small>(4)</small>
+                        
+                    </div>
+                    
+                        <ul class="sub hide">
+                            
+                                <li>
+                                    <div data-rel="系统<--->Linux">
+                                        
+                                        Linux
+                                        
+                                            <small>(1
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                                <li>
+                                    <div data-rel="系统<--->Ubuntu">
+                                        
+                                        Ubuntu
+                                        
+                                            <small>(2
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                                <li>
+                                    <div data-rel="系统<--->Windows">
+                                        
+                                        Windows
+                                        
+                                            <small>(1
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                        </ul>
+                    
+                </li>
+            
+        
+    
+        
+            
+                <li>
+                    <div data-rel="虚拟化">
+                        <i class="fold iconfont icon-right"></i>
+                        
+                        虚拟化
+                        <small>(12)</small>
+                        
+                    </div>
+                    
+                        <ul class="sub hide">
+                            
+                                <li>
+                                    <div data-rel="虚拟化<--->Docker">
+                                        
+                                        Docker
+                                        
+                                            <small>(6
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                                <li>
+                                    <div data-rel="虚拟化<--->k8s">
+                                        
+                                        k8s
+                                        
+                                            <small>(4
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                                <li>
+                                    <div data-rel="虚拟化<--->VMware">
+                                        
+                                        VMware
+                                        
+                                            <small>(2
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                        </ul>
+                    
+                </li>
+            
+        
+    
+        
+            
+                <li>
+                    <div data-rel="学习笔记">
+                        <i class="fold iconfont icon-right"></i>
+                        
+                        学习笔记
+                        <small>(3)</small>
+                        
+                    </div>
+                    
+                        <ul class="sub hide">
+                            
+                                <li>
+                                    <div data-rel="学习笔记<--->Kubernetes">
+                                        
+                                        Kubernetes
+                                        
+                                            <small>(3
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                        </ul>
+                    
+                </li>
+            
+        
+    
+        
+            
+                <li>
+                    <div data-rel="中间件">
+                        <i class="fold iconfont icon-right"></i>
+                        
+                        中间件
+                        <small>(11)</small>
+                        
+                    </div>
+                    
+                        <ul class="sub hide">
+                            
+                                <li>
+                                    <div data-rel="中间件<--->Nacos">
+                                        
+                                        Nacos
+                                        
+                                            <small>(3
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                                <li>
+                                    <div data-rel="中间件<--->Nginx">
+                                        
+                                        Nginx
+                                        
+                                            <small>(3
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                                <li>
+                                    <div data-rel="中间件<--->Redis">
+                                        
+                                        Redis
+                                        
+                                            <small>(1
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                                <li>
+                                    <div data-rel="中间件<--->RocketMQ">
+                                        
+                                        RocketMQ
+                                        
+                                            <small>(3
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                                <li>
+                                    <div data-rel="中间件<--->ZK">
+                                        
+                                        ZK
+                                        
+                                            <small>(1
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                        </ul>
+                    
+                </li>
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+</ul>
+<div class="left-bottom">
+    <div class="menus">
+        
+            
+            
+            
+    </div>
+    <div>
+        
+            <a class="about  hasFriend  site_url"
+               
+               href="/about">关于</a>
+        
+        <a style="width: 50%"
+                
+                                           class="friends">友链</a>
+        
+    </div>
+</div>
+<input type="hidden" id="yelog_site_posts_number" value="63">
+<input type="hidden" id="yelog_site_word_count" value="72k">
+<div style="display: none">
+    <span id="busuanzi_value_site_uv"></span>
+    <span id="busuanzi_value_site_pv"></span>
+</div>
+
+    </div>
+    <div class="nav-right">
+        <div class="friends-area">
+    <div class="friends-title">
+        友情链接
+        <i class="iconfont icon-left"></i>
+    </div>
+    <div class="friends-content">
+        <ul>
+            
+            <li><a target="_blank" href="https://www.cnblogs.com/langdashu/">我的CSDN</a></li>
+            
+            <li><a target="_blank" href="https://www.langxw.com/">运维人</a></li>
+            
+        </ul>
+    </div>
+</div>
+        <div class="title-list">
+    <div class="right-top">
+        <div id="default-panel">
+            <i class="iconfont icon-search" data-title="搜索 快捷键 i"></i>
+            <div class="right-title">全部文章</div>
+            <i class="iconfont icon-file-tree" data-title="切换到大纲视图 快捷键 w"></i>
+        </div>
+        <div id="search-panel">
+            <i class="iconfont icon-left" data-title="返回"></i>
+            <input id="local-search-input" />
+            <label class="border-line" for="input"></label>
+            <i class="iconfont icon-case-sensitive" data-title="大小写敏感"></i>
+            <i class="iconfont icon-tag" data-title="标签"></i>
+        </div>
+        <div id="outline-panel" style="display: none">
+            <div class="right-title">大纲</div>
+            <i class="iconfont icon-list" data-title="切换到文章列表"></i>
+        </div>
+    </div>
+
+    <div class="tags-list">
+    <input id="tag-search" />
+    <div class="tag-wrapper">
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>方案</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>规范</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>加速器</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>日志系统</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>数据库</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>系统升级</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>aircrack-ng</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>arimon-ng</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>bbr</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>centos</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>csi-plugin</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>docker</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>ELK</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>es</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>excel</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>filebeat</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>FTP</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>git</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>http代理</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>index</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>k8s</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>kubelet</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>lets-encrypt</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>linux</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>log</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>mongodb</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>mysql</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>nacos</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>nginx</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>oracle</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>privoxy</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>Prometheus</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>python</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>Python</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>redis</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>RocketMQ</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>SFTP</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>shadowsockets</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>shadowsocks</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>shell</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>ssl证书</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>swap</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>sysctl</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>timezone</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>ubuntu</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>vmware</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>vsca</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>vsphere</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>vultr</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>win10</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>zookeeper</a>
+            </li>
+        
+    </div>
+
+</div>
+
+    
+    <nav id="title-list-nav">
+        
+        <a id="top" class="全部文章 工具 翻墙 "
+           href="/2021/02/22/ss%E5%85%8D%E8%B4%B9%E8%B4%A6%E5%8F%B7/"
+           data-tag="shadowsocks"
+           data-author="" >
+            <span class="post-title" title="ss免费账号">ss免费账号</span>
+            <span class="post-date" title="2021-02-22 15:38:35">2021/02/22</span>
+        </a>
+        
+        <a id="top" class="全部文章 工具 翻墙 "
+           href="/2021/02/02/VPS%E6%90%AD%E5%BB%BASS%E5%BD%B1%E6%A2%AD%E6%9C%8D%E5%8A%A1%E7%AB%AF%E5%B9%B6%E4%BC%98%E5%8C%96%E5%8A%A0%E9%80%9FShadowsocks-BBR/"
+           data-tag="shadowsockets,bbr,vultr"
+           data-author="" >
+            <span class="post-title" title="VPS搭建SS影梭服务端并优化加速Shadowsocks+BBR">VPS搭建SS影梭服务端并优化加速Shadowsocks+BBR</span>
+            <span class="post-date" title="2021-02-02 10:10:31">2021/02/02</span>
+        </a>
+        
+        <a id="top" class="全部文章 工具 翻墙 "
+           href="/2021/06/04/%E4%BD%BF%E7%94%A8Privoxy%E5%B0%86http%E4%BB%A3%E7%90%86%E8%BD%AC%E6%8D%A2%E6%88%90socks5%E4%BB%A3%E7%90%86/"
+           data-tag="privoxy"
+           data-author="" >
+            <span class="post-title" title="使用Privoxy将http代理转换成socks5代理">使用Privoxy将http代理转换成socks5代理</span>
+            <span class="post-date" title="2021-06-04 19:00:16">2021/06/04</span>
+        </a>
+        
+        <a  class="全部文章 学习笔记 Kubernetes "
+           href="/2024/03/13/K8s-1-28%E7%89%88%E6%9C%AC%E4%BA%8C%E8%BF%9B%E5%88%B6%E9%83%A8%E7%BD%B2/"
+           data-tag="k8s"
+           data-author="" >
+            <span class="post-title" title="K8s 1.28版本二进制部署">K8s 1.28版本二进制部署</span>
+            <span class="post-date" title="2024-03-13 18:49:37">2024/03/13</span>
+        </a>
+        
+        <a  class="全部文章 学习笔记 Kubernetes "
+           href="/2024/02/06/K8s%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"
+           data-tag="k8s"
+           data-author="" >
+            <span class="post-title" title="K8s学习笔记">K8s学习笔记</span>
+            <span class="post-date" title="2024-02-06 18:25:15">2024/02/06</span>
+        </a>
+        
+        <a  class="全部文章 脚本 Shell "
+           href="/2023/12/18/%E5%AE%B9%E5%99%A8%E5%86%85%E6%8A%93%E5%8C%85/"
+           data-tag="docker,shell,k8s"
+           data-author="" >
+            <span class="post-title" title="容器内抓包">容器内抓包</span>
+            <span class="post-date" title="2023-12-18 10:03:29">2023/12/18</span>
+        </a>
+        
+        <a  class="全部文章 中间件 Nginx "
+           href="/2023/12/14/Nginx%E4%B8%8D%E5%96%9C%E6%AC%A2%E4%B8%8B%E5%88%92%E7%BA%BF/"
+           data-tag="nginx"
+           data-author="" >
+            <span class="post-title" title="Nginx不喜欢下划线_">Nginx不喜欢下划线_</span>
+            <span class="post-date" title="2023-12-14 14:00:56">2023/12/14</span>
+        </a>
+        
+        <a  class="全部文章 脚本 Shell "
+           href="/2023/12/08/%E5%AE%9A%E6%9C%9F%E6%A3%80%E6%9F%A5%E6%9F%90%E4%B8%AASSL%E8%AF%81%E4%B9%A6%E7%9A%84%E6%9C%89%E6%95%88%E6%9C%9F%E5%B9%B6%E5%91%8A%E8%AD%A6/"
+           data-tag="shell,linux"
+           data-author="" >
+            <span class="post-title" title="定期检查某个SSL证书的有效期并告警">定期检查某个SSL证书的有效期并告警</span>
+            <span class="post-date" title="2023-12-08 11:48:03">2023/12/08</span>
+        </a>
+        
+        <a  class="全部文章 脚本 Shell "
+           href="/2023/12/08/%E6%89%B9%E9%87%8F%E6%A3%80%E6%9F%A5%E5%9F%9F%E5%90%8DSSL%E8%AF%81%E4%B9%A6%E7%9A%84%E6%9C%89%E6%95%88%E6%9C%9F/"
+           data-tag="shell,linux"
+           data-author="" >
+            <span class="post-title" title="批量检查域名SSL证书的有效期">批量检查域名SSL证书的有效期</span>
+            <span class="post-date" title="2023-12-08 11:35:10">2023/12/08</span>
+        </a>
+        
+        <a  class="全部文章 脚本 命令行 "
+           href="/2023/12/08/%E5%91%BD%E4%BB%A4%E8%A1%8Csed%E6%8F%90%E5%8F%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B8%AD%E7%9A%84%E5%AD%97%E6%AE%B5/"
+           data-tag="shell"
+           data-author="" >
+            <span class="post-title" title="命令行sed提取字符串中的字段">命令行sed提取字符串中的字段</span>
+            <span class="post-date" title="2023-12-08 11:23:50">2023/12/08</span>
+        </a>
+        
+        <a  class="全部文章 学习笔记 Kubernetes "
+           href="/2023/08/18/%E6%B5%85%E6%9E%90OCI%E3%80%81CRI%E3%80%81Docker%E3%80%81Containerd%E3%80%81runc%E3%80%81Dockershim%E3%80%81Containerd-shim%E5%88%86%E5%88%AB%E6%98%AF%E4%BB%80%E4%B9%88/"
+           data-tag="k8s"
+           data-author="" >
+            <span class="post-title" title="浅析OCI、CRI、Docker、Containerd、runc、Dockershim、Containerd-shim分别是什么">浅析OCI、CRI、Docker、Containerd、runc、Dockershim、Containerd-shim分别是什么</span>
+            <span class="post-date" title="2023-08-18 15:25:51">2023/08/18</span>
+        </a>
+        
+        <a  class="全部文章 数据库 ES "
+           href="/2023/08/18/ES%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-K8s%E7%8E%AF%E5%A2%83/"
+           data-tag="es"
+           data-author="" >
+            <span class="post-title" title="ES集群搭建-K8s环境">ES集群搭建-K8s环境</span>
+            <span class="post-date" title="2023-08-18 09:42:56">2023/08/18</span>
+        </a>
+        
+        <a  class="全部文章 中间件 Nacos "
+           href="/2022/07/04/Nacos%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-K8s%E7%8E%AF%E5%A2%83/"
+           data-tag="k8s,nacos"
+           data-author="" >
+            <span class="post-title" title="Nacos集群搭建-K8s环境">Nacos集群搭建-K8s环境</span>
+            <span class="post-date" title="2022-07-04 15:44:51">2022/07/04</span>
+        </a>
+        
+        <a  class="全部文章 虚拟化 k8s "
+           href="/2022/04/19/Kube-prometheus%E6%B7%BB%E5%8A%A0%E8%87%AA%E5%AE%9A%E4%B9%89%E7%9B%91%E6%8E%A7%E9%A1%B9/"
+           data-tag="k8s,Prometheus"
+           data-author="" >
+            <span class="post-title" title="Kube-prometheus添加自定义监控项">Kube-prometheus添加自定义监控项</span>
+            <span class="post-date" title="2022-04-19 13:57:02">2022/04/19</span>
+        </a>
+        
+        <a  class="全部文章 虚拟化 k8s "
+           href="/2022/03/22/%E8%87%AA%E5%BB%BAk8s%E4%BD%BF%E7%94%A8%E9%98%BF%E9%87%8C%E4%BA%91%E5%AD%98%E5%82%A8%E6%8F%92%E4%BB%B6csi/"
+           data-tag="k8s,csi-plugin"
+           data-author="" >
+            <span class="post-title" title="自建k8s使用阿里云存储插件csi">自建k8s使用阿里云存储插件csi</span>
+            <span class="post-date" title="2022-03-22 13:01:45">2022/03/22</span>
+        </a>
+        
+        <a  class="全部文章 虚拟化 k8s "
+           href="/2022/03/02/kubelet%E5%91%BD%E4%BB%A4%E8%87%AA%E5%8A%A8%E8%A1%A5%E5%85%A8%E5%8A%9F%E8%83%BD/"
+           data-tag="k8s,kubelet"
+           data-author="" >
+            <span class="post-title" title="kubelet命令自动补全功能">kubelet命令自动补全功能</span>
+            <span class="post-date" title="2022-03-02 17:22:57">2022/03/02</span>
+        </a>
+        
+        <a  class="全部文章 虚拟化 k8s "
+           href="/2022/02/21/K8S%E5%90%AF%E7%94%A8%E9%9D%9E%E5%AE%89%E5%85%A8%E5%86%85%E6%A0%B8%E5%8F%82%E6%95%B0/"
+           data-tag="k8s,sysctl"
+           data-author="" >
+            <span class="post-title" title="K8S启用非安全内核参数">K8S启用非安全内核参数</span>
+            <span class="post-date" title="2022-02-21 18:03:19">2022/02/21</span>
+        </a>
+        
+        <a  class="全部文章 脚本 Python "
+           href="/2021/12/01/%E7%BB%9F%E8%AE%A115%E5%A4%A9%E5%86%85%E9%98%BF%E9%87%8C%E4%BA%91SLB%E5%90%8E%E7%AB%AF%E5%BC%82%E5%B8%B8%E5%92%8C%E5%B9%B6%E5%8F%91%E6%8C%87%E6%A0%87/"
+           data-tag="Python"
+           data-author="" >
+            <span class="post-title" title="统计15天内阿里云SLB后端异常和并发指标">统计15天内阿里云SLB后端异常和并发指标</span>
+            <span class="post-date" title="2021-12-01 11:00:46">2021/12/01</span>
+        </a>
+        
+        <a  class="全部文章 脚本 Python "
+           href="/2021/12/01/%E7%BB%9F%E8%AE%A115%E5%A4%A9%E5%86%85%E9%98%BF%E9%87%8C%E4%BA%91ECS%E5%86%85%E5%AD%98%E4%BD%BF%E7%94%A8%E7%8E%87%E5%92%8CCPU%E4%BD%BF%E7%94%A8%E7%8E%87/"
+           data-tag="python"
+           data-author="" >
+            <span class="post-title" title="统计15天内阿里云ECS内存使用率和CPU使用率">统计15天内阿里云ECS内存使用率和CPU使用率</span>
+            <span class="post-date" title="2021-12-01 10:42:57">2021/12/01</span>
+        </a>
+        
+        <a  class="全部文章 脚本 Python "
+           href="/2021/12/01/%E7%BB%9F%E8%AE%A1%E9%98%BF%E9%87%8C%E4%BA%91ECS%E5%81%9C%E6%9C%BA%E7%8A%B6%E6%80%81%E7%9A%84%E4%B8%BB%E6%9C%BA/"
+           data-tag="python"
+           data-author="" >
+            <span class="post-title" title="统计阿里云ECS停机状态的主机">统计阿里云ECS停机状态的主机</span>
+            <span class="post-date" title="2021-12-01 10:32:24">2021/12/01</span>
+        </a>
+        
+        <a  class="全部文章 脚本 Python "
+           href="/2021/11/30/%E7%BB%9F%E8%AE%A1%E9%98%BF%E9%87%8C%E4%BA%91ECS%E7%A3%81%E7%9B%98%E4%BD%BF%E7%94%A8%E7%8E%87/"
+           data-tag="python"
+           data-author="" >
+            <span class="post-title" title="统计阿里云ECS磁盘使用率">统计阿里云ECS磁盘使用率</span>
+            <span class="post-date" title="2021-11-30 18:33:08">2021/11/30</span>
+        </a>
+        
+        <a  class="全部文章 方案 "
+           href="/2021/11/30/%E9%98%BF%E9%87%8C%E4%BA%91%E8%B5%84%E6%BA%90%E5%88%A9%E7%94%A8%E7%8E%87%E5%AE%9A%E6%9C%9F%E7%BB%9F%E8%AE%A1%E6%96%B9%E6%A1%88/"
+           data-tag="方案,规范"
+           data-author="" >
+            <span class="post-title" title="阿里云资源利用率定期统计方案">阿里云资源利用率定期统计方案</span>
+            <span class="post-date" title="2021-11-30 18:07:12">2021/11/30</span>
+        </a>
+        
+        <a  class="全部文章 中间件 RocketMQ "
+           href="/2021/11/30/RocketMQ%E9%83%A8%E7%BD%B2-DLedger%E9%9B%86%E7%BE%A4%E6%A8%A1%E5%BC%8F-Docker%E7%89%88/"
+           data-tag="RocketMQ"
+           data-author="" >
+            <span class="post-title" title="RocketMQ部署-DLedger集群模式-Docker版">RocketMQ部署-DLedger集群模式-Docker版</span>
+            <span class="post-date" title="2021-11-30 18:02:40">2021/11/30</span>
+        </a>
+        
+        <a  class="全部文章 脚本 Shell "
+           href="/2021/11/30/Centos%E7%B3%BB%E7%BB%9F%E6%97%A5%E5%B8%B8%E5%B7%A1%E6%A3%80%E8%84%9A%E6%9C%AC/"
+           data-tag="shell,linux"
+           data-author="" >
+            <span class="post-title" title="Centos系统日常巡检脚本">Centos系统日常巡检脚本</span>
+            <span class="post-date" title="2021-11-30 17:19:25">2021/11/30</span>
+        </a>
+        
+        <a  class="全部文章 虚拟化 Docker "
+           href="/2021/06/04/Docker%E6%B7%BB%E5%8A%A0http%E4%BB%A3%E7%90%86/"
+           data-tag="docker,http代理"
+           data-author="" >
+            <span class="post-title" title="Docker添加http代理">Docker添加http代理</span>
+            <span class="post-date" title="2021-06-04 19:32:02">2021/06/04</span>
+        </a>
+        
+        <a  class="全部文章 脚本 Python "
+           href="/2021/05/28/%E4%B8%80%E9%94%AE%E9%87%8D%E5%91%BD%E5%90%8D%E9%92%89%E9%92%89%E6%8E%A5%E6%94%B6%E5%88%B0%E7%9A%84%E6%96%87%E4%BB%B6/"
+           data-tag="python"
+           data-author="" >
+            <span class="post-title" title="一键重命名钉钉接收到的文件">一键重命名钉钉接收到的文件</span>
+            <span class="post-date" title="2021-05-28 17:21:30">2021/05/28</span>
+        </a>
+        
+        <a  class="全部文章 脚本 命令行 "
+           href="/2021/05/19/%E5%91%BD%E4%BB%A4%E8%A1%8C%E6%9F%A5%E7%9C%8BSSL%E8%AF%81%E4%B9%A6%E7%9A%84%E6%9C%89%E6%95%88%E6%9C%9F%E5%92%8C%E7%BB%84%E7%BB%87/"
+           data-tag="shell"
+           data-author="" >
+            <span class="post-title" title="命令行查看SSL证书的有效期和组织">命令行查看SSL证书的有效期和组织</span>
+            <span class="post-date" title="2021-05-19 14:24:19">2021/05/19</span>
+        </a>
+        
+        <a  class="全部文章 脚本 命令行 "
+           href="/2021/05/19/%E5%91%BD%E4%BB%A4%E8%A1%8C%E8%8E%B7%E5%8F%96%E5%85%AC%E7%BD%91IP%E5%9C%B0%E5%9D%80/"
+           data-tag="shell"
+           data-author="" >
+            <span class="post-title" title="命令行获取公网IP地址">命令行获取公网IP地址</span>
+            <span class="post-date" title="2021-05-19 14:22:20">2021/05/19</span>
+        </a>
+        
+        <a  class="全部文章 中间件 Nginx "
+           href="/2021/05/19/Nginx%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E6%97%B6%E7%AB%AF%E5%8F%A3%E4%B8%A2%E5%A4%B1%E7%9A%84%E8%A7%A3%E5%86%B3/"
+           data-tag="nginx"
+           data-author="" >
+            <span class="post-title" title="Nginx反向代理时端口丢失的解决">Nginx反向代理时端口丢失的解决</span>
+            <span class="post-date" title="2021-05-19 14:20:11">2021/05/19</span>
+        </a>
+        
+        <a  class="全部文章 脚本 Python "
+           href="/2021/04/14/Python%E5%88%B6%E4%BD%9CExce%E6%8A%A5%E8%A1%A8%E5%B9%B6%E6%89%93%E5%8C%85/"
+           data-tag="python,mysql,excel"
+           data-author="" >
+            <span class="post-title" title="Python制作Exce报表并打包">Python制作Exce报表并打包</span>
+            <span class="post-date" title="2021-04-14 15:25:45">2021/04/14</span>
+        </a>
+        
+        <a  class="全部文章 数据库 MongoDB "
+           href="/2021/04/14/Mongodb%E5%B0%8F%E7%89%88%E6%9C%AC%E7%83%AD%E5%8D%87%E7%BA%A7/"
+           data-tag="mongodb"
+           data-author="" >
+            <span class="post-title" title="Mongodb小版本热升级">Mongodb小版本热升级</span>
+            <span class="post-date" title="2021-04-14 10:10:43">2021/04/14</span>
+        </a>
+        
+        <a  class="全部文章 工具 FTP "
+           href="/2021/04/13/%E5%9F%BA%E4%BA%8ESSH%E6%9C%8D%E5%8A%A1%E7%9A%84SFTP%E5%BA%94%E7%94%A8/"
+           data-tag="FTP,SFTP"
+           data-author="" >
+            <span class="post-title" title="基于SSH服务的SFTP应用">基于SSH服务的SFTP应用</span>
+            <span class="post-date" title="2021-04-13 20:48:55">2021/04/13</span>
+        </a>
+        
+        <a  class="全部文章 工具 FTP "
+           href="/2021/04/13/%E6%97%A5%E5%BF%97%E7%B3%BB%E7%BB%9F%E7%9A%84%E9%80%89%E5%9E%8B/"
+           data-tag="FTP,日志系统"
+           data-author="" >
+            <span class="post-title" title="日志系统的选型">日志系统的选型</span>
+            <span class="post-date" title="2021-04-13 19:36:34">2021/04/13</span>
+        </a>
+        
+        <a  class="全部文章 数据库 MongoDB "
+           href="/2021/03/12/Mongodb%E5%A4%8D%E5%88%B6%E9%9B%86%E5%BB%BA%E8%AE%AE%E5%A5%87%E6%95%B0%E4%B8%AA%E8%8A%82%E7%82%B9%E7%9A%84%E5%8E%9F%E5%9B%A0/"
+           data-tag="mongodb"
+           data-author="" >
+            <span class="post-title" title="Mongodb复制集建议奇数个节点的原因">Mongodb复制集建议奇数个节点的原因</span>
+            <span class="post-date" title="2021-03-12 22:58:06">2021/03/12</span>
+        </a>
+        
+        <a  class="全部文章 数据库 MongoDB "
+           href="/2021/03/12/Mongodb%E5%88%86%E7%89%87%E9%9B%86%E7%BE%A4%E9%83%A8%E7%BD%B2/"
+           data-tag="mongodb"
+           data-author="" >
+            <span class="post-title" title="Mongodb分片集群部署">Mongodb分片集群部署</span>
+            <span class="post-date" title="2021-03-12 20:52:20">2021/03/12</span>
+        </a>
+        
+        <a  class="全部文章 数据库 MongoDB "
+           href="/2021/03/03/Mongodb%E5%A4%8D%E5%88%B6%E9%9B%86%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA/"
+           data-tag="mongodb"
+           data-author="" >
+            <span class="post-title" title="Mongodb复制集集群搭建">Mongodb复制集集群搭建</span>
+            <span class="post-date" title="2021-03-03 19:37:16">2021/03/03</span>
+        </a>
+        
+        <a  class="全部文章 虚拟化 Docker "
+           href="/2021/02/02/DockerHub%E5%8A%A0%E9%80%9F/"
+           data-tag="docker,加速器"
+           data-author="" >
+            <span class="post-title" title="DockerHub加速">DockerHub加速</span>
+            <span class="post-date" title="2021-02-02 10:34:29">2021/02/02</span>
+        </a>
+        
+        <a  class="全部文章 虚拟化 Docker "
+           href="/2021/02/02/Docker%E4%BF%AE%E6%94%B9%E9%BB%98%E8%AE%A4%E6%97%B6%E5%8C%BA/"
+           data-tag="docker,timezone"
+           data-author="" >
+            <span class="post-title" title="Docker修改默认时区">Docker修改默认时区</span>
+            <span class="post-date" title="2021-02-02 10:32:07">2021/02/02</span>
+        </a>
+        
+        <a  class="全部文章 工具 ELK "
+           href="/2021/02/02/ELK-Docker%E5%8C%96%E5%AE%89%E8%A3%85/"
+           data-tag="docker,ELK"
+           data-author="" >
+            <span class="post-title" title="ELK-Docker化安装">ELK-Docker化安装</span>
+            <span class="post-date" title="2021-02-02 10:28:20">2021/02/02</span>
+        </a>
+        
+        <a  class="全部文章 工具 ELK "
+           href="/2021/02/02/ELK%E8%87%AA%E5%AE%9A%E4%B9%89%E7%B4%A2%E5%BC%95%E9%85%8D%E7%BD%AE/"
+           data-tag="ELK,index,log"
+           data-author="" >
+            <span class="post-title" title="ELK自定义索引配置">ELK自定义索引配置</span>
+            <span class="post-date" title="2021-02-02 10:26:17">2021/02/02</span>
+        </a>
+        
+        <a  class="全部文章 工具 ELK "
+           href="/2021/02/02/Filebeat%E5%90%88%E5%B9%B6%E5%A4%9A%E8%A1%8C%E6%97%A5%E5%BF%97/"
+           data-tag="ELK,filebeat"
+           data-author="" >
+            <span class="post-title" title="Filebeat合并多行日志">Filebeat合并多行日志</span>
+            <span class="post-date" title="2021-02-02 10:23:55">2021/02/02</span>
+        </a>
+        
+        <a  class="全部文章 工具 Git "
+           href="/2021/02/02/Git%E4%B8%8A%E4%BC%A0%E6%9C%AC%E5%9C%B0%E9%A1%B9%E7%9B%AE/"
+           data-tag="git"
+           data-author="" >
+            <span class="post-title" title="Git上传本地项目">Git上传本地项目</span>
+            <span class="post-date" title="2021-02-02 10:21:35">2021/02/02</span>
+        </a>
+        
+        <a  class="全部文章 工具 免费证书 "
+           href="/2021/02/02/Lets-encrypt%E5%85%8D%E8%B4%B9SSL%E8%AF%81%E4%B9%A6%E7%94%B3%E8%AF%B7/"
+           data-tag="lets-encrypt,ssl证书"
+           data-author="" >
+            <span class="post-title" title="Lets-encrypt免费SSL证书申请">Lets-encrypt免费SSL证书申请</span>
+            <span class="post-date" title="2021-02-02 10:18:38">2021/02/02</span>
+        </a>
+        
+        <a  class="全部文章 中间件 Nginx "
+           href="/2021/02/02/Nginx%E5%88%A9%E7%94%A8%E6%BA%90%E5%8D%87%E7%BA%A7/"
+           data-tag="nginx"
+           data-author="" >
+            <span class="post-title" title="Nginx利用源升级">Nginx利用源升级</span>
+            <span class="post-date" title="2021-02-02 10:16:55">2021/02/02</span>
+        </a>
+        
+        <a  class="全部文章 系统 Ubuntu "
+           href="/2021/02/02/Ubuntu-14-04LTS%E5%8D%87%E7%BA%A7%E5%88%B0Ubuntu-18-04LTS/"
+           data-tag="ubuntu,系统升级"
+           data-author="" >
+            <span class="post-title" title="Ubuntu-14.04LTS升级到Ubuntu-18.04LTS">Ubuntu-14.04LTS升级到Ubuntu-18.04LTS</span>
+            <span class="post-date" title="2021-02-02 10:14:53">2021/02/02</span>
+        </a>
+        
+        <a  class="全部文章 系统 Ubuntu "
+           href="/2021/02/02/Ubuntu%E6%96%B0%E5%A2%9ESWAP%E5%92%8C%E8%B0%83%E6%95%B4SWAP%E5%A4%A7%E5%B0%8F/"
+           data-tag="ubuntu,swap"
+           data-author="" >
+            <span class="post-title" title="Ubuntu新增SWAP和调整SWAP大小">Ubuntu新增SWAP和调整SWAP大小</span>
+            <span class="post-date" title="2021-02-02 10:13:23">2021/02/02</span>
+        </a>
+        
+        <a  class="全部文章 虚拟化 VMware "
+           href="/2021/02/02/VSCA%E5%8F%91%E9%82%AE%E4%BB%B6%E9%85%8D%E7%BD%AE/"
+           data-tag="vsca"
+           data-author="" >
+            <span class="post-title" title="VSCA发邮件配置">VSCA发邮件配置</span>
+            <span class="post-date" title="2021-02-02 10:08:20">2021/02/02</span>
+        </a>
+        
+        <a  class="全部文章 系统 Windows "
+           href="/2021/02/02/Win10%E7%9A%84%E4%BE%BF%E6%8D%B7%E4%BD%BF%E7%94%A8/"
+           data-tag="win10"
+           data-author="" >
+            <span class="post-title" title="Win10的便捷使用">Win10的便捷使用</span>
+            <span class="post-date" title="2021-02-02 10:06:16">2021/02/02</span>
+        </a>
+        
+        <a  class="全部文章 工具 破解 "
+           href="/2021/02/02/Wifi%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3/"
+           data-tag="aircrack-ng,arimon-ng"
+           data-author="" >
+            <span class="post-title" title="Wifi密码破解">Wifi密码破解</span>
+            <span class="post-date" title="2021-02-02 10:02:18">2021/02/02</span>
+        </a>
+        
+        <a  class="全部文章 虚拟化 Docker "
+           href="/2021/02/02/Docker%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/"
+           data-tag="docker"
+           data-author="" >
+            <span class="post-title" title="Docker基本操作">Docker基本操作</span>
+            <span class="post-date" title="2021-02-02 09:53:03">2021/02/02</span>
+        </a>
+        
+        <a  class="全部文章 虚拟化 Docker "
+           href="/2021/02/02/Docker%E6%8C%82%E8%BD%BD%E6%96%87%E4%BB%B6%E7%9A%84%E6%9B%B4%E6%96%B0%E9%97%AE%E9%A2%98/"
+           data-tag="docker"
+           data-author="" >
+            <span class="post-title" title="Docker挂载文件的更新问题">Docker挂载文件的更新问题</span>
+            <span class="post-date" title="2021-02-02 09:50:42">2021/02/02</span>
+        </a>
+        
+        <a  class="全部文章 虚拟化 VMware "
+           href="/2021/02/02/vSphere%E6%95%B0%E6%8D%AE%E4%B8%AD%E5%BF%83%E6%9E%B6%E6%9E%84%E9%80%89%E5%9E%8B/"
+           data-tag="vmware,vsphere"
+           data-author="" >
+            <span class="post-title" title="vSphere数据中心架构选型">vSphere数据中心架构选型</span>
+            <span class="post-date" title="2021-02-02 09:47:12">2021/02/02</span>
+        </a>
+        
+        <a  class="全部文章 虚拟化 Docker "
+           href="/2021/02/02/%E5%88%B6%E4%BD%9CDockerImage%E5%AD%98%E5%9C%A8%E7%9A%84%E9%97%AE%E9%A2%98/"
+           data-tag="docker"
+           data-author="" >
+            <span class="post-title" title="制作DockerImage存在的问题">制作DockerImage存在的问题</span>
+            <span class="post-date" title="2021-02-02 09:44:03">2021/02/02</span>
+        </a>
+        
+        <a  class="全部文章 系统 Linux "
+           href="/2021/02/01/Centos%E6%9F%90%E4%B8%AA%E7%9B%91%E5%90%AC%E7%9A%84%E7%AB%AF%E5%8F%A3%E7%9C%8B%E4%B8%8D%E5%88%B0PID/"
+           data-tag="centos"
+           data-author="" >
+            <span class="post-title" title="Centos某个监听的端口看不到PID">Centos某个监听的端口看不到PID</span>
+            <span class="post-date" title="2021-02-01 15:35:10">2021/02/01</span>
+        </a>
+        
+        <a  class="全部文章 数据库 MongoDB "
+           href="/2021/02/01/Mongodb%E5%8D%95%E5%AE%9E%E4%BE%8B%E9%83%A8%E7%BD%B2%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%96%B9%E5%BC%8F/"
+           data-tag="mongodb,数据库"
+           data-author="" >
+            <span class="post-title" title="Mongodb单实例部署的两种方式">Mongodb单实例部署的两种方式</span>
+            <span class="post-date" title="2021-02-01 15:22:54">2021/02/01</span>
+        </a>
+        
+        <a  class="全部文章 中间件 Nacos "
+           href="/2021/02/01/Nacos%E5%8D%95%E6%9C%BA%E9%83%A8%E7%BD%B2/"
+           data-tag="nacos"
+           data-author="" >
+            <span class="post-title" title="Nacos单机部署">Nacos单机部署</span>
+            <span class="post-date" title="2021-02-01 14:54:52">2021/02/01</span>
+        </a>
+        
+        <a  class="全部文章 中间件 Nacos "
+           href="/2021/02/01/Nacos%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA/"
+           data-tag="nacos"
+           data-author="" >
+            <span class="post-title" title="Nacos集群搭建">Nacos集群搭建</span>
+            <span class="post-date" title="2021-02-01 14:53:54">2021/02/01</span>
+        </a>
+        
+        <a  class="全部文章 脚本 Python "
+           href="/2021/02/01/Python%E8%AF%BB%E5%8F%96Oracle%E6%95%B0%E6%8D%AE%E5%BA%93/"
+           data-tag="python,oracle"
+           data-author="" >
+            <span class="post-title" title="Python读取Oracle数据库">Python读取Oracle数据库</span>
+            <span class="post-date" title="2021-02-01 14:48:16">2021/02/01</span>
+        </a>
+        
+        <a  class="全部文章 中间件 RocketMQ "
+           href="/2021/02/01/RocketMQ%E9%83%A8%E7%BD%B2-%E5%8D%95%E6%9C%BA%E6%A8%A1%E5%BC%8F/"
+           data-tag="RocketMQ"
+           data-author="" >
+            <span class="post-title" title="RocketMQ部署-单机模式">RocketMQ部署-单机模式</span>
+            <span class="post-date" title="2021-02-01 14:34:32">2021/02/01</span>
+        </a>
+        
+        <a  class="全部文章 中间件 Redis "
+           href="/2021/02/01/Redis%E4%BC%AA%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA/"
+           data-tag="redis"
+           data-author="" >
+            <span class="post-title" title="Redis伪集群搭建">Redis伪集群搭建</span>
+            <span class="post-date" title="2021-02-01 10:25:25">2021/02/01</span>
+        </a>
+        
+        <a  class="全部文章 中间件 RocketMQ "
+           href="/2021/01/31/%E5%AE%89%E8%A3%85RocketMQ-Console/"
+           data-tag="RocketMQ"
+           data-author="" >
+            <span class="post-title" title="安装RocketMQ-Console">安装RocketMQ-Console</span>
+            <span class="post-date" title="2021-01-31 20:11:23">2021/01/31</span>
+        </a>
+        
+        <a  class="全部文章 中间件 ZK "
+           href="/2021/01/31/Zookeeper%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-Cluster%E6%A8%A1%E5%BC%8F/"
+           data-tag="zookeeper"
+           data-author="" >
+            <span class="post-title" title="Zookeeper集群搭建-Cluster模式">Zookeeper集群搭建-Cluster模式</span>
+            <span class="post-date" title="2021-01-31 19:19:16">2021/01/31</span>
+        </a>
+        
+        <a  class="全部文章 "
+           href="/2021/01/29/hello-world/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="Hello World">Hello World</span>
+            <span class="post-date" title="2021-01-29 10:34:12">2021/01/29</span>
+        </a>
+        
+        <div id="no-item-tips">
+
+        </div>
+    </nav>
+    <div id="outline-list">
+    </div>
+</div>
+    </div>
+    <div class="hide-list">
+        <div class="semicircle" data-title="切换全屏 快捷键 s">
+            <div class="brackets first"><</div>
+            <div class="brackets">&gt;</div>
+        </div>
+    </div>
+</aside>
+<div id="post">
+    <div class="pjax">
+        <article id="post-K8s-1-28版本二进制部署" class="article article-type-post" itemscope itemprop="blogPost">
+    
+        <h1 class="article-title">K8s 1.28版本二进制部署</h1>
+    
+    <div class="article-meta">
+        
+        
+        
+        <span class="book">
+            <i class="iconfont icon-category"></i>
+            
+            
+            <a  data-rel="学习笔记">学习笔记</a> > 
+            
+            <a  data-rel="学习笔记&lt;---&gt;Kubernetes">Kubernetes</a>
+            
+        </span>
+        
+        
+        <span class="tag">
+            <i class="iconfont icon-tag"></i>
+            
+            <a class="color4">k8s</a>
+            
+        </span>
+        
+    </div>
+    <div class="article-meta">
+        
+            发布时间 : <time class="date" title='最后更新: 2024-03-13 18:50:55'>2024-03-13 18:49</time>
+        
+    </div>
+    <div class="article-meta">
+        
+        <span>字数:18.8k</span>
+        
+        
+        <span id="busuanzi_container_page_pv">
+            阅读 :<span id="busuanzi_value_page_pv">
+                <span class="count-comment">
+                    <span class="spinner">
+                      <div class="cube1"></div>
+                      <div class="cube2"></div>
+                    </span>
+                </span>
+            </span>
+        </span>
+        
+        
+        <span class="top-comment" title="跳转至评论区">
+            <a href="#comments">
+                评论:<span class="count-comment">
+                    <span class="spinner">
+                      <div class="cube1"></div>
+                      <div class="cube2"></div>
+                    </span>
+                </span>
+            </a>
+        </span>
+        
+    </div>
+    
+    <div class="toc-ref">
+    
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E9%AB%98%E5%8F%AF%E7%94%A8%E6%9E%B6%E6%9E%84"><span class="toc-text">一、高可用架构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E6%9E%B6%E6%9E%84%E5%9B%BE"><span class="toc-text">1、架构图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E6%9E%B6%E6%9E%84%E8%AF%B4%E6%98%8E"><span class="toc-text">2、架构说明</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81%E7%BB%84%E4%BB%B6%E4%BB%8B%E7%BB%8D"><span class="toc-text">3、组件介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-1-Master%E7%BB%84%E4%BB%B6"><span class="toc-text">3.1 Master组件</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#3-1-1-kube-apiserver"><span class="toc-text">3.1.1 kube-apiserver</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3-1-2-etcd"><span class="toc-text">3.1.2 etcd</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3-1-3-kube-scheduler"><span class="toc-text">3.1.3 kube-scheduler</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3-1-4-kube-controller-manager"><span class="toc-text">3.1.4 kube-controller-manager</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3-1-5-kubelet"><span class="toc-text">3.1.5 kubelet</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3-1-6-kube-proxy"><span class="toc-text">3.1.6 kube-proxy</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-Node%E7%BB%84%E4%BB%B6"><span class="toc-text">3.2 Node组件</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#3-2-1-kubelet"><span class="toc-text">3.2.1 kubelet</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3-2-2-kube-proxy"><span class="toc-text">3.2.2 kube-proxy</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4%E3%80%81k8s%E9%AB%98%E5%8F%AF%E7%94%A8%E6%9E%B6%E6%9E%84%E5%88%86%E6%9E%90"><span class="toc-text">4、k8s高可用架构分析</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E4%BA%8C%E8%BF%9B%E5%88%B6%E9%83%A8%E7%BD%B2"><span class="toc-text">二、二进制部署</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E7%8E%AF%E5%A2%83"><span class="toc-text">2.1 环境</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-1-%E9%AB%98%E5%8F%AF%E7%94%A8kubernetes%E9%9B%86%E7%BE%A4%E8%A7%84%E5%88%92"><span class="toc-text">2.1.1 高可用kubernetes集群规划</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-2-%E7%BD%91%E6%AE%B5%E8%A7%84%E5%88%92"><span class="toc-text">2.1.2 网段规划</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-3-%E4%BA%91%E4%B8%BB%E6%9C%BA%E8%A7%84%E5%88%92"><span class="toc-text">2.1.3 云主机规划</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-4-%E9%85%8D%E7%BD%AE%E4%BF%A1%E6%81%AF"><span class="toc-text">2.1.4 配置信息</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-K8s%E5%9F%BA%E7%A1%80%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE"><span class="toc-text">2.2 K8s基础环境配置</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E6%89%80%E6%9C%89%E8%8A%82%E7%82%B9%E5%AE%89%E8%A3%85%E5%B8%B8%E7%94%A8%E8%BD%AF%E4%BB%B6%E5%8C%85"><span class="toc-text">1. 所有节点安装常用软件包</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E8%AE%BE%E7%BD%AE%E4%B8%BB%E6%9C%BA%E5%90%8D"><span class="toc-text">2. 设置主机名</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E5%85%B3%E9%97%AD%E9%98%B2%E7%81%AB%E5%A2%99%E5%92%8CSelinux"><span class="toc-text">3. 关闭防火墙和Selinux</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-%E5%85%B3%E9%97%AD%E4%BA%A4%E6%8D%A2%E5%88%86%E5%8C%BA"><span class="toc-text">4. 关闭交换分区</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-%E6%97%B6%E9%97%B4%E5%90%8C%E6%AD%A5"><span class="toc-text">5. 时间同步</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-%E9%85%8D%E7%BD%AElimit"><span class="toc-text">6. 配置limit</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#7-%E5%86%85%E6%A0%B8%E8%B0%83%E4%BC%98"><span class="toc-text">7. 内核调优</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#8-%E9%85%8D%E7%BD%AE%E5%85%8D%E5%AF%86%E7%99%BB%E5%BD%95"><span class="toc-text">8. 配置免密登录</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#9-%E5%8D%87%E7%BA%A7Linux%E5%86%85%E6%A0%B8%E8%87%B34-18%E4%BB%A5%E4%B8%8A"><span class="toc-text">9. 升级Linux内核至4.18以上</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#10-%E5%AE%89%E8%A3%85ipvasadm"><span class="toc-text">10. 安装ipvasadm</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#11-%E4%BF%AE%E6%94%B9%E7%BD%91%E5%8D%A1%E5%90%8D%E7%A7%B0%E4%B8%BAeth0"><span class="toc-text">11. 修改网卡名称为eth0</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-%E5%9F%BA%E6%9C%AC%E7%BB%84%E4%BB%B6%E5%AE%89%E8%A3%85"><span class="toc-text">2.3 基本组件安装</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E5%AE%89%E8%A3%85containerd%EF%BC%88%E6%89%80%E6%9C%89%E8%8A%82%E7%82%B9%EF%BC%89"><span class="toc-text">1. 安装containerd（所有节点）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E5%AE%89%E8%A3%85etcd%E7%BB%84%E4%BB%B6"><span class="toc-text">2. 安装etcd组件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E5%AE%89%E8%A3%85k8s%E7%BB%84%E4%BB%B6"><span class="toc-text">3. 安装k8s组件</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4-%E7%94%9F%E6%88%90K8s%E5%92%8Cetcd%E8%AF%81%E4%B9%A6"><span class="toc-text">2.4 生成K8s和etcd证书</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E5%AE%89%E8%A3%85cfssl%E8%AF%81%E4%B9%A6%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7%EF%BC%88master01%EF%BC%89"><span class="toc-text">1. 安装cfssl证书管理工具（master01）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E7%94%9F%E6%88%90etcd%E8%AF%81%E4%B9%A6%EF%BC%88master01%EF%BC%89"><span class="toc-text">2. 生成etcd证书（master01）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E7%94%9F%E6%88%90k8s%E7%BB%84%E4%BB%B6%E8%AF%81%E4%B9%A6%EF%BC%88master01%EF%BC%89"><span class="toc-text">3. 生成k8s组件证书（master01）</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E9%83%A8%E7%BD%B2K8s%E9%AB%98%E5%8F%AF%E7%94%A8%E9%9B%86%E7%BE%A4"><span class="toc-text">3. 部署K8s高可用集群</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E9%AB%98%E5%8F%AF%E7%94%A8%E7%BB%84%E4%BB%B6%E9%83%A8%E7%BD%B2"><span class="toc-text">1. 高可用组件部署</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E5%90%AF%E5%8A%A8etcd%E9%9B%86%E7%BE%A4"><span class="toc-text">2. 启动etcd集群</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E9%83%A8%E7%BD%B2ApiServer%E7%BB%84%E4%BB%B6"><span class="toc-text">3. 部署ApiServer组件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-%E9%83%A8%E7%BD%B2ControlerManager%E7%BB%84%E4%BB%B6"><span class="toc-text">4. 部署ControlerManager组件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-%E9%83%A8%E7%BD%B2Scheduler%E7%BB%84%E4%BB%B6"><span class="toc-text">5. 部署Scheduler组件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-%E5%88%9B%E5%BB%BABootstrapping%E8%87%AA%E5%8A%A8%E9%A2%81%E5%8F%91kubelet%E8%AF%81%E4%B9%A6%E9%85%8D%E7%BD%AE"><span class="toc-text">6. 创建Bootstrapping自动颁发kubelet证书配置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#9-%E9%83%A8%E7%BD%B2worker%E8%8A%82%E7%82%B9"><span class="toc-text">9. 部署worker节点</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E9%83%A8%E7%BD%B2CNI%E7%BD%91%E7%BB%9C%E6%8F%92%E4%BB%B6"><span class="toc-text">4. 部署CNI网络插件</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E5%AE%89%E8%A3%85Calico"><span class="toc-text">1. 安装Calico</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E5%AE%89%E8%A3%85Prometheus%E7%9B%91%E6%8E%A7"><span class="toc-text">2. 安装Prometheus监控</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-%E5%AE%89%E8%A3%85CoreDNS"><span class="toc-text">5. 安装CoreDNS</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-%E5%AE%89%E8%A3%85Metrics-Server"><span class="toc-text">6. 安装Metrics Server</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-%E5%AE%89%E8%A3%85Dashboard"><span class="toc-text">7. 安装Dashboard</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E9%9B%86%E7%BE%A4%E9%AA%8C%E8%AF%81"><span class="toc-text">三、集群验证</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E9%83%A8%E7%BD%B2pod%E8%B5%84%E6%BA%90"><span class="toc-text">1. 部署pod资源</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E7%94%A8pod%E8%A7%A3%E6%9E%90%E9%BB%98%E8%AE%A4%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4%E4%B8%AD%E7%9A%84kubernetes"><span class="toc-text">2. 用pod解析默认命名空间中的kubernetes</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E6%B5%8B%E8%AF%95%E8%B7%A8%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4%E6%98%AF%E5%90%A6%E5%8F%AF%E4%BB%A5%E8%A7%A3%E6%9E%90"><span class="toc-text">3. 测试跨命名空间是否可以解析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E6%AF%8F%E4%B8%AA%E8%8A%82%E7%82%B9%E9%83%BD%E5%BF%85%E9%A1%BB%E8%A6%81%E8%83%BD%E8%AE%BF%E9%97%AEKubernetes%E7%9A%84kubernetes-svc-443%E5%92%8Ckube-dns%E7%9A%84service-53"><span class="toc-text">4. 每个节点都必须要能访问Kubernetes的kubernetes svc 443和kube-dns的service 53</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-Pod%E5%92%8CPod%E4%B9%8B%E5%89%8D%E8%A6%81%E8%83%BD%E9%80%9A"><span class="toc-text">5. Pod和Pod之前要能通</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-%E5%88%9B%E5%BB%BA%E4%B8%89%E4%B8%AA%E5%89%AF%E6%9C%AC%EF%BC%8C%E5%8F%AF%E4%BB%A5%E7%9C%8B%E5%88%B03%E4%B8%AA%E5%89%AF%E6%9C%AC%E5%88%86%E5%B8%83%E5%9C%A8%E4%B8%8D%E5%90%8C%E7%9A%84%E8%8A%82%E7%82%B9%E4%B8%8A"><span class="toc-text">6. 创建三个副本，可以看到3个副本分布在不同的节点上</span></a></li></ol></li></ol>
+    
+<style>
+    .left-col .switch-btn,
+    .left-col .switch-area {
+        display: none;
+    }
+    .toc-level-3 i,
+    .toc-level-3 ol {
+        display: none !important;
+    }
+</style>
+</div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="一、高可用架构"><a href="#一、高可用架构" class="headerlink" title="一、高可用架构"></a>一、高可用架构</h2><h3 id="1、架构图"><a href="#1、架构图" class="headerlink" title="1、架构图"></a>1、架构图</h3><p><img src="https://s2.loli.net/2024/03/12/7qYdlwvnbEOCI2p.jpg" alt="K8s高可用架构png"></p>
+<h3 id="2、架构说明"><a href="#2、架构说明" class="headerlink" title="2、架构说明"></a>2、架构说明</h3><p>k8s分为Master节点和Node节点，Master节点是控制节点，Node节点是工作节点。其中，Master节点包含kube-apiserver、kube-scheduler、kube-controller-manager、etcd、kubelet、kube-proxy；Node节点包含kubelet、kube-proxy。</p>
+<p>关于Master节点和Node节点介绍如下:</p>
+<ol>
+<li><p>Master节点-控制节点<br>指容器编排层，它暴露 API 和接口来定义、 部署容器和管理容器的生命周期。管理集群中的工作节点和 Pod。在生产环境中，控制平面通常跨多台计算机运行， 一个集群通常运行多个节点，提供容错性和高可用性。</p>
+</li>
+<li><p>Node节点-工作节点<br>托管 Pod，而 Pod 就是作为应用负载的组件,是可以在 Kubernetes 中创建和管理的、最小的可部署的计算单元。每个集群至少有一个工作节点。</p>
+</li>
+</ol>
+<h3 id="3、组件介绍"><a href="#3、组件介绍" class="headerlink" title="3、组件介绍"></a>3、组件介绍</h3><h4 id="3-1-Master组件"><a href="#3-1-Master组件" class="headerlink" title="3.1 Master组件"></a>3.1 Master组件</h4><h5 id="3-1-1-kube-apiserver"><a href="#3-1-1-kube-apiserver" class="headerlink" title="3.1.1 kube-apiserver"></a>3.1.1 kube-apiserver</h5><p>API 服务器是 Kubernetes 控制平面的组件， 该组件负责公开了 Kubernetes API，负责处理接受请求的工作。 API 服务器是 Kubernetes 控制平面的前端。Kubernetes API 服务器的主<br>要实现是 kube-apiserver。 <code>kube-apiserver</code> 设计上考虑了水平扩缩，也就是说，它可通过部署多个实例来进行扩缩。 你可以运行 <code>kube-apiserver</code> 的多个实例，并在这些实例之间平衡流量。</p>
+<h5 id="3-1-2-etcd"><a href="#3-1-2-etcd" class="headerlink" title="3.1.2 etcd"></a>3.1.2 etcd</h5><p>一致且高可用的键值存储，用作 Kubernetes 所有集群数据的后台数据库。一般可以安装在Master节点上，如果资源充足，也可安装到单独的服务器上。</p>
+<h5 id="3-1-3-kube-scheduler"><a href="#3-1-3-kube-scheduler" class="headerlink" title="3.1.3 kube-scheduler"></a>3.1.3 kube-scheduler</h5><p><code>kube-scheduler</code> 是控制平面的组件， 负责监视新创建的、未指定运行节点node的 Pods， 并选择节点来让 Pod 在上面运行。</p>
+<p>调度决策考虑的因素包括单个 Pod 及 Pods 集合的资源需求、软硬件及策略约束、 亲和性及反亲和性规范、数据位置、工作负载间的干扰及最后时限。</p>
+<h5 id="3-1-4-kube-controller-manager"><a href="#3-1-4-kube-controller-manager" class="headerlink" title="3.1.4 kube-controller-manager"></a>3.1.4 kube-controller-manager</h5><p>kube-controller-manager 是控制平面的组件， 负责运行控制器进程。</p>
+<p>从逻辑上讲， 每个控制器都是一个单独的进程， 但是为了降低复杂性，它们都被编译到同一个可执行文件，并在同一个进程中运行。</p>
+<p>这些控制器包括：</p>
+<ul>
+<li>节点控制器（Node Controller）：负责在节点出现故障时进行通知和响应</li>
+<li>任务控制器（Job Controller）：监测代表一次性任务的 Job 对象，然后创建 Pods 来运行这些任务直至完成</li>
+<li>端点分片控制器（EndpointSlice controller）：填充端点分片（EndpointSlice）对象（以提供 Service 和 Pod 之间的链接）。</li>
+<li>服务账号控制器（ServiceAccount controller）：为新的命名空间创建默认的服务账号（ServiceAccount）</li>
+</ul>
+<h5 id="3-1-5-kubelet"><a href="#3-1-5-kubelet" class="headerlink" title="3.1.5 kubelet"></a>3.1.5 kubelet</h5><p><code>kubelet</code> 会在集群中每个节点(node)上运行。 它保证容器containers都运行在 Pod 中。这里之所以放在Master节点组件里面，客观上说Master也属于node。</p>
+<p>kubelet 接收一组通过各类机制提供给它的 PodSpecs， 确保这些 PodSpecs 中描述的容器处于运行状态且健康。 kubelet 不会管理不是由 Kubernetes 创建的容器。</p>
+<h5 id="3-1-6-kube-proxy"><a href="#3-1-6-kube-proxy" class="headerlink" title="3.1.6 kube-proxy"></a>3.1.6 kube-proxy</h5><p>kube-proxy是集群中每个节点(node)上所运行的网络代理， 实现 Kubernetes 服务(Service)概念的一部分。</p>
+<p>kube-proxy 维护节点上的一些网络规则， 这些网络规则会允许从集群内部或外部的网络会话与 Pod 进行网络通信。</p>
+<p>如果操作系统提供了可用的数据包过滤层，则 kube-proxy 会通过它来实现网络规则。 否则，kube-proxy 仅做流量转发。</p>
+<h4 id="3-2-Node组件"><a href="#3-2-Node组件" class="headerlink" title="3.2 Node组件"></a>3.2 Node组件</h4><h5 id="3-2-1-kubelet"><a href="#3-2-1-kubelet" class="headerlink" title="3.2.1 kubelet"></a>3.2.1 kubelet</h5><p><code>kubelet</code> 会在集群中每个节点(node)上运行。 它保证容器containers都运行在 Pod 中。这里之所以放在Master节点组件里面，客观上说Master也属于node。</p>
+<p>kubelet 接收一组通过各类机制提供给它的 PodSpecs， 确保这些 PodSpecs 中描述的容器处于运行状态且健康。 kubelet 不会管理不是由 Kubernetes 创建的容器。</p>
+<h5 id="3-2-2-kube-proxy"><a href="#3-2-2-kube-proxy" class="headerlink" title="3.2.2 kube-proxy"></a>3.2.2 kube-proxy</h5><p>kube-proxy是集群中每个节点(node)上所运行的网络代理， 实现 Kubernetes 服务(Service)概念的一部分。</p>
+<p>kube-proxy 维护节点上的一些网络规则， 这些网络规则会允许从集群内部或外部的网络会话与 Pod 进行网络通信。</p>
+<p>如果操作系统提供了可用的数据包过滤层，则 kube-proxy 会通过它来实现网络规则。 否则，kube-proxy 仅做流量转发。</p>
+<h3 id="4、k8s高可用架构分析"><a href="#4、k8s高可用架构分析" class="headerlink" title="4、k8s高可用架构分析"></a>4、k8s高可用架构分析</h3><p>这里负载均衡采用KeepAlived和HAProxy实现高可用，当然了，你也可以使用公有云的负载均衡和F5实现高可用。当采用KeepAlived和HAProxy实现高可用时，会虚拟出一个VIP，用于组件之间的交互。</p>
+<p>当kube-scheduler、kube-controller-manager、kubelet、kube-proxy组件想访问kube-apiserver时，必须要经过负载均衡再进行访问kube-apiserver，从而实现了高可用。</p>
+<p>针对etcd组件，只有kube-apiserver组件才能与其进行交互，kube-scheduler、kube-controller-manager、kubelet、kube-proxy组件不能直接与etcd组件进行交互。</p>
+<h2 id="二、二进制部署"><a href="#二、二进制部署" class="headerlink" title="二、二进制部署"></a>二、二进制部署</h2><h3 id="2-1-环境"><a href="#2-1-环境" class="headerlink" title="2.1 环境"></a>2.1 环境</h3><h4 id="2-1-1-高可用kubernetes集群规划"><a href="#2-1-1-高可用kubernetes集群规划" class="headerlink" title="2.1.1 高可用kubernetes集群规划"></a>2.1.1 高可用kubernetes集群规划</h4><table>
+<thead>
+<tr>
+<th>主机名</th>
+<th>IP地址</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>k8s-master01</td>
+<td>10.200.16.10</td>
+<td>master节点</td>
+</tr>
+<tr>
+<td>k8s-master02</td>
+<td>10.200.16.11</td>
+<td>master节点</td>
+</tr>
+<tr>
+<td>k8s-master03</td>
+<td>10.200.16.12</td>
+<td>master节点</td>
+</tr>
+<tr>
+<td>k8s-worker01</td>
+<td>10.200.16.13</td>
+<td>worker节点</td>
+</tr>
+<tr>
+<td>k8s-worker02</td>
+<td>10.200.16.14</td>
+<td>worker节点</td>
+</tr>
+<tr>
+<td>k8s-worker03</td>
+<td>10.200.16.2</td>
+<td>worker节点</td>
+</tr>
+<tr>
+<td>apiserver-lb</td>
+<td>10.200.0.34</td>
+<td>负载均衡IP</td>
+</tr>
+</tbody></table>
+<h4 id="2-1-2-网段规划"><a href="#2-1-2-网段规划" class="headerlink" title="2.1.2 网段规划"></a>2.1.2 网段规划</h4><table>
+<thead>
+<tr>
+<th>网段名称</th>
+<th>网段划分</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>宿主机网段</td>
+<td>10.200.0.0/16</td>
+</tr>
+<tr>
+<td>Pod网段</td>
+<td>172.16.0.0/16</td>
+</tr>
+<tr>
+<td>Service网段</td>
+<td>10.100.0.0/16</td>
+</tr>
+</tbody></table>
+<p><strong>注意事项：</strong></p>
+<ol>
+<li><p><strong>一般情况下，宿主机网段、K8s Service网段、Pod网段不能重复。</strong></p>
+</li>
+<li><p><strong>K8s Service网段比较特殊，必定不能和Pod网段或者宿主机网段重复。</strong></p>
+</li>
+<li><p>特殊情况下，宿主机网段和Pod网段可以重复（阿里云Terway组件）。</p>
+</li>
+</ol>
+<h4 id="2-1-3-云主机规划"><a href="#2-1-3-云主机规划" class="headerlink" title="2.1.3 云主机规划"></a>2.1.3 云主机规划</h4><p>采用三Master三Worker+云负载均衡，4核8G磁盘100G</p>
+<h4 id="2-1-4-配置信息"><a href="#2-1-4-配置信息" class="headerlink" title="2.1.4 配置信息"></a>2.1.4 配置信息</h4><table>
+<thead>
+<tr>
+<th>配置信息</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>系统版本</td>
+<td>Centos7.9</td>
+</tr>
+<tr>
+<td>containerd版本</td>
+<td>1.6.28</td>
+</tr>
+<tr>
+<td>Kubernetes版本</td>
+<td>v1.28.7</td>
+</tr>
+<tr>
+<td>kubectl版本</td>
+<td>v1.28.7</td>
+</tr>
+</tbody></table>
+<h3 id="2-2-K8s基础环境配置"><a href="#2-2-K8s基础环境配置" class="headerlink" title="2.2 K8s基础环境配置"></a>2.2 K8s基础环境配置</h3><h4 id="1-所有节点安装常用软件包"><a href="#1-所有节点安装常用软件包" class="headerlink" title="1. 所有节点安装常用软件包"></a>1. 所有节点安装常用软件包</h4><ol>
+<li>所有节点CentOS 7安装yum源如下</li>
+</ol>
+<pre><code class="bash">curl -o /etc/yum.repos.d/CentOS-Base.repo https://mirrors.aliyun.com/repo/Centos-7.repo
+curl -s -o /etc/yum.repos.d/epel.repo http://mirrors.aliyun.com/repo/epel-7.repo
+sed -i -e &#39;/mirrors.cloud.aliyuncs.com/d&#39; -e &#39;/mirrors.aliyuncs.com/d&#39; /etc/yum.repos.d/CentOS-Base.repo
+curl -o /etc/yum.repos.d/docker-ce.repo https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
+</code></pre>
+<ol start="2">
+<li>所有节点安装常用的软件包 <code>yum -y install bind-utils expect rsync wget jq psmisc vim net-tools telnet yum-utils device-mapper-persistent-data lvm2 git ntpdate bash-completion</code></li>
+</ol>
+<h4 id="2-设置主机名"><a href="#2-设置主机名" class="headerlink" title="2. 设置主机名"></a>2. 设置主机名</h4><pre><code class="bash">hostnamectl set-hostname k8s-master01
+hostnamectl set-hostname k8s-master02
+hostnamectl set-hostname k8s-master03
+hostnamectl set-hostname k8s-worker01
+hostnamectl set-hostname k8s-worker02
+hostnamectl set-hostname k8s-worker03
+</code></pre>
+<h4 id="3-关闭防火墙和Selinux"><a href="#3-关闭防火墙和Selinux" class="headerlink" title="3. 关闭防火墙和Selinux"></a>3. 关闭防火墙和Selinux</h4><pre><code class="bash">systemctl disable --now firewalld
+# systemctl disable --now NetworkManager (如果有就关闭)
+setenforce 0
+sed -i &#39;s#SELINUX=enforcing#SELINUX=disabled#g&#39; /etc/selinux/config
+</code></pre>
+<h4 id="4-关闭交换分区"><a href="#4-关闭交换分区" class="headerlink" title="4. 关闭交换分区"></a>4. 关闭交换分区</h4><pre><code class="bash">sed -ri &#39;s/.*swap.*/#&amp;/&#39; /etc/fstab
+swapoff -a &amp;&amp; sysctl -w vm.swappiness=
+free -h
+</code></pre>
+<h4 id="5-时间同步"><a href="#5-时间同步" class="headerlink" title="5. 时间同步"></a>5. 时间同步</h4><ul>
+<li>手动同步时区和时间</li>
+</ul>
+<pre><code class="bash">ln -svf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+ntpdate ntp.aliyun.com
+</code></pre>
+<ul>
+<li>定期任务同步</li>
+</ul>
+<pre><code class="bash">echo &quot;*/5 * * * * /usr/sbin/ntpdate ntp.aliyun.com&quot; &gt; /var/spool/cron/root
+crontab -l
+</code></pre>
+<h4 id="6-配置limit"><a href="#6-配置limit" class="headerlink" title="6. 配置limit"></a>6. 配置limit</h4><pre><code class="bash">cat &gt;&gt; /etc/security/limits.conf &lt;&lt;&#39;EOF&#39;
+* soft nofile 655360
+* hard nofile 131072
+* soft nproc 655350
+* hard nproc 655350
+* soft memlock unlimited
+* hard memlock unlimited
+EOF
+</code></pre>
+<h4 id="7-内核调优"><a href="#7-内核调优" class="headerlink" title="7. 内核调优"></a>7. 内核调优</h4><pre><code class="bash">cat &lt;&lt;EOF &gt; /etc/sysctl.d/k8s.conf
+# 以下3个参数是containerd所依赖的内核参数
+net.ipv4.ip_forward = 1
+net.bridge.bridge-nf-call-iptables = 1
+fs.may_detach_mounts = 1
+vm.overcommit_memory=1
+vm.panic_onoom=0
+fs.inotify.max_user_watches=89100
+fs.file-max=52706963
+fs.nr_open=52706963
+net.netfilter.nf_conntrack_max=2310720
+
+net.ipv4.tcp_keepalive_time = 600
+net.ipv4.tcp_keepalive_probes = 3
+net.ipv4.tcp_keepalive_intvl =15
+net.ipv4.tcp_max_tw_buckets = 36000
+net.ipv4.tcp_tw_reuse = 1
+net.ipv4.tcp_max_orphans = 327680
+net.ipv4.tcp_orphan_retries = 3
+net.ipv4.tcp_syncookies = 1
+net.ipv4.tcp_max_syn_backlog = 16384
+net.ipv4.ip_conntrack_max = 65536
+net.ipv4.tcp_max_syn_backlog = 16384
+net.ipv4.tcp_timestamps = 0
+net.core.somaxconn = 16384
+
+net.ipv6.conf.all.disable_ipv6 = 0
+net.ipv6.conf.default.disable_ipv6 = 0
+net.ipv6.conf.lo.disable_ipv6 = 0
+net.ipv6.conf.all.forwarding = 1
+EOF
+
+sysctl --system
+
+
+# 这些是Linux系统的一些参数设置，用于配置和优化网络、文件系统和虚拟内存等方面的功能。以下是每个参数的详细解释：
+# 
+# 1. net.ipv4.ip_forward = 1
+#    - 这个参数启用了IPv4的IP转发功能，允许服务器作为网络路由器转发数据包。
+# 
+# 2. net.bridge.bridge-nf-call-iptables = 1
+#    - 当使用网络桥接技术时，将数据包传递到iptables进行处理。
+#   
+# 3. fs.may_detach_mounts = 1
+#    - 允许在挂载文件系统时，允许被其他进程使用。
+#   
+# 4. vm.overcommit_memory=1
+#    - 该设置允许原始的内存过量分配策略，当系统的内存已经被完全使用时，系统仍然会分配额外的内存。
+# 
+# 5. vm.panic_on_oom=0
+#    - 当系统内存不足（OOM）时，禁用系统崩溃和重启。
+# 
+# 6. fs.inotify.max_user_watches=89100
+#    - 设置系统允许一个用户的inotify实例可以监控的文件数目的上限。
+# 
+# 7. fs.file-max=52706963
+#    - 设置系统同时打开的文件数的上限。
+# 
+# 8. fs.nr_open=52706963
+#    - 设置系统同时打开的文件描述符数的上限。
+# 
+# 9. net.netfilter.nf_conntrack_max=2310720
+#    - 设置系统可以创建的网络连接跟踪表项的最大数量。
+# 
+# 10. net.ipv4.tcp_keepalive_time = 600
+#     - 设置TCP套接字的空闲超时时间（秒），超过该时间没有活动数据时，内核会发送心跳包。
+# 
+# 11. net.ipv4.tcp_keepalive_probes = 3
+#     - 设置未收到响应的TCP心跳探测次数。
+# 
+# 12. net.ipv4.tcp_keepalive_intvl = 15
+#     - 设置TCP心跳探测的时间间隔（秒）。
+# 
+# 13. net.ipv4.tcp_max_tw_buckets = 36000
+#     - 设置系统可以使用的TIME_WAIT套接字的最大数量。
+# 
+# 14. net.ipv4.tcp_tw_reuse = 1
+#     - 启用TIME_WAIT套接字的重新利用，允许新的套接字使用旧的TIME_WAIT套接字。
+# 
+# 15. net.ipv4.tcp_max_orphans = 327680
+#     - 设置系统可以同时存在的TCP套接字垃圾回收包裹数的最大数量。
+# 
+# 16. net.ipv4.tcp_orphan_retries = 3
+#     - 设置系统对于孤立的TCP套接字的重试次数。
+# 
+# 17. net.ipv4.tcp_syncookies = 1
+#     - 启用TCP SYN cookies保护，用于防止SYN洪泛攻击。
+# 
+# 18. net.ipv4.tcp_max_syn_backlog = 16384
+#     - 设置新的TCP连接的半连接数（半连接队列）的最大长度。
+# 
+# 19. net.ipv4.ip_conntrack_max = 65536
+#     - 设置系统可以创建的网络连接跟踪表项的最大数量。
+# 
+# 20. net.ipv4.tcp_timestamps = 0
+#     - 关闭TCP时间戳功能，用于提供更好的安全性。
+# 
+# 21. net.core.somaxconn = 16384
+#     - 设置系统核心层的连接队列的最大值。
+# 
+# 22. net.ipv6.conf.all.disable_ipv6 = 0
+#     - 启用IPv6协议。
+# 
+# 23. net.ipv6.conf.default.disable_ipv6 = 0
+#     - 启用IPv6协议。
+# 
+# 24. net.ipv6.conf.lo.disable_ipv6 = 0
+#     - 启用IPv6协议。
+# 
+# 25. net.ipv6.conf.all.forwarding = 1
+#     - 允许IPv6数据包转发。
+</code></pre>
+<h4 id="8-配置免密登录"><a href="#8-配置免密登录" class="headerlink" title="8. 配置免密登录"></a>8. 配置免密登录</h4><pre><code class="bash">yum install -y sshpass
+ssh-keygen -f /root/.ssh/id_rsa -P &#39;&#39;
+export IP=&quot;10.200.16.11 10.200.16.12 10.200.16.13 10.200.16.14 10.200.16.2&quot;
+export SSHPASS=111111
+for HOST in $IP;do
+     sshpass -e ssh-copy-id -o StrictHostKeyChecking=no $HOST
+done
+</code></pre>
+<p>方便传输文件</p>
+<h4 id="9-升级Linux内核至4-18以上"><a href="#9-升级Linux内核至4-18以上" class="headerlink" title="9. 升级Linux内核至4.18以上"></a>9. 升级Linux内核至4.18以上</h4><pre><code class="bash"># 安装最新的内核
+# 我这里选择的是稳定版kernel-ml   如需更新长期维护版本kernel-lt  
+yum -y --enablerepo=elrepo-kernel  install  kernel-ml
+# 查看已安装那些内核
+rpm -qa | grep kernel
+
+# 查看默认内核
+grubby --default-kernel
+
+# 若不是最新的使用命令设置
+grubby --set-default $(ls /boot/vmlinuz-* | grep elrepo)
+
+# 重启生效
+reboot
+</code></pre>
+<h4 id="10-安装ipvasadm"><a href="#10-安装ipvasadm" class="headerlink" title="10. 安装ipvasadm"></a>10. 安装ipvasadm</h4><pre><code class="bash">yum install ipvsadm ipset sysstat conntrack libseccomp -y
+
+cat &gt;&gt; /etc/modules-load.d/ipvs.conf &lt;&lt;EOF 
+ip_vs
+ip_vs_rr
+ip_vs_wrr
+ip_vs_sh
+nf_conntrack
+ip_tables
+ip_set
+xt_set
+ipt_set
+ipt_rpfilter
+ipt_REJECT
+ipip
+EOF
+
+systemctl restart systemd-modules-load.service
+
+lsmod | grep -e ip_vs -e nf_conntrack
+#ip_vs_sh               16384  0
+#ip_vs_wrr              16384  0
+#ip_vs_rr               16384  0
+#ip_vs                 180224  6 ip_vs_rr,ip_vs_sh,ip_vs_wrr
+#nf_conntrack          176128  1 ip_vs
+#nf_defrag_ipv6         24576  2 nf_conntrack,ip_vs
+#nf_defrag_ipv4         16384  1 nf_conntrack
+#libcrc32c              16384  3 nf_conntrack,xfs,ip_vs
+
+# 参数解释
+#
+# ip_vs
+# IPVS 是 Linux 内核中的一个模块，用于实现负载均衡和高可用性。它通过在前端代理服务器上分发传入请求到后端实际服务器上，提供了高性能和可扩展的网络服务。
+#
+# ip_vs_rr
+# IPVS 的一种调度算法之一，使用轮询方式分发请求到后端服务器，每个请求按顺序依次分发。
+#
+# ip_vs_wrr
+# IPVS 的一种调度算法之一，使用加权轮询方式分发请求到后端服务器，每个请求按照指定的权重比例分发。
+#
+# ip_vs_sh
+# IPVS 的一种调度算法之一，使用哈希方式根据源 IP 地址和目标 IP 地址来分发请求。
+#
+# nf_conntrack
+# 这是一个内核模块，用于跟踪和管理网络连接，包括 TCP、UDP 和 ICMP 等协议。它是实现防火墙状态跟踪的基础。
+#
+# ip_tables
+# 这是一个内核模块，提供了对 Linux 系统 IP 数据包过滤和网络地址转换（NAT）功能的支持。
+#
+# ip_set
+# 这是一个内核模块，扩展了 iptables 的功能，支持更高效的 IP 地址集合操作。
+#
+# xt_set
+# 这是一个内核模块，扩展了 iptables 的功能，支持更高效的数据包匹配和操作。
+#
+# ipt_set
+# 这是一个用户空间工具，用于配置和管理 xt_set 内核模块。
+#
+# ipt_rpfilter
+# 这是一个内核模块，用于实现反向路径过滤，用于防止 IP 欺骗和 DDoS 攻击。
+#
+# ipt_REJECT
+# 这是一个 iptables 目标，用于拒绝 IP 数据包，并向发送方发送响应，指示数据包被拒绝。
+#
+# ipip
+# 这是一个内核模块，用于实现 IP 封装在 IP（IP-over-IP）的隧道功能。它可以在不同网络之间创建虚拟隧道来传输 IP 数据包。
+</code></pre>
+<h4 id="11-修改网卡名称为eth0"><a href="#11-修改网卡名称为eth0" class="headerlink" title="11. 修改网卡名称为eth0"></a>11. 修改网卡名称为eth0</h4><p>如果网卡名称不是eth0需修改网卡名称</p>
+<pre><code class="bash">1.使用命令 ip addr 查看 linux 是否有 th0 网卡
+
+2.vi /etc/sysconfig/network-scripts/ifcfg-ens33 将里面的 NAME 和 DEVICE 项修改为 eth0，ONBOOT需修改为yes
+
+3.重命名网卡名称
+
+cd /etc/sysconfig/network-scripts/
+
+mv ifcfg-ens33 ifcfg-eth0
+
+4.编辑 /etc/default/grub，加入net.ifnames=0 biosdevname=0 到 GRUB_CMALINE_LINUX 变量中（注意空格别遗漏）
+
+5.执行命令： grub2-mkconfig -o /boot/grub2/grub.cfg ，重新生成GRUB配置并更新内核参数
+
+6.执行命令：reboot 重启系统
+
+7.使用命令 ip addr 查看 eth0 网卡是否已经变更成功
+</code></pre>
+<h3 id="2-3-基本组件安装"><a href="#2-3-基本组件安装" class="headerlink" title="2.3 基本组件安装"></a>2.3 基本组件安装</h3><h4 id="1-安装containerd（所有节点）"><a href="#1-安装containerd（所有节点）" class="headerlink" title="1. 安装containerd（所有节点）"></a>1. 安装containerd（所有节点）</h4><ol>
+<li>安装</li>
+</ol>
+<pre><code class="bash">yum -y install containerd.io
+</code></pre>
+<ol start="2">
+<li>配置containerd所需的模块</li>
+</ol>
+<pre><code class="bash"># 1.临时手动加载模块
+modrobe -- overlay
+modprobe -- br_netfilter
+
+# 2.开机自动加载所需的内核模块
+cat &gt; /etc/modules-load.d/containerd.conf &lt;&lt;EOF
+overlay
+br_netfilter
+EOF
+
+# 1. overlay：overlay是容器d默认使用的存储驱动，它提供了一种轻量级的、可堆叠的、逐层增量的文件系统。它通过在现有文件系统上叠加文件系统层来创建容器的文件系统视图。每个容器可以有自己的一组文件系统层，这些层可以共享基础镜像中的文件，并在容器内部进行修改。使用overlay可以有效地使用磁盘空间，并使容器更加轻量级。
+# 2. br_netfilter：br_netfilter是Linux内核提供的一个网络过滤器模块，用于在容器网络中进行网络过滤和NAT转发。当容器和主机之间的网络通信需要进行DNAT或者SNAT时，br_netfilter模块可以将IP地址进行转换。它还可以提供基于iptables规则的网络过滤功能，用于限制容器之间或容器与外部网络之间的通信。
+</code></pre>
+<ol start="3">
+<li>修改containerd的配置文件</li>
+</ol>
+<pre><code class="bash"># 1.重新初始化containerd的配置文件
+containerdconfig default | tee /etc/containerd/config.toml 
+
+# 2.修改Cgroup的管理者为systemd组件
+sed -ri &#39;s#(SystemdCgroup = )false#\1true#&#39; /etc/containerd/config.toml 
+grep SystemdCgroup /etc/containerd/config.toml
+
+# 3.修改pause的基础镜像名称
+sed -i &#39;s#registry.k8s.io/pause:3.6#registry.cn-hangzhou.aliyuncs.com/google_containers/pause:3.7#&#39; /etc/containerd/config.toml
+grep sandbox_image /etc/containerd/config.toml
+
+# 配置加速器（不是必须）
+mkdir /etc/containerd/certs.d/docker.io -pv
+
+cat &gt; /etc/containerd/certs.d/docker.io/hosts.toml &lt;&lt; EOF
+server = &quot;https://docker.io&quot;
+[host.&quot;https://hub-mirror.c.163.com&quot;]
+  capabilities = [&quot;pull&quot;, &quot;resolve&quot;]
+EOF
+</code></pre>
+<ol start="4">
+<li>所有节点启动containerd</li>
+</ol>
+<pre><code class="bash"># 1.启动containerd服务
+systemctl daemon-reload &amp;&amp; systemctl enable --now containerd
+
+# 2.查看containerd的版本
+ctr version
+
+# ctr是containerd的一个客户端工具。
+</code></pre>
+<ol start="5">
+<li>配置crictl客户端连接的运行时位置</li>
+</ol>
+<pre><code class="bash"># 下载对应版本
+wget https://github.com/kubernetes-sigs/cri-tools/releases/download/v1.28.0/crictl-v1.28.0-linux-amd64.tar.gz
+tar -xf crictl-v1.28.0-linux-amd64.tar.gz -C /usr/local/bin/  
+
+cat &gt; /etc/crictl.yaml &lt;&lt;EOF
+runtime-endpoint: unix:///run/containerd/containerd.sock
+image-endpoint: unix:///run/containerd/containerd.sock
+timeout: 10
+debug: false
+EOF
+# crictl 是 CRI 兼容的容器运行时命令行接口，可以使用它来检查和调试 Kubernetes 节点上的容器运行时和应用程序。crictl 则直接对应了命名空间 k8s.io，即”crictl image list“等同于“ctr -n=k8s.io image list“
+crictl --version
+</code></pre>
+<h4 id="2-安装etcd组件"><a href="#2-安装etcd组件" class="headerlink" title="2. 安装etcd组件"></a>2. 安装etcd组件</h4><p>下载配置后，将软件包下发到所有节点（master节点）</p>
+<pre><code class="bash"># 下载
+wget https://github.com/etcd-io/etcd/releases/download/v3.5.10/etcd-v3.5.10-linux-amd64.tar.gz
+# 解压，跳过1层目录，只解压etcd和etcdctl
+tar -xf etcd-v3.5.10-linux-amd64.tar.gz --strip-components=1 -C /usr/local/bin etcd-v3.5.10-linux-amd64/etcd&#123;,ctl&#125;
+# 验证
+etcdctl version
+# 下发软件包
+MasterNodes=&#39;k8s-master02 k8s-master03&#39;
+for NODE in $MasterNodes; do echo $NODE; scp /usr/local/bin/etcd* $NODE:/usr/local/bin/; done
+</code></pre>
+<h4 id="3-安装k8s组件"><a href="#3-安装k8s组件" class="headerlink" title="3. 安装k8s组件"></a>3. 安装k8s组件</h4><pre><code class="bash"># 在github挑选合适的二进制版本 https://github.com/kubernetes/kubernetes/blob/master/CHANGELOG/CHANGELOG-1.28.md#server-binaries
+wget https://dl.k8s.io/v1.28.7/kubernetes-server-linux-amd64.tar.gz
+
+# 解压，这个命令的作用是将kubernetes-server-linux-amd64.tar.gz文件中的kubelet、kubectl、kube-apiserver、kube-controller-manager、kube-scheduler
+# 和kube-proxy六个文件提取到/usr/local/bin目录下，同时忽略文件路径中的前三级目录结构。                   
+tar -xf kubernetes-server-linux-amd64.tar.gz  --strip-components=3 -C /usr/local/bin kubernetes/server/bin/kube&#123;let,ctl,-apiserver,-controller-manager,-scheduler,-proxy&#125;
+
+# 查看版本
+kubelet --version
+
+# 下发软件包到其他节点
+MasterNodes=&#39;k8s-master02 k8s-master03&#39;
+WorkNodes=&#39;k8s-worker01 k8s-worker02 k8s-worker03&#39;
+for NODE in $MasterNodes; do echo $NODE; scp /usr/local/bin/kube&#123;let,ctl,-apiserver,-controller-manager,-scheduler,-proxy&#125; $NODE:/usr/local/bin/; done
+for NODE in $WorkNodes; do echo $NODE; scp /usr/local/bin/kube&#123;let,-proxy&#125; $NODE:/usr/local/bin/; done
+</code></pre>
+<h3 id="2-4-生成K8s和etcd证书"><a href="#2-4-生成K8s和etcd证书" class="headerlink" title="2.4 生成K8s和etcd证书"></a>2.4 生成K8s和etcd证书</h3><h4 id="1-安装cfssl证书管理工具（master01）"><a href="#1-安装cfssl证书管理工具（master01）" class="headerlink" title="1. 安装cfssl证书管理工具（master01）"></a>1. 安装cfssl证书管理工具（master01）</h4><pre><code class="bash">wget https://ghproxy.com/https://github.com/cloudflare/cfssl/releases/download/v1.6.4/cfssl_1.6.4_linux_amd64 -O /usr/local/bin/cfssl
+wget https://ghproxy.com/https://github.com/cloudflare/cfssl/releases/download/v1.6.4/cfssljson_1.6.4_linux_amd64 -O /usr/local/bin/cfssljson
+</code></pre>
+<p>或者用其他方式下载</p>
+<h4 id="2-生成etcd证书（master01）"><a href="#2-生成etcd证书（master01）" class="headerlink" title="2. 生成etcd证书（master01）"></a>2. 生成etcd证书（master01）</h4><ol>
+<li>创建etcd证书存储目录</li>
+</ol>
+<pre><code class="bash">mkdir -pv /yinzhengjie/certs/&#123;etcd,pki&#125;/ &amp;&amp; cd /yinzhengjie/certs/pki/
+</code></pre>
+<ol start="2">
+<li>生成etcd证书的自建ca证书</li>
+</ol>
+<pre><code class="bash"># 1.生成证书的CSR文件
+cat &gt; etcd-ca-csr.json &lt;&lt; EOF
+&#123;
+  &quot;CN&quot;: &quot;etcd&quot;,
+  &quot;key&quot;: &#123;
+    &quot;algo&quot;: &quot;rsa&quot;,
+    &quot;size&quot;: 2048
+  &#125;,
+  &quot;names&quot;: [
+    &#123;
+      &quot;C&quot;: &quot;CN&quot;,
+      &quot;ST&quot;: &quot;Beijing&quot;,
+      &quot;L&quot;: &quot;Beijing&quot;,
+      &quot;O&quot;: &quot;etcd&quot;,
+      &quot;OU&quot;: &quot;Etcd Security&quot;
+    &#125;
+  ],
+  &quot;ca&quot;: &#123;
+    &quot;expiry&quot;: &quot;876000h&quot;
+  &#125;
+&#125;
+EOF
+
+# 这是一个用于生成证书签名请求（Certificate Signing Request，CSR）的JSON配置文件。JSON配置文件指定了生成证书签名请求所需的数据。
+# - &quot;CN&quot;: &quot;etcd&quot; 指定了希望生成的证书的CN字段（Common Name），即证书的主题，通常是该证书标识的实体的名称。
+# - &quot;key&quot;: &#123;&#125; 指定了生成证书所使用的密钥的配置信息。&quot;algo&quot;: &quot;rsa&quot; 指定了密钥的算法为RSA，&quot;size&quot;: 2048 指定了密钥的长度为2048位。
+# - &quot;names&quot;: [] 包含了生成证书时所需的实体信息。在这个例子中，只包含了一个实体，其相关信息如下：
+#   - &quot;C&quot;: &quot;CN&quot; 指定了实体的国家/地区代码，这里是中国。
+#   - &quot;ST&quot;: &quot;Beijing&quot; 指定了实体所在的省/州。
+#   - &quot;L&quot;: &quot;Beijing&quot; 指定了实体所在的城市。
+#   - &quot;O&quot;: &quot;etcd&quot; 指定了实体的组织名称。
+#   - &quot;OU&quot;: &quot;Etcd Security&quot; 指定了实体所属的组织单位。
+# - &quot;ca&quot;: &#123;&#125; 指定了生成证书时所需的CA（Certificate Authority）配置信息。
+#   - &quot;expiry&quot;: &quot;876000h&quot; 指定了证书的有效期，这里是876000小时。
+# 
+# 生成证书签名请求时，可以使用这个JSON配置文件作为输入，根据配置文件中的信息生成相应的CSR文件。然后，可以将CSR文件发送给CA进行签名，以获得有效的证书。
+
+
+# 2.生成etcd CA证书和CA证书的key
+cfssl gencert -initca etcd-ca-csr.json | cfssljson -bare /root/certs/etcd/etcd-ca
+# cfssl是一个用于生成TLS/SSL证书的工具，它支持PKI、JSON格式配置文件以及与许多其他集成工具的配合使用。
+# gencert参数表示生成证书的操作。-initca参数表示初始化一个CA（证书颁发机构）。CA是用于签发其他证书的根证书。etcd-ca-csr.json是一个JSON格式的配置文件，其中包含了CA的详细信息，如私钥、公钥、有效期等。这个文件提供了生成CA证书所需的信息。
+# | 符号表示将上一个命令的输出作为下一个命令的输入。
+# cfssljson是cfssl工具的一个子命令，用于格式化cfssl生成的JSON数据。 -bare参数表示直接输出裸证书，即只生成证书文件，不包含其他格式的文件。
+# 所以，这条命令的含义是使用cfssl工具根据配置文件etcd-ca-csr.json生成一个CA证书，并将证书文件保存在/root/certs/etcd/etcd-ca路径下。
+
+
+# 3.查看结果
+ls /root/certs/etcd/
+etcd-ca.csr
+etcd-ca-key.pem
+etcd-ca.pem
+</code></pre>
+<ol start="3">
+<li>基于自建ca证书颁发etcd证书</li>
+</ol>
+<pre><code class="bash"># 1.写入生成证书所需的配置文件
+cat &gt; ca-config.json &lt;&lt; EOF 
+&#123;
+  &quot;signing&quot;: &#123;
+    &quot;default&quot;: &#123;
+      &quot;expiry&quot;: &quot;876000h&quot;
+    &#125;,
+    &quot;profiles&quot;: &#123;
+      &quot;kubernetes&quot;: &#123;
+        &quot;usages&quot;: [
+            &quot;signing&quot;,
+            &quot;key encipherment&quot;,
+            &quot;server auth&quot;,
+            &quot;client auth&quot;
+        ],
+        &quot;expiry&quot;: &quot;876000h&quot;
+      &#125;
+    &#125;
+  &#125;
+&#125;
+EOF
+
+# 这段配置文件是用于配置加密和认证签名的一些参数。
+# 在这里，有两个部分：`signing`和`profiles`。
+# `signing`包含了默认签名配置和配置文件。
+# 默认签名配置`default`指定了证书的过期时间为`876000h`。`876000h`表示证书有效期为100年。
+# `profiles`部分定义了不同的证书配置文件。
+# 在这里，只有一个配置文件`kubernetes`。它包含了以下`usages`和过期时间`expiry`：
+# 1. `signing`：用于对其他证书进行签名
+# 2. `key encipherment`：用于加密和解密传输数据
+# 3. `server auth`：用于服务器身份验证
+# 4. `client auth`：用于客户端身份验证
+
+
+
+# 2.生成证书的CSR文件： 证书签发请求文件，配置了一些域名，公司，单位
+cat &gt; etcd-csr.json &lt;&lt; EOF 
+&#123;
+  &quot;CN&quot;: &quot;etcd&quot;,
+  &quot;key&quot;: &#123;
+    &quot;algo&quot;: &quot;rsa&quot;,
+    &quot;size&quot;: 2048
+  &#125;,
+  &quot;names&quot;: [
+    &#123;
+      &quot;C&quot;: &quot;CN&quot;,
+      &quot;ST&quot;: &quot;Beijing&quot;,
+      &quot;L&quot;: &quot;Beijing&quot;,
+      &quot;O&quot;: &quot;etcd&quot;,
+      &quot;OU&quot;: &quot;Etcd Security&quot;
+    &#125;
+  ]
+&#125;
+EOF
+
+
+# 3.基于自建的ectd ca证书生成etcd的证书
+cfssl gencert \
+  -ca=/root/certs/etcd/etcd-ca.pem \
+  -ca-key=/root/certs/etcd/etcd-ca-key.pem \
+  -config=ca-config.json \
+  --hostname=127.0.0.1,k8s-master01,k8s-master02,k8s-master03,10.200.16.10,10.200.16.11,10.200.16.12 \
+  --profile=kubernetes \
+  etcd-csr.json  | cfssljson -bare /root/certs/etcd/etcd-server
+
+# 这是一条使用cfssl生成etcd证书的命令，下面是各个参数的解释：
+# -ca=/etc/etcd/ssl/etcd-ca.pem：指定用于签名etcd证书的CA文件的路径。
+# -ca-key=/etc/etcd/ssl/etcd-ca-key.pem：指定用于签名etcd证书的CA私钥文件的路径。
+# -config=ca-config.json：指定CA配置文件的路径，该文件定义了证书的有效期、加密算法等设置。
+# -hostname=xxxx：指定要为etcd生成证书的主机名和IP地址列表。
+# -profile=kubernetes：指定使用的证书配置文件，该文件定义了证书的用途和扩展属性。
+# etcd-csr.json：指定etcd证书请求的JSON文件的路径，该文件包含了证书请求的详细信息。
+# | cfssljson -bare /etc/etcd/ssl/etcd：通过管道将cfssl命令的输出传递给cfssljson命令，并使用-bare参数指定输出文件的前缀路径，这里将生成etcd证书的.pem和-key.pem文件。
+
+
+# 查看  
+ll /root/certs/etcd/
+# total 24
+# -rw-r--r-- 1 root root 1050 Jan  7 15:36 etcd-ca.csr
+# -rw------- 1 root root 1679 Jan  7 15:36 etcd-ca-key.pem
+# -rw-r--r-- 1 root root 1318 Jan  7 15:36 etcd-ca.pem
+# -rw-r--r-- 1 root root 1131 Jan  7 15:40 etcd-server.csr
+# -rw------- 1 root root 1679 Jan  7 15:40 etcd-server-key.pem
+# -rw-r--r-- 1 root root 1464 Jan  7 15:40 etcd-server.pem
+</code></pre>
+<ol start="4">
+<li>将etcd证书拷贝至其他两个节点</li>
+</ol>
+<pre><code class="bash">MasterNodes=&#39;k8s-master02 k8s-master03&#39;
+
+for NODE in $MasterNodes; do
+     echo $NODE; ssh $NODE &quot;mkdir -pv /root/certs/etcd/&quot;
+     for FILE in etcd-ca-key.pem etcd-ca.pem etcd-server-key.pem etcd-server.pem; do
+       scp /root/certs/etcd/$&#123;FILE&#125; $NODE:/root/certs/etcd/$&#123;FILE&#125;
+     done
+done
+</code></pre>
+<h4 id="3-生成k8s组件证书（master01）"><a href="#3-生成k8s组件证书（master01）" class="headerlink" title="3. 生成k8s组件证书（master01）"></a>3. 生成k8s组件证书（master01）</h4><ol>
+<li><p>所有节点创建证书保存目录 <code>mkdir -p /root/certs/kubernetes/</code></p>
+</li>
+<li><p>master01节点生成kubernetes自建ca证书</p>
+</li>
+</ol>
+<pre><code class="bash"># 1.生成证书的CSR文件： 证书签发请求文件，配置了一些域名，公司，单位
+cat &gt; k8s-ca-csr.json &lt;&lt; EOF 
+&#123;
+  &quot;CN&quot;: &quot;kubernetes&quot;,
+  &quot;key&quot;: &#123;
+    &quot;algo&quot;: &quot;rsa&quot;,
+    &quot;size&quot;: 2048
+  &#125;,
+  &quot;names&quot;: [
+    &#123;
+      &quot;C&quot;: &quot;CN&quot;,
+      &quot;ST&quot;: &quot;Beijing&quot;,
+      &quot;L&quot;: &quot;Beijing&quot;,
+      &quot;O&quot;: &quot;Kubernetes&quot;,
+      &quot;OU&quot;: &quot;Kubernetes-manual&quot;
+    &#125;
+  ],
+  &quot;ca&quot;: &#123;
+    &quot;expiry&quot;: &quot;876000h&quot;
+  &#125;
+&#125;
+EOF
+
+# 2.生成kubernetes证书
+cfssl gencert -initca k8s-ca-csr.json | cfssljson -bare /root/certs/kubernetes/k8s-ca
+
+# 3.查看
+ll /root/certs/kubernetes/
+# total 12
+# -rw-r--r-- 1 root root 1070 Jan  7 15:47 k8s-ca.csr
+# -rw------- 1 root root 1675 Jan  7 15:47 k8s-ca-key.pem
+# -rw-r--r-- 1 root root 1363 Jan  7 15:47 k8s-ca.pem
+</code></pre>
+<ol start="3">
+<li>基于自检ca证书颁发apiserver相关证书</li>
+</ol>
+<pre><code class="bash"># 1.生成k8s证书的有效期为100年
+cat &gt; k8s-ca-config.json &lt;&lt; EOF
+&#123;
+  &quot;signing&quot;: &#123;
+    &quot;default&quot;: &#123;
+      &quot;expiry&quot;: &quot;876000h&quot;
+    &#125;,
+    &quot;profiles&quot;: &#123;
+      &quot;kubernetes&quot;: &#123;
+        &quot;usages&quot;: [
+            &quot;signing&quot;,
+            &quot;key encipherment&quot;,
+            &quot;server auth&quot;,
+            &quot;client auth&quot;
+        ],
+        &quot;expiry&quot;: &quot;876000h&quot;
+      &#125;
+    &#125;
+  &#125;
+&#125;
+EOF
+
+
+# 2.生成apiserver证书的CSR文件： 证书签发请求文件，配置了一些域名，公司，单位
+cat &gt; apiserver-csr.json &lt;&lt; EOF 
+&#123;
+  &quot;CN&quot;: &quot;kube-apiserver&quot;,
+  &quot;key&quot;: &#123;
+    &quot;algo&quot;: &quot;rsa&quot;,
+    &quot;size&quot;: 2048
+  &#125;,
+  &quot;names&quot;: [
+    &#123;
+      &quot;C&quot;: &quot;CN&quot;,
+      &quot;ST&quot;: &quot;Beijing&quot;,
+      &quot;L&quot;: &quot;Beijing&quot;,
+      &quot;O&quot;: &quot;Kubernetes&quot;,
+      &quot;OU&quot;: &quot;Kubernetes-manual&quot;
+    &#125;
+  ]
+&#125;
+EOF
+
+# 3.基于自检ca证书生成apiServer的证书文件
+cfssl gencert \
+  -ca=/root/certs/kubernetes/k8s-ca.pem \
+  -ca-key=/root/certs/kubernetes/k8s-ca-key.pem \
+  -config=k8s-ca-config.json \
+  --hostname=10.100.0.1,10.200.0.34,kubernetes,kubernetes.default,kubernetes.default.svc,kubernetes.default.svc.cluster,kubernetes.default.svc.cluster.local,10.200.16.10,10.200.16.11,10.200.16.12,10.200.16.13,10.200.16.14,10.200.16.2 \
+  --profile=kubernetes \
+   apiserver-csr.json  | cfssljson -bare /root/certs/kubernetes/apiserver
+
+
+# 这个命令是使用cfssl工具生成Kubernetes API Server的证书。
+# 命令的参数解释如下：
+# - `-ca=/etc/kubernetes/pki/ca.pem`：指定证书的颁发机构（CA）文件路径。
+# - `-ca-key=/etc/kubernetes/pki/ca-key.pem`：指定证书的颁发机构（CA）私钥文件路径。
+# - `-config=ca-config.json`：指定证书生成的配置文件路径，配置文件中包含了证书的有效期、加密算法等信息。
+# - `-hostname=10.100.0.1,10.200.0.34,kubernetes`：指定证书的主机名或IP地址列表。
+# - &quot;10.100.0.1&quot;为咱们的svc网段的第一个地址,&quot;10.0.0.240&quot;是负载均衡器的VIP地址。&quot;kubernetes,...,kubernetes.default.svc.cluster.local&quot;对应的是apiServer解析的A记录。
+#    &quot;10.200.16.10,...,10.0.0.245&quot;对应的是K8S集群的地址。如果后续集群要扩容，需要多加入一些IP地址。
+# - `-profile=kubernetes`：指定证书生成的配置文件中的配置文件名。
+# - `apiserver-csr.json`：API Server的证书签名请求配置文件路径。
+# - `| cfssljson -bare /etc/kubernetes/pki/apiserver`：通过管道将生成的证书输出到cfssljson工具，将其转换为PEM编码格式，并保存到 `/etc/kubernetes/pki/apiserver.pem` 和 `/etc/kubernetes/pki/apiserver-key.pem` 文件中。
+
+# 4.验证 
+ll /root/certs/kubernetes/apiserver*
+#-rw-r--r-- 1 root root 1314 Jan  7 17:03 /root/certs/kubernetes/apiserver.csr
+#-rw------- 1 root root 1679 Jan  7 17:03 /root/certs/kubernetes/apiserver-key.pem
+#-rw-r--r-- 1 root root 1712 Jan  7 17:03 /root/certs/kubernetes/apiserver.pem
+</code></pre>
+<ol start="4">
+<li><p>生成第三方组件与apiServer通信的聚合证书</p>
+<p><strong>聚合证书的作用就是让第三方组件(比如metrics-server等)能够拿这个证书文件和apiServer进行通信。</strong></p>
+</li>
+</ol>
+<pre><code class="bash"># 1.生成聚合证书的用于自建ca的CSR文件
+cat &gt; front-proxy-ca-csr.json &lt;&lt; EOF 
+&#123;
+  &quot;CN&quot;: &quot;kubernetes&quot;,
+  &quot;key&quot;: &#123;
+     &quot;algo&quot;: &quot;rsa&quot;,
+     &quot;size&quot;: 2048
+  &#125;
+&#125;
+EOF
+
+
+# 2.生成聚合证书的自检ca证书
+cfssl gencert -initca front-proxy-ca-csr.json | cfssljson -bare /root/certs/kubernetes/front-proxy-ca
+[root@k8s-master01 pki]# 
+[root@k8s-master01 pki]# ll /root/certs/kubernetes/front-proxy-ca*
+-rw-r--r-- 1 root root  891 Jan  7 17:05 /root/certs/kubernetes/front-proxy-ca.csr
+-rw------- 1 root root 1675 Jan  7 17:05 /root/certs/kubernetes/front-proxy-ca-key.pem
+-rw-r--r-- 1 root root 1094 Jan  7 17:05 /root/certs/kubernetes/front-proxy-ca.pem
+[root@k8s-master01 pki]# 
+
+
+# 3.生成聚合证书的用于客户端的CSR文件
+cat &gt; front-proxy-client-csr.json &lt;&lt; EOF 
+&#123;
+  &quot;CN&quot;: &quot;front-proxy-client&quot;,
+  &quot;key&quot;: &#123;
+     &quot;algo&quot;: &quot;rsa&quot;,
+     &quot;size&quot;: 2048
+  &#125;
+&#125;
+EOF
+
+# 4.基于聚合证书的自建ca证书签发聚合证书的客户端证书
+cfssl gencert \
+  -ca=/root/certs/kubernetes/front-proxy-ca.pem \
+  -ca-key=/root/certs/kubernetes/front-proxy-ca-key.pem \
+  -config=k8s-ca-config.json \
+  -profile=kubernetes \
+  front-proxy-client-csr.json | cfssljson -bare /root/certs/kubernetes/front-proxy-client
+
+# 5.查看
+ll /root/certs/kubernetes/front-proxy-client*
+#-rw-r--r-- 1 root root  903 Jan  7 17:06 /root/certs/kubernetes/front-proxy-client.csr
+#-rw------- 1 root root 1679 Jan  7 17:06 /root/certs/kubernetes/front-proxy-client-key.pem
+#-rw-r--r-- 1 root root 1188 Jan  7 17:06 /root/certs/kubernetes/front-proxy-client.pem
+</code></pre>
+<ol start="5">
+<li>生成controller-manager证书及kubeconfig文件</li>
+</ol>
+<pre><code class="bash">#    1.生成controller-manager的CSR文件
+cat &gt; controller-manager-csr.json &lt;&lt; EOF
+&#123;
+  &quot;CN&quot;: &quot;system:kube-controller-manager&quot;,
+  &quot;key&quot;: &#123;
+    &quot;algo&quot;: &quot;rsa&quot;,
+    &quot;size&quot;: 2048
+  &#125;,
+  &quot;names&quot;: [
+    &#123;
+      &quot;C&quot;: &quot;CN&quot;,
+      &quot;ST&quot;: &quot;Beijing&quot;,
+      &quot;L&quot;: &quot;Beijing&quot;,
+      &quot;O&quot;: &quot;system:kube-controller-manager&quot;,
+      &quot;OU&quot;: &quot;Kubernetes-manual&quot;
+    &#125;
+  ]
+&#125;
+EOF
+
+
+#    2.生成controller-manager证书文件
+cfssl gencert \
+  -ca=/root/certs/kubernetes/k8s-ca.pem \
+  -ca-key=/root/certs/kubernetes/k8s-ca-key.pem \
+  -config=k8s-ca-config.json \
+  -profile=kubernetes \
+  controller-manager-csr.json | cfssljson -bare /root/certs/kubernetes/controller-manager
+
+
+# 验证
+ll /root/certs/kubernetes/controller-manager*
+#-rw-r--r-- 1 root root 1082 Nov  5 11:31 /root/certs/kubernetes/controller-manager.csr
+#-rw------- 1 root root 1675 Nov  5 11:31 /root/certs/kubernetes/controller-manager-key.pem
+#-rw-r--r-- 1 root root 1501 Nov  5 11:31 /root/certs/kubernetes/controller-manager.pem
+
+
+#    3.创建一个kubeconfig目录
+mkdir -pv /root/certs/kubeconfig
+
+#    4.设置一个集群
+kubectl config set-cluster root-k8s \
+  --certificate-authority=/root/certs/kubernetes/k8s-ca.pem \
+  --embed-certs=true \
+  --server=https://10.200.0.34:6443 \
+  --kubeconfig=/root/certs/kubeconfig/kube-controller-manager.kubeconfig
+# kubectl config set-cluster命令用于配置集群信息，root-k8s是集群名称。
+# --certificate-authority选项指定了集群的证书颁发机构（CA）的路径，这个CA会验证kube-apiserver提供的证书是否合法。
+# --embed-certs选项用于将证书嵌入到生成的kubeconfig文件中，这样就不需要在kubeconfig文件中单独指定证书文件路径。
+# --server选项指定了kube-apiserver的地址，负载均衡或者keepalived的地址，apiserver安全端口默认6443。
+# --kubeconfig选项指定了生成的kubeconfig文件的路径和名称。
+# 综上所述，kubectl config set-cluster命令的作用是在kubeconfig文件中设置集群信息，包括证书颁发机构、证书、kube-apiserver地址等。
+
+
+#    5.设置一个用户项
+kubectl config set-credentials system:kube-controller-manager \
+  --client-certificate=/root/certs/kubernetes/controller-manager.pem \
+  --client-key=/root/certs/kubernetes/controller-manager-key.pem \
+  --embed-certs=true \
+  --kubeconfig=/root/certs/kubeconfig/kube-controller-manager.kubeconfig
+# 上述命令是用于设置 Kubernetes 的 controller-manager 组件的客户端凭据。下面是每个参数的详细解释：
+# - `kubectl config`: 是使用 kubectl 命令行工具的配置子命令。
+# - `set-credentials`: 是定义一个新的用户凭据配置的子命令。
+# - `system:kube-controller-manager`: 是设置用户凭据的名称，`system:` 是 Kubernetes API Server 内置的身份验证器使用的用户标识符前缀，它表示是一个系统用户，在本例中是 kube-controller-manager 组件使用的身份。
+# - `--client-certificate=/etc/kubernetes/pki/controller-manager.pem`: 指定 controller-manager.pem 客户端证书的路径。
+# - `--client-key=/etc/kubernetes/pki/controller-manager-key.pem`: 指定 controller-manager-key.pem 客户端私钥的路径。
+# - `--embed-certs=true`: 表示将证书和私钥直接嵌入到生成的 kubeconfig 文件中，而不是通过引用外部文件。
+# - `--kubeconfig=/root/certs/kubeconfig/kube-controller-manager.kubeconfig`: 指定生成的 kubeconfig 文件的路径和文件名，即 controller-manager.kubeconfig。
+
+#    6.设置一个上下文环境
+kubectl config set-context system:kube-controller-manager@kubernetes \
+  --cluster=root-k8s \
+  --user=system:kube-controller-manager \
+  --kubeconfig=/root/certs/kubeconfig/kube-controller-manager.kubeconfig
+
+# 这个命令用于配置 Kubernetes 控制器管理器的上下文信息。下面是各个参数的详细解释：
+# 1. `kubectl config set-context system:kube-controller-manager@kubernetes`: 设置上下文的名称为 `system:kube-controller-manager@kubernetes`，这是一个标识符，用于唯一标识该上下文。
+# 2. `--cluster=kubernetes`: 指定集群的名称为 `kubernetes`，这是一个现有集群的标识符，表示要管理的 Kubernetes 集群。
+# 3. `--user=system:kube-controller-manager`: 指定使用的用户身份为 `system:kube-controller-manager`。这是一个特殊的用户身份，具有控制 Kubernetes 控制器管理器的权限。
+# 4. `--kubeconfig=/etc/kubernetes/controller-manager.kubeconfig`: 指定 kubeconfig 文件的路径。kubeconfig 文件是一个用于管理 Kubernetes 配置的文件，包含了集群、用户和上下文的相关信息。
+# 通过运行这个命令，可以将这些配置信息保存到 `/root/certs/kubeconfig/kube-controller-manager.kubeconfig` 文件中，以便在后续的操作中使用。
+
+
+#    7.使用默认的上下文
+kubectl config use-context system:kube-controller-manager@kubernetes \
+  --kubeconfig=/root/certs/kubeconfig/kube-controller-manager.kubeconfig
+# 这个命令是用来指定kubectl使用指定的上下文环境来执行操作。上下文环境是kubectl用来确定要连接到哪个Kubernetes集群以及使用哪个身份验证信息的配置。
+# 在这个命令中，`kubectl config use-context`是用来设置当前上下文环境的命令。 `system:kube-controller-manager@kubernetes`是指定的上下文名称，它告诉kubectl要使用的Kubernetes集群和身份验证信息。 
+# `--kubeconfig=/root/certs/kubeconfig/kube-controller-manager.kubeconfig`是用来指定使用的kubeconfig文件的路径。kubeconfig文件是存储集群连接和身份验证信息的配置文件。
+# 通过执行这个命令，kubectl将使用指定的上下文来执行后续的操作，包括部署和管理Kubernetes资源。
+</code></pre>
+<ol start="6">
+<li><p>生成scheduler证书及kubeconfig文件</p>
+<p>kubeconfig 文件是一个用于管理 Kubernetes 配置的文件，包含了集群、用户和上下文的相关信息。</p>
+</li>
+</ol>
+<pre><code class="bash">#    1.生成scheduler的CSR文件
+cat &gt; scheduler-csr.json  &lt;&lt; EOF
+&#123;
+  &quot;CN&quot;: &quot;system:kube-scheduler&quot;,
+  &quot;key&quot;: &#123;
+    &quot;algo&quot;: &quot;rsa&quot;,
+    &quot;size&quot;: 2048
+  &#125;,
+  &quot;names&quot;: [
+    &#123;
+      &quot;C&quot;: &quot;CN&quot;,
+      &quot;ST&quot;: &quot;Beijing&quot;,
+      &quot;L&quot;: &quot;Beijing&quot;,
+      &quot;O&quot;: &quot;system:kube-scheduler&quot;,
+      &quot;OU&quot;: &quot;Kubernetes-manual&quot;
+    &#125;
+  ]
+&#125;
+EOF
+
+#    2.生成scheduler证书文件
+cfssl gencert \
+  -ca=/root/certs/kubernetes/k8s-ca.pem \
+  -ca-key=/root/certs/kubernetes/k8s-ca-key.pem \
+  -config=k8s-ca-config.json \
+  -profile=kubernetes \
+  scheduler-csr.json | cfssljson -bare /root/certs/kubernetes/scheduler
+
+ll /root/certs/kubernetes/scheduler*
+#-rw-r--r-- 1 root root 1058 Jan  7 18:56 /root/certs/kubernetes/scheduler.csr
+#-rw------- 1 root root 1679 Jan  7 18:56 /root/certs/kubernetes/scheduler-key.pem
+#rw-r--r-- 1 root root 1476 Jan  7 18:56 /root/certs/kubernetes/scheduler.pem
+
+
+
+#    3.设置一个集群
+kubectl config set-cluster root-k8s \
+  --certificate-authority=/root/certs/kubernetes/k8s-ca.pem \
+  --embed-certs=true \
+  --server=https://10.200.0.34:6443 \
+  --kubeconfig=/root/certs/kubeconfig/kube-scheduler.kubeconfig
+
+
+#   4.设置一个用户项
+kubectl config set-credentials system:kube-scheduler \
+  --client-certificate=/root/certs/kubernetes/scheduler.pem \
+  --client-key=/root/certs/kubernetes/scheduler-key.pem \
+  --embed-certs=true \
+  --kubeconfig=/root/certs/kubeconfig/kube-scheduler.kubeconfig
+
+#  5.设置一个上下文环境
+kubectl config set-context system:kube-scheduler@kubernetes \
+  --cluster=root-k8s \
+  --user=system:kube-scheduler \
+  --kubeconfig=/root/certs/kubeconfig/kube-scheduler.kubeconfig
+
+#  6.使用默认的上下文
+kubectl config use-context system:kube-scheduler@kubernetes \
+  --kubeconfig=/root/certs/kubeconfig/kube-scheduler.kubeconfig
+</code></pre>
+<ol start="7">
+<li>配置k8s集群管理员证书及kubeconfig文件</li>
+</ol>
+<pre><code class="bash">#    1.生成管理员的CSR文件
+cat &gt; admin-csr.json &lt;&lt; EOF
+&#123;
+  &quot;CN&quot;: &quot;admin&quot;,
+  &quot;key&quot;: &#123;
+    &quot;algo&quot;: &quot;rsa&quot;,
+    &quot;size&quot;: 2048
+  &#125;,
+  &quot;names&quot;: [
+    &#123;
+      &quot;C&quot;: &quot;CN&quot;,
+      &quot;ST&quot;: &quot;Beijing&quot;,
+      &quot;L&quot;: &quot;Beijing&quot;,
+      &quot;O&quot;: &quot;system:masters&quot;,
+      &quot;OU&quot;: &quot;Kubernetes-manual&quot;
+    &#125;
+  ]
+&#125;
+EOF
+# 这段代码是一个JSON格式的配置文件，用于创建和配置一个名为&quot;admin&quot;的Kubernetes凭证。
+#   - &quot;O&quot;: &quot;system:masters&quot;：这是证书的组织字段，这里是system:masters，表示系统的管理员组。
+# 通过这个配置文件创建的凭证将具有管理员权限，并且可以用于管理Kubernetes集群。
+
+
+
+#    2.生成k8s集群管理员证书
+cfssl gencert \
+  -ca=/root/certs/kubernetes/k8s-ca.pem \
+  -ca-key=/root/certs/kubernetes/k8s-ca-key.pem \
+  -config=k8s-ca-config.json \
+  -profile=kubernetes \
+  admin-csr.json | cfssljson -bare /root/certs/kubernetes/admin
+
+ll /root/certs/kubernetes/admin*
+-rw-r--r-- 1 root root 1025 Jan  7 19:00 /root/certs/kubernetes/admin.csr
+-rw------- 1 root root 1675 Jan  7 19:00 /root/certs/kubernetes/admin-key.pem
+-rw-r--r-- 1 root root 1444 Jan  7 19:00 /root/certs/kubernetes/admin.pem
+
+
+
+
+#    2.设置一个集群
+kubectl config set-cluster root-k8s \
+  --certificate-authority=/root/certs/kubernetes/k8s-ca.pem \
+  --embed-certs=true \
+  --server=https://10.200.0.34:6443 \
+  --kubeconfig=/root/certs/kubeconfig/kube-admin.kubeconfig
+
+
+#   4.设置一个用户项
+kubectl config set-credentials kube-admin \
+  --client-certificate=/root/certs/kubernetes/admin.pem \
+  --client-key=/root/certs/kubernetes/admin-key.pem \
+  --embed-certs=true \
+  --kubeconfig=/root/certs/kubeconfig/kube-admin.kubeconfig
+
+#  5.设置一个上下文环境
+kubectl config set-context kube-admin@kubernetes \
+  --cluster=root-k8s \
+  --user=kube-admin \
+  --kubeconfig=/root/certs/kubeconfig/kube-admin.kubeconfig
+
+#  6.使用默认的上下文
+kubectl config use-context kube-admin@kubernetes \
+  --kubeconfig=/root/certs/kubeconfig/kube-admin.kubeconfig
+</code></pre>
+<ol start="8">
+<li>创建ServiceAccount Key ——secret</li>
+</ol>
+<pre><code class="bash">#     1.ServiceAccount是k8s一种认证方式，创建ServiceAccount的时候会创建一个与之绑定的secret，这个secret会生成一个token
+openssl genrsa -out /root/certs/kubernetes/sa.key 2048
+
+
+#    2.基于sa.key创建sa.pub
+openssl rsa -in /root/certs/kubernetes/sa.key -pubout -out /root/certs/kubernetes/sa.pub
+
+ll /root/certs/kubernetes/sa*
+#-rw-r--r-- 1 root root 1679 Jan  7 19:02 /root/certs/kubernetes/sa.key
+#-rw-r--r-- 1 root root  451 Jan  7 19:03 /root/certs/kubernetes/sa.pub
+# 这两个命令是使用OpenSSL工具生成RSA密钥对。
+# 
+# 命令1：openssl genrsa -out /etc/kubernetes/pki/sa.key 2048
+# 该命令用于生成私钥文件。具体解释如下：
+# - openssl：openssl命令行工具。
+# - genrsa：生成RSA密钥对。
+# - -out /etc/kubernetes/pki/sa.key：指定输出私钥文件的路径和文件名。
+# - 2048：指定密钥长度为2048位。
+# 
+# 命令2：openssl rsa -in /etc/kubernetes/pki/sa.key -pubout -out /etc/kubernetes/pki/sa.pub
+# 该命令用于从私钥中导出公钥。具体解释如下：
+# - openssl：openssl命令行工具。
+# - rsa：与私钥相关的RSA操作。
+# - -in /etc/kubernetes/pki/sa.key：指定输入私钥文件的路径和文件名。
+# - -pubout：指定输出公钥。
+# - -out /etc/kubernetes/pki/sa.pub：指定输出公钥文件的路径和文件名。
+# 总结：通过以上两个命令，我们可以使用OpenSSL工具生成一个RSA密钥对，并将私钥保存在/etc/kubernetes/pki/sa.key文件中，将公钥保存在/etc/kubernetes/pki/sa.pub文件中。
+</code></pre>
+<ol start="9">
+<li>将除etcd外其他证书拷贝到其他两个master节点</li>
+</ol>
+<pre><code class="bash">for NODE in k8s-master02 k8s-master03; do 
+       echo $NODE; ssh $NODE &quot;mkdir -pv /root/certs/&#123;kubernetes,kubeconfig&#125;&quot;
+     for FILE in $(ls /root/certs/kubernetes); do 
+        scp /root/certs/kubernetes/$&#123;FILE&#125; $NODE:/root/certs/kubernetes/$&#123;FILE&#125;;
+     done; 
+     for FILE in kube-admin.kubeconfig  kube-controller-manager.kubeconfig  kube-scheduler.kubeconfig; do 
+        scp /root/certs/kubeconfig/$&#123;FILE&#125; $NODE:/root/certs/kubeconfig/$&#123;FILE&#125;;
+     done;
+done
+</code></pre>
+<p>验证三台证书数量是否一致 <code>ls /root/certs/kubernetes | wc -l</code></p>
+<ol start="10">
+<li><p>生成kube-proxy证书及kubeconfig文件</p>
+<p><strong>这个证书不用同步到其他节点，连接使用kubeconfig文件。</strong></p>
+</li>
+</ol>
+<pre><code class="bash">#     1.生成kube-proxy的csr文件
+cat &gt; kube-proxy-csr.json  &lt;&lt; EOF
+&#123;
+  &quot;CN&quot;: &quot;system:kube-proxy&quot;,
+  &quot;key&quot;: &#123;
+    &quot;algo&quot;: &quot;rsa&quot;,
+    &quot;size&quot;: 2048
+  &#125;,
+  &quot;names&quot;: [
+    &#123;
+      &quot;C&quot;: &quot;CN&quot;,
+      &quot;ST&quot;: &quot;Beijing&quot;,
+      &quot;L&quot;: &quot;Beijing&quot;,
+      &quot;O&quot;: &quot;system:kube-proxy&quot;,
+      &quot;OU&quot;: &quot;Kubernetes-manual&quot;
+    &#125;
+  ]
+&#125;
+EOF
+
+
+#    2.创建kube-proxy需要的证书文件
+cfssl gencert \
+  -ca=/root/certs/kubernetes/k8s-ca.pem \
+  -ca-key=/root/certs/kubernetes/k8s-ca-key.pem \
+  -config=k8s-ca-config.json \
+  -profile=kubernetes \
+  kube-proxy-csr.json | cfssljson -bare /root/certs/kubernetes/kube-proxy
+
+
+ll /root/certs/kubernetes/kube-proxy*
+#-rw-r--r-- 1 root root 1045 Jan  9 09:43 /root/certs/kubernetes/kube-proxy.csr
+#-rw------- 1 root root 1679 Jan  9 09:43 /root/certs/kubernetes/kube-proxy-key.pem
+#-rw-r--r-- 1 root root 1464 Jan  9 09:43 /root/certs/kubernetes/kube-proxy.pem
+
+
+
+#    3.设置集群
+kubectl config set-cluster root-k8s \
+  --certificate-authority=/root/certs/kubernetes/k8s-ca.pem \
+  --embed-certs=true \
+  --server=https://10.200.0.34:6443 \
+  --kubeconfig=/root/certs/kubeconfig/kube-proxy.kubeconfig
+
+#    4.设置一个用户项
+kubectl config set-credentials system:kube-proxy \
+  --client-certificate=/root/certs/kubernetes/kube-proxy.pem \
+  --client-key=/root/certs/kubernetes/kube-proxy-key.pem \
+  --embed-certs=true \
+  --kubeconfig=/root/certs/kubeconfig/kube-proxy.kubeconfig
+
+#    5.设置一个上下文环境
+kubectl config set-context kube-proxy@kubernetes \
+  --cluster=root-k8s \
+  --user=system:kube-proxy \
+  --kubeconfig=/root/certs/kubeconfig/kube-proxy.kubeconfig
+
+#    6.使用默认的上下文
+kubectl config use-context kube-proxy@kubernetes \
+  --kubeconfig=/root/certs/kubeconfig/kube-proxy.kubeconfig
+
+#    7.将kube-proxy的kube-proxy.kubeconfig文件发送到其他节点
+for NODE in k8s-master02 k8s-master03 k8s-worker01 k8s-worker02 k8s-worker03; do
+     echo $NODE
+     scp /root/certs/kubeconfig/kube-proxy.kubeconfig $NODE:/root/certs/kubeconfig/
+done
+</code></pre>
+<h3 id="3-部署K8s高可用集群"><a href="#3-部署K8s高可用集群" class="headerlink" title="3. 部署K8s高可用集群"></a>3. 部署K8s高可用集群</h3><h4 id="1-高可用组件部署"><a href="#1-高可用组件部署" class="headerlink" title="1. 高可用组件部署"></a>1. 高可用组件部署</h4><ul>
+<li><p>方案1：keepalived+nginx，具体方案省略。</p>
+</li>
+<li><p>方案2：keepalived+haproxy，具体方案省略。</p>
+</li>
+<li><p>方案3：云负载均衡（后端直接对接apiserver，本文采用）</p>
+</li>
+</ul>
+<p><strong>云主机建议使用负载均称，物理机和虚拟机建议采用keepalived。</strong></p>
+<h4 id="2-启动etcd集群"><a href="#2-启动etcd集群" class="headerlink" title="2. 启动etcd集群"></a>2. 启动etcd集群</h4><ol>
+<li>创建etcd集群各节点配置文件</li>
+</ol>
+<pre><code class="bash"># 1.创建etc部署目录（三个节点）
+mkdir -pv /root/softwares/etcd
+
+# 2.master01
+
+cat &gt; /root/softwares/etcd/etcd.config.yml &lt;&lt;&#39;EOF&#39;
+name: &#39;k8s-master01&#39;
+data-dir: /var/lib/etcd
+wal-dir: /var/lib/etcd/wal
+snapshot-count: 5000
+heartbeat-interval: 100
+election-timeout: 1000
+quota-backend-bytes: 0
+listen-peer-urls: &#39;https://10.200.16.10:2380&#39;
+listen-client-urls: &#39;https://10.200.16.10:2379,http://127.0.0.1:2379&#39;
+max-snapshots: 3
+max-wals: 5
+cors:
+initial-advertise-peer-urls: &#39;https://10.200.16.10:2380&#39;
+advertise-client-urls: &#39;https://10.200.16.10:2379&#39;
+discovery:
+discovery-fallback: &#39;proxy&#39;
+discovery-proxy:
+discovery-srv:
+initial-cluster: &#39;k8s-master01=https://10.200.16.10:2380,k8s-master02=https://10.200.16.11:2380,k8s-master03=https://10.200.16.12:2380&#39;
+initial-cluster-token: &#39;etcd-k8s-cluster&#39;
+initial-cluster-state: &#39;new&#39;
+strict-reconfig-check: false
+enable-v2: true
+enable-pprof: true
+proxy: &#39;off&#39;
+proxy-failure-wait: 5000
+proxy-refresh-interval: 30000
+proxy-dial-timeout: 1000
+proxy-write-timeout: 5000
+proxy-read-timeout: 0
+client-transport-security:
+  cert-file: &#39;/root/certs/etcd/etcd-server.pem&#39;
+  key-file: &#39;/root/certs/etcd/etcd-server-key.pem&#39;
+  client-cert-auth: true
+  trusted-ca-file: &#39;/root/certs/etcd/etcd-ca.pem&#39;
+  auto-tls: true
+peer-transport-security:
+  cert-file: &#39;/root/certs/etcd/etcd-server.pem&#39;
+  key-file: &#39;/root/certs/etcd/etcd-server-key.pem&#39;
+  peer-client-cert-auth: true
+  trusted-ca-file: &#39;/root/certs/etcd/etcd-ca.pem&#39;
+  auto-tls: true
+debug: false
+log-package-levels:
+log-outputs: [default]
+force-new-cluster: false
+EOF
+
+# 这个配置文件是用于 etcd 集群的配置，其中包含了一些重要的参数和选项：
+# 
+# - `name`：指定了当前节点的名称，用于集群中区分不同的节点。
+# - `data-dir`：指定了 etcd 数据的存储目录。
+# - `wal-dir`：指定了 etcd 数据写入磁盘的目录。
+# - `snapshot-count`：指定了触发快照的事务数量。
+# - `heartbeat-interval`：指定了 etcd 集群中节点之间的心跳间隔。
+# - `election-timeout`：指定了选举超时时间。
+# - `quota-backend-bytes`：指定了存储的限额，0 表示无限制。
+# - `listen-peer-urls`：指定了节点之间通信的 URL，使用 HTTPS 协议。
+# - `listen-client-urls`：指定了客户端访问 etcd 集群的 URL，同时提供了本地访问的 URL。
+# - `max-snapshots`：指定了快照保留的数量。
+# - `max-wals`：指定了日志保留的数量。
+# - `initial-advertise-peer-urls`：指定了节点之间通信的初始 URL。
+# - `advertise-client-urls`：指定了客户端访问 etcd 集群的初始 URL。
+# - `discovery`：定义了 etcd 集群发现相关的选项。
+# - `initial-cluster`：指定了 etcd 集群的初始成员。
+# - `initial-cluster-token`：指定了集群的 token。
+# - `initial-cluster-state`：指定了集群的初始状态。
+# - `strict-reconfig-check`：指定了严格的重新配置检查选项。
+# - `enable-v2`：启用了 v2 API。
+# - `enable-pprof`：启用了性能分析。
+# - `proxy`：设置了代理模式。
+# - `client-transport-security`：客户端的传输安全配置。
+# - `peer-transport-security`：节点之间的传输安全配置。
+# - `debug`：是否启用调试模式。
+# - `log-package-levels`：日志的输出级别。
+# - `log-outputs`：指定了日志的输出类型。
+# - `force-new-cluster`：是否强制创建一个新的集群。
+# 
+# 这些参数和选项可以根据实际需求进行调整和配置。
+
+# 3.master02
+# 修改name，本节点url
+cat &gt; /root/softwares/etcd/etcd.config.yml &lt;&lt; &#39;EOF&#39;
+name: &#39;k8s-master02&#39;
+data-dir: /var/lib/etcd
+wal-dir: /var/lib/etcd/wal
+snapshot-count: 5000
+heartbeat-interval: 100
+election-timeout: 1000
+quota-backend-bytes: 0
+listen-peer-urls: &#39;https://10.200.16.11:2380&#39;
+listen-client-urls: &#39;https://10.200.16.11:2379,http://127.0.0.1:2379&#39;
+max-snapshots: 3
+max-wals: 5
+cors:
+initial-advertise-peer-urls: &#39;https://10.200.16.11:2380&#39;
+advertise-client-urls: &#39;https://10.200.16.11:2379&#39;
+discovery:
+discovery-fallback: &#39;proxy&#39;
+discovery-proxy:
+discovery-srv:
+initial-cluster: &#39;k8s-master01=https://10.200.16.10:2380,k8s-master02=https://10.200.16.11:2380,k8s-master03=https://10.200.16.12:2380&#39;
+initial-cluster-token: &#39;etcd-k8s-cluster&#39;
+initial-cluster-state: &#39;new&#39;
+strict-reconfig-check: false
+enable-v2: true
+enable-pprof: true
+proxy: &#39;off&#39;
+proxy-failure-wait: 5000
+proxy-refresh-interval: 30000
+proxy-dial-timeout: 1000
+proxy-write-timeout: 5000
+proxy-read-timeout: 0
+client-transport-security:
+  cert-file: &#39;/root/certs/etcd/etcd-server.pem&#39;
+  key-file: &#39;/root/certs/etcd/etcd-server-key.pem&#39;
+  client-cert-auth: true
+  trusted-ca-file: &#39;/root/certs/etcd/etcd-ca.pem&#39;
+  auto-tls: true
+peer-transport-security:
+  cert-file: &#39;/root/certs/etcd/etcd-server.pem&#39;
+  key-file: &#39;/root/certs/etcd/etcd-server-key.pem&#39;
+  peer-client-cert-auth: true
+  trusted-ca-file: &#39;/root/certs/etcd/etcd-ca.pem&#39;
+  auto-tls: true
+debug: false
+log-package-levels:
+log-outputs: [default]
+force-new-cluster: false
+EOF
+
+# 4.master03
+
+cat &gt; /root/softwares/etcd/etcd.config.yml &lt;&lt; &#39;EOF&#39;
+name: &#39;k8s-master03&#39;
+data-dir: /var/lib/etcd
+wal-dir: /var/lib/etcd/wal
+snapshot-count: 5000
+heartbeat-interval: 100
+election-timeout: 1000
+quota-backend-bytes: 0
+listen-peer-urls: &#39;https://10.200.16.12:2380&#39;
+listen-client-urls: &#39;https://10.200.16.12:2379,http://127.0.0.1:2379&#39;
+max-snapshots: 3
+max-wals: 5
+cors:
+initial-advertise-peer-urls: &#39;https://10.200.16.12:2380&#39;
+advertise-client-urls: &#39;https://10.200.16.12:2379&#39;
+discovery:
+discovery-fallback: &#39;proxy&#39;
+discovery-proxy:
+discovery-srv:
+initial-cluster: &#39;k8s-master01=https://10.200.16.10:2380,k8s-master02=https://10.200.16.11:2380,k8s-master03=https://10.200.16.12:2380&#39;
+initial-cluster-token: &#39;etcd-k8s-cluster&#39;
+initial-cluster-state: &#39;new&#39;
+strict-reconfig-check: false
+enable-v2: true
+enable-pprof: true
+proxy: &#39;off&#39;
+proxy-failure-wait: 5000
+proxy-refresh-interval: 30000
+proxy-dial-timeout: 1000
+proxy-write-timeout: 5000
+proxy-read-timeout: 0
+client-transport-security:
+  cert-file: &#39;/root/certs/etcd/etcd-server.pem&#39;
+  key-file: &#39;/root/certs/etcd/etcd-server-key.pem&#39;
+  client-cert-auth: true
+  trusted-ca-file: &#39;/root/certs/etcd/etcd-ca.pem&#39;
+  auto-tls: true
+peer-transport-security:
+  cert-file: &#39;/root/certs/etcd/etcd-server.pem&#39;
+  key-file: &#39;/root/certs/etcd/etcd-server-key.pem&#39;
+  peer-client-cert-auth: true
+  trusted-ca-file: &#39;/root/certs/etcd/etcd-ca.pem&#39;
+  auto-tls: true
+debug: false
+log-package-levels:
+log-outputs: [default]
+force-new-cluster: false
+EOF
+</code></pre>
+<ol start="2">
+<li>编写etcd启动脚本</li>
+</ol>
+<pre><code class="bash">cat &gt; /usr/lib/systemd/system/etcd.service &lt;&lt;&#39;EOF&#39;
+[Unit]
+Description=Etcd Service
+Documentation=https://coreos.com/etcd/docs/latest/
+After=network.target
+
+[Service]
+Type=notify
+ExecStart=/usr/local/bin/etcd --config-file=/root/softwares/etcd/etcd.config.yml
+Restart=on-failure
+RestartSec=10
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target
+Alias=etcd3.service
+EOF
+</code></pre>
+<ol start="3">
+<li>启动etcd集群</li>
+</ol>
+<pre><code class="bash"># 1.三点节点启动
+systemctl daemon-reload &amp;&amp; systemctl enable --now etcd
+systemctl status etcd
+
+# 2.查看etcd集群状态-master01节点
+etcdctl --endpoints=&quot;10.200.16.10:2379,10.200.16.11:2379,10.200.16.12:2379&quot; --cacert=/root/certs/etcd/etcd-ca.pem --cert=/root/certs/etcd/etcd-server.pem --key=/root/certs/etcd/etcd-server-key.pem  endpoint status --write-out=table
+
+# 3.验证集群高可用，停止后观察集群状态
+systemctl stop etcd 
+systemctl start etcd 
+</code></pre>
+<h4 id="3-部署ApiServer组件"><a href="#3-部署ApiServer组件" class="headerlink" title="3. 部署ApiServer组件"></a>3. 部署ApiServer组件</h4><ol>
+<li>k8s-master01节点启动ApiServer</li>
+</ol>
+<pre><code class="bash">cat &gt; /usr/lib/systemd/system/kube-apiserver.service &lt;&lt; &#39;EOF&#39;
+[Unit]
+Description=Kubernetes API Server
+Documentation=https://github.com/kubernetes/kubernetes
+After=network.target
+
+[Service]
+ExecStart=/usr/local/bin/kube-apiserver \
+      --v=2  \
+      --bind-address=0.0.0.0  \
+      --secure-port=6443  \
+      --allow_privileged=true \
+      --advertise-address=10.200.16.10 \
+      --service-cluster-ip-range=10.100.0.0/16  \
+      --service-node-port-range=3000-50000  \
+      --etcd-servers=https://10.200.16.10:2379,https://10.200.16.11:2379,https://10.200.16.12:2379 \
+      --etcd-cafile=/root/certs/etcd/etcd-ca.pem  \
+      --etcd-certfile=/root/certs/etcd/etcd-server.pem  \
+      --etcd-keyfile=/root/certs/etcd/etcd-server-key.pem  \
+      --client-ca-file=/root/certs/kubernetes/k8s-ca.pem  \
+      --tls-cert-file=/root/certs/kubernetes/apiserver.pem  \
+      --tls-private-key-file=/root/certs/kubernetes/apiserver-key.pem  \
+      --kubelet-client-certificate=/root/certs/kubernetes/apiserver.pem  \
+      --kubelet-client-key=/root/certs/kubernetes/apiserver-key.pem  \
+      --service-account-key-file=/root/certs/kubernetes/sa.pub  \
+      --service-account-signing-key-file=/root/certs/kubernetes/sa.key \
+      --service-account-issuer=https://kubernetes.default.svc.root.com \
+      --kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname  \
+      --enable-admission-plugins=NamespaceLifecycle,LimitRanger,ServiceAccount,DefaultStorageClass,DefaultTolerationSeconds,NodeRestriction,ResourceQuota  \
+      --authorization-mode=Node,RBAC  \
+      --enable-bootstrap-token-auth=true  \
+      --requestheader-client-ca-file=/root/certs/kubernetes/front-proxy-ca.pem  \
+      --proxy-client-cert-file=/root/certs/kubernetes/front-proxy-client.pem  \
+      --proxy-client-key-file=/root/certs/kubernetes/front-proxy-client-key.pem  \
+      --requestheader-allowed-names=aggregator  \
+      --requestheader-group-headers=X-Remote-Group  \
+      --requestheader-extra-headers-prefix=X-Remote-Extra-  \
+      --requestheader-username-headers=X-Remote-User
+
+Restart=on-failure
+RestartSec=10s
+LimitNOFILE=65535
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+systemctl daemon-reload &amp;&amp; systemctl enable --now kube-apiserver
+systemctl status kube-apiserver
+</code></pre>
+<p>参数解释：</p>
+<pre><code class="markdown">该配置文件是用于定义Kubernetes API Server的systemd服务的配置。systemd是一个用于启动和管理Linux系统服务的守护进程。
+
+[Unit]
+- Description: 服务的描述信息，用于显示在日志和系统管理工具中。
+- Documentation: 提供关于服务的文档链接。
+- After: 规定服务依赖于哪些其他服务或单元。在这个例子中，API Server服务在网络目标启动之后启动。
+
+[Service]
+- ExecStart: 定义服务的命令行参数和命令。这里指定了API Server的启动命令，包括各种参数选项。
+- Restart: 指定当服务退出时应该如何重新启动。在这个例子中，服务在失败时将被重新启动。
+- RestartSec: 指定两次重新启动之间的等待时间。
+- LimitNOFILE: 指定进程可以打开的文件描述符的最大数量。
+
+[Install]
+- WantedBy: 指定服务应该安装到哪个系统目标。在这个例子中，服务将被安装到multi-user.target目标，以便在多用户模式下启动。
+
+上述配置文件中定义的kube-apiserver服务将以指定的参数运行，这些参数包括：
+
+- `--v=2` 指定日志级别为2，打印详细的API Server日志。
+- `--allow-privileged=true` 允许特权容器运行。
+- `--bind-address=0.0.0.0` 绑定API Server监听的IP地址。
+- `--secure-port=6443` 指定API Server监听的安全端口。
+- `--advertise-address=10.200.16.10` 广告API Server的地址。
+- `--service-cluster-ip-range=10.96.0.0/12,fd00:1111::/112` 指定服务CIDR范围。
+- `--service-node-port-range=30000-32767` 指定NodePort的范围。
+- `--etcd-servers=https://10.200.16.10:2379,https://10.200.16.11:2379,https://10.200.16.12:2379` 指定etcd服务器的地址。
+- `--etcd-cafile` 指定etcd服务器的CA证书。
+- `--etcd-certfile` 指定etcd服务器的证书。
+- `--etcd-keyfile` 指定etcd服务器的私钥。
+- `--client-ca-file` 指定客户端CA证书。
+- `--tls-cert-file` 指定服务的证书。
+- `--tls-private-key-file` 指定服务的私钥。
+- `--kubelet-client-certificate` 和 `--kubelet-client-key` 指定与kubelet通信的客户端证书和私钥。
+- `--service-account-key-file` 指定服务账户公钥文件。
+- `--service-account-signing-key-file` 指定服务账户签名密钥文件。
+- `--service-account-issuer` 指定服务账户的发布者。
+- `--kubelet-preferred-address-types` 指定kubelet通信时的首选地址类型。
+- `--enable-admission-plugins` 启用一系列准入插件。
+- `--authorization-mode` 指定授权模式。
+- `--enable-bootstrap-token-auth` 启用引导令牌认证。
+- `--requestheader-client-ca-file` 指定请求头中的客户端CA证书。
+- `--proxy-client-cert-file` 和 `--proxy-client-key-file` 指定代理客户端的证书和私钥。
+- `--requestheader-allowed-names` 指定请求头中允许的名字。
+- `--requestheader-group-headers` 指定请求头中的组头。
+- `--requestheader-extra-headers-prefix` 指定请求头中的额外头前缀。
+- `--requestheader-username-headers` 指定请求头中的用户名头。
+- `--enable-aggregator-routing` 启用聚合路由。
+
+整个配置文件为Kubernetes API Server提供了必要的参数，以便正确地启动和运行。
+</code></pre>
+<ol start="2">
+<li>k8s-master02节点启动ApiServer</li>
+</ol>
+<pre><code class="bash">cat &gt; /usr/lib/systemd/system/kube-apiserver.service &lt;&lt; &#39;EOF&#39;
+[Unit]
+Description=Kubernetes API Server
+Documentation=https://github.com/kubernetes/kubernetes
+After=network.target
+
+[Service]
+ExecStart=/usr/local/bin/kube-apiserver \
+      --v=2  \
+      --bind-address=0.0.0.0  \
+      --secure-port=6443  \
+      --allow_privileged=true \
+      --advertise-address=10.200.16.11 \
+      --service-cluster-ip-range=10.100.0.0/16  \
+      --service-node-port-range=3000-50000  \
+      --etcd-servers=https://10.200.16.10:2379,https://10.200.16.11:2379,https://10.200.16.12:2379 \
+      --etcd-cafile=/root/certs/etcd/etcd-ca.pem  \
+      --etcd-certfile=/root/certs/etcd/etcd-server.pem  \
+      --etcd-keyfile=/root/certs/etcd/etcd-server-key.pem  \
+      --client-ca-file=/root/certs/kubernetes/k8s-ca.pem  \
+      --tls-cert-file=/root/certs/kubernetes/apiserver.pem  \
+      --tls-private-key-file=/root/certs/kubernetes/apiserver-key.pem  \
+      --kubelet-client-certificate=/root/certs/kubernetes/apiserver.pem  \
+      --kubelet-client-key=/root/certs/kubernetes/apiserver-key.pem  \
+      --service-account-key-file=/root/certs/kubernetes/sa.pub  \
+      --service-account-signing-key-file=/root/certs/kubernetes/sa.key \
+      --service-account-issuer=https://kubernetes.default.svc.root.com \
+      --kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname  \
+      --enable-admission-plugins=NamespaceLifecycle,LimitRanger,ServiceAccount,DefaultStorageClass,DefaultTolerationSeconds,NodeRestriction,ResourceQuota  \
+      --authorization-mode=Node,RBAC  \
+      --enable-bootstrap-token-auth=true  \
+      --requestheader-client-ca-file=/root/certs/kubernetes/front-proxy-ca.pem  \
+      --proxy-client-cert-file=/root/certs/kubernetes/front-proxy-client.pem  \
+      --proxy-client-key-file=/root/certs/kubernetes/front-proxy-client-key.pem  \
+      --requestheader-allowed-names=aggregator  \
+      --requestheader-group-headers=X-Remote-Group  \
+      --requestheader-extra-headers-prefix=X-Remote-Extra-  \
+      --requestheader-username-headers=X-Remote-User
+
+Restart=on-failure
+RestartSec=10s
+LimitNOFILE=65535
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+systemctl daemon-reload &amp;&amp; systemctl enable --now kube-apiserver
+systemctl status kube-apiserver
+</code></pre>
+<ol start="3">
+<li>k8s-master03节点启动ApiServer</li>
+</ol>
+<pre><code class="bash">cat &gt; /usr/lib/systemd/system/kube-apiserver.service &lt;&lt; &#39;EOF&#39;
+[Unit]
+Description=Kubernetes API Server
+Documentation=https://github.com/kubernetes/kubernetes
+After=network.target
+
+[Service]
+ExecStart=/usr/local/bin/kube-apiserver \
+      --v=2  \
+      --bind-address=0.0.0.0  \
+      --secure-port=6443  \
+      --allow_privileged=true \
+      --advertise-address=10.200.16.12 \
+      --service-cluster-ip-range=10.100.0.0/16  \
+      --service-node-port-range=3000-50000  \
+      --etcd-servers=https://10.200.16.10:2379,https://10.200.16.11:2379,https://10.200.16.12:2379 \
+      --etcd-cafile=/root/certs/etcd/etcd-ca.pem  \
+      --etcd-certfile=/root/certs/etcd/etcd-server.pem  \
+      --etcd-keyfile=/root/certs/etcd/etcd-server-key.pem  \
+      --client-ca-file=/root/certs/kubernetes/k8s-ca.pem  \
+      --tls-cert-file=/root/certs/kubernetes/apiserver.pem  \
+      --tls-private-key-file=/root/certs/kubernetes/apiserver-key.pem  \
+      --kubelet-client-certificate=/root/certs/kubernetes/apiserver.pem  \
+      --kubelet-client-key=/root/certs/kubernetes/apiserver-key.pem  \
+      --service-account-key-file=/root/certs/kubernetes/sa.pub  \
+      --service-account-signing-key-file=/root/certs/kubernetes/sa.key \
+      --service-account-issuer=https://kubernetes.default.svc.root.com \
+      --kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname  \
+      --enable-admission-plugins=NamespaceLifecycle,LimitRanger,ServiceAccount,DefaultStorageClass,DefaultTolerationSeconds,NodeRestriction,ResourceQuota  \
+      --authorization-mode=Node,RBAC  \
+      --enable-bootstrap-token-auth=true  \
+      --requestheader-client-ca-file=/root/certs/kubernetes/front-proxy-ca.pem  \
+      --proxy-client-cert-file=/root/certs/kubernetes/front-proxy-client.pem  \
+      --proxy-client-key-file=/root/certs/kubernetes/front-proxy-client-key.pem  \
+      --requestheader-allowed-names=aggregator  \
+      --requestheader-group-headers=X-Remote-Group  \
+      --requestheader-extra-headers-prefix=X-Remote-Extra-  \
+      --requestheader-username-headers=X-Remote-User
+
+Restart=on-failure
+RestartSec=10s
+LimitNOFILE=65535
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+systemctl daemon-reload &amp;&amp; systemctl enable --now kube-apiserver
+systemctl status kube-apiserver
+</code></pre>
+<h4 id="4-部署ControlerManager组件"><a href="#4-部署ControlerManager组件" class="headerlink" title="4. 部署ControlerManager组件"></a>4. 部署ControlerManager组件</h4><pre><code class="bash"># 所有master节点的controller-manager组件配置文件相同
+# - &quot;--cluster-cidr&quot;是Pod的网段地址，不带service前缀，默认是pod的cidr
+cat &gt; /usr/lib/systemd/system/kube-controller-manager.service &lt;&lt; &#39;EOF&#39;
+[Unit]
+Description=Kubernetes Controller Manager
+Documentation=https://github.com/kubernetes/kubernetes
+After=network.target
+
+[Service]
+ExecStart=/usr/local/bin/kube-controller-manager \
+      --v=2 \
+      --root-ca-file=/root/certs/kubernetes/k8s-ca.pem \
+      --cluster-signing-cert-file=/root/certs/kubernetes/k8s-ca.pem \
+      --cluster-signing-key-file=/root/certs/kubernetes/k8s-ca-key.pem \
+      --service-account-private-key-file=/root/certs/kubernetes/sa.key \
+      --kubeconfig=/root/certs/kubeconfig/kube-controller-manager.kubeconfig \
+      --leader-elect=true \
+      --use-service-account-credentials=true \
+      --node-monitor-grace-period=40s \
+      --node-monitor-period=5s \
+      --controllers=*,bootstrapsigner,tokencleaner \
+      --allocate-node-cidrs=true \
+      --cluster-cidr=10.100.0.0/16 \
+      --requestheader-client-ca-file=/root/certs/kubernetes/front-proxy-ca.pem \
+      --node-cidr-mask-size=24
+
+Restart=always
+RestartSec=10s
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+
+systemctl daemon-reload
+systemctl enable --now kube-controller-manager
+systemctl  status kube-controller-manager
+</code></pre>
+<p>参数解释</p>
+<pre><code class="bash">这是一个用于启动 Kubernetes 控制器管理器的 systemd 服务单元文件。下面是对每个部分的详细解释：
+
+[Unit]：单元的基本信息部分，用于描述和标识这个服务单元。
+Description：服务单元的描述信息，说明了该服务单元的作用，这里是 Kubernetes 控制器管理器。
+Documentation：可选项，提供了关于该服务单元的文档链接。
+After：定义了该服务单元在哪些其他单元之后启动，这里是 network.target，即在网络服务启动之后启动。
+
+[Service]：定义了服务的运行参数和行为。
+ExecStart：指定服务启动时执行的命令，这里是 /usr/local/bin/kube-controller-manager，并通过后续的行继续传递了一系列的参数设置。
+Restart：定义了服务在退出后的重新启动策略，这里设置为 always，表示总是重新启动服务。
+RestartSec：定义了重新启动服务的时间间隔，这里设置为 10 秒。
+
+[Install]：定义了如何安装和启用服务单元。
+WantedBy：指定了服务单元所属的 target，这里是 multi-user.target，表示启动多用户模式下的服务。
+在 ExecStart 中传递的参数说明如下：
+
+--v=2：设置日志的详细级别为 2。
+--bind-address=0.0.0.0：绑定的 IP 地址，用于监听 Kubernetes 控制平面的请求，这里设置为 0.0.0.0，表示监听所有网络接口上的请求。
+--root-ca-file：根证书文件的路径，用于验证其他组件的证书。
+--cluster-signing-cert-file：用于签名集群证书的证书文件路径。
+--cluster-signing-key-file：用于签名集群证书的私钥文件路径。
+--service-account-private-key-file：用于签名服务账户令牌的私钥文件路径。
+--kubeconfig：kubeconfig 文件的路径，包含了与 Kubernetes API 服务器通信所需的配置信息。
+--leader-elect=true：启用 Leader 选举机制，确保只有一个控制器管理器作为 leader 在运行。
+--use-service-account-credentials=true：使用服务账户的凭据进行认证和授权。
+--node-monitor-grace-period=40s：节点监控的优雅退出时间，节点长时间不响应时会触发节点驱逐。
+--node-monitor-period=5s：节点监控的检测周期，用于检测节点是否正常运行。
+--controllers：指定要运行的控制器类型，在这里使用了通配符 *，表示运行所有的控制器，同时还包括了 bootstrapsigner 和 tokencleaner 控制器。
+--allocate-node-cidrs=true：为节点分配 CIDR 子网，用于分配 Pod 网络地址。
+--service-cluster-ip-range：定义 Service 的 IP 范围，这里设置为 10.96.0.0/12 和 fd00::/108。
+--cluster-cidr：定义集群的 CIDR 范围，这里设置为 172.16.0.0/12 和 fc00::/48。
+--node-cidr-mask-size-ipv4：分配给每个节点的 IPv4 子网掩码大小，默认是 24
+--node-cidr-mask-size-ipv6：分配给每个节点的 IPv6 子网掩码大小，默认是 120。
+--requestheader-client-ca-file：设置请求头中客户端 CA 的证书文件路径，用于认证请求头中的 CA 证书。
+
+这个服务单元文件描述了 Kubernetes 控制器管理器的启动参数和行为，并且定义了服务的依赖关系和重新启动策略。通过 systemd 启动该服务单元，即可启动 Kubernetes 控制器管理器组件。
+</code></pre>
+<h4 id="5-部署Scheduler组件"><a href="#5-部署Scheduler组件" class="headerlink" title="5. 部署Scheduler组件"></a>5. 部署Scheduler组件</h4><pre><code class="bash"># 所有master节点的kube-scheduler配置文件相同
+cat &gt; /usr/lib/systemd/system/kube-scheduler.service &lt;&lt;&#39;EOF&#39;
+[Unit]
+Description=Jason Yin&#39;s Kubernetes Scheduler
+Documentation=https://github.com/kubernetes/kubernetes
+After=network.target
+
+[Service]
+ExecStart=/usr/local/bin/kube-scheduler \
+      --v=2 \
+      --leader-elect=true \
+      --kubeconfig=/root/certs/kubeconfig/kube-scheduler.kubeconfig
+
+Restart=always
+RestartSec=10s
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+
+systemctl daemon-reload
+systemctl enable --now kube-scheduler
+systemctl  status kube-scheduler
+</code></pre>
+<p>参数解释</p>
+<pre><code class="markdown">你是谁这是一个用于启动 Kubernetes 调度器的 systemd 服务单元文件。下面是对每个部分的详细解释：
+
+[Unit]：单元的基本信息部分，用于描述和标识这个服务单元。
+Description：服务单元的描述信息，说明了该服务单元的作用，这里是 Kubernetes 调度器。
+Documentation：可选项，提供了关于该服务单元的文档链接。
+After：定义了该服务单元在哪些其他单元之后启动，这里是 network.target，即在网络服务启动之后启动。
+
+[Service]：定义了服务的运行参数和行为。
+ExecStart：指定服务启动时执行的命令，这里是 /usr/local/bin/kube-scheduler，并通过后续的行继续传递了一系列的参数设置。
+Restart：定义了服务在退出后的重新启动策略，这里设置为 always，表示总是重新启动服务。
+RestartSec：定义了重新启动服务的时间间隔，这里设置为 10 秒。
+
+[Install]：定义了如何安装和启用服务单元。
+WantedBy：指定了服务单元所属的 target，这里是 multi-user.target，表示启动多用户模式下的服务。
+
+在 ExecStart 中传递的参数说明如下：
+
+--v=2：设置日志的详细级别为 2。
+--bind-address=0.0.0.0：绑定的 IP 地址，用于监听 Kubernetes 控制平面的请求，这里设置为 0.0.0.0，表示监听所有网络接口上的请求。
+--leader-elect=true：启用 Leader 选举机制，确保只有一个调度器作为 leader 在运行。
+--kubeconfig=/etc/kubernetes/scheduler.kubeconfig：kubeconfig 文件的路径，包含了与 Kubernetes API 服务器通信所需的配置信息。
+
+这个服务单元文件描述了 Kubernetes 调度器的启动参数和行为，并且定义了服务的依赖关系和重新启动策略。通过 systemd 启动该服务单元，即可启动 Kubernetes 调度器组件。
+</code></pre>
+<h4 id="6-创建Bootstrapping自动颁发kubelet证书配置"><a href="#6-创建Bootstrapping自动颁发kubelet证书配置" class="headerlink" title="6. 创建Bootstrapping自动颁发kubelet证书配置"></a>6. 创建Bootstrapping自动颁发kubelet证书配置</h4><ol>
+<li>master01节点创建bootstrap-kubelet.kubeconfig文件</li>
+</ol>
+<pre><code class="bash">#    1.设置集群
+kubectl config set-cluster root-k8s \
+  --certificate-authority=/root/certs/kubernetes/k8s-ca.pem \
+  --embed-certs=true \
+  --server=https://10.200.0.34:6443 \
+  --kubeconfig=/root/certs/kubeconfig/bootstrap-kubelet.kubeconfig
+
+#    2.创建用户(id为6位,secret为16位，硬性规定)
+kubectl config set-credentials tls-bootstrap-token-user  \
+  --token=yindao.langxwroot16weii \
+  --kubeconfig=/root/certs/kubeconfig/bootstrap-kubelet.kubeconfig
+
+
+#    3.将集群和用户进行绑定
+kubectl config set-context tls-bootstrap-token-user@kubernetes \
+  --cluster=root-k8s \
+  --user=tls-bootstrap-token-user \
+  --kubeconfig=/root/certs/kubeconfig/bootstrap-kubelet.kubeconfig
+
+
+#    4.配置默认的上下文
+kubectl config use-context tls-bootstrap-token-user@kubernetes \
+  --kubeconfig=/root/certs/kubeconfig/bootstrap-kubelet.kubeconfig
+</code></pre>
+<ol start="2">
+<li>所有master节点拷贝管理证书</li>
+</ol>
+<pre><code class="bash">mkdir -p /root/.kube
+cp /root/certs/kubeconfig/kube-admin.kubeconfig /root/.kube/config
+kubectl get cs
+kubectl cluster-info 
+</code></pre>
+<ol start="3">
+<li>创建bootstrap-secret授权</li>
+</ol>
+<pre><code class="bash"># 1.创建yaml文件，注意token-id和token-secret 和上面保持一致
+cat &gt; bootstrap-secret.yaml &lt;&lt;EOF
+apiVersion: v1
+kind: Secret
+metadata:
+  name: bootstrap-token-yindao
+  namespace: kube-system
+type: bootstrap.kubernetes.io/token
+stringData:
+  description: &quot;The default bootstrap token generated by &#39;kubelet &#39;.&quot;
+  token-id: yindao
+  token-secret: langxwroot16weii
+  usage-bootstrap-authentication: &quot;true&quot;
+  usage-bootstrap-signing: &quot;true&quot;
+  auth-extra-groups:  system:bootstrappers:default-node-token,system:bootstrappers:worker,system:bootstrappers:ingress
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: kubelet-bootstrap
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: system:node-bootstrapper
+subjects:
+- apiGroup: rbac.authorization.k8s.io
+  kind: Group
+  name: system:bootstrappers:default-node-token
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: node-autoapprove-bootstrap
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: system:certificates.k8s.io:certificatesigningrequests:nodeclient
+subjects:
+- apiGroup: rbac.authorization.k8s.io
+  kind: Group
+  name: system:bootstrappers:default-node-token
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: node-autoapprove-certificate-rotation
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: system:certificates.k8s.io:certificatesigningrequests:selfnodeclient
+subjects:
+- apiGroup: rbac.authorization.k8s.io
+  kind: Group
+  name: system:nodes
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  annotations:
+    rbac.authorization.kubernetes.io/autoupdate: &quot;true&quot;
+  labels:
+    kubernetes.io/bootstrapping: rbac-defaults
+  name: system:kube-apiserver-to-kubelet
+rules:
+  - apiGroups:
+      - &quot;&quot;
+    resources:
+      - nodes/proxy
+      - nodes/stats
+      - nodes/log
+      - nodes/spec
+      - nodes/metrics
+    verbs:
+      - &quot;*&quot;
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: system:kube-apiserver
+  namespace: &quot;&quot;
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: system:kube-apiserver-to-kubelet
+subjects:
+
+  - apiGroup: rbac.authorization.k8s.io
+    kind: User
+    name: kube-apiserver
+EOF
+
+# 2 应用
+kubectl apply -f bootstrap-secret.yaml 
+</code></pre>
+<h4 id="9-部署worker节点"><a href="#9-部署worker节点" class="headerlink" title="9. 部署worker节点"></a>9. 部署worker节点</h4><ol>
+<li>复制证书</li>
+</ol>
+<pre><code class="bash">for NODE in k8s-master02 k8s-master03 k8s-worker01 k8s-worker02 k8s-worker03; do
+     echo $NODE
+     ssh $NODE &quot;mkdir -p /root/certs/kube&#123;config,rnetes&#125;&quot;
+     for FILE in k8s-ca.pem k8s-ca-key.pem front-proxy-ca.pem; do
+       scp kubernetes/$FILE $NODE:/root/certs/kubernetes/$&#123;FILE&#125;
+     done
+     scp kubeconfig/bootstrap-kubelet.kubeconfig $NODE:/root/certs/kubeconfig/
+done
+</code></pre>
+<ol start="2">
+<li>启动kubelet服务</li>
+</ol>
+<pre><code class="bash">#     - 在&quot;10-kubelet.con&quot;文件中使用&quot;--kubeconfig&quot;指定的&quot;kubelet.kubeconfig&quot;文件并不存在，这个证书文件后期会自动生成;
+#    - 对于&quot;clusterDNS&quot;是NDS地址，我们可以自定义，比如&quot;10.100.0.254&quot;;
+#    - &quot;clusterDomain&quot;对应的是域名信息，要和我们设计的集群保持一致，比如默认值&quot;cluster.local&quot;;
+#    - &quot;10-kubelet.conf&quot;文件中的&quot;ExecStart=&quot;需要写2次，否则可能无法启动kubelet;
+
+# 1.所有节点创建工作目录
+mkdir -p /var/lib/kubelet /var/log/kubernetes /etc/systemd/system/kubelet.service.d /etc/kubernetes/manifests/
+
+# 2.所有节点创建kubelet的配置文件
+cat &gt; /etc/kubernetes/kubelet-conf.yml &lt;&lt;&#39;EOF&#39;
+apiVersion: kubelet.config.k8s.io/v1beta1
+kind: KubeletConfiguration
+address: 0.0.0.0
+port: 10250
+readOnlyPort: 10255
+authentication:
+  anonymous:
+    enabled: false
+  webhook:
+    cacheTTL: 2m0s
+    enabled: true
+  x509:
+    clientCAFile: /root/certs/kubernetes/k8s-ca.pem
+authorization:
+  mode: Webhook
+  webhook:
+    cacheAuthorizedTTL: 5m0s
+    cacheUnauthorizedTTL: 30s
+cgroupDriver: systemd
+cgroupsPerQOS: true
+clusterDNS:
+- 10.100.0.254
+clusterDomain: cluster.local
+containerLogMaxFiles: 5
+containerLogMaxSize: 10Mi
+contentType: application/vnd.kubernetes.protobuf
+cpuCFSQuota: true
+cpuManagerPolicy: none
+cpuManagerReconcilePeriod: 10s
+enableControllerAttachDetach: true
+enableDebuggingHandlers: true
+enforceNodeAllocatable:
+- pods
+eventBurst: 10
+eventRecordQPS: 5
+evictionHard:
+  imagefs.available: 15%
+  memory.available: 100Mi
+  nodefs.available: 10%
+  nodefs.inodesFree: 5%
+evictionPressureTransitionPeriod: 5m0s
+failSwapOn: true
+fileCheckFrequency: 20s
+hairpinMode: promiscuous-bridge
+healthzBindAddress: 127.0.0.1
+healthzPort: 10248
+httpCheckFrequency: 20s
+imageGCHighThresholdPercent: 85
+imageGCLowThresholdPercent: 80
+imageMinimumGCAge: 2m0s
+iptablesDropBit: 15
+iptablesMasqueradeBit: 14
+kubeAPIBurst: 10
+kubeAPIQPS: 5
+makeIPTablesUtilChains: true
+maxOpenFiles: 1000000
+maxPods: 110
+nodeStatusUpdateFrequency: 10s
+oomScoreAdj: -999
+podPidsLimit: -1
+registryBurst: 10
+registryPullQPS: 5
+resolvConf: /etc/resolv.conf
+rotateCertificates: true
+runtimeRequestTimeout: 2m0s
+serializeImagePulls: true
+staticPodPath: /etc/kubernetes/manifests
+streamingConnectionIdleTimeout: 4h0m0s
+syncFrequency: 1m0s
+volumeStatsAggPeriod: 1m0s
+EOF
+
+
+# 3.所有节点配置kubelet service
+cat &gt;  /usr/lib/systemd/system/kubelet.service &lt;&lt;&#39;EOF&#39;
+[Unit]
+Description=Kubernetes Kubelet
+Documentation=https://github.com/kubernetes/kubernetes
+After=containerd.service
+Requires=containerd.service
+
+[Service]
+ExecStart=/usr/local/bin/kubelet
+Restart=always
+StartLimitInterval=0
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+# 4.所有节点配置kubelet service的配置文件
+cat &gt; /etc/systemd/system/kubelet.service.d/10-kubelet.conf &lt;&lt;&#39;EOF&#39;
+[Service]
+Environment=&quot;KUBELET_KUBECONFIG_ARGS=--bootstrap-kubeconfig=/root/certs/kubeconfig/bootstrap-kubelet.kubeconfig --kubeconfig=/root/certs/kubeconfig/kubelet.kubeconfig&quot;
+Environment=&quot;KUBELET_CONFIG_ARGS=--config=/etc/kubernetes/kubelet-conf.yml&quot;
+Environment=&quot;KUBELET_SYSTEM_ARGS=--container-runtime-endpoint=unix:///run/containerd/containerd.sock&quot;
+Environment=&quot;KUBELET_EXTRA_ARGS=--node-labels=node.kubernetes.io/node=&#39;&#39; &quot;
+ExecStart=
+ExecStart=/usr/local/bin/kubelet $KUBELET_KUBECONFIG_ARGS $KUBELET_CONFIG_ARGS $KUBELET_SYSTEM_ARGS $KUBELET_EXTRA_ARGS
+EOF
+
+
+参数解释：
+# 这是一个Kubelet的配置文件，用于配置Kubelet的各项参数。
+# 
+# - apiVersion: kubelet.config.k8s.io/v1beta1：指定了配置文件的API版本为kubelet.config.k8s.io/v1beta1。
+# - kind: KubeletConfiguration：指定了配置类别为KubeletConfiguration。
+# - address: 0.0.0.0：指定了Kubelet监听的地址为0.0.0.0。
+# - port: 10250：指定了Kubelet监听的端口为10250。
+# - readOnlyPort: 10255：指定了只读端口为10255，用于提供只读的状态信息。
+# - authentication：指定了认证相关的配置信息。
+#   - anonymous.enabled: false：禁用了匿名认证。
+#   - webhook.enabled: true：启用了Webhook认证。
+#   - x509.clientCAFile: /etc/kubernetes/pki/ca.pem：指定了X509证书的客户端CA文件路径。
+# - authorization：指定了授权相关的配置信息。
+#   - mode: Webhook：指定了授权模式为Webhook。
+#   - webhook.cacheAuthorizedTTL: 5m0s：指定了授权缓存时间段为5分钟。
+#   - webhook.cacheUnauthorizedTTL: 30s：指定了未授权缓存时间段为30秒。
+# - cgroupDriver: systemd：指定了Cgroup驱动为systemd。
+# - cgroupsPerQOS: true：启用了每个QoS类别一个Cgroup的设置。
+# - clusterDNS: 指定了集群的DNS服务器地址列表。
+#   - 10.96.0.10：指定了DNS服务器地址为10.96.0.10。
+# - clusterDomain: cluster.local：指定了集群的域名后缀为cluster.local。
+# - containerLogMaxFiles: 5：指定了容器日志文件保留的最大数量为5个。
+# - containerLogMaxSize: 10Mi：指定了容器日志文件的最大大小为10Mi。
+# - contentType: application/vnd.kubernetes.protobuf：指定了内容类型为protobuf。
+# - cpuCFSQuota: true：启用了CPU CFS Quota。
+# - cpuManagerPolicy: none：禁用了CPU Manager。
+# - cpuManagerReconcilePeriod: 10s：指定了CPU管理器的调整周期为10秒。
+# - enableControllerAttachDetach: true：启用了控制器的挂载和拆卸。
+# - enableDebuggingHandlers: true：启用了调试处理程序。
+# - enforceNodeAllocatable: 指定了强制节点可分配资源的列表。
+#   - pods：强制节点可分配pods资源。
+# - eventBurst: 10：指定了事件突发的最大数量为10。
+# - eventRecordQPS: 5：指定了事件记录的最大请求量为5。
+# - evictionHard: 指定了驱逐硬性限制参数的配置信息。
+#   - imagefs.available: 15%：指定了镜像文件系统可用空间的限制为15%。
+#   - memory.available: 100Mi：指定了可用内存的限制为100Mi。
+#   - nodefs.available: 10%：指定了节点文件系统可用空间的限制为10%。
+#   - nodefs.inodesFree: 5%：指定了节点文件系统可用inode的限制为5%。
+# - evictionPressureTransitionPeriod: 5m0s：指定了驱逐压力转换的时间段为5分钟。
+# - failSwapOn: true：指定了在发生OOM时禁用交换分区。
+# - fileCheckFrequency: 20s：指定了文件检查频率为20秒。
+# - hairpinMode: promiscuous-bridge：设置了Hairpin Mode为&quot;promiscuous-bridge&quot;。
+# - healthzBindAddress: 127.0.0.1：指定了健康检查的绑定地址为127.0.0.1。
+# - healthzPort: 10248：指定了健康检查的端口为10248。
+# - httpCheckFrequency: 20s：指定了HTTP检查的频率为20秒。
+# - imageGCHighThresholdPercent: 85：指定了镜像垃圾回收的上阈值为85%。
+# - imageGCLowThresholdPercent: 80：指定了镜像垃圾回收的下阈值为80%。
+# - imageMinimumGCAge: 2m0s：指定了镜像垃圾回收的最小时间为2分钟。
+# - iptablesDropBit: 15：指定了iptables的Drop Bit为15。
+# - iptablesMasqueradeBit: 14：指定了iptables的Masquerade Bit为14。
+# - kubeAPIBurst: 10：指定了KubeAPI的突发请求数量为10个。
+# - kubeAPIQPS: 5：指定了KubeAPI的每秒请求频率为5个。
+# - makeIPTablesUtilChains: true：指定了是否使用iptables工具链。
+# - maxOpenFiles: 1000000：指定了最大打开文件数为1000000。
+# - maxPods: 110：指定了最大的Pod数量为110。
+# - nodeStatusUpdateFrequency: 10s：指定了节点状态更新的频率为10秒。
+# - oomScoreAdj: -999：指定了OOM Score Adjustment为-999。
+# - podPidsLimit: -1：指定了Pod的PID限制为-1，表示无限制。
+# - registryBurst: 10：指定了Registry的突发请求数量为10个。
+# - registryPullQPS: 5：指定了Registry的每秒拉取请求数量为5个。
+# - resolvConf: /etc/resolv.conf：指定了resolv.conf的文件路径。
+# - rotateCertificates: true：指定了是否轮转证书。
+# - runtimeRequestTimeout: 2m0s：指定了运行时请求的超时时间为2分钟。
+# - serializeImagePulls: true：指定了是否序列化镜像拉取。
+# - staticPodPath: /etc/kubernetes/manifests：指定了静态Pod的路径。
+# - streamingConnectionIdleTimeout: 4h0m0s：指定了流式连接的空闲超时时间为4小时。
+# - syncFrequency: 1m0s：指定了同步频率为1分钟。
+# - volumeStatsAggPeriod: 1m0s：指定了卷统计聚合周期为1分钟。
+
+# 5.启动所有节点kubelet
+systemctl daemon-reload
+systemctl enable --now kubelet
+systemctl status kubelet
+
+
+# 6.在所有master节点上查看nodes信息。
+kubectl get nodes
+
+
+# 7.可以查看到有相应的csr用户客户端的证书请求
+kubectl get csr
+</code></pre>
+<ol start="3">
+<li>启动kube-proxy服务</li>
+</ol>
+<pre><code class="bash"># 1.所有节点创建kube-proxy.conf配置文件，
+cat &gt; /etc/kubernetes/kube-proxy.yml &lt;&lt; EOF
+apiVersion: kubeproxy.config.k8s.io/v1alpha1
+kind: KubeProxyConfiguration
+bindAddress: 0.0.0.0
+metricsBindAddress: 127.0.0.1:10249
+clientConnection:
+  acceptConnection: &quot;&quot;
+  burst: 10
+  contentType: application/vnd.kubernetes.protobuf
+  kubeconfig: /root/certs/kubeconfig/kube-proxy.kubeconfig
+  qps: 5
+clusterCIDR: 10.100.0.0/16
+configSyncPeriod: 15m0s
+conntrack:
+  max: null
+  maxPerCore: 32768
+  min: 131072
+  tcpCloseWaitTimeout: 1h0m0s
+  tcpEstablishedTimeout: 24h0m0s
+enableProfiling: false
+healthzBindAddress: 0.0.0.0:10256
+hostnameOverride: &quot;&quot;
+iptables:
+  masqueradeAll: false
+  masqueradeBit: 14
+  minSyncPeriod: 0s
+ipvs:
+  masqueradeAll: true
+  minSyncPeriod: 5s
+  scheduler: &quot;rr&quot;
+  syncPeriod: 30s
+mode: &quot;ipvs&quot;
+nodeProtAddress: null
+oomScoreAdj: -999
+portRange: &quot;&quot;
+udpIdelTimeout: 250ms
+EOF
+
+
+# 2.所有节点使用systemd管理kube-proxy
+cat &gt; /usr/lib/systemd/system/kube-proxy.service &lt;&lt; EOF
+[Unit]
+Description=Jason Yin&#39;s Kubernetes Proxy
+After=network.target
+
+[Service]
+ExecStart=/usr/local/bin/kube-proxy \
+  --config=/etc/kubernetes/kube-proxy.yml \
+  --v=2 
+Restart=on-failure
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+
+# 3.所有节点启动kube-proxy
+systemctl daemon-reload &amp;&amp; systemctl enable --now kube-proxy
+systemctl status kube-proxy
+</code></pre>
+<h3 id="4-部署CNI网络插件"><a href="#4-部署CNI网络插件" class="headerlink" title="4. 部署CNI网络插件"></a>4. 部署CNI网络插件</h3><h4 id="1-安装Calico"><a href="#1-安装Calico" class="headerlink" title="1. 安装Calico"></a>1. 安装Calico</h4><p>使用calico.yaml方式安装</p>
+<pre><code class="bash"># 1.更改calico网段
+wget https://mirrors.chenby.cn/https://github.com/projectcalico/calico/blob/master/manifests/calico-typha.yaml
+
+cp calico-typha.yaml calico.yaml
+
+vim calico.yaml
+# 打开注释CALICO_IPV4POOL_CIDR
+    - name: CALICO_IPV4POOL_CIDR
+      value: &quot;172.16.0.0/16&quot;
+
+# 若docker镜像拉不下来，可以使用国内的仓库
+sed -i &quot;s#docker.io/calico/#m.daocloud.io/docker.io/calico/#g&quot; calico.yaml 
+
+kubectl apply -f calico.yaml
+# 验证pod
+kubectl get pod -A
+</code></pre>
+<h4 id="2-安装Prometheus监控"><a href="#2-安装Prometheus监控" class="headerlink" title="2. 安装Prometheus监控"></a>2. 安装Prometheus监控</h4><pre><code class="bash">wget https://raw.githubusercontent.com/cilium/cilium/1.15.1/examples/kubernetes/addons/prometheus/monitoring-example.yaml
+
+sed -i &quot;s#docker.io/#m.daocloud.io/docker.io/#g&quot; monitoring-example.yaml
+
+kubectl  apply -f monitoring-example.yaml
+
+# 安装成功后，可修改monitor的svc为NodePort类型，对方开放访问。
+</code></pre>
+<h3 id="5-安装CoreDNS"><a href="#5-安装CoreDNS" class="headerlink" title="5. 安装CoreDNS"></a>5. 安装CoreDNS</h3><blockquote>
+<p>corDNS需要使用helm 安装，如没有安装helm，请参考：9.2.1 安装helm</p>
+</blockquote>
+<pre><code class="bash"># 下载tgz包
+helm repo add coredns https://coredns.github.io/helm
+helm pull coredns/coredns
+tar xvf coredns-*.tgz
+cd coredns/
+
+# 修改IP地址
+vim values.yaml
+cat values.yaml | grep clusterIP:
+clusterIP: &quot;10.100.0.254&quot;
+
+
+# 修改为国内源 docker源可选
+sed -i &quot;s#coredns/#m.daocloud.io/docker.io/coredns/#g&quot; values.yaml
+sed -i &quot;s#registry.k8s.io/#m.daocloud.io/registry.k8s.io/#g&quot; values.yaml
+
+# 默认参数安装
+helm install  coredns ./coredns/ -n kube-system
+</code></pre>
+<h3 id="6-安装Metrics-Server"><a href="#6-安装Metrics-Server" class="headerlink" title="6. 安装Metrics Server"></a>6. 安装Metrics Server</h3><p>在新版的Kubernetes中系统资源的采集均使用Metrics-server，可以通过Metrics采集节点和Pod的内存、磁盘、CPU和网络的使用率。</p>
+<pre><code class="bash"># 单机版 
+wget https://mirrors.chenby.cn/https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+# 高可用版本(我第一次安装使用的高可用版本)
+# wget https://mirrors.chenby.cn/https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/high-availability.yaml
+
+
+# 修改配置
+vim components.yaml
+# vim high-availability.yaml
+
+
+# 需要添加内容的3处地方
+---
+# 1
+- args:
+        - --cert-dir=/tmp
+        - --secure-port=4443
+        - --kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname
+        - --kubelet-use-node-status-port
+        - --metric-resolution=15s
+        - --kubelet-insecure-tls
+        - --requestheader-client-ca-file=/etc/kubernetes/pki/front-proxy-ca.pem
+        - --requestheader-username-headers=X-Remote-User
+        - --requestheader-group-headers=X-Remote-Group
+        - --requestheader-extra-headers-prefix=X-Remote-Extra-
+
+# 2
+        volumeMounts:
+        - mountPath: /tmp
+          name: tmp-dir
+        - name: ca-ssl
+          mountPath: /etc/kubernetes/pki
+
+# 3
+      volumes:
+      - emptyDir: &#123;&#125;
+        name: tmp-dir
+      - name: ca-ssl
+        hostPath:
+          path:  /root/certs/kubernetes
+---
+
+
+# 修改为国内源 docker源可选
+sed -i &quot;s#registry.k8s.io/#m.daocloud.io/registry.k8s.io/#g&quot; components.yaml
+# sed -i &quot;s#registry.k8s.io/#m.daocloud.io/registry.k8s.io/#g&quot; high-availability.yaml
+
+# 二选一
+kubectl apply -f components.yaml
+# kubectl apply -f high-availability.yaml
+
+kubectl  top node
+</code></pre>
+<h3 id="7-安装Dashboard"><a href="#7-安装Dashboard" class="headerlink" title="7. 安装Dashboard"></a>7. 安装Dashboard</h3><pre><code class="bash"># 1
+wget https://raw.githubusercontent.com/kubernetes/dashboard/v2.7.0/aio/deploy/recommended.yaml
+
+# 2.修改recommended.yaml中service的相关部分，可以临时使用nodeport的方式访问
+kind: Service
+apiVersion: v1
+metadata:
+  labels:
+    k8s-app: kubernetes-dashboard
+  name: kubernetes-dashboard
+  namespace: kubernetes-dashboard
+spec:
+  type: NodePort  # 添加这个NodePort
+  ports:
+    - port: 443
+      targetPort: 8443
+      nodePort: 32443  # 添加这个端口
+  selector:
+    k8s-app: kubernetes-dashboard
+
+# 3.镜像地址替换(此处阿里云仓库为公开，可以随意使用)
+sed -i &quot;s#kubernetesui/#registry.cn-hangzhou.aliyuncs.com/lzb-kubernetesui/#g&quot; recommended.yaml
+
+kubectl apply -f recommended.yaml
+
+# 4.查看dashboard是否启动成功
+kubectl  get pod -A
+
+kubectl get svc kubernetes-dashboard -n kubernetes-dashboard
+
+
+# 5.创建token
+cat &gt; dashboard-user.yaml &lt;&lt; EOF
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: admin-user
+  namespace: kube-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: admin-user
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+- kind: ServiceAccount
+  name: admin-user
+  namespace: kube-system
+EOF
+
+kubectl  apply -f dashboard-user.yaml
+
+# 创建token
+kubectl -n kube-system create token admin-user
+
+# 6.登录Dashboard
+</code></pre>
+<h2 id="三、集群验证"><a href="#三、集群验证" class="headerlink" title="三、集群验证"></a>三、集群验证</h2><h3 id="1-部署pod资源"><a href="#1-部署pod资源" class="headerlink" title="1. 部署pod资源"></a>1. 部署pod资源</h3><pre><code class="bash">cat&lt;&lt;EOF | kubectl apply -f -
+apiVersion: v1
+kind: Pod
+metadata:
+  name: busybox
+  namespace: default
+spec:
+  containers:
+  - name: busybox
+    image: docker.io/library/busybox:1.28
+    command:
+      - sleep
+      - &quot;3600&quot;
+    imagePullPolicy: IfNotPresent
+  restartPolicy: Always
+EOF
+
+# 查看
+kubectl  get pod
+</code></pre>
+<h3 id="2-用pod解析默认命名空间中的kubernetes"><a href="#2-用pod解析默认命名空间中的kubernetes" class="headerlink" title="2. 用pod解析默认命名空间中的kubernetes"></a>2. 用pod解析默认命名空间中的kubernetes</h3><pre><code class="bash">kubectl get svc
+# 进行解析
+kubectl exec  busybox -n default -- nslookup kubernetes
+Server:   10.100.0.254
+Address 1: 10.100.0.10 coredns-coredns.kube-system.svc.cluster.local
+
+Name:      kubernetes
+Address 1: 10.100.0.1 kubernetes.default.svc.cluster.local
+</code></pre>
+<h3 id="3-测试跨命名空间是否可以解析"><a href="#3-测试跨命名空间是否可以解析" class="headerlink" title="3. 测试跨命名空间是否可以解析"></a>3. 测试跨命名空间是否可以解析</h3><pre><code class="bash"># 查看有那些name
+kubectl  get svc -A
+# 进行解析
+kubectl exec  busybox -n default -- nslookup coredns-coredns.kube-system
+Server:   10.100.0.254
+Address 1: 10.100.0.10 coredns-coredns.kube-system.svc.cluster.local
+
+Name:      coredns-coredns.kube-system
+Address 1: 10.100.0.10 coredns-coredns.kube-system.svc.cluster.local
+</code></pre>
+<h3 id="4-每个节点都必须要能访问Kubernetes的kubernetes-svc-443和kube-dns的service-53"><a href="#4-每个节点都必须要能访问Kubernetes的kubernetes-svc-443和kube-dns的service-53" class="headerlink" title="4. 每个节点都必须要能访问Kubernetes的kubernetes svc 443和kube-dns的service 53"></a>4. 每个节点都必须要能访问Kubernetes的kubernetes svc 443和kube-dns的service 53</h3><pre><code class="bash"># 所有节点执行
+
+telnet 10.100.0.1 443
+Trying 10.100.0.1...
+Connected to 10.100.0.1.
+Escape character is &#39;^]&#39;.
+
+telnet 10.100.0.10 53
+Trying 10.100.0.10...
+Connected to 10.100.0.10.
+Escape character is &#39;^]&#39;.
+
+curl 10.100.0.10:53
+curl: (52) Empty reply from server
+</code></pre>
+<h3 id="5-Pod和Pod之前要能通"><a href="#5-Pod和Pod之前要能通" class="headerlink" title="5. Pod和Pod之前要能通"></a>5. Pod和Pod之前要能通</h3><pre><code class="bash">kubectl get po -owide
+kubectl get po -n kube-system -owide
+
+
+# 进入busybox ping其他节点上的pod
+kubectl exec -ti busybox -- sh
+/ # ping 192.168.0.34
+PING 192.168.0.34 (192.168.0.34): 56 data bytes
+64 bytes from 192.168.0.34: seq=0 ttl=63 time=42.624 ms
+64 bytes from 192.168.0.34: seq=1 ttl=63 time=0.530 ms
+64 bytes from 192.168.0.34: seq=2 ttl=63 time=0.568 ms
+64 bytes from 192.168.0.34: seq=3 ttl=63 time=1.066 ms
+
+# 可以连通证明这个pod是可以跨命名空间和跨主机通信的
+</code></pre>
+<h3 id="6-创建三个副本，可以看到3个副本分布在不同的节点上"><a href="#6-创建三个副本，可以看到3个副本分布在不同的节点上" class="headerlink" title="6. 创建三个副本，可以看到3个副本分布在不同的节点上"></a>6. 创建三个副本，可以看到3个副本分布在不同的节点上</h3><pre><code class="bash">at &gt; deployments.yaml &lt;&lt; EOF
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  labels:
+    app: nginx
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx
+        ports:
+        - containerPort: 80
+
+EOF
+
+kubectl  apply -f deployments.yaml 
+# 查看nginx分布在3个节点上
+kubectl  get pod -o wide
+# 删除nginx
+kubectl delete -f deployments.yaml
+</code></pre>
+
+      
+       <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 lxwno.1@163.com </span>
+    </div>
+</article>
+
+
+<p>
+    <a  class="dashang" onclick="dashangToggle()">赏</a>
+</p>
+
+
+
+
+    <div id="comments"></div>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+
+<script type="text/javascript">
+    $.getScript('/js/gitalk.js', function () {
+        var gitalk = new Gitalk({
+            clientID: '94bba6061f888e89a5cd',
+            clientSecret: '635d5b10bedb27638424a710b999d4a78f1ad1e4',
+            repo: 'langlangago.github.io',
+            owner: 'langlangago',
+            admin: ['langlangago'],
+            id: decodeURI(location.pathname),
+            distractionFreeMode: 'true',
+            language: 'zh-CN',
+            perPage: parseInt('10',10)
+        })
+        gitalk.render('comments')
+    })
+</script>
+
+
+
+
+    
+
+
+
+
+    </div>
+    <div class="copyright">
+        <p class="footer-entry">
+    ©2016-2020 LangXiaowei
+</p>
+<p class="footer-entry">Built with <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/yelog/hexo-theme-3-hexo" target="_blank">3-hexo</a> theme</p>
+
+    </div>
+    <div class="full-toc">
+        <button class="full" data-title="切换全屏 快捷键 s"><span class="min "></span></button>
+<a class="" id="rocket" ></a>
+
+    </div>
+</div>
+
+<div class="hide_box" onclick="dashangToggle()"></div>
+<div class="shang_box">
+    <a class="shang_close"  onclick="dashangToggle()">×</a>
+    <div class="shang_tit">
+        <p>喜欢就点赞,疼爱就打赏</p>
+    </div>
+    <div class="shang_payimg">
+        <div class="pay_img">
+            <img src="/img/alipay.jpg" class="alipay" title="扫码支持">
+            <img src="/img/weixin.jpg" class="weixin" title="扫码支持">
+        </div>
+    </div>
+    <div class="shang_payselect">
+        <span><label><input type="radio" name="pay" checked value="alipay">支付宝</label></span><span><label><input type="radio" name="pay" value="weixin">微信</label></span>
+    </div>
+</div>
+
+
+</body>
+<script src="/js/jquery.pjax.js?v=1.1.0" ></script>
+
+<script src="/js/script.js?v=1.1.0" ></script>
+<script>
+    var img_resize = 'default';
+    function initArticle() {
+        /*渲染对应的表格样式*/
+        
+            $("#post .pjax table").addClass("green_title");
+        
+
+        /*渲染打赏样式*/
+        
+        $("input[name=pay]").on("click", function () {
+            if($("input[name=pay]:checked").val()=="weixin"){
+                $(".shang_box .shang_payimg .pay_img").addClass("weixin_img");
+            } else {
+                $(".shang_box .shang_payimg .pay_img").removeClass("weixin_img");
+            }
+        })
+        
+
+        /*高亮代码块行号*/
+        
+
+        /*访问数量*/
+        
+        $.getScript("//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js");
+        
+
+        /*代码高亮，行号对齐*/
+        $('.pre-numbering').css('line-height',$('.has-numbering').css('line-height'));
+
+        
+        
+        /* 渲染*/
+        function HTMLDecode(text) {
+            var temp = document.createElement("div");
+            temp.innerHTML = text;
+            var output = temp.innerText || temp.textContent;
+            temp = null;
+            return output;
+        }
+        if (window.mermaid){
+            window.mermaid = null
+        }
+        $.getScript("//cdn.jsdelivr.net/npm/mermaid@8.4.2/dist/mermaid.min.js", function () {
+            var mermaidOptions = JSON.parse(HTMLDecode("{&#34;theme&#34;:&#34;default&#34;,&#34;startOnLoad&#34;:true,&#34;flowchart&#34;:{&#34;useMaxWidth&#34;:false,&#34;htmlLabels&#34;:true}}"))
+            if (window.mermaid) {
+                mermaid.initialize(mermaidOptions)
+                mermaid.contentLoaded()
+            }
+        })
+        
+    }
+
+    /*打赏页面隐藏与展示*/
+    
+    function dashangToggle() {
+        $(".shang_box").fadeToggle();
+        $(".hide_box").fadeToggle();
+    }
+    
+
+</script>
+
+<!--加入行号的高亮代码块样式-->
+
+<!--自定义样式设置-->
+<style>
+    
+    
+    .nav {
+        width: 542px;
+    }
+    .nav.fullscreen {
+        margin-left: -542px;
+    }
+    .nav-left {
+        width: 120px;
+    }
+    
+    
+    @media screen and (max-width: 1468px) {
+        .nav {
+            width: 492px;
+        }
+        .nav.fullscreen {
+            margin-left: -492px;
+        }
+        .nav-left {
+            width: 100px;
+        }
+    }
+    
+    
+    @media screen and (max-width: 1024px) {
+        .nav {
+            width: 492px;
+            margin-left: -492px
+        }
+        .nav.fullscreen {
+            margin-left: 0;
+        }
+    }
+    
+    @media screen and (max-width: 426px) {
+        .nav {
+            width: 100%;
+        }
+        .nav-left {
+            width: 100%;
+        }
+    }
+    
+    
+    .nav-right .title-list nav a .post-title, .nav-right .title-list #local-search-result a .post-title {
+        color: #383636;
+    }
+    
+    
+    .nav-right .title-list nav a .post-date, .nav-right .title-list #local-search-result a .post-date {
+        color: #5e5e5f;
+    }
+    
+    
+    .nav-right nav a.hover, #local-search-result a.hover{
+        background-color: #e2e0e0;
+    }
+    
+    
+
+    /*列表样式*/
+    
+
+    /* 背景图样式 */
+    
+    
+
+
+    /*引用块样式*/
+    
+
+    /*文章列表背景图*/
+    
+
+    
+</style>
+
+
+
+
+
+
+
+</html>
