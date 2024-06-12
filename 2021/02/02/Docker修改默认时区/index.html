@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>统计15天内阿里云ECS内存使用率和CPU使用率 | 运维人</title>
-  <meta name="keywords" content=" python ">
-  <meta name="description" content="统计15天内阿里云ECS内存使用率和CPU使用率 | 运维人">
+  <title>Docker修改默认时区 | 运维人</title>
+  <meta name="keywords" content=" docker , timezone ">
+  <meta name="description" content="Docker修改默认时区 | 运维人">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick">
 <meta property="og:type" content="article">
@@ -1519,9 +1519,9 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="post-统计15天内阿里云ECS内存使用率和CPU使用率" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-Docker修改默认时区" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">统计15天内阿里云ECS内存使用率和CPU使用率</h1>
+        <h1 class="article-title">Docker修改默认时区</h1>
     
     <div class="article-meta">
         
@@ -1531,9 +1531,9 @@
             <i class="iconfont icon-category"></i>
             
             
-            <a  data-rel="脚本">脚本</a> > 
+            <a  data-rel="虚拟化">虚拟化</a> > 
             
-            <a  data-rel="脚本&lt;---&gt;Python">Python</a>
+            <a  data-rel="虚拟化&lt;---&gt;Docker">Docker</a>
             
         </span>
         
@@ -1541,19 +1541,21 @@
         <span class="tag">
             <i class="iconfont icon-tag"></i>
             
-            <a class="color2">python</a>
+            <a class="color2">docker</a>
+            
+            <a class="color4">timezone</a>
             
         </span>
         
     </div>
     <div class="article-meta">
         
-            发布时间 : <time class="date" title='最后更新: 2021-12-01 10:59:02'>2021-12-01 10:42</time>
+            发布时间 : <time class="date" title='最后更新: 2024-06-12 11:47:24'>2021-02-02 10:32</time>
         
     </div>
     <div class="article-meta">
         
-        <span>字数:868</span>
+        <span>字数:273</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -1583,7 +1585,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E7%BC%98%E7%94%B1"><span class="toc-text">一、缘由</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E7%8E%AF%E5%A2%83"><span class="toc-text">二、环境</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="toc-text">三、代码实现</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E7%BC%98%E7%94%B1%EF%BC%9A"><span class="toc-text">一、缘由：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95%EF%BC%9A"><span class="toc-text">二、解决办法：</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E6%96%B9%E5%BC%8F%EF%BC%9A"><span class="toc-text">1、环境变量方式：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E9%87%8D%E6%96%B0%E5%88%B6%E4%BD%9C%E9%95%9C%E5%83%8F%E6%96%B9%E5%BC%8F%EF%BC%9A"><span class="toc-text">2、重新制作镜像方式：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="toc-text">三、注意事项</span></a></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -1599,174 +1601,37 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="一、缘由"><a href="#一、缘由" class="headerlink" title="一、缘由"></a>一、缘由</h2><p><strong>本脚本是阿里云资源利用率定期统计方案中的其中一个脚本。</strong></p>
-<p>本脚本可实现，从每天95个平均值数据中取中位数，15天15个中位数取平均值，得到最终的15天内CPU和内存使用率数值。</p>
-<p>进而根据阈值进行判断，资源是否处于低利用率状态。</p>
-<h2 id="二、环境"><a href="#二、环境" class="headerlink" title="二、环境"></a>二、环境</h2><p><strong>Python3.7 + 阿里云云监控SDK + 阿里云ECS的SDK + pandas + numpy</strong></p>
-<h2 id="三、代码实现"><a href="#三、代码实现" class="headerlink" title="三、代码实现"></a>三、代码实现</h2><pre><code class="bash"># -*- coding: utf-7 -*-
-import time
-import numpy
-import json
-import pandas as pd
-from typing import List
-from alibabacloud_cms20190101.client import Client as Cms20190101Client
-from alibabacloud_tea_openapi import models as open_api_models
-from alibabacloud_cms20190101 import models as cms_20190101_models
-from alibabacloud_ecs20140526.client import Client as Ecs20140527Client
-from alibabacloud_ecs20140526 import models as ecs_20140526_models
-
-REGION_ID = [&#39;cn-beijing&#39;, &#39;cn-hangzhou&#39;, &#39;cn-zhangjiakou&#39;, &#39;cn-shenzhen&#39;, &#39;cn-shanghai&#39;, &#39;cn-hongkong&#39;,
-             &#39;ap-southeast-1&#39;, &#39;ap-northeast-1&#39;]
-
-
-class GetMonitorData:
-    def __init__(self):
-        pass
-
-    @staticmethod
-    def create_client(
-        access_key_id: str,
-        access_key_secret: str,
-    ) -&gt; Cms20190101Client:
-        config = open_api_models.Config(
-            access_key_id=&#39;xxxxxxxxx&#39;,
-            access_key_secret=&#39;xxxxxxxxxxxxx&#39;
-        )
-        config.endpoint = &#39;metrics.cn-hangzhou.aliyuncs.com&#39;
-        return Cms20190101Client(config)
-
-    @staticmethod
-    def main(
-        args: List[str],
-    ) -&gt; None:
-        client = GetMonitorData.create_client(&#39;acessKeyId&#39;, &#39;accessKeySecret&#39;)
-        describe_metric_list_request = cms_20190101_models.DescribeMetricListRequest(
-            metric_name=args[1],
-            namespace=args[0],
-            period=&#39;900&#39;,
-            start_time=args[2],
-            end_time=args[3],
-            length=&#39;100&#39;,
-            dimensions=&#39;&#123;&#123;"instanceId":&#123;&#125;&#125;&#125;&#39;.format(args[4])
-        )
-        res = client.describe_metric_list(describe_metric_list_request)
-        return res.body
-
-
-class GetInstanceIdName:
-    def __init__(self):
-        pass
-
-    @staticmethod
-    def create_client(
-        access_key_id: str,
-        access_key_secret: str,
-    ) -&gt; Ecs20140526Client:
-        config = open_api_models.Config(
-            access_key_id=&#39;xxxxxxxxxxxxxx&#39;,
-            access_key_secret=&#39;xxxxxxxxxxxxxxxxxxxx&#39;
-        )
-        config.endpoint = &#39;ecs-cn-hangzhou.aliyuncs.com&#39;
-        return Ecs20140526Client(config)
-
-    @staticmethod
-    def main(
-        args: List[str],
-    ) -&gt; None:
-        client = GetInstanceIdName.create_client(&#39;accessKeyId&#39;, &#39;accessKeySecret&#39;)
-        describe_instances_request = ecs_20140526_models.DescribeInstancesRequest(
-            region_id=args[1],
-            next_token=args[0],
-            max_results=50
-        )
-        res = client.describe_instances(describe_instances_request)
-        return res.body
-
-
-def get_id_name_dict():
-    instance_dict = &#123;&#125;
-    for i in range(0, len(REGION_ID)):
-        token = &#39;init_data&#39;
-        while token:
-            result = GetInstanceIdName.main([token, REGION_ID[i]])
-            token = result.next_token
-            info_list = result.instances.instance
-            for j in range(0, len(info_list)):
-                instance_dict[info_list[j].instance_id] = info_list[j].instance_name
-    print(&#39;实例ID和名字的字典:&#39;, instance_dict)
-    return instance_dict
-
-
-def get_median_24h(instance_dict, pre_days, metric_name):
-    median_dict = &#123;&#125;
-    today = time.strftime(&#39;%Y-%m-%d&#39;, time.localtime(time.time()))
-    today_time = time.mktime(time.strptime(today, &#39;%Y-%m-%d&#39;))
-    # 从昨天开始，往前推15天，15次循环,取1-15。取00:00:00-23:59:59的时间戳
-    start_time = str(round((today_time - 86400*pre_days)*1000))
-    end_time = str(round((today_time - 86400*(pre_days-1) - 1)*1000))
-    namespace = &#39;acs_ecs_dashboard&#39;
-    for i in instance_dict.keys():
-        result = GetMonitorData.main([namespace, metric_name, start_time, end_time, i])
-        average_list = []
-        res_list = json.loads(result.datapoints)
-        # 停机和未安装监控agent的主机拿不到监控数据，res_list是个空列表，计算平均是会报错
-        if len(res_list) != 0:
-            for j in range(0, len(res_list)):
-                # print(res_list[i])
-                average_list.append(round(res_list[j][&#39;Average&#39;], 2))
-        else:
-            average_list = [0.00, ]
-        # print(len(average_list), average_list)
-        # 取中位数
-        median_dict[i] = numpy.median(average_list)
-        time.sleep(0.2)
-    return median_dict
-
-
-def get_average_15days(instance_dict, metric):
-    temp_dict = &#123;&#125;
-    median_dict1 = get_median_24h(instance_dict, 1, metric)
-    for k, v in median_dict1.items():
-        temp_dict[k] = []
-    for k1, v1 in median_dict1.items():
-        temp_dict[k1].append(v1)
-    for i in range(2, 16):
-        median_dict = get_median_24h(instance_dict, i, metric)
-        for k2, v2 in median_dict.items():
-            temp_dict[k2].append(v2)
-    for k3, v3 in temp_dict.items():
-        temp_dict[k3] = round(numpy.mean(v3), 3)
-    print(temp_dict)
-    return temp_dict
-
-
-def write_to_execl(data):
-    df = pd.DataFrame.from_dict(data, orient=&#39;index&#39;, columns=[&#39;CPU使用率&#39;, &#39;内存使用率&#39;])
-    df.to_excel(&#39;cpu_mem_15days.xlsx&#39;)
-
-
-if __name__ == &#39;__main__&#39;:
-
-    # 获取InstanceId和InstanceName的对应字典
-    # str_time = time.time()
-    instance_dict = get_id_name_dict()
-    # 数据合并处理，比较复杂
-    id_list_dict = &#123;&#125;
-    for k, v in instance_dict.items():
-        id_list_dict[k] = []
-    ecs_metric = [&#39;CPUUtilization&#39;, &#39;memory_usedutilization&#39;]
-    for metric in ecs_metric:
-        metric_data = get_average_15days(instance_dict, metric)
-        for k2, v2 in metric_data.items():
-            id_list_dict[k2].append(v2)
-    for k_id, k_name in instance_dict.items():
-        if k_id in id_list_dict:
-            id_list_dict[k_name] = id_list_dict.pop(k_id)
-    # 数据写入excel表格
-    write_to_execl(id_list_dict)
-    # print(time.time() - str_time)
+        <h2 id="一、缘由："><a href="#一、缘由：" class="headerlink" title="一、缘由："></a>一、缘由：</h2><p><strong>Docker Hub中的镜像默认都是0时区，而我们在东八区，差8小时，会导致我们看日志不能准确定位时间，这是很要命的。</strong></p>
+<h2 id="二、解决办法："><a href="#二、解决办法：" class="headerlink" title="二、解决办法："></a>二、解决办法：</h2><h3 id="1、环境变量方式："><a href="#1、环境变量方式：" class="headerlink" title="1、环境变量方式："></a>1、环境变量方式：</h3><ol>
+<li><p>docker run 启动时加入环境变量：<code>docker run -e &quot;TZ=Asia/Shanghai&quot;</code></p>
+</li>
+<li><p>docker-compose 方式启动时，加入 </p>
+<pre><code class="bash">environment:
+ - TZ=Asia/Shanghai
 </code></pre>
-<p><strong>注意：以上代码中24小时内的数据，是一个实例一个循环取的数据，调用接口次数多，耗时较长。经实践400个ECS，执行完本脚本要5个小时左右，可耐心等待。</strong></p>
+<h3 id="2、重新制作镜像方式："><a href="#2、重新制作镜像方式：" class="headerlink" title="2、重新制作镜像方式："></a>2、重新制作镜像方式：</h3></li>
+</ol>
+<p>如果你是基于某个官方Image来制作自己的镜像，比如Alpine。那么你可以在Dockerfile中，加入:</p>
+<pre><code class="bash">RUN apk --no-cache add tzdata  &amp;&amp; \
+  ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime &amp;&amp; \
+  echo &quot;Asia/Shanghai&quot; &gt; /etc/timezone
+</code></pre>
+<h2 id="三、注意事项"><a href="#三、注意事项" class="headerlink" title="三、注意事项"></a>三、注意事项</h2><ul>
+<li><p>Dockerfile中加入时区ENV，只是在构建时image时，简单的添加了一个TZ环境变量，并不会作用在容器运行时，不会改变系统时区。<strong>无效操作</strong></p>
+</li>
+<li><p>K8s的deployment等yaml中加入env环境变量可以作用于容器运行时，可以改变系统时区，相当于<code>docker run -e </code></p>
+</li>
+</ul>
+<pre><code class="yaml">    spec:
+      containers:
+      - name: nginx
+        image: registry.cn-hangzhou.aliyuncs.com/acs-sample/nginx 
+        ports:
+        - containerPort: 80
+        env:
+        - name: TZ
+          value: &quot;Asia/Shanghai&quot;
+</code></pre>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 lxwno.1@163.com </span>
