@@ -6,7 +6,7 @@
   <link href="https://www.langxw.com/atom.xml" rel="self"/>
   
   <link href="https://www.langxw.com/"/>
-  <updated>2021-01-29T02:34:12.000Z</updated>
+  <updated>2024-06-26T08:10:54.555Z</updated>
   <id>https://www.langxw.com/</id>
   
   <author>
@@ -15,6 +15,32 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>K8S证书更新</title>
+    <link href="https://www.langxw.com/2024/06/26/K8S%E8%AF%81%E4%B9%A6%E6%9B%B4%E6%96%B0/"/>
+    <id>https://www.langxw.com/2024/06/26/K8S%E8%AF%81%E4%B9%A6%E6%9B%B4%E6%96%B0/</id>
+    <published>2024-06-26T07:57:19.000Z</published>
+    <updated>2024-06-26T08:10:54.555Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="一、背景"><a href="#一、背景" class="headerlink" title="一、背景"></a>一、背景</h2><p>公司自建的K8S集群证书过期，导致集群无法提供服务。首先需要确认一下内容：</p><ul><li><p>K8s 版本：V1.20</p></li><li><p>部署方式：kubeadm</p></li><li><p>部署架构：几个master节点+几个worker几点</p></li></ul><h2 id="二、操作步骤"><a href="#二、操作步骤" class="headerlink" title="二、操作步骤"></a>二、操作步骤</h2><h3 id="1、查看证书过期情况"><a href="#1、查看证书过期情况" class="headerlink" title="1、查看证书过期情况"></a>1、查看证书过期情况</h3><p><code>kubeadm certs check-expiration</code></p><h3 id="2、备份-etc-kubernetes"><a href="#2、备份-etc-kubernetes" class="headerlink" title="2、备份/etc/kubernetes/"></a>2、备份/etc/kubernetes/</h3><pre><code class="bash">cp -rp /etc/kubernetes /etc/kubernetes.bakcp -r /var/lib/etcd /var/lib/etcd-$(date +%Y%m%d).bakcp -r ~/.kube/config ~/.kube/config.bak</code></pre><h3 id="3、生成新的证书"><a href="#3、生成新的证书" class="headerlink" title="3、生成新的证书"></a>3、生成新的证书</h3><h4 id="3-1-方法1：（默认选择）"><a href="#3-1-方法1：（默认选择）" class="headerlink" title="3.1 方法1：（默认选择）"></a>3.1 方法1：（默认选择）</h4><p><code>kubeadm certs renew all #  使用该命令不用提前删除过期证书</code></p><h4 id="3-2-方法2：（单个更新）"><a href="#3-2-方法2：（单个更新）" class="headerlink" title="3.2 方法2：（单个更新）"></a>3.2 方法2：（单个更新）</h4><pre><code class="bash">kubeadm certs renew apiserver kubeadm certs renew admin.conf kubeadm certs renew apiserver-etcd-clientkubeadm certs renew apiserver-kubelet-clientkubeadm certs renew controller-manager.confkubeadm certs renew etcd-healthcheck-clientkubeadm certs renew etcd-peerkubeadm certs renew etcd-serverkubeadm certs renew front-proxy-client  kubeadm certs renew scheduler.conf</code></pre><p><strong>如果你运行了一个 HA 集群，这个命令需要在所有控制面板节点上执行。</strong><br>(除了kubelet.conf都会更新生成)</p><h3 id="4、验证集群状态"><a href="#4、验证集群状态" class="headerlink" title="4、验证集群状态"></a>4、验证集群状态</h3><h4 id="4-1-验证集群证书有效期是否更新（等待5分钟再查看）："><a href="#4-1-验证集群证书有效期是否更新（等待5分钟再查看）：" class="headerlink" title="4.1 验证集群证书有效期是否更新（等待5分钟再查看）："></a>4.1 验证集群证书有效期是否更新（等待5分钟再查看）：</h4><p><code>echo | openssl s_client -showcerts -connect 127.0.0.1:6443 -servername api 2&gt;/dev/null | openssl x509 -noout -enddate</code><br>如果证书有效期一直未更新，需要重启控制面的服务（详见步骤6）<br><code>kubeadm certs check-expiration</code></p><h4 id="4-2-验证集群状态"><a href="#4-2-验证集群状态" class="headerlink" title="4.2 验证集群状态"></a>4.2 验证集群状态</h4><ul><li>查询状态</li></ul><p><code>kubectl get nodes</code><br><code>kubectl get pods -A</code></p><ul><li><p>重启pod验证<br>kubectl rollout restart deployment <deployment-name> -n <namespace></p></li><li><p>业务验证</p></li></ul><p><strong>如果集群状态正常，服务正常，则下面的操作应该都不用进行下去。</strong></p><h3 id="5、生成配置文件（可能不需要）"><a href="#5、生成配置文件（可能不需要）" class="headerlink" title="5、生成配置文件（可能不需要）"></a>5、生成配置文件（可能不需要）</h3><h4 id="5-1-方法1：（默认选择）"><a href="#5-1-方法1：（默认选择）" class="headerlink" title="5.1 方法1：（默认选择）"></a>5.1 方法1：（默认选择）</h4><p><code>kubeadm init phase kubeconfig all</code></p><h4 id="5-2-方法2："><a href="#5-2-方法2：" class="headerlink" title="5.2 方法2："></a>5.2 方法2：</h4><p>// 重新生成 admin 配置文件<br><code>kubeadm init phase kubeconfig admin</code><br>// 重新生成 kubelet 配置文件<br><code>kubeadm init phase kubeconfig kubelet</code></p><h3 id="6、重启服务（可能不需要）"><a href="#6、重启服务（可能不需要）" class="headerlink" title="6、重启服务（可能不需要）"></a>6、重启服务（可能不需要）</h3><pre><code class="bash">cd /etc/kubernetes/ &amp;&amp; mv manifests/* /tmp/mv /tmp/kube-* /etc/kubernetes/manifests/ &amp;&amp; mv /tmp/etcd.yaml /etc/kubernetes/manifests/</code></pre><h3 id="7、重启kubelet（可能不需要）"><a href="#7、重启kubelet（可能不需要）" class="headerlink" title="7、重启kubelet（可能不需要）"></a>7、重启kubelet（可能不需要）</h3><p><code>systemctl restart kubelet &amp;&amp; systemctl status kubelet</code></p><h3 id="8、更新集群连接配置（视情况而定）"><a href="#8、更新集群连接配置（视情况而定）" class="headerlink" title="8、更新集群连接配置（视情况而定）"></a>8、更新集群连接配置（视情况而定）</h3><p><code>sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config sudo chown $(id -u):$(id -g) $HOME/.kube/config</code></p><h3 id="9、其他办法将证书时间调整为10年"><a href="#9、其他办法将证书时间调整为10年" class="headerlink" title="9、其他办法将证书时间调整为10年"></a>9、其他办法将证书时间调整为10年</h3><p>需要修改kubeadm源代码，待测试赛</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h2 id=&quot;一、背景&quot;&gt;&lt;a href=&quot;#一、背景&quot; class=&quot;headerlink&quot; title=&quot;一、背景&quot;&gt;&lt;/a&gt;一、背景&lt;/h2&gt;&lt;p&gt;公司自建的K8S集群证书过期，导致集群无法提供服务。首先需要确认一下内容：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;K8s 版本：V</summary>
+      
+    
+    
+    
+    
+    <category term="k8s" scheme="https://www.langxw.com/tags/k8s/"/>
+    
+    <category term="证书" scheme="https://www.langxw.com/tags/%E8%AF%81%E4%B9%A6/"/>
+    
+  </entry>
   
   <entry>
     <title>Hello World</title>
@@ -520,32 +546,6 @@
       
     <summary type="html">&lt;h2 id=&quot;一、缘由&quot;&gt;&lt;a href=&quot;#一、缘由&quot; class=&quot;headerlink&quot; title=&quot;一、缘由&quot;&gt;&lt;/a&gt;一、缘由&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;本脚本是阿里云资源利用率定期统计方案中的其中一个脚本。&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;公司阿里云ECS比较</summary>
-      
-    
-    
-    
-    <category term="脚本" scheme="https://www.langxw.com/categories/%E8%84%9A%E6%9C%AC/"/>
-    
-    <category term="Python" scheme="https://www.langxw.com/categories/%E8%84%9A%E6%9C%AC/Python/"/>
-    
-    
-    <category term="python" scheme="https://www.langxw.com/tags/python/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>统计阿里云ECS磁盘使用率</title>
-    <link href="https://www.langxw.com/2021/11/30/%E7%BB%9F%E8%AE%A1%E9%98%BF%E9%87%8C%E4%BA%91ECS%E7%A3%81%E7%9B%98%E4%BD%BF%E7%94%A8%E7%8E%87/"/>
-    <id>https://www.langxw.com/2021/11/30/%E7%BB%9F%E8%AE%A1%E9%98%BF%E9%87%8C%E4%BA%91ECS%E7%A3%81%E7%9B%98%E4%BD%BF%E7%94%A8%E7%8E%87/</id>
-    <published>2021-11-30T10:33:08.000Z</published>
-    <updated>2021-12-01T03:05:22.000Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="一、缘由"><a href="#一、缘由" class="headerlink" title="一、缘由"></a>一、缘由</h2><p>公司阿里云主机很多业务模块，经常受磁盘告警烦恼，尤其是在周末或者假期，运维不敢随意清理，就得找开发确认乐之后才能清理。</p><p>为了减少假期的磁盘告警，保证业务的正常运行，可在周五或者假期前一天统计所有主机的磁盘使用率，对于大于65%的，一一进行核对和清理。</p><h2 id="二、环境"><a href="#二、环境" class="headerlink" title="二、环境"></a>二、环境</h2><p><strong>Python3.7 + 阿里云云监控SDK。</strong></p><h2 id="三、代码实现"><a href="#三、代码实现" class="headerlink" title="三、代码实现"></a>三、代码实现</h2><p><strong>调用阿里云云监控的接口，来查询磁盘使用率，并最终输出文档，按磁盘使用率倒序排列。</strong></p><pre><code class="bash"># -*- coding: utf-8 -*-import sysimport jsonimport timefrom typing import Listfrom operator import itemgetterfrom alibabacloud_cms20190101.client import Client as Cms20190101Clientfrom alibabacloud_tea_openapi import models as open_api_modelsfrom alibabacloud_cms20190101 import models as cms_20190101_modelsclass Sample:    def __init__(self):        pass    @staticmethod    def create_client(        access_key_id: str,        access_key_secret: str,    ) -&gt; Cms20190101Client:        &quot;&quot;&quot;        使用AK&amp;SK初始化账号Client        @param access_key_id:        @param access_key_secret:        @return: Client        @throws Exception        &quot;&quot;&quot;        config = open_api_models.Config(            # 您的AccessKey ID,            access_key_id=&#39;xxxxxxxxx&#39;,            # 您的AccessKey Secret,            access_key_secret=&#39;xxxxxxxx&#39;        )        # 访问的域名        config.endpoint = &#39;metrics.cn-hangzhou.aliyuncs.com&#39;        return Cms20190101Client(config)    @staticmethod    def main(        args: List[str],    ) -&gt; None:        client = Sample.create_client(&#39;accessKeyId&#39;, &#39;accessKeySecret&#39;)        describe_metric_list_request = cms_20190101_models.DescribeMetricListRequest(            metric_name=&#39;diskusage_utilization&#39;,            namespace=&#39;acs_ecs_dashboard&#39;,            period=&#39;60&#39;,            start_time=args[1],            end_time=args[2],            length=&#39;100&#39;,            next_token=args[0]        )        # 复制代码运行请自行打印 API 的返回值        res = client.describe_metric_list(describe_metric_list_request)        return res.bodydef get_disk_usage(api_res):    disk_list = []    # print(dir(api_res))    res_list = json.loads(api_res.datapoints)    for i in range(0, len(res_list)):        disk_list_tmp = [res_list[i][&#39;instanceId&#39;], res_list[i][&#39;diskname&#39;], res_list[i][&#39;Average&#39;]]        disk_list.append(disk_list_tmp)    return disk_listif __name__ == &#39;__main__&#39;:    token = &#39;init_data&#39;    disk_info = []    # 不能取当前时间，当前时间太近了，没有最新的监控数据。    day = time.strftime(&#39;%Y-%m-%d&#39;, time.localtime())    start_time = str(round((time.time()-300)*1000))    end_time = str(round((time.time()-240)*1000))    while token:        result = Sample.main([token, start_time, end_time])        token = result.next_token        disk_res = get_disk_usage(result)        disk_info.extend(disk_res)    order_disk_info = sorted(disk_info, key=itemgetter(2), reverse=True)    with open(&#39;statistics_disk_&#123;&#125;.txt&#39;.format(day), &#39;w&#39;) as f:        f.write(&#39;ECS实例ID \t\t盘符 \t\t磁盘使用率\n&#39;)        for i in range(0, len(order_disk_info)):            f.write(str(order_disk_info[i])+&#39;\n&#39;)</code></pre><p><strong>注意：输出文档只有实例ID，如果显示实例名称，可以参考另一篇文章的接口调用。</strong></p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h2 id=&quot;一、缘由&quot;&gt;&lt;a href=&quot;#一、缘由&quot; class=&quot;headerlink&quot; title=&quot;一、缘由&quot;&gt;&lt;/a&gt;一、缘由&lt;/h2&gt;&lt;p&gt;公司阿里云主机很多业务模块，经常受磁盘告警烦恼，尤其是在周末或者假期，运维不敢随意清理，就得找开发确认乐之后才能清理。&lt;/p</summary>
       
     
     
