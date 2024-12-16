@@ -2,22 +2,21 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>运维人</title>
-  <meta name="keywords" content="">
-  <meta name="description" content="运维人">
+  <title>Nacos集群搭建 | 运维人</title>
+  <meta name="keywords" content=" nacos ">
+  <meta name="description" content="Nacos集群搭建 | 运维人">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<meta name="description" content="一、背景公司自建的K8S集群证书过期，导致集群无法提供服务。首先需要确认一下内容：  K8s 版本：V1.20  部署方式：kubeadm  部署架构：几个master节点+几个worker几点   二、操作步骤1、查看证书过期情况kubeadm certs check-expiration 2、备份&#x2F;etc&#x2F;kubernetes&#x2F;cp -rp &#x2F;etc&#x2F;kubernetes &#x2F;etc&#x2F;kuber">
+<meta name="description" content="一、预备环境说明： 64位JDK ，这里使用 JDK 1.8.0_261 下载编译好的压缩包，nacos-server-1.4.0.tar.gz 准备三台主机A(192.168.1.1)、B(192.168.1.2)、C(192.168.1.3) 准备高可用Nginx集群、MySQL集群  二、集群架构：graph LR A[微服务] --&gt; B(Nginx集群)     B --&gt; D[Naco">
 <meta property="og:type" content="article">
-<meta property="og:title" content="K8S证书更新">
-<meta property="og:url" content="https://www.langxw.com/2024/06/26/K8S%E8%AF%81%E4%B9%A6%E6%9B%B4%E6%96%B0/index.html">
+<meta property="og:title" content="Nacos集群搭建">
+<meta property="og:url" content="https://www.langxw.com/2024/11/05/Nacos%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA/index.html">
 <meta property="og:site_name" content="运维人">
-<meta property="og:description" content="一、背景公司自建的K8S集群证书过期，导致集群无法提供服务。首先需要确认一下内容：  K8s 版本：V1.20  部署方式：kubeadm  部署架构：几个master节点+几个worker几点   二、操作步骤1、查看证书过期情况kubeadm certs check-expiration 2、备份&#x2F;etc&#x2F;kubernetes&#x2F;cp -rp &#x2F;etc&#x2F;kubernetes &#x2F;etc&#x2F;kuber">
+<meta property="og:description" content="一、预备环境说明： 64位JDK ，这里使用 JDK 1.8.0_261 下载编译好的压缩包，nacos-server-1.4.0.tar.gz 准备三台主机A(192.168.1.1)、B(192.168.1.2)、C(192.168.1.3) 准备高可用Nginx集群、MySQL集群  二、集群架构：graph LR A[微服务] --&gt; B(Nginx集群)     B --&gt; D[Naco">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2024-06-26T07:57:19.000Z">
-<meta property="article:modified_time" content="2024-06-26T08:10:54.555Z">
+<meta property="article:published_time" content="2024-11-05T05:05:13.037Z">
+<meta property="article:modified_time" content="2021-02-01T06:53:54.000Z">
 <meta property="article:author" content="运维人">
-<meta property="article:tag" content="k8s">
-<meta property="article:tag" content="证书">
+<meta property="article:tag" content="nacos">
 <meta name="twitter:card" content="summary">
 
 
@@ -59,7 +58,7 @@
 
 
 <body>
-<aside class="nav mobile">
+<aside class="nav">
     <div class="nav-left">
         <a href="/"
    class="avatar_target">
@@ -742,7 +741,7 @@
     </div>
 </div>
 <input type="hidden" id="yelog_site_posts_number" value="64">
-<input type="hidden" id="yelog_site_word_count" value="72.7k">
+<input type="hidden" id="yelog_site_word_count" value="72.8k">
 <div style="display: none">
     <span id="busuanzi_value_site_uv"></span>
     <span id="busuanzi_value_site_pv"></span>
@@ -1028,28 +1027,28 @@
             <span class="post-date" title="2021-06-04 19:00:16">2021/06/04</span>
         </a>
         
+        <a  class="全部文章 中间件 Nacos "
+           href="/2024/11/05/Nacos%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA/"
+           data-tag="nacos"
+           data-author="" >
+            <span class="post-title" title="Nacos集群搭建">Nacos集群搭建</span>
+            <span class="post-date" title="2024-11-05 13:05:13">2024/11/05</span>
+        </a>
+        
+        <a  class="全部文章 "
+           href="/2024/11/05/hello-world/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="Hello World">Hello World</span>
+            <span class="post-date" title="2024-11-05 13:05:12">2024/11/05</span>
+        </a>
+        
         <a  class="全部文章 "
            href="/2024/06/26/K8S%E8%AF%81%E4%B9%A6%E6%9B%B4%E6%96%B0/"
            data-tag="k8s,证书"
            data-author="" >
             <span class="post-title" title="K8S证书更新">K8S证书更新</span>
             <span class="post-date" title="2024-06-26 15:57:19">2024/06/26</span>
-        </a>
-        
-        <a  class="全部文章 "
-           href="/2024/04/03/hello-world/"
-           data-tag=""
-           data-author="" >
-            <span class="post-title" title="Hello World">Hello World</span>
-            <span class="post-date" title="2024-04-03 12:55:50">2024/04/03</span>
-        </a>
-        
-        <a  class="全部文章 中间件 Nacos "
-           href="/2024/04/03/Nacos%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA/"
-           data-tag="nacos"
-           data-author="" >
-            <span class="post-title" title="Nacos集群搭建">Nacos集群搭建</span>
-            <span class="post-date" title="2024-04-03 12:55:50">2024/04/03</span>
         </a>
         
         <a  class="全部文章 虚拟化 Kubernetes "
@@ -1531,12 +1530,73 @@
         </div>
     </div>
 </aside>
-<div id="post" class="index">
+<div id="post">
     <div class="pjax">
-        <article class="index">
-            <div class="toc-ref">
+        <article id="post-Nacos集群搭建" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Why-Blog"><span class="toc-text">Why Blog</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AF%B9%E5%8D%9A%E5%AE%A2%E7%9A%84%E7%90%86%E8%A7%A3"><span class="toc-text">对博客的理解</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E4%BA%8E%E8%BF%90%E7%BB%B4%E4%BA%BA"><span class="toc-text">关于运维人</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8D%9A%E5%AE%A2%E5%B9%B3%E5%8F%B0"><span class="toc-text">博客平台</span></a></li></ol></li></ol>
+        <h1 class="article-title">Nacos集群搭建</h1>
+    
+    <div class="article-meta">
+        
+        
+        
+        <span class="book">
+            <i class="iconfont icon-category"></i>
+            
+            
+            <a  data-rel="中间件">中间件</a> > 
+            
+            <a  data-rel="中间件&lt;---&gt;Nacos">Nacos</a>
+            
+        </span>
+        
+        
+        <span class="tag">
+            <i class="iconfont icon-tag"></i>
+            
+            <a class="color1">nacos</a>
+            
+        </span>
+        
+    </div>
+    <div class="article-meta">
+        
+            发布时间 : <time class="date" title='最后更新: 2021-02-01 14:53:54'>2024-11-05 13:05</time>
+        
+    </div>
+    <div class="article-meta">
+        
+        <span>字数:779</span>
+        
+        
+        <span id="busuanzi_container_page_pv">
+            阅读 :<span id="busuanzi_value_page_pv">
+                <span class="count-comment">
+                    <span class="spinner">
+                      <div class="cube1"></div>
+                      <div class="cube2"></div>
+                    </span>
+                </span>
+            </span>
+        </span>
+        
+        
+        <span class="top-comment" title="跳转至评论区">
+            <a href="#comments">
+                评论:<span class="count-comment">
+                    <span class="spinner">
+                      <div class="cube1"></div>
+                      <div class="cube2"></div>
+                    </span>
+                </span>
+            </a>
+        </span>
+        
+    </div>
+    
+    <div class="toc-ref">
+    
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E9%A2%84%E5%A4%87%E7%8E%AF%E5%A2%83%E8%AF%B4%E6%98%8E%EF%BC%9A"><span class="toc-text">一、预备环境说明：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E9%9B%86%E7%BE%A4%E6%9E%B6%E6%9E%84%EF%BC%9A"><span class="toc-text">二、集群架构：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E9%83%A8%E7%BD%B2%E6%AD%A5%E9%AA%A4%EF%BC%9A"><span class="toc-text">三、部署步骤：</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E8%A7%A3%E5%8E%8B%EF%BC%9A"><span class="toc-text">1、解压：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E5%AF%BC%E5%85%A5%E6%95%B0%E6%8D%AE%E6%96%87%E4%BB%B6%EF%BC%9A"><span class="toc-text">2、导入数据文件：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81%E4%BF%AE%E6%94%B9%E6%95%B0%E6%8D%AE%E6%BA%90%EF%BC%9A"><span class="toc-text">3、修改数据源：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4%E3%80%81%E4%BF%AE%E6%94%B9%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE%EF%BC%9A"><span class="toc-text">4、修改集群配置：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5%E3%80%81%E4%BF%AE%E6%94%B9%E5%86%85%E5%AD%98%E5%8D%A0%E7%94%A8%EF%BC%9A"><span class="toc-text">5、修改内存占用：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6%E3%80%81%E5%90%AF%E5%8A%A8%EF%BC%9A"><span class="toc-text">6、启动：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7%E3%80%81%E9%85%8D%E7%BD%AENginx%E4%BB%A3%E7%90%86Upstream"><span class="toc-text">7、配置Nginx代理Upstream</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8%E3%80%81%E9%AA%8C%E8%AF%81%EF%BC%9A"><span class="toc-text">8、验证：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E5%85%B6%E4%BB%96"><span class="toc-text">四、其他</span></a></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -1549,36 +1609,117 @@
     }
 </style>
 </div>
-            <h1 id="Why-Blog"><a href="#Why-Blog" class="headerlink" title="Why Blog"></a>Why Blog</h1><h2 id="对博客的理解"><a href="#对博客的理解" class="headerlink" title="对博客的理解"></a>对博客的理解</h2><p>喜欢写Blog的人，会经历三个阶段。</p>
-<blockquote>
-<p>第一阶段，刚接触Blog，觉得很新鲜，试着选择一个免费空间来写。</p>
-</blockquote>
-<blockquote>
-<p>第二阶段，发现免费空间限制太多，就自己购买域名和空间，搭建独立博客。</p>
-</blockquote>
-<blockquote>
-<p>第三阶段，觉得独立博客的管理太麻烦，最好在保留控制权的前提下，让别人来管，自己只负责写文章。</p>
-</blockquote>
-<p>我们每个人的在网络上产生的数据越来越多，这些信息是我们在互联网上存在过的痕迹，值得我们认真对待。但是它们被分散分布在各个网站上。很多时候我们很难将它们聚合在一起，而且各个网站的信息排布方式也没有办法自由控制，所以我们需要一个可以由自己主宰的空间——博客。</p>
-<p>通过博客，我们可以记录自己的生活和成长的轨迹。它不像 Twitter 那样碎片化，也不像 Facebook 那样关系化，它是私人的空间。</p>
-<h2 id="关于运维人"><a href="#关于运维人" class="headerlink" title="关于运维人"></a>关于运维人</h2><p><strong>运维人</strong> 是郎晓伟的个人站。</p>
-<p>到目前为止已经写了<code class="article_number"></code>篇文章， 共<code class="site_word_count"></code>字。</p>
-<p>本站访问人数：<code class="site_uv"></code>人次 ， 访问量：<code class="site_pv"></code>次</p>
-<h2 id="博客平台"><a href="#博客平台" class="headerlink" title="博客平台"></a>博客平台</h2><p>这个博客通过 <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a> 生成，部署在 <a target="_blank" rel="noopener" href="https://pages.github.com/">GitHub Pages</a>主题 <a target="_blank" rel="noopener" href="https://github.com/yelog/hexo-theme-3-hexo">3-hexo</a> 已经在github上开源</p>
-<p>主要功能：</p>
-<ul>
-<li>搜索支持文章标题、标签(#标签)、作者(@作者)</li>
-<li>pad/手机等移动端适配</li>
-<li>页面全局快捷键 <a target="_blank" rel="noopener" href='http://yelog.org/2017/03/24/3-hexo-shortcuts/'>3-hexo快捷键说明</a></li>
-</ul>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="一、预备环境说明："><a href="#一、预备环境说明：" class="headerlink" title="一、预备环境说明："></a>一、预备环境说明：</h2><ol>
+<li>64位JDK ，这里使用 JDK 1.8.0_261</li>
+<li>下载编译好的压缩包，nacos-server-1.4.0.tar.gz</li>
+<li>准备三台主机A(192.168.1.1)、B(192.168.1.2)、C(192.168.1.3)</li>
+<li>准备高可用Nginx集群、MySQL集群</li>
+</ol>
+<h2 id="二、集群架构："><a href="#二、集群架构：" class="headerlink" title="二、集群架构："></a>二、集群架构：</h2><pre class="mermaid">graph LR
+A[微服务] --> B(Nginx集群)
+    B --> D[Nacos1]
+    B --> E[Nacos2]
+    B --> F[Nacos3]
+    D --> G(MySQL集群)
+    E --> G
+    F --> G</pre>
 
-        </article>
-        
-        <p>
-            <a  class="dashang" onclick="dashangToggle()">赏</a>
-        </p>
-        
-        
+
+<ul>
+<li><p><strong>高可用Nginx集群</strong></p>
+</li>
+<li><p><strong>高可用Nacos集群（至少三个实例）</strong></p>
+</li>
+<li><p><strong>高可用MySQL集群</strong></p>
+</li>
+</ul>
+<h2 id="三、部署步骤："><a href="#三、部署步骤：" class="headerlink" title="三、部署步骤："></a>三、部署步骤：</h2><h3 id="1、解压："><a href="#1、解压：" class="headerlink" title="1、解压："></a>1、解压：</h3><p><code>tar -zxvf nacos-server-1.4.0.tar.gz -C /data</code></p>
+<h3 id="2、导入数据文件："><a href="#2、导入数据文件：" class="headerlink" title="2、导入数据文件："></a>2、导入数据文件：</h3><p>创建数据库nacos_test，将<code>/data/nacos/conf/nacos-mysql.sql</code>导入数据库，并创建应用程序访问账号。</p>
+<h3 id="3、修改数据源："><a href="#3、修改数据源：" class="headerlink" title="3、修改数据源："></a>3、修改数据源：</h3><p>这里我们使用外置MySQL集群作为数据存储。</p>
+<p>修改<code>conf/application.properties</code>中关于MySQL数据源的配置。</p>
+<pre><code class="yaml">#*************** Config Module Related Configurations ***************#
+### If use MySQL as datasource:
+spring.datasource.platform=mysql
+
+### Count of DB:
+db.num=1
+
+### Connect URL of DB:
+db.url.0=jdbc:mysql://192.168.1.1:3306/nacos_test?characterEncoding=utf8&amp;connectTim
+eout=1000&amp;socketTimeout=3000&amp;auto
+Reconnect=true&amp;useUnicode=true&amp;useSSL=false&amp;serverTimezone=UTC
+db.user=nacos_test_rw
+db.password=POUZV#Of
+</code></pre>
+<h3 id="4、修改集群配置："><a href="#4、修改集群配置：" class="headerlink" title="4、修改集群配置："></a>4、修改集群配置：</h3><p>修改<code>conf/cluster.conf</code>文件的末尾关于IP和端口配置（若没有cluster.conf就用cluster.conf.example复制）</p>
+<pre><code>192.168.1.1:8848
+192.168.1.2:8848
+192.168.1.3:8848
+</code></pre>
+<p>这里写上集群内三台主机的IP和nacos监听端口</p>
+<h3 id="5、修改内存占用："><a href="#5、修改内存占用：" class="headerlink" title="5、修改内存占用："></a>5、修改内存占用：</h3><p>如果机器内存本身不大，那么不建议使用默认配置，根据具体情况修改<code>nacos/bin/startup.sh</code>中关于java内存占用的配置，</p>
+<p>比如将集群的内存占用从2G修改为512M（standalone配置可以保持不变），集群模式是else中内容：</p>
+<pre><code class="shell">#===========================================================================================
+# JVM Configuration
+#===========================================================================================
+if [[ &quot;$&#123;MODE&#125;&quot; == &quot;standalone&quot; ]]; then
+    JAVA_OPT=&quot;$&#123;JAVA_OPT&#125; -Xms512m -Xmx512m -Xmn256m&quot;
+    JAVA_OPT=&quot;$&#123;JAVA_OPT&#125; -Dnacos.standalone=true&quot;
+else
+    if [[ &quot;$&#123;EMBEDDED_STORAGE&#125;&quot; == &quot;embedded&quot; ]]; then
+        JAVA_OPT=&quot;$&#123;JAVA_OPT&#125; -DembeddedStorage=true&quot;
+    fi
+    JAVA_OPT=&quot;$&#123;JAVA_OPT&#125; -server -Xms512m -Xmx512m -Xmn256m -XX:MetaspaceSize=128m -XX:MaxMetaspaceSize=320m&quot;
+    JAVA_OPT=&quot;$&#123;JAVA_OPT&#125; -XX:-OmitStackTraceInFastThrow -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=$&#123;BASE_D
+IR&#125;/logs/java_heapdump.hprof&quot;
+</code></pre>
+<h3 id="6、启动："><a href="#6、启动：" class="headerlink" title="6、启动："></a>6、启动：</h3><p>依次启动，先启动的是主节点。</p>
+<p>执行<code>bin/startup.sh</code>即可，默认是集群模式。</p>
+<p>启动后可以查看日志文件和端口监听来确定集群是否启动成功 <code>tail -f nacos/logs/start.out</code>。</p>
+<p>注意：<code>./startup.sh -m standalone</code> 是启动单实例模式。</p>
+<h3 id="7、配置Nginx代理Upstream"><a href="#7、配置Nginx代理Upstream" class="headerlink" title="7、配置Nginx代理Upstream"></a>7、配置Nginx代理Upstream</h3><p>修改Nginx配置文件default.conf，加入负载均衡和反向代理的配置。</p>
+<pre><code class="shell"># 在server外部
+upstream nacos-cluster &#123;
+  server 192.168.1.1:8848;
+  server 192.168.1.2:8848;
+  server 192.168.1.3:8848;
+&#125;
+# 在server内部.location / 之前
+server &#123;
+    # 省略。。。。。
+    location /nacos &#123;
+        proxy_redirect off;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_pass http://nacos-cluster;
+    &#125;
+&#125;
+</code></pre>
+<p><strong>注意：nginx upstream 的name中不要带下划线，不然springboot会报400错误。</strong></p>
+<h3 id="8、验证："><a href="#8、验证：" class="headerlink" title="8、验证："></a>8、验证：</h3><p>通过Nginx代理来访问整个集群（建议Nginx集群使用一个域名来访问）。</p>
+<p>可通过<a target="_blank" rel="noopener" href="http://192.168.1.1/nacos%E8%AE%BF%E9%97%AEnacos%E9%9B%86%E7%BE%A4%EF%BC%8C%E9%BB%98%E8%AE%A4%E5%B8%90%E5%8F%B7nacos%E3%80%81%E5%AF%86%E7%A0%81nacos%E3%80%82">http://192.168.1.1/nacos访问nacos集群，默认帐号nacos、密码nacos。</a></p>
+<p>或者使用域名访问<a target="_blank" rel="noopener" href="http://nacos.xxx.com/nacos%E3%80%82">http://nacos.xxx.com/nacos。</a></p>
+<h2 id="四、其他"><a href="#四、其他" class="headerlink" title="四、其他"></a>四、其他</h2><ol>
+<li><a target="_blank" rel="noopener" href="https://nacos.io/zh-cn/docs/what-is-nacos.html">Nacos官方文档 https://nacos.io/zh-cn/docs/what-is-nacos.html</a></li>
+</ol>
+
+      
+       <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 lxwno.1@163.com </span>
+    </div>
+</article>
+
+
+<p>
+    <a  class="dashang" onclick="dashangToggle()">赏</a>
+</p>
+
+
+
+
     <div id="comments"></div>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
 
@@ -1600,6 +1741,13 @@
 </script>
 
 
+
+
+    
+
+
+
+
     </div>
     <div class="copyright">
         <p class="footer-entry">
@@ -1608,11 +1756,11 @@
 <p class="footer-entry">Built with <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/yelog/hexo-theme-3-hexo" target="_blank">3-hexo</a> theme</p>
 
     </div>
-</div>
-<div class="full-toc">
-    <button class="full" data-title="切换全屏 快捷键 s"><span class="min "></span></button>
+    <div class="full-toc">
+        <button class="full" data-title="切换全屏 快捷键 s"><span class="min "></span></button>
 <a class="" id="rocket" ></a>
 
+    </div>
 </div>
 
 <div class="hide_box" onclick="dashangToggle()"></div>

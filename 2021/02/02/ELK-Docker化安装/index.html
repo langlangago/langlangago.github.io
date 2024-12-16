@@ -6,18 +6,17 @@
   <meta name="keywords" content=" docker , ELK ">
   <meta name="description" content="ELK-Docker化安装 | 运维人">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<meta name="description" content="一、背景公司自建的K8S集群证书过期，导致集群无法提供服务。首先需要确认一下内容：  K8s 版本：V1.20  部署方式：kubeadm  部署架构：几个master节点+几个worker几点   二、操作步骤1、查看证书过期情况kubeadm certs check-expiration 2、备份&#x2F;etc&#x2F;kubernetes&#x2F;cp -rp &#x2F;etc&#x2F;kubernetes &#x2F;etc&#x2F;kuber">
+<meta name="description" content="一、预备环境说明： 64位JDK ，这里使用 JDK 1.8.0_261 下载编译好的压缩包，nacos-server-1.4.0.tar.gz 准备三台主机A(192.168.1.1)、B(192.168.1.2)、C(192.168.1.3) 准备高可用Nginx集群、MySQL集群  二、集群架构：graph LR A[微服务] --&gt; B(Nginx集群)     B --&gt; D[Naco">
 <meta property="og:type" content="article">
-<meta property="og:title" content="K8S证书更新">
-<meta property="og:url" content="https://www.langxw.com/2024/06/26/K8S%E8%AF%81%E4%B9%A6%E6%9B%B4%E6%96%B0/index.html">
+<meta property="og:title" content="Nacos集群搭建">
+<meta property="og:url" content="https://www.langxw.com/2024/11/05/Nacos%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA/index.html">
 <meta property="og:site_name" content="运维人">
-<meta property="og:description" content="一、背景公司自建的K8S集群证书过期，导致集群无法提供服务。首先需要确认一下内容：  K8s 版本：V1.20  部署方式：kubeadm  部署架构：几个master节点+几个worker几点   二、操作步骤1、查看证书过期情况kubeadm certs check-expiration 2、备份&#x2F;etc&#x2F;kubernetes&#x2F;cp -rp &#x2F;etc&#x2F;kubernetes &#x2F;etc&#x2F;kuber">
+<meta property="og:description" content="一、预备环境说明： 64位JDK ，这里使用 JDK 1.8.0_261 下载编译好的压缩包，nacos-server-1.4.0.tar.gz 准备三台主机A(192.168.1.1)、B(192.168.1.2)、C(192.168.1.3) 准备高可用Nginx集群、MySQL集群  二、集群架构：graph LR A[微服务] --&gt; B(Nginx集群)     B --&gt; D[Naco">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2024-06-26T07:57:19.000Z">
-<meta property="article:modified_time" content="2024-06-26T08:10:54.555Z">
+<meta property="article:published_time" content="2024-11-05T05:05:13.037Z">
+<meta property="article:modified_time" content="2021-02-01T06:53:54.000Z">
 <meta property="article:author" content="运维人">
-<meta property="article:tag" content="k8s">
-<meta property="article:tag" content="证书">
+<meta property="article:tag" content="nacos">
 <meta name="twitter:card" content="summary">
 
 
@@ -742,7 +741,7 @@
     </div>
 </div>
 <input type="hidden" id="yelog_site_posts_number" value="64">
-<input type="hidden" id="yelog_site_word_count" value="72.7k">
+<input type="hidden" id="yelog_site_word_count" value="72.8k">
 <div style="display: none">
     <span id="busuanzi_value_site_uv"></span>
     <span id="busuanzi_value_site_pv"></span>
@@ -1028,28 +1027,28 @@
             <span class="post-date" title="2021-06-04 19:00:16">2021/06/04</span>
         </a>
         
+        <a  class="全部文章 中间件 Nacos "
+           href="/2024/11/05/Nacos%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA/"
+           data-tag="nacos"
+           data-author="" >
+            <span class="post-title" title="Nacos集群搭建">Nacos集群搭建</span>
+            <span class="post-date" title="2024-11-05 13:05:13">2024/11/05</span>
+        </a>
+        
+        <a  class="全部文章 "
+           href="/2024/11/05/hello-world/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="Hello World">Hello World</span>
+            <span class="post-date" title="2024-11-05 13:05:12">2024/11/05</span>
+        </a>
+        
         <a  class="全部文章 "
            href="/2024/06/26/K8S%E8%AF%81%E4%B9%A6%E6%9B%B4%E6%96%B0/"
            data-tag="k8s,证书"
            data-author="" >
             <span class="post-title" title="K8S证书更新">K8S证书更新</span>
             <span class="post-date" title="2024-06-26 15:57:19">2024/06/26</span>
-        </a>
-        
-        <a  class="全部文章 "
-           href="/2024/04/03/hello-world/"
-           data-tag=""
-           data-author="" >
-            <span class="post-title" title="Hello World">Hello World</span>
-            <span class="post-date" title="2024-04-03 12:55:50">2024/04/03</span>
-        </a>
-        
-        <a  class="全部文章 中间件 Nacos "
-           href="/2024/04/03/Nacos%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA/"
-           data-tag="nacos"
-           data-author="" >
-            <span class="post-title" title="Nacos集群搭建">Nacos集群搭建</span>
-            <span class="post-date" title="2024-04-03 12:55:50">2024/04/03</span>
         </a>
         
         <a  class="全部文章 虚拟化 Kubernetes "
@@ -1564,12 +1563,12 @@
     </div>
     <div class="article-meta">
         
-            发布时间 : <time class="date" title='最后更新: 2021-02-02 10:31:40'>2021-02-02 10:28</time>
+            发布时间 : <time class="date" title='最后更新: 2024-12-16 18:02:34'>2021-02-02 10:28</time>
         
     </div>
     <div class="article-meta">
         
-        <span>字数:1.3k</span>
+        <span>字数:1.4k</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -1686,7 +1685,7 @@ docker run --net=&quot;host&quot; docker.elastic.co/beats/filebeat:7.1.1 setup -
 </code></pre>
 <h3 id="6、X-PACK"><a href="#6、X-PACK" class="headerlink" title="6、X-PACK"></a>6、X-PACK</h3><p>x-pack是elasticsearch的一个扩展包，将安全，警告，监视，图形和报告功能捆绑在一个易于安装的软件包中。 </p>
 <p>因为x-pack是收费的，所以试用期只有一个月。长期使用就必须根据官网文档说得来，也是给我们后门，一年一年的续期。</p>
-<p><strong>如果要认证，建议用Nginx做反向代理+认证</strong></p>
+<p><strong>在ES 6.8版本及以后，x-pack基础版提免费的内置认证服务，高级认证服务需要购买License。</strong></p>
 <h2 id="三、ELK-使用步骤："><a href="#三、ELK-使用步骤：" class="headerlink" title="三、ELK 使用步骤："></a>三、ELK 使用步骤：</h2><p>Spring Boot 日志输出到指定目录，Filebeat 进行采集，Logstash 进行过滤，Elasticsearch 进行存储，Kibana 进行展示。</p>
 <p>Filebeat 示例配置（<code>vi /etc/filebeat/filebeat.yml</code>）：</p>
 <pre><code class="yaml">filebeat.prospectors:
